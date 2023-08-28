@@ -1,12 +1,12 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
-import { LeagueProvider } from "@/context/LeagueContext";
-import DashboardLayout from "@/layouts/Dashboard";
+import { LeagueProvider } from "@/context/sleeper/LeagueContext";
+import { MatchProvider } from "@/context/sleeper/MatchContext";
+import { OwnerProvider } from "@/context/sleeper/OwnerContext";
+import { PlayerProvider } from "@/context/sleeper/PlayerContext";
 import { ChildrenProps } from "@/interfaces";
-import { MatchProvider } from "@/context/MatchContext";
-import { OwnerProvider } from "@/context/OwnerContext";
-import { PlayerProvider } from "@/context/PlayerContext";
+import DashboardLayout from "@/layouts/Dashboard";
 
 const inter = Inter({ subsets: ['latin'] })
 

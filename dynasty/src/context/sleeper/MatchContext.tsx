@@ -1,6 +1,7 @@
 "use client";
+import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "../../interfaces";
 
 const defaultMatches: Interfaces.Match[] = [];
 
