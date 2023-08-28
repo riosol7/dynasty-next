@@ -4,6 +4,9 @@ import { Inter } from "next/font/google"
 import { LeagueProvider } from "@/context/LeagueContext";
 import DashboardLayout from "@/layouts/Dashboard";
 import { ChildrenProps } from "@/interfaces";
+import { MatchProvider } from "@/context/MatchContext";
+import { OwnerProvider } from "@/context/OwnerContext";
+import { PlayerProvider } from "@/context/PlayerContext";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +20,13 @@ export default function RootLayout({children}: ChildrenProps) {
     <html lang="en">
       <body className={inter.className}>
         <LeagueProvider>
-          <DashboardLayout>{children}</DashboardLayout>
+          <MatchProvider>
+            <OwnerProvider>
+              <PlayerProvider>
+                <DashboardLayout>{children}</DashboardLayout>
+              </PlayerProvider>
+            </OwnerProvider>
+          </MatchProvider>
         </LeagueProvider>
       </body>
     </html>

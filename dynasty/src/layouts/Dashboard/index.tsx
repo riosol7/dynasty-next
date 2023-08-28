@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
                 paddingLeft: isSidebarOpen ? "" : "calc(5rem)",
                 marginLeft: isSidebarOpen ? "200px" : "0" 
             }}>
-                <div className="container">
+                <div className={styles.dashboardContent}>
                     <LeagueNav league={league}/>
                     {children}
                 </div>
