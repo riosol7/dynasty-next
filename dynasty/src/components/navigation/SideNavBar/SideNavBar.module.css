@@ -1,0 +1,23 @@
+.sideBar {
+    position: fixed;
+    top:0;
+    min-Height:100vh;
+    min-Width:4rem; 
+    padding-Right:1.6em;
+    padding-left: 1.6em;
+    background-color: black;
+    border-right:#0f0f0f .4em solid;
+    z-index: 999999;
+}
+.activeIcon {
+    background:linear-gradient(360deg, rgba(116,178,221,1) 0%, rgba(114,202,224,1) 20%, rgba(51,193,189,1) 50%, rgba(80,204,147,1) 100%);
+    width: 4px;
+    height: 45px;
+    border-radius: 0px 8px 8px 0px;
+    position: absolute;
+    left:0
+}
+.iconSize {
+    font-size: 2rem;
+    width: 2rem;
+}
