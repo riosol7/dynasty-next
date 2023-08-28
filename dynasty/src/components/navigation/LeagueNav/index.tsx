@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import styles from "./LeagueNav.module.css";
 import * as Interfaces from "../../../interfaces";
+import { Icon } from '@iconify-icon/react';
 
 function LeagueStatus({ league }: Interfaces.LeagueProps) {
     const statusClasses = {
@@ -15,7 +16,7 @@ function LeagueStatus({ league }: Interfaces.LeagueProps) {
             {league.status === "pre_draft" && "Pre Draft"}
             {league.status === "complete" && "Post Season"}
             {league.status === "in_season" && "In Season"}
-            <span className="ml-2">{league.season}</span>
+            <span className="ml-2 text-white">{league.season}</span>
         </p>
     );
 }
@@ -24,10 +25,10 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
     return (
         <div className="flex items-center">
             <p className="m-0 mx-4 text-whitesmoke">
-                Division <span className="ml-2">{league.settings?.divisions}</span>
+                Divisions <span className="ml-2 text-white">{league.settings?.divisions}</span>
             </p>
             <p className="m-0 text-whitesmoke">
-                Roster <span className="ml-2">{league.total_rosters}</span>
+                Rosters <span className="ml-2 text-white">{league.total_rosters}</span>
             </p>
         </div>
     );
@@ -37,7 +38,7 @@ export default function LeagueNav({ league }: Interfaces.LeagueProps) {
     const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
 
     return (
-        <div className="flex items-start justify-between my-2">
+        <div className={styles.stickyTop}>
             <div className="flex items-center flex-wrap">
                 <a href={`/`} className={styles.cellLink} style={{ width: "270px" }}>
                     <div className="flex items-center">
@@ -53,10 +54,10 @@ export default function LeagueNav({ league }: Interfaces.LeagueProps) {
                 </div>
             </div>
             <div className="flex justify-center items-center p-2 bg-gray-900 rounded-full w-10 h-10">
-                {/* <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/> */}
+                <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/>
             </div>
-            <div className="p-2">
-                {/* <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/> */}
+            <div className={styles.hover}>
+                <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
             </div>
         </div>
     )

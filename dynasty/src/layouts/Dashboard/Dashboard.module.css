@@ -1,6 +1,9 @@
-.dashboard {
-    min-height: 100%;
-    width: 100%;
-    height: 100%;
-    padding-left: calc(4rem + 1.6em);
+.dashboardLayout {
+    min-height: 100vh;
+    width: calc(100% - 200px);
+    background-color: rgb(82, 82, 82);
+    transition: .5s;
+}
+.dashboardContent {
+    padding-inline: 1.5rem;
 }

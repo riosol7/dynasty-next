@@ -1,15 +1,15 @@
 .sideBar {
     position: fixed;
-    top:0;
-    min-Height:100vh;
-    min-Width:4rem; 
-    padding-Right:1.6em;
-    padding-left: 1.6em;
-    background-color: black;
-    border-right:#0f0f0f .4em solid;
-    z-index: 999999;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    min-Width: 5rem; 
+    background-color: var(--sidebar-color);
+    transition: 0.5s;
+    overflow-x: hidden;
+    z-index: 1;
 }
-.activeIcon {
+#activeIcon {
     background:linear-gradient(360deg, rgba(116,178,221,1) 0%, rgba(114,202,224,1) 20%, rgba(51,193,189,1) 50%, rgba(80,204,147,1) 100%);
     width: 4px;
     height: 45px;
