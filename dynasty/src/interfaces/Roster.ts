@@ -45,3 +45,7 @@ export interface RosterContextType {
     rosters: Roster[];
     loadRosters: boolean;
 }
+
+export interface RosterProps {
+    roster: Roster;
+}

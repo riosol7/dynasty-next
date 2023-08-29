@@ -1,10 +1,16 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
-import { LeagueProvider } from "@/context/sleeper/LeagueContext";
-import { MatchProvider } from "@/context/sleeper/MatchContext";
-import { OwnerProvider } from "@/context/sleeper/OwnerContext";
-import { PlayerProvider } from "@/context/sleeper/PlayerContext";
+import { 
+  LeagueProvider, 
+  MatchProvider, 
+  OwnerProvider, 
+  RosterProvider, 
+  PlayerProvider,
+  FantasyCalcProvider,
+  KTCProvider,
+  SuperFlexProvider,
+} from "@/context";
 import { ChildrenProps } from "@/interfaces";
 import DashboardLayout from "@/layouts/Dashboard";
 
@@ -22,9 +28,17 @@ export default function RootLayout({children}: ChildrenProps) {
         <LeagueProvider>
           <MatchProvider>
             <OwnerProvider>
-                          <PlayerProvider>
-                            <DashboardLayout>{children}</DashboardLayout>
-                          </PlayerProvider>
+              <RosterProvider>
+                <PlayerProvider>
+                  <FantasyCalcProvider>
+                    <KTCProvider>
+                      <SuperFlexProvider>
+                        <DashboardLayout>{children}</DashboardLayout>
+                      </SuperFlexProvider>
+                    </KTCProvider>
+                  </FantasyCalcProvider>
+                </PlayerProvider>
+              </RosterProvider>
             </OwnerProvider>
           </MatchProvider>
         </LeagueProvider>

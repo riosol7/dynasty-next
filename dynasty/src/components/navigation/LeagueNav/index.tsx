@@ -42,7 +42,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
             <div className="flex items-center">
                 <Icon className={styles.hamburger} icon="charm:menu-hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
                 <div className="flex items-center flex-wrap">
-                    <a href={`/`} className={styles.cellLink} style={{ width: "270px" }}>
+                    <a href={`/`} id={styles.leagueAnchor} style={{ width: "270px" }}>
                         <div className="flex items-center">
                             <div className="flex justify-center mr-4">
                                 <Image className="rounded" width={36} height={36} alt="avatar" src={`${avatarBaseURL}${league.avatar}`}/>
@@ -58,6 +58,14 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
             </div>
             <div className="flex justify-center items-center p-2 bg-gray-900 rounded-full w-10 h-10">
                 <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/>
+            </div>
+            <div>
+                <select id={styles.selectMarket}>
+                    <option>{"KeepTradeCut"}</option>
+                    <option>{"FantasyCalc"}</option>
+                    <option>{"SuperFlex"}</option>
+                    <option>{"DynastyProcess"}</option>
+                </select>
             </div>
             <div className={styles.activity}>
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>

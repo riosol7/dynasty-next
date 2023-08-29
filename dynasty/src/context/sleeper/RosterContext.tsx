@@ -15,7 +15,7 @@ export const useRosterContext = () => {
     return context;
 };
 
-export const OwnerProvider = ({ children }: Interfaces.ChildrenProps) => {
+export const RosterProvider = ({ children }: Interfaces.ChildrenProps) => {
     const [rosters, setRosters] = useState<Interfaces.Roster[]>(defaultRosters);
     const [loadRosters, setLoadRosters] = useState(true);
 

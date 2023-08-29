@@ -1,11 +1,16 @@
-import 'swiper/swiper-bundle.min.css';
+"use client";
+import "swiper/swiper-bundle.min.css";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Autoplay from "swiper";
+// import Autoplay from "swiper";
+import { useRosterContext } from "@/context";
 import { Icon } from "@iconify-icon/react";
-import MVPSlide from './slides';
+import MVPSlide from "./slides";
 
-export default function MVPSlider({rosters, league, matches}) {
+
+export default function MVPSlider() {
+    const { rosters, loadRosters } = useRosterContext();
+
     return (
         <div className="my-5">
             <div className="flex items-center justify-between mb-3">
@@ -45,15 +50,14 @@ export default function MVPSlider({rosters, league, matches}) {
                     spaceBetween={30}
                     slidesPerGroup={1}
                     loop={true}
-                    modules={[Autoplay]}
                     autoplay={{
-                    delay: 5500,
-                    disableOnInteraction: false
+                        delay: 5500,
+                        disableOnInteraction: false
                     }}
                 >
-                    {rosters?.teamRank?.map((roster, i) => (
+                    {rosters?.map((roster, i) => (
                     <SwiperSlide key={i}>
-                        <MVPSlide league={league} matches={matches} roster={roster} />
+                        <MVPSlide roster={roster}/>
                     </SwiperSlide>
                     ))}
                 </Swiper>
