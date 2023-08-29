@@ -3,4 +3,5 @@ export * from "./League";
 export * from  "./Match";
 export * from "./Owner";
 export * from  "./Player";
+export * from "./Roster";
 export * from "./NavigationProps";

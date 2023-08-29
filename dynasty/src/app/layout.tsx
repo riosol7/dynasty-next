@@ -22,9 +22,9 @@ export default function RootLayout({children}: ChildrenProps) {
         <LeagueProvider>
           <MatchProvider>
             <OwnerProvider>
-              <PlayerProvider>
-                <DashboardLayout>{children}</DashboardLayout>
-              </PlayerProvider>
+                          <PlayerProvider>
+                            <DashboardLayout>{children}</DashboardLayout>
+                          </PlayerProvider>
             </OwnerProvider>
           </MatchProvider>
         </LeagueProvider>

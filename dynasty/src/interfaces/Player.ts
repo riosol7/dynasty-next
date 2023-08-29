@@ -19,10 +19,41 @@ export interface Player {
     weight: string;
     yahoo_id: number;
     years_exp: number;
+    value: number;
 };
 
 export interface PlayerContextType {
     players: Player[];
     loadPlayers: boolean;
 };
-  
+
+export interface PlayerMarket {
+    rank: string;
+    player: string;
+    team: string;
+    position: string;
+    positionRank: string | null;
+    age: number;
+    tier: string;
+    trend: string;
+    value: number;
+    fantasycalcId: string | null;
+    sleeperId: string | null;
+    mflId: string | null;
+    path: string;
+}
+
+export interface KTCContextType {
+    ktc: PlayerMarket[];
+    loadKTC: boolean;
+}
+
+export interface SuperFlexContextType {
+    superFlex: PlayerMarket[];
+    loadSuperFlex: boolean;
+}
+
+export interface FantasyCalcContextType {
+    fc: PlayerMarket[];
+    loadFC: boolean;
+}

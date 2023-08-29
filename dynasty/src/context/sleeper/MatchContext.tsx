@@ -26,7 +26,7 @@ export const MatchProvider = ({ children }: Interfaces.ChildrenProps) => {
                 const parsedData = await call.json();
                 setMatches(parsedData);
                 setLoadMatches(false);
-                console.log("fetchMatch:", parsedData);
+                console.log("fetchMatches:", parsedData);
             } catch (err) {
                 console.log(err);
             }
