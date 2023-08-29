@@ -1,26 +1,43 @@
-.stickyTop {
-    position: sticky;
+.navigation {
+    position: fixed;
     top: 0;
+    left: 0;
+    height: 4em;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 1;
-    background-color: #a33333; /* Add your desired background color */
-    padding-block: 1rem;
- }
-.cellLink, .cellLink:hover, .cellLink:active{
+    background-color: #a33333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for a more prominent effect */
+
+}
+.cellLink, .cellLink:hover, .cellLink:active {
     color: inherit;
     text-decoration: none;
 }
-.cellLink{
+.cellLink {
     display: flex;
     align-items: center;
     width: 100%;
 }
-.hover {
+.hamburger {
+    font-size: 1.8rem;
     padding: 4px;
+    color: white;
+    margin-inline: .8em;
 }
-.hover:hover{
+.hamburger:hover {
+    border-radius: 50%;
+    background-color: #111111;
+}
+.activity {
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.activity:hover {
     border-radius: 50%;
     background-color: #111111;
 }

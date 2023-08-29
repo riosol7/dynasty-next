@@ -11,15 +11,15 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <div className={styles.appLayout}>
-            <SideNavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
+        <div>
+            <LeagueNav league={league} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
             <div className={styles.dashboardLayout} style={{ 
                 width: isSidebarOpen ? "" : "100%",
                 paddingLeft: isSidebarOpen ? "" : "calc(5rem)",
                 marginLeft: isSidebarOpen ? "200px" : "0" 
             }}>
+                <SideNavBar isSidebarOpen={isSidebarOpen}/>
                 <div className={styles.dashboardContent}>
-                    <LeagueNav league={league}/>
                     {children}
                 </div>
             </div>

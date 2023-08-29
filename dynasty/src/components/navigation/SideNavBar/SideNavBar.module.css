@@ -1,10 +1,12 @@
 .sideBar {
     position: fixed;
-    top: 0;
     left: 0;
-    height: 100vh;
+    bottom: 0;
+    padding-top: 1em;
+    height: calc(100% - 4em);
     min-Width: 5rem; 
-    background-color: var(--sidebar-color);
+    background-color: grey;
+    /* background-color: var(--sidebar-color); */
     transition: 0.5s;
     overflow-x: hidden;
     z-index: 1;

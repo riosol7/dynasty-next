@@ -4,13 +4,10 @@ import vs from "../../../assets/images/vs.png";
 import * as Interfaces from "../../../interfaces";
 import { Icon } from '@iconify-icon/react';
 
-export default function SideNavBar({isSidebarOpen, setIsSidebarOpen}: Interfaces.SideNavBarProps) {
+export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) {
 
     return (
         <div className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
-            <div className="py-5 flex justify-center items-center">
-                <Icon className={styles.iconSize} icon="charm:menu-hamburger" style={{color:"white"}} onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
-            </div>
             <div className="py-5 flex justify-center items-center">
                 <div id={styles.activeIcon}></div>
                 <Icon className={styles.iconSize} icon="bxs:dashboard"style={{}}/>
