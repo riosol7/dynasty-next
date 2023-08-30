@@ -6,34 +6,40 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from 'swiper/modules';
 import { Icon } from "@iconify-icon/react";
 import MVPSlide from "./slides";
-import { processRosters } from "@/utils";
+import { processPlayers, processRosters } from "@/utils";
 import { 
+    useFantasyCalcContext,
+    useKTCContext,
     useOwnerContext,
     usePlayerContext,
     useRosterContext,
+    useSuperFlexContext,
  } from "@/context";
 import { Roster } from "@/interfaces";
 
 export default function MVPSlider() {
-    const  { owners, loadOwners } = useOwnerContext();
+    const { owners, loadOwners } = useOwnerContext();
     const { rosters, loadRosters } = useRosterContext();
     const { players, loadPlayers } = usePlayerContext();
+    const { ktc, loadKTC } = useKTCContext();
+    const { superFlex, loadSuperFlex } = useSuperFlexContext();
+    const { fc, loadFC } = useFantasyCalcContext();
+    // const processedPlayers = processPlayers(players, ktc, superFlex, fc);
     const processedRosters = processRosters(rosters, players, owners);
-    console.log(processedRosters);
+
+    // console.log("processedPlayers",processedPlayers);
+    // console.log("processedRosters",processedRosters);
 
     return (
         <div className="my-5">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
-                <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
-                <p className="m-0 mx-1 font-semibold">MVPs</p>
+                    <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
+                    <p className="m-0 mx-1 font-semibold">MVPs</p>
                 </div>
-                <div>
                 <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
-                </div>
             </div>
-            <div>
-                <div className="flex" style={{ maxWidth: "1717.44px", cursor: "grab" }}>
+            <div className="flex" style={{ maxWidth: "1717.44px", cursor: "grab" }}>
                 <Swiper
                     breakpoints={{
                     1850: {
@@ -72,8 +78,7 @@ export default function MVPSlider() {
                     </SwiperSlide>
                     ))}
                 </Swiper>
-                </div>
             </div>
-            </div>
+        </div>
     )
 }
