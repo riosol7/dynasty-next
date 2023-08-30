@@ -1,9 +1,34 @@
+import * as Interfaces from "../interfaces";
 import { findRosterByID } from "./findRoster";
-import * as Interface from "../interfaces";
-// FIX the any type and top players to account for all fantasyMarkets
-export const getMVP = async (id: Number, rosters:any) => {
+// Reconfigured top players to account for all fantasyMarkets;
+const initialMVP: Interfaces.Player = {
+    first_name: '',
+    team: '',
+    position: '',
+    rank: '',
+    age: 0,
+    birth_date: "",
+    college: "",
+    depth_chart_order: 0,
+    espn_id: 0,
+    fantasy_data_id: 0,
+    full_name: "",
+    height: "",
+    high_school: "",
+    last_name: "",
+    number: 0,
+    player_id: "",
+    rotowire_id: 0,
+    sportradar_id: "",
+    weight: "",
+    yahoo_id: 0,
+    years_exp: 0,
+    value: 0
+};
+
+export const getMVP = (id: Number, rosters:Interfaces.Roster[]): Interfaces.Player => {
     try {
-        const foundTeam = await findRosterByID(id, rosters?.teamRank);
+        const foundTeam = findRosterByID(id, rosters)!;
         const topPlayers = [
             foundTeam?.ktc.qb.players[0],
             foundTeam?.ktc.rb.players[0],
@@ -18,6 +43,6 @@ export const getMVP = async (id: Number, rosters:any) => {
         return topPlayer;
     } catch (error) {
         console.error("Error:", error);
-        return null;
+        return initialMVP;
     };
 };

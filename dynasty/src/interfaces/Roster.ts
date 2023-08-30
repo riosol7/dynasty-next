@@ -1,4 +1,4 @@
-import { Player } from ".";
+import { Owner, Player } from ".";
 export interface Roster {
     taxi: string[];
     starters: string[];
@@ -14,9 +14,10 @@ export interface Roster {
     };
     roster_id: number;
     reserve: string[] | null;
-    players: string[];
+    players: string[] | Player[] | null;
     player_map: Record<string, string> | null;
     owner_id: string;
+    owner: Owner;
     metadata: Record<string, string>;
     league_id: string;
     keepers: string[] | null;

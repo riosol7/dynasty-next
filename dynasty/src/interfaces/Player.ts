@@ -13,6 +13,7 @@ export interface Player {
     number: number;
     player_id: string;
     position: string;
+    rank: string;
     rotowire_id: number;
     sportradar_id: string;
     team: string;
@@ -56,4 +57,8 @@ export interface SuperFlexContextType {
 export interface FantasyCalcContextType {
     fc: PlayerMarket[];
     loadFC: boolean;
+}
+
+export interface MVP {
+
 }

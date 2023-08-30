@@ -1,0 +1,47 @@
+.playerHUD {
+    background-color: #111111;
+    border-radius: 25px;
+    border: 1px solid #111111;
+    padding: 5px;
+    min-width: 30px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+}
+  
+.qbHUD {
+    color: #f8296d;
+}
+
+.rbHUD {
+    color: #36ceb8;
+}
+
+.wrHUD {
+    color: #58a7ff;
+}
+
+.teHUD {
+    color: #faae58;
+}
+
+.mvpLayout {
+    border: none;
+    border-radius: 4px;
+}
+
+.ownerLogo {
+    border-radius: 50%;
+    width: 29px;
+}
+.arrow {
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.arrow:hover {
+    border-radius: 50%;
+    background-color: #111111;
+    /* color: #a9dfd8;  not working? check Owner page match colon icon*/ 
+}

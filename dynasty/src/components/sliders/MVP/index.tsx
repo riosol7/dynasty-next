@@ -1,15 +1,25 @@
 "use client";
 import "swiper/swiper-bundle.min.css";
+import styles from "./MVP.module.css";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import Autoplay from "swiper";
-import { useRosterContext } from "@/context";
+import { Autoplay } from 'swiper/modules';
 import { Icon } from "@iconify-icon/react";
 import MVPSlide from "./slides";
-
+import { processRosters } from "@/utils";
+import { 
+    useOwnerContext,
+    usePlayerContext,
+    useRosterContext,
+ } from "@/context";
+import { Roster } from "@/interfaces";
 
 export default function MVPSlider() {
+    const  { owners, loadOwners } = useOwnerContext();
     const { rosters, loadRosters } = useRosterContext();
+    const { players, loadPlayers } = usePlayerContext();
+    const processedRosters = processRosters(rosters, players, owners);
+    console.log(processedRosters);
 
     return (
         <div className="my-5">
@@ -18,8 +28,8 @@ export default function MVPSlider() {
                 <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
                 <p className="m-0 mx-1 font-semibold">MVPs</p>
                 </div>
-                <div id="LA" className="p-2">
-                <Icon icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
+                <div>
+                <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
                 </div>
             </div>
             <div>
@@ -50,14 +60,15 @@ export default function MVPSlider() {
                     spaceBetween={30}
                     slidesPerGroup={1}
                     loop={true}
+                    modules={[Autoplay]}
                     autoplay={{
                         delay: 5500,
                         disableOnInteraction: false
                     }}
                 >
-                    {rosters?.map((roster, i) => (
+                    {processedRosters?.map((roster: Roster, i: React.Key) => (
                     <SwiperSlide key={i}>
-                        <MVPSlide roster={roster}/>
+                        <MVPSlide roster={roster} rosters={processedRosters}/>
                     </SwiperSlide>
                     ))}
                 </Swiper>

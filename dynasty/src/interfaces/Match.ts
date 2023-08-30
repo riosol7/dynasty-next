@@ -14,6 +14,6 @@ export interface Match {
 };
 
 export interface MatchContextType {
-    matches: Match[];
+    matches: Match[][];
     loadMatches: boolean;
 };
