@@ -7,7 +7,7 @@ import { Icon } from '@iconify-icon/react';
 export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) {
 
     return (
-        <div className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
+        <nav className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
             <div className="py-5 flex justify-center items-center">
                 <div id={styles.activeIcon}></div>
                 <Icon className={styles.iconSize} icon="bxs:dashboard"style={{}}/>
@@ -21,6 +21,6 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
             <div className="py-5 flex justify-center items-center">
                 <Icon className={styles.iconSize} icon="carbon:blog" style={{color:"#7f7f7f"}}/>
             </div>
-        </div>
+        </nav>
     )
 }

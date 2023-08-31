@@ -24,7 +24,7 @@ export default function MVPSlider() {
     const { ktc, loadKTC } = useKTCContext();
     const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
-    // const processedPlayers = processPlayers(players, ktc, superFlex, fc);
+    const processedPlayers = processPlayers(players, ktc, superFlex, fc);
     const processedRosters = processRosters(rosters, players, owners);
 
     // console.log("processedPlayers",processedPlayers);

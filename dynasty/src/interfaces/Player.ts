@@ -1,15 +1,26 @@
+interface MarketContent {
+    rank: string | undefined;
+    value: number | undefined;
+    tier: string | null | undefined;
+    trend: string | null | undefined;
+    path: string | null | undefined;
+    positionRank: string | null | undefined;
+}
+
 export interface Player {
     age: number;
     birth_date: string;
     college: string;
     depth_chart_order: number;
     espn_id: number;
+    fantasy_calc_id: string | null;
     fantasy_data_id: number;
     first_name: string;
     full_name: string;
     height: string;
     high_school: string;
     last_name: string;
+    mfl_id: string | null;
     number: number;
     player_id: string;
     position: string;
@@ -21,6 +32,9 @@ export interface Player {
     yahoo_id: number;
     years_exp: number;
     value: number;
+    ktc: MarketContent;
+    superFlex: MarketContent;
+    fc: MarketContent;
 };
 
 export interface PlayerContextType {

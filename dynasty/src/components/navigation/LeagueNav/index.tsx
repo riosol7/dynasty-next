@@ -38,7 +38,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
     const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
 
     return (
-        <header className={styles.navigation}>
+        <nav className={styles.navigation}>
             <div className="flex items-center">
                 <Icon className={styles.hamburger} icon="charm:menu-hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
                 <div className="flex items-center flex-wrap">
@@ -70,6 +70,6 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
             <div className={styles.activity}>
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
             </div>
-        </header>
+        </nav>
     )
 }

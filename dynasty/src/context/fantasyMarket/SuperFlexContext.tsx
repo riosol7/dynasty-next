@@ -22,7 +22,7 @@ export const SuperFlexProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}scripts/ktc`);
+                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}scripts/superflex`);
                 const parsedData = await call.json();
                 setSuperFlex(parsedData);
                 setLoadSuperFlex(false);
