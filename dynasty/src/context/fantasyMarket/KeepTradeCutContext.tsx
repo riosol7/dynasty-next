@@ -22,7 +22,7 @@ export const KTCProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}scripts/ktc`);
+                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}players/ktc`);
                 const parsedData = await call.json();
                 setKTC(parsedData);
                 setLoadKTC(false);

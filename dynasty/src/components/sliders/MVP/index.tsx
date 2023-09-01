@@ -25,9 +25,8 @@ export default function MVPSlider() {
     const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const processedPlayers = processPlayers(players, ktc, superFlex, fc);
-    const processedRosters = processRosters(rosters, players, owners);
+    const processedRosters = processRosters(rosters, processedPlayers, owners);
 
-    // console.log("processedPlayers",processedPlayers);
     // console.log("processedRosters",processedRosters);
 
     return (

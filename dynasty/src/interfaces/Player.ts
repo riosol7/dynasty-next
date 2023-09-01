@@ -1,10 +1,10 @@
 interface MarketContent {
     rank: string | undefined;
-    value: number | undefined;
+    value: number | string;
     tier: string | null | undefined;
     trend: string | null | undefined;
     path: string | null | undefined;
-    positionRank: string | null | undefined;
+    positionRank: string | undefined;
 }
 
 export interface Player {
@@ -47,11 +47,11 @@ export interface PlayerMarket {
     player: string;
     team: string;
     position: string;
-    positionRank: string | null;
+    positionRank: string;
     age: number;
     tier: string;
     trend: string;
-    value: number;
+    value: number | string;
     fantasycalcId: string | null;
     sleeperId: string | null;
     mflId: string | null;
