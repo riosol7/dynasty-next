@@ -30,7 +30,33 @@ const initialMVP: Interfaces.Player = {
     weight: "",
     yahoo_id: 0,
     years_exp: 0,
-    value: 0
+    value: 0,
+    fantasy_calc_id: null,
+    mfl_id: null,
+    ktc: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    },
+    superFlex: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    },
+    fc: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    }
 };
 
 const positionStyles = {
@@ -76,7 +102,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
             }}>
                 <div className="px-1">
                     <div style={{
-                        backgroundImage: `url(${playerBaseURL}${mvp.player_id}.jpg)`,
+                        backgroundImage: `url(${playerBaseURL}${mvp?.player_id}.jpg)`,
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "bottom",
                         backgroundSize: "cover",
@@ -88,11 +114,11 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                 <div className="col">
                     <div className="flex justify-between">
                         <div className="mt-2">
-                            <p className="m-0">{mvp.first_name}</p>
-                            <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp.last_name}</p>
+                            <p className="m-0">{mvp?.first_name}</p>
+                            <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
                         </div>
                         <div className="p-2">
-                            <Image className={styles.ownerLogo} alt="avatar" width={24} height={24} src={`${avatarBaseURL}${roster.owner.avatar}`}/>
+                            <Image className={styles.ownerLogo} alt="avatar" width={24} height={24} src={`${avatarBaseURL}${roster?.owner?.avatar}`}/>
                         </div>
                     </div>
                     <div className="my-1 flex items-center">

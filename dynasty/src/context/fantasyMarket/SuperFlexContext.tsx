@@ -10,7 +10,7 @@ const SuperFlexContext = createContext<Interfaces.SuperFlexContextType | undefin
 export const useSuperFlexContext = () => {
     const context = useContext(SuperFlexContext);
     if (!context) {
-        throw new Error("useKTCContext must be used within a KTCProvider");
+        throw new Error("useSuperFlexContext must be used within a SuperFlexProvider");
     }
     return context;
 };
@@ -22,7 +22,7 @@ export const SuperFlexProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}scripts/superflex`);
+                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}players/superFlex`);
                 const parsedData = await call.json();
                 setSuperFlex(parsedData);
                 setLoadSuperFlex(false);

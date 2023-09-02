@@ -17,12 +17,13 @@ export interface Roster {
     players: string[] | Player[] | null;
     player_map: Record<string, string> | null;
     owner_id: string;
-    owner: Owner;
+    owner: Owner | undefined | null;
     metadata: Record<string, string>;
     league_id: string;
     keepers: string[] | null;
     co_owners: string[] | null;
     ktc: {
+        teamTotal: number;
         qb: {
             players: Player[];
             value: number;

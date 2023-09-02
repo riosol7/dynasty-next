@@ -22,7 +22,7 @@ export const FantasyCalcProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}scripts/fantasy_calc`);
+                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}players/fantasy_calc`);
                 const parsedData = await call.json();
                 setFC(parsedData);
                 setLoadFC(false);
