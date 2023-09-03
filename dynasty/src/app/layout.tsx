@@ -12,6 +12,7 @@ import {
   SuperFlexProvider,
   DynastyProcessProvider,
   FantasyProProvider,
+  FantasyMarketProvider,
 } from "@/context";
 import { ChildrenProps } from "@/interfaces";
 import DashboardLayout from "@/layouts/Dashboard";
@@ -37,7 +38,9 @@ export default function RootLayout({children}: ChildrenProps) {
                       <SuperFlexProvider>
                         <DynastyProcessProvider>
                           <FantasyProProvider>
-                            <DashboardLayout>{children}</DashboardLayout>
+                            <FantasyMarketProvider>
+                              <DashboardLayout>{children}</DashboardLayout>
+                            </FantasyMarketProvider>
                           </FantasyProProvider>
                         </DynastyProcessProvider>
                       </SuperFlexProvider>

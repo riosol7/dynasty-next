@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <div>
+        <>
             <LeagueNav league={league} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
             <div className={styles.dashboardLayout} style={{ 
                 width: isSidebarOpen ? "" : "100%",
@@ -23,6 +23,6 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
                     {children}
                 </div>
             </div>
-        </div>
+        </>
     )
 }

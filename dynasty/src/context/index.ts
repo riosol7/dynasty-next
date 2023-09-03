@@ -8,3 +8,4 @@ export { KTCProvider, useKTCContext } from "./fantasyMarket/KeepTradeCutContext"
 export { FantasyCalcProvider, useFantasyCalcContext } from "./fantasyMarket/FantasyCalcContext";
 export { DynastyProcessProvider, useDynastyProcessContext } from "./fantasyMarket/DynastyProcessContext";
 export { FantasyProProvider, useFantasyProContext } from "./fantasyMarket/FantasyProContext";
+export { FantasyMarketProvider, useFantasyMarket } from "./fantasyMarket/FantasyMarketContext";

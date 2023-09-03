@@ -5,88 +5,8 @@ import Image from "next/image";
 import value from "../../../../assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
 import { findLogo, getMVP, getTotalPts } from "@/utils";
-import { useLeagueContext, useMatchContext } from "@/context";
+import { useLeagueContext, useMatchContext, useFantasyMarket } from "@/context";
 import * as Interfaces from "../../../../interfaces";
-
-const initialMVP: Interfaces.Player = {
-    first_name: '',
-    team: '',
-    position: '',
-    rank: '',
-    age: 0,
-    birth_date: "",
-    cbs_id: null,
-    college: "",
-    depth_chart_order: 0,
-    espn_id: 0,
-    fantasy_data_id: 0,
-    full_name: "",
-    height: "",
-    high_school: "",
-    last_name: "",
-    number: 0,
-    player_id: "",
-    rotowire_id: 0,
-    sportradar_id: "",
-    weight: "",
-    yahoo_id: 0,
-    years_exp: 0,
-    value: 0,
-    fantasy_calc_id: null,
-    mfl_id: null,
-    ktc: {
-        value: 0,
-        rank: "",
-        tier: "",
-        trend: "",
-        path: "",
-        positionRank: "",
-    },
-    superFlex: {
-        value: 0,
-        rank: "",
-        tier: "",
-        trend: "",
-        path: "",
-        positionRank: "",
-    },
-    fantasy_calc: {
-        value: 0,
-        rank: "",
-        tier: "",
-        trend: "",
-        path: "",
-        positionRank: "",
-    },
-    dynasty_process: {
-        ecr_1qb: "",
-        ecr_2qb: "",
-        ecr_pos: "",
-        value_1qb: "",
-        value_2qb: "",
-        fp_id: "",
-    },
-    fantasy_pro: {
-        fantasypros_id: "",
-        rank: "",
-        ecr: "",
-        sd: "",
-        best: "",
-        worst: "",   
-        player_page_url: "",
-        player_image_url: "",
-        player_bye_week: "",
-        player_owned_avg: "",
-        player_owned_espn: "",
-        player_owned_yahoo: "",
-        player_opponent: "",
-        player_opponent_id: "",
-        player_ecr_delta: "",
-        pos_rank: "",
-        start_sit_grade: "",
-        r2p_pts: "",
-    },
-};
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -98,8 +18,9 @@ const positionStyles = {
 export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
     const { league, loadLeague } = useLeagueContext();
     const { matches, loadMatches } = useMatchContext();
+    const { fantasyMarket } = useFantasyMarket()!;
 
-    const [mvp, setMVP] = useState<Interfaces.Player>(initialMVP);
+    const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialMVP);
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
 
     const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
@@ -108,7 +29,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
     useEffect(() => {
         async function fetchMVP() {
             try {
-                const player = await getMVP(roster.roster_id, rosters);
+                const player = await getMVP(roster.roster_id, rosters, fantasyMarket);
                 setMVP(player);
                 setLoadMVP(false);
             } catch (error) {
@@ -116,7 +37,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
             }
         }
         fetchMVP();
-    }, [mvp, roster.roster_id, rosters]);
+    }, [fantasyMarket, mvp, roster.roster_id, rosters]);
 
     const logo = findLogo(mvp?.team);
     // const position = mvp?.position ? mvp.position.match(/^[A-Z]+/)?.[0] : undefined;
@@ -164,11 +85,11 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                     <div className="flex items-center mx-2" style={{marginTop: ".8em"}}>
                         <div className="flex items-center" style={{width: "60px"}}>
                             <Icon icon="fa6-solid:ranking-star" style={{fontSize: "22px", color: "#a9dfd8"}}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{mvp.rank}</p>
+                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{mvp[fantasyMarket].rank}</p>
                         </div>
                         <div className="flex items-center">
                             <Image src={value} alt="value" width={25} height={25}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp.value}</p>
+                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp[fantasyMarket].value}</p>
                         </div>
                     </div>
                 </div>

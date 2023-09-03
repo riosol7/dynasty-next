@@ -15,64 +15,63 @@ export const processRosters = (rosters: Interfaces.Roster[], players: Interfaces
         }
     }).filter(player => player !== null) as Interfaces.Player[];    
     
-    const qbFiltered = foundPlayers.filter(player => player.position === "QB").sort((a, b) => {
-      const aValue = typeof a.value === "string" ? parseFloat(a.value) : a.value;
-      const bValue = typeof b.value === "string" ? parseFloat(b.value) : b.value;
+    const qbFiltered = foundPlayers.filter(player => player.position === "QB");
+    const rbFiltered = foundPlayers.filter(player => player.position === "RB");
+    const wrFiltered = foundPlayers.filter(player => player.position === "WR");
+    const teFiltered = foundPlayers.filter(player => player.position === "TE");
 
-      return (isNaN(bValue) ? 0 : bValue) - (isNaN(aValue) ? 0 : aValue);
-    });
-    console.log("qbFiltered:", qbFiltered)
-    const qbTotal = qbFiltered.reduce((total, player) => {
-      return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    const ktcQBValue = qbFiltered.reduce((total, player) => {
+      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
-    const rbFiltered = foundPlayers.filter(player => player.position === "RB").sort((a, b) => {
-        return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    });
-    const rbTotal = rbFiltered.reduce((total, player) => {
-      return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    const ktcRBValue = rbFiltered.reduce((total, player) => {
+      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
-    const wrFiltered = foundPlayers.filter(player => player.position === "WR").sort((a, b) => {
-      return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    });
-    const wrTotal = wrFiltered.reduce((total, player) => {
-      return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    const ktcWRValue = wrFiltered.reduce((total, player) => {
+      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
-    const teFiltered = foundPlayers.filter(player => player.position === "TE").sort((a, b) => {
-      return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    });
-    const teTotal = teFiltered.reduce((total, player) => {
-      return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    const ktcTEValue = teFiltered.reduce((total, player) => {
+      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
+
+    // const rbFiltered = foundPlayers.filter(player => player.position === "RB").sort((a, b) => {
+    //     return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
+    // });
+    // const rbTotal = rbFiltered.reduce((total, player) => {
+    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    // }, 0);
+
+    // const wrFiltered = foundPlayers.filter(player => player.position === "WR").sort((a, b) => {
+    //   return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
+    // });
+    // const wrTotal = wrFiltered.reduce((total, player) => {
+    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    // }, 0);
+
+    // const teFiltered = foundPlayers.filter(player => player.position === "TE").sort((a, b) => {
+    //   return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
+    // });
+    // const teTotal = teFiltered.reduce((total, player) => {
+    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
+    // }, 0);
   
-    let teamTotal = qbTotal + rbTotal + wrTotal + teTotal;
+    const ktcTeamValue = ktcQBValue + ktcRBValue + ktcWRValue + ktcTEValue;
     return {
       ...roster,
       players: foundPlayers,
       owner: foundOwner,
-      // starters: foundStarters,
-      // reserve: foundReserve,
-      // taxi: foundTaxi,
       ktc: {
-        teamTotal: teamTotal,
-        qb: {
-            value: qbTotal,
-            players: qbFiltered,
-        },
-        rb: {
-            value: rbTotal,
-            players: rbFiltered,
-        },
-        wr: {
-            value: wrTotal,
-            players: wrFiltered,
-        },
-        te: {
-            value: teTotal,
-            players: teFiltered,
-        },
+        team: ktcTeamValue,
+        qb: ktcQBValue,
+        rb: ktcRBValue,
+        wr: ktcWRValue,
+        te: ktcTEValue,
       },
     };
   })

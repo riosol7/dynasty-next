@@ -1,34 +1,20 @@
 import * as Interfaces from "../interfaces";
 import { findRosterByID } from "./findRoster";
 // Reconfigured top players to account for all fantasyMarkets;
-const initialMVP: Interfaces.Player = {
-    first_name: '',
-    team: '',
-    position: '',
-    rank: '',
-    age: 0,
-    birth_date: "",
-    college: "",
-    depth_chart_order: 0,
-    espn_id: 0,
-    fantasy_data_id: 0,
-    full_name: "",
-    height: "",
-    high_school: "",
-    last_name: "",
-    number: 0,
-    player_id: "",
-    rotowire_id: 0,
-    sportradar_id: "",
-    weight: "",
-    yahoo_id: 0,
-    years_exp: 0,
-    value: 0
-};
 
-export const getMVP = (id: Number, rosters:Interfaces.Roster[]): Interfaces.Player => {
+export const getMVP = (id: Number, rosters: Interfaces.Roster[], fantasyMarket: string): Interfaces.Player => {
     try {
         const foundTeam = findRosterByID(id, rosters)!;
+        const qbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "QB");
+        // const qbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "QB").sort((a, b) => {
+        //         return (isNaN(b[fantasyMarket].value) ? 0 : parseInt(b[fantasyMarket].value)) - (isNaN(a[fantasyMarket].value) ? 0 : parseInt(a[fantasyMarket].value));
+        //     });
+        const rbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "RB");
+        const wrFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "WR");
+        const teFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "TE");
+
+        // const test = qbFiltered[fantasyMarket].
+
         const topPlayers = [
             foundTeam?.ktc.qb.players[0],
             foundTeam?.ktc.rb.players[0],
@@ -43,6 +29,6 @@ export const getMVP = (id: Number, rosters:Interfaces.Roster[]): Interfaces.Play
         return topPlayer;
     } catch (error) {
         console.error("Error:", error);
-        return initialMVP;
+        return Interfaces.initialMVP;
     };
 };

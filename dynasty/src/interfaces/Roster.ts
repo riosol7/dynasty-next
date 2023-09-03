@@ -1,4 +1,12 @@
 import { Owner, Player } from ".";
+
+interface DynastyValue {
+    team: number;
+    qb: number;
+    rb: number;
+    wr: number;
+    te: number;
+};
 export interface Roster {
     taxi: string[];
     starters: string[];
@@ -22,25 +30,10 @@ export interface Roster {
     league_id: string;
     keepers: string[] | null;
     co_owners: string[] | null;
-    ktc: {
-        teamTotal: number;
-        qb: {
-            players: Player[];
-            value: number;
-        };
-        rb: {
-            players: Player[];
-            value: number;
-        };
-        wr: {
-            players: Player[];
-            value: number;
-        };
-        te: {
-            players: Player[];
-            value: number;
-        };
-    }
+    ktc: DynastyValue; // KeepTradeCut
+    sf: DynastyValue; // SuperFlex
+    fc: DynastyValue; // FantasyCalc
+    dp: DynastyValue; // DynastyProcess
 }
 
 export interface RosterContextType {

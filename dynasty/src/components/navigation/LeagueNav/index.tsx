@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./LeagueNav.module.css";
+import { useFantasyMarket } from "@/context";
 import * as Interfaces from "../../../interfaces";
 import { Icon } from '@iconify-icon/react';
 
@@ -35,7 +36,10 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
 };
 
 export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
+    const { fantasyMarket, onChange } = useFantasyMarket()!;
+
     const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
+
 
     return (
         <nav className={styles.navigation}>
@@ -60,11 +64,11 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/>
             </div>
             <div>
-                <select id={styles.selectMarket}>
-                    <option>{"KeepTradeCut"}</option>
-                    <option>{"FantasyCalc"}</option>
-                    <option>{"SuperFlex"}</option>
-                    <option>{"DynastyProcess"}</option>
+                <select id={styles.selectMarket} onChange={onChange} value={fantasyMarket}>
+                    <option value={"ktc"}>{"KeepTradeCut"}</option>
+                    <option value={"fc"}>{"FantasyCalc"}</option>
+                    <option value={"sf"}>{"SuperFlex"}</option>
+                    <option value={"dp"}>{"DynastyProcess"}</option>
                 </select>
             </div>
             <div className={styles.activity}>

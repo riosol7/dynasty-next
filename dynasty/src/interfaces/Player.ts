@@ -10,13 +10,13 @@ interface MarketContent {
 export interface Player {
     age: number;
     birth_date: string;
-    cbs_id: string | null;
+    cbs_id: string;
     college: string;
     depth_chart_order: number;
-    dynasty_process: DynastyProcessPlayerConcise;
+    dp: DynastyProcessPlayerConcise;
     espn_id: number;
-    fantasy_calc: MarketContent;
-    fantasy_calc_id: string | null;
+    fc: MarketContent;
+    fantasy_calc_id: string;
     fantasy_data_id: number;
     fantasy_pro: FantasyProPlayerConcise;
     first_name: string;
@@ -25,13 +25,13 @@ export interface Player {
     high_school: string;
     ktc: MarketContent;
     last_name: string;
-    mfl_id: string | null;
+    mfl_id: string;
     number: number;
     player_id: string;
     position: string;
     rotowire_id: number;
     sportradar_id: string;
-    superFlex: MarketContent;
+    sf: MarketContent;
     team: string;
     weight: string;
     yahoo_id: number;
@@ -179,3 +179,81 @@ export interface FantasyCalcContextType {
     fc: FantasyCalcPlayer[];
     loadFC: boolean;
 }
+
+export const initialMVP: Player = {
+    first_name: '',
+    team: '',
+    position: '',
+    age: 0,
+    birth_date: "",
+    cbs_id: "",
+    college: "",
+    depth_chart_order: 0,
+    espn_id: 0,
+    fantasy_data_id: 0,
+    full_name: "",
+    height: "",
+    high_school: "",
+    last_name: "",
+    number: 0,
+    player_id: "",
+    rotowire_id: 0,
+    sportradar_id: "",
+    weight: "",
+    yahoo_id: 0,
+    years_exp: 0,
+    fantasy_calc_id: "",
+    mfl_id: "",
+    ktc: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    },
+    sf: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    },
+    fc: {
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
+    },
+    dp: {
+        ecr_1qb: "",
+        ecr_2qb: "",
+        ecr_pos: "",
+        value_1qb: "",
+        value_2qb: "",
+        fp_id: "",
+    },
+    fantasy_pro: {
+        fantasypros_id: "",
+        rank: "",
+        ecr: "",
+        sd: "",
+        best: "",
+        worst: "",   
+        player_page_url: "",
+        player_image_url: "",
+        player_bye_week: "",
+        player_owned_avg: "",
+        player_owned_espn: "",
+        player_owned_yahoo: "",
+        player_opponent: "",
+        player_opponent_id: "",
+        player_ecr_delta: "",
+        pos_rank: "",
+        start_sit_grade: "",
+        r2p_pts: "",
+    },
+};
