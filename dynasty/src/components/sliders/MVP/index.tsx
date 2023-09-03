@@ -8,7 +8,9 @@ import { Icon } from "@iconify-icon/react";
 import MVPSlide from "./slides";
 import { processPlayers, processRosters } from "@/utils";
 import { 
+    useDynastyProcessContext,
     useFantasyCalcContext,
+    useFantasyProContext,
     useKTCContext,
     useOwnerContext,
     usePlayerContext,
@@ -24,7 +26,9 @@ export default function MVPSlider() {
     const { ktc, loadKTC } = useKTCContext();
     const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
-    const processedPlayers = processPlayers(players, ktc, superFlex, fc);
+    const { dp, loadDP } = useDynastyProcessContext();
+    const { fantasyPro, loadFantasyPro } = useFantasyProContext();
+    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(rosters, processedPlayers, owners);
 
     // console.log("processedRosters",processedRosters);

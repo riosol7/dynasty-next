@@ -15,6 +15,7 @@ const initialMVP: Interfaces.Player = {
     rank: '',
     age: 0,
     birth_date: "",
+    cbs_id: null,
     college: "",
     depth_chart_order: 0,
     espn_id: 0,
@@ -49,14 +50,42 @@ const initialMVP: Interfaces.Player = {
         path: "",
         positionRank: "",
     },
-    fc: {
+    fantasy_calc: {
         value: 0,
         rank: "",
         tier: "",
         trend: "",
         path: "",
         positionRank: "",
-    }
+    },
+    dynasty_process: {
+        ecr_1qb: "",
+        ecr_2qb: "",
+        ecr_pos: "",
+        value_1qb: "",
+        value_2qb: "",
+        fp_id: "",
+    },
+    fantasy_pro: {
+        fantasypros_id: "",
+        rank: "",
+        ecr: "",
+        sd: "",
+        best: "",
+        worst: "",   
+        player_page_url: "",
+        player_image_url: "",
+        player_bye_week: "",
+        player_owned_avg: "",
+        player_owned_espn: "",
+        player_owned_yahoo: "",
+        player_opponent: "",
+        player_opponent_id: "",
+        player_ecr_delta: "",
+        pos_rank: "",
+        start_sit_grade: "",
+        r2p_pts: "",
+    },
 };
 
 const positionStyles = {
@@ -122,9 +151,9 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                         </div>
                     </div>
                     <div className="my-1 flex items-center">
-                        <div className={`${styles.playerHUD} ${positionStyles[mvp.position as keyof typeof positionStyles] || ""}`}>
+                        <div className={`${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
                             <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
-                                {mvp.position}
+                                {mvp?.position}
                                 <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
                                     {getTotalPts(league, matches, roster.roster_id, mvp.player_id).pts}
                                     <span style={{color: "lightgray"}}> pts</span>

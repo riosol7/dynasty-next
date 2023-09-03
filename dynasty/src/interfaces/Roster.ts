@@ -14,7 +14,7 @@ export interface Roster {
     };
     roster_id: number;
     reserve: string[] | null;
-    players: string[] | Player[] | null;
+    players: string[] | Player[];
     player_map: Record<string, string> | null;
     owner_id: string;
     owner: Owner | undefined | null;

@@ -3,7 +3,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import * as Interfaces from "../../interfaces";
 
-const defaultFantasyCalc: Interfaces.PlayerMarket[] = [];
+const defaultFantasyCalc: Interfaces.FantasyCalcPlayer[] = [];
 
 const FantasyCalcContext = createContext<Interfaces.FantasyCalcContextType | undefined>(undefined);
 
@@ -16,7 +16,7 @@ export const useFantasyCalcContext = () => {
 };
 
 export const FantasyCalcProvider = ({ children }: Interfaces.ChildrenProps) => {
-    const [fc, setFC] = useState<Interfaces.PlayerMarket[]>(defaultFantasyCalc);
+    const [fc, setFC] = useState<Interfaces.FantasyCalcPlayer[]>(defaultFantasyCalc);
     const [loadFC, setLoadFC] = useState(true);
 
     useEffect(() => {

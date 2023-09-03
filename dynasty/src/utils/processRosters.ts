@@ -3,11 +3,25 @@ import * as Interfaces from "../interfaces";
 export const processRosters = (rosters: Interfaces.Roster[], players: Interfaces.Player[], owners: Interfaces.Owner[]) => {
   const uploadPlayersToRosters = rosters.map(roster => {
     const foundOwner = owners.find(owner => owner.roster_id === roster.roster_id);
-    const foundPlayers = players.filter(player => roster.players.includes(player.player_id));
-    const qbFiltered = foundPlayers.filter(player => player.position === "QB").sort((a, b) => {
-      return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    });
+    const playerIDs = roster.players;
 
+    const foundPlayers = playerIDs.map((playerID) => {
+      const player = players.find(player => player.player_id === playerID);
+        if (player) {
+            return player;
+        } else {
+            // Handle the case where a player with the ID is not found
+            return null;
+        }
+    }).filter(player => player !== null) as Interfaces.Player[];    
+    
+    const qbFiltered = foundPlayers.filter(player => player.position === "QB").sort((a, b) => {
+      const aValue = typeof a.value === "string" ? parseFloat(a.value) : a.value;
+      const bValue = typeof b.value === "string" ? parseFloat(b.value) : b.value;
+
+      return (isNaN(bValue) ? 0 : bValue) - (isNaN(aValue) ? 0 : aValue);
+    });
+    console.log("qbFiltered:", qbFiltered)
     const qbTotal = qbFiltered.reduce((total, player) => {
       return total + (isNaN(player.value) ? 0 : parseInt(player.value));
     }, 0);
