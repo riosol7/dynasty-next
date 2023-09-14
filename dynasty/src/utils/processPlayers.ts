@@ -20,9 +20,9 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
 
         // Initialize properties
         player.ktc = player.ktc || {};
-        player.superFlex = player.superFlex || {};
-        player.fantasy_calc = player.fantasy_calc || {};
-        player.dynasty_process = player.dynasty_process || {};
+        player.sf = player.sf || {};
+        player.fc = player.fc || {};
+        player.dp = player.dp || {};
         player.fantasy_pro = player.fantasy_pro || {};
 
         if (ktcPlayer && player.ktc) {
@@ -34,25 +34,25 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
             player.ktc.trend = ktcPlayer.trend || player.ktc.trend;
             player.ktc.path = ktcPlayer.path || player.ktc.path;
         };
-        if (sfPlayer && player.superFlex) {
-            player.superFlex.rank = sfPlayer.rank || player.superFlex.rank;
-            player.superFlex.positionRank = extractNumbersFromString(sfPlayer.positionRank) || player.superFlex.positionRank;
-            player.superFlex.value = sfPlayer.value || player.superFlex.value;
+        if (sfPlayer && player.sf) {
+            player.sf.rank = sfPlayer.rank || player.sf.rank;
+            player.sf.positionRank = extractNumbersFromString(sfPlayer.positionRank) || player.sf.positionRank;
+            player.sf.value = sfPlayer.value || player.sf.value;
         };
-        if (fcPlayer && player.fantasy_calc) {
+        if (fcPlayer && player.fc) {
             player.fantasy_calc_id = fcPlayer.fantasycalcId || player.fantasy_calc_id;
             player.mfl_id = fcPlayer.mflId || player.mfl_id;
-            player.fantasy_calc.rank = fcPlayer.overallRank || player.fantasy_calc.rank;
-            player.fantasy_calc.positionRank = fcPlayer.positionRank || player.fantasy_calc.positionRank;
-            player.fantasy_calc.value = fcPlayer.value || player.fantasy_calc.value;
-            player.fantasy_calc.trend = fcPlayer.trend30day || player.fantasy_calc.trend;
+            player.fc.rank = fcPlayer.overallRank || player.fc.rank;
+            player.fc.positionRank = fcPlayer.positionRank || player.fc.positionRank;
+            player.fc.value = fcPlayer.value || player.fc.value;
+            player.fc.trend = fcPlayer.trend30day || player.fc.trend;
         };
-        if (dpPlayer && player.dynasty_process) {
-            player.dynasty_process.ecr_1qb = dpPlayer.ecr_1qb || player.dynasty_process.ecr_1qb;
-            player.dynasty_process.ecr_2qb = dpPlayer.ecr_2qb || player.dynasty_process.ecr_2qb;
-            player.dynasty_process.ecr_pos = dpPlayer.ecr_pos || player.dynasty_process.ecr_pos;
-            player.dynasty_process.value_1qb = dpPlayer.value_1qb || player.dynasty_process.value_1qb;
-            player.dynasty_process.value_2qb = dpPlayer.value_2qb || player.dynasty_process.value_2qb;
+        if (dpPlayer && player.dp) {
+            player.dp.ecr_1qb = dpPlayer.ecr_1qb || player.dp.ecr_1qb;
+            player.dp.ecr_2qb = dpPlayer.ecr_2qb || player.dp.ecr_2qb;
+            player.dp.ecr_pos = dpPlayer.ecr_pos || player.dp.ecr_pos;
+            player.dp.value_1qb = dpPlayer.value_1qb || player.dp.value_1qb;
+            player.dp.value_2qb = dpPlayer.value_2qb || player.dp.value_2qb;
         };
         if (fpPlayer && player.fantasy_pro) {
             player.fantasy_pro.fantasypros_id = fpPlayer.fantasypros_id || player.fantasy_pro.fantasypros_id;

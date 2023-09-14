@@ -173,12 +173,12 @@ export interface KTCContextType {
 export interface SuperFlexContextType {
     superFlex: PlayerMarket[];
     loadSuperFlex: boolean;
-}
+};
 
 export interface FantasyCalcContextType {
     fc: FantasyCalcPlayer[];
     loadFC: boolean;
-}
+};
 
 export const initialMVP: Player = {
     first_name: '',

@@ -5,7 +5,7 @@ import Image from "next/image";
 import value from "../../../../assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
 import { findLogo, getMVP, getTotalPts } from "@/utils";
-import { useLeagueContext, useMatchContext, useFantasyMarket } from "@/context";
+import { useFantasyMarket } from "@/context";
 import * as Interfaces from "../../../../interfaces";
 
 const positionStyles = {
@@ -16,8 +16,6 @@ const positionStyles = {
 };
 
 export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
-    const { league, loadLeague } = useLeagueContext();
-    const { matches, loadMatches } = useMatchContext();
     const { fantasyMarket } = useFantasyMarket()!;
 
     const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialMVP);
@@ -76,7 +74,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                             <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
                                 {mvp?.position}
                                 <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                    {getTotalPts(league, matches, roster.roster_id, mvp.player_id).pts}
+                                    {getTotalPts(league, roster.roster_id, mvp.player_id).pts}
                                     <span style={{color: "lightgray"}}> pts</span>
                                 </span>
                             </p>

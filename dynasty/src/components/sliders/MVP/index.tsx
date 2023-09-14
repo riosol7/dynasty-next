@@ -12,16 +12,14 @@ import {
     useFantasyCalcContext,
     useFantasyProContext,
     useKTCContext,
-    useOwnerContext,
+    useLeagueContext,
     usePlayerContext,
-    useRosterContext,
     useSuperFlexContext,
  } from "@/context";
-import { Roster } from "@/interfaces";
+ import * as Interfaces from "../../../interfaces";
 
 export default function MVPSlider() {
-    const { owners, loadOwners } = useOwnerContext();
-    const { rosters, loadRosters } = useRosterContext();
+    const  { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
     const { superFlex, loadSuperFlex } = useSuperFlexContext();
@@ -29,9 +27,7 @@ export default function MVPSlider() {
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
-    const processedRosters = processRosters(rosters, processedPlayers, owners);
-
-    // console.log("processedRosters",processedRosters);
+    const processedRosters = processRosters(legacyLeague[0], processedPlayers);
 
     return (
         <div className="my-5">
@@ -75,7 +71,7 @@ export default function MVPSlider() {
                         disableOnInteraction: false
                     }}
                 >
-                    {processedRosters?.map((roster: Roster, i: React.Key) => (
+                    {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (
                     <SwiperSlide key={i}>
                         <MVPSlide roster={roster} rosters={processedRosters}/>
                     </SwiperSlide>

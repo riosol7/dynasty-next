@@ -7,6 +7,7 @@ interface DynastyValue {
     wr: number;
     te: number;
 };
+
 export interface Roster {
     taxi: string[];
     starters: string[];
@@ -16,7 +17,12 @@ export interface Roster {
         waiver_budget_used: number;
         total_moves: number;
         ties: number;
+        ppts_decimal: number;
+        ppts: number;
         losses: number;
+        fpts_decimal: number;
+        fpts_against_decimal: number;
+        fpts_against: number;
         fpts: number;
         division: number;
     };
@@ -26,7 +32,9 @@ export interface Roster {
     player_map: Record<string, string> | null;
     owner_id: string;
     owner: Owner | undefined | null;
-    metadata: Record<string, string>;
+    metadata: {
+        [key: string]: string;
+    };
     league_id: string;
     keepers: string[] | null;
     co_owners: string[] | null;
@@ -34,13 +42,8 @@ export interface Roster {
     sf: DynastyValue; // SuperFlex
     fc: DynastyValue; // FantasyCalc
     dp: DynastyValue; // DynastyProcess
-}
-
-export interface RosterContextType {
-    rosters: Roster[];
-    loadRosters: boolean;
-}
+};
 
 export interface RosterProps {
     roster: Roster;
-}
+};

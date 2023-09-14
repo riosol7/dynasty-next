@@ -1,3 +1,5 @@
+import { Roster } from ".";
+
 export interface League {
   total_rosters: number;
   status: "pre_draft" | "complete" | "in_season";  
@@ -223,36 +225,7 @@ export interface League {
     }[];
   };
   matchups: any[][]; // Update this type as per your data
-  rosters: {
-    taxi: string[];
-    starters: string[];
-    settings: {
-      wins: number;
-      waiver_position: number;
-      waiver_budget_used: number;
-      total_moves: number;
-      ties: number;
-      ppts_decimal: number;
-      ppts: number;
-      losses: number;
-      fpts_decimal: number;
-      fpts_against_decimal: number;
-      fpts_against: number;
-      fpts: number;
-      division: number;
-    };
-    roster_id: number;
-    reserve: string[];
-    players: string[];
-    player_map: null; // Update this type as per your data
-    owner_id: string;
-    metadata: {
-      [key: string]: string;
-    };
-    league_id: string;
-    keepers: null; // Update this type as per your data
-    co_owners: null; // Update this type as per your data
-  }[];
+  rosters: Roster[];
   transactions: {
     waiver_budget: any[]; // Update this type as per your data
     type: string;

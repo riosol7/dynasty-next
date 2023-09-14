@@ -1,8 +1,11 @@
 import * as Interfaces from "../interfaces";
 
-export const processRosters = (rosters: Interfaces.Roster[], players: Interfaces.Player[], owners: Interfaces.Owner[]) => {
+export const processRosters = (league: Interfaces.League, players: Interfaces.Player[]): Interfaces.Roster[] => {
+  const rosters = league.rosters;
+  const users = league.users;
+
   const uploadPlayersToRosters = rosters.map(roster => {
-    const foundOwner = owners.find(owner => owner.roster_id === roster.roster_id);
+    const foundOwner = users.find(user => user.user_id === roster.owner_id);
     const playerIDs = roster.players;
 
     const foundPlayers = playerIDs.map((playerID) => {
