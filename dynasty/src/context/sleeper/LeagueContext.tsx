@@ -3,15 +3,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import * as Interfaces from "../../interfaces";
 
-const defaultLeague: Interfaces.League = {
-    status: "pre_draft",
-    season: "",
-    total_rosters: "",
-    name: "",
-    avatar: "",
-};
-
-const LeagueContext = createContext<Interfaces.LeagueContextType | undefined>(undefined);
+const LeagueContext = createContext<Interfaces.LegacyLeagueContextType | undefined>(undefined);
 
 export const useLeagueContext = () => {
     const context = useContext(LeagueContext);
@@ -22,24 +14,24 @@ export const useLeagueContext = () => {
 };
 
 export const LeagueProvider = ({ children }: Interfaces.ChildrenProps) => {
-    const [league, setLeague] = useState<Interfaces.League>(defaultLeague);
-    const [loadLeague, setLoadLeague] = useState(true);
+    const [legacyLeague, setLegacyLeague] = useState<Interfaces.League[]>(Interfaces.defaultLegacyLeague);
+    const [loadLegacyLeague, setLoadLegacyLeague] = useState(true);
 
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}league`);
+                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}league/${process.env.NEXT_PUBLIC_LEAGUE_ID}`);
                 const parsedData = await call.json();
-                setLeague(parsedData);
-                setLoadLeague(false);
-                console.log("fetchLeague:", parsedData);
+                setLegacyLeague(parsedData);
+                setLoadLegacyLeague(false);
+                console.log("fetchLegacyLeague:", parsedData);
             } catch (err) {
                 console.log(err);
             }
         })();
     }, []);
 
-    const contextValue: Interfaces.LeagueContextType = { league, loadLeague };
+    const contextValue: Interfaces.LegacyLeagueContextType = { legacyLeague, loadLegacyLeague };
 
     return (
         <LeagueContext.Provider value={contextValue}>{children}</LeagueContext.Provider>

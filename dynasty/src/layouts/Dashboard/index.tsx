@@ -7,12 +7,12 @@ import SideNavBar from "@/components/navigation/SideNavBar";
 import LeagueNav from "@/components/navigation/LeagueNav";
 
 export default function DashboardLayout({ children }: Interfaces.ChildrenProps) {
-    const { league, loadLeague } = useLeagueContext();
+    const { legacyLeague, loadLegacyLeague } = useLeagueContext();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
         <>
-            <LeagueNav league={league} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
+            <LeagueNav league={legacyLeague[0]} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
             <div className={styles.dashboardLayout} style={{ 
                 width: isSidebarOpen ? "" : "100%",
                 paddingLeft: isSidebarOpen ? "" : "calc(5rem)",

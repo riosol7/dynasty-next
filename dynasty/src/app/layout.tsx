@@ -2,10 +2,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
 import { 
-  LeagueProvider, 
-  MatchProvider, 
-  OwnerProvider, 
-  RosterProvider, 
+  LeagueProvider,  
   PlayerProvider,
   FantasyCalcProvider,
   KTCProvider,
@@ -29,27 +26,21 @@ export default function RootLayout({children}: ChildrenProps) {
     <html lang="en">
       <body className={inter.className}>
         <LeagueProvider>
-          <MatchProvider>
-            <OwnerProvider>
-              <RosterProvider>
-                <PlayerProvider>
-                  <FantasyCalcProvider>
-                    <KTCProvider>
-                      <SuperFlexProvider>
-                        <DynastyProcessProvider>
-                          <FantasyProProvider>
-                            <FantasyMarketProvider>
-                              <DashboardLayout>{children}</DashboardLayout>
-                            </FantasyMarketProvider>
-                          </FantasyProProvider>
-                        </DynastyProcessProvider>
-                      </SuperFlexProvider>
-                    </KTCProvider>
-                  </FantasyCalcProvider>
-                </PlayerProvider>
-              </RosterProvider>
-            </OwnerProvider>
-          </MatchProvider>
+          <PlayerProvider>
+            <FantasyCalcProvider>
+              <KTCProvider>
+                <SuperFlexProvider>
+                  <DynastyProcessProvider>
+                    <FantasyProProvider>
+                      <FantasyMarketProvider>
+                        <DashboardLayout>{children}</DashboardLayout>
+                      </FantasyMarketProvider>
+                    </FantasyProProvider>
+                  </DynastyProcessProvider>
+                </SuperFlexProvider>
+              </KTCProvider>
+            </FantasyCalcProvider>
+          </PlayerProvider>
         </LeagueProvider>
       </body>
     </html>
