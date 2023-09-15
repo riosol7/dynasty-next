@@ -1,32 +1,19 @@
 import * as Interfaces from "../interfaces";
-import { findRosterByID } from "./findRoster";
-// Reconfigured top players to account for all fantasyMarkets;
 
-export const getMVP = (id: Number, rosters: Interfaces.Roster[], fantasyMarket: string): Interfaces.Player => {
+export const getMVP = (roster: Interfaces.Roster, fantasyMarket: string): Interfaces.Player => {
     try {
-        const foundTeam = findRosterByID(id, rosters)!;
-        const qbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "QB");
-        // const qbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "QB").sort((a, b) => {
-        //         return (isNaN(b[fantasyMarket].value) ? 0 : parseInt(b[fantasyMarket].value)) - (isNaN(a[fantasyMarket].value) ? 0 : parseInt(a[fantasyMarket].value));
-        //     });
-        const rbFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "RB");
-        const wrFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "WR");
-        const teFiltered = (foundTeam.players as Interfaces.Player[]).filter((player: Interfaces.Player) => player.position === "TE");
-
-        // const test = qbFiltered[fantasyMarket].
-
-        const topPlayers = [
-            foundTeam?.ktc.qb.players[0],
-            foundTeam?.ktc.rb.players[0],
-            foundTeam?.ktc.wr.players[0],
-            foundTeam?.ktc.te.players[0]
-        ];
-        const topPlayer = topPlayers.reduce((prev, current) => {
-            if (!prev) return current;
-            if (!current) return prev;
-            return prev.value > current.value ? prev : current;
+        const topPlayers = (roster.players as Interfaces.Player[]).sort((a, b) => {
+            const aValue = (a[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value;
+            const bValue = (b[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value;
+        
+            const aValueParsed = typeof aValue === 'string' ? parseInt(aValue) : aValue as number;
+            const bValueParsed = typeof bValue === 'string' ? parseInt(bValue) : bValue as number;
+    
+            return (isNaN(bValueParsed) ? 0 : bValueParsed) - (isNaN(aValueParsed) ? 0 : aValueParsed);
         });
-        return topPlayer;
+
+        return topPlayers[0];
+
     } catch (error) {
         console.error("Error:", error);
         return Interfaces.initialMVP;

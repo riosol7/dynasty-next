@@ -1,6 +1,6 @@
-import { Roster } from "."
+import { Roster, League } from "."
 
 export interface MVPSlideProps {
-    rosters: Roster[];
+    legacyLeague: League[];
     roster: Roster 
 };

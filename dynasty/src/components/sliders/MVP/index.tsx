@@ -73,7 +73,7 @@ export default function MVPSlider() {
                 >
                     {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (
                     <SwiperSlide key={i}>
-                        <MVPSlide roster={roster} rosters={processedRosters}/>
+                        <MVPSlide legacyLeague={legacyLeague} roster={roster}/>
                     </SwiperSlide>
                     ))}
                 </Swiper>

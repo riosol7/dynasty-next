@@ -1,11 +1,11 @@
-interface MarketContent {
+export interface MarketContent {
     rank: string | undefined;
     value: number | string;
     tier: string | null | undefined;
     trend: string | null | undefined;
     path: string | null | undefined;
     positionRank: string | undefined;
-}
+};
 
 export interface Player {
     age: number;
@@ -110,7 +110,7 @@ export interface DynastyProcessPlayer {
     ecr_2qb: string;
     ecr_pos: string;
     value_1qb: string;
-    value_2qb: string;
+    value: string;
     scrape_date: string;
     fp_id: string;  
 };
@@ -120,7 +120,7 @@ export interface DynastyProcessPlayerConcise {
     ecr_2qb: string;
     ecr_pos: string;
     value_1qb: string;
-    value_2qb: string;
+    value: string;
     fp_id: string;  
 };
 
@@ -233,7 +233,7 @@ export const initialMVP: Player = {
         ecr_2qb: "",
         ecr_pos: "",
         value_1qb: "",
-        value_2qb: "",
+        value: "",
         fp_id: "",
     },
     fantasy_pro: {

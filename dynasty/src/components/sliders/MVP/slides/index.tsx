@@ -15,7 +15,7 @@ const positionStyles = {
     TE: styles.teHUD,
 };
 
-export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
+export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProps) {
     const { fantasyMarket } = useFantasyMarket()!;
 
     const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialMVP);
@@ -27,7 +27,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
     useEffect(() => {
         async function fetchMVP() {
             try {
-                const player = await getMVP(roster.roster_id, rosters, fantasyMarket);
+                const player = getMVP(roster, fantasyMarket);
                 setMVP(player);
                 setLoadMVP(false);
             } catch (error) {
@@ -35,7 +35,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
             }
         }
         fetchMVP();
-    }, [fantasyMarket, mvp, roster.roster_id, rosters]);
+    }, [fantasyMarket, mvp, roster.roster_id]);
 
     const logo = findLogo(mvp?.team);
     // const position = mvp?.position ? mvp.position.match(/^[A-Z]+/)?.[0] : undefined;
@@ -74,7 +74,7 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                             <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
                                 {mvp?.position}
                                 <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                    {getTotalPts(league, roster.roster_id, mvp.player_id).pts}
+                                    {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).pts}
                                     <span style={{color: "lightgray"}}> pts</span>
                                 </span>
                             </p>
@@ -83,11 +83,11 @@ export default function MVPSlide({roster, rosters}: Interfaces.MVPSlideProps) {
                     <div className="flex items-center mx-2" style={{marginTop: ".8em"}}>
                         <div className="flex items-center" style={{width: "60px"}}>
                             <Icon icon="fa6-solid:ranking-star" style={{fontSize: "22px", color: "#a9dfd8"}}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{mvp[fantasyMarket].rank}</p>
+                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).rank}</p>
                         </div>
                         <div className="flex items-center">
                             <Image src={value} alt="value" width={25} height={25}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp[fantasyMarket].value}</p>
+                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value}</p>
                         </div>
                     </div>
                 </div>
