@@ -16,6 +16,6 @@ export const getMVP = (roster: Interfaces.Roster, fantasyMarket: string): Interf
 
     } catch (error) {
         console.error("Error:", error);
-        return Interfaces.initialMVP;
+        return Interfaces.initialPlayer;
     };
 };

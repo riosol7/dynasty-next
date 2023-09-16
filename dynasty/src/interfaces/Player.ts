@@ -171,7 +171,7 @@ export interface FantasyCalcContextType {
     loadFC: boolean;
 };
 
-export const initialMVP: Player = {
+export const initialPlayer: Player = {
     first_name: '',
     team: '',
     position: '',

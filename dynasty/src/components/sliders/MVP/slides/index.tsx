@@ -18,7 +18,7 @@ const positionStyles = {
 export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProps) {
     const { fantasyMarket } = useFantasyMarket()!;
 
-    const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialMVP);
+    const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialPlayer);
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
 
     const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_BASE_URL;

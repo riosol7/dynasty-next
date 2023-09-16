@@ -28,7 +28,7 @@ export default function MVPSlider() {
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-    console.log(processedRosters);
+
     return (
         <div className="my-5">
             <div className="flex items-center justify-between mb-3">

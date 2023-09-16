@@ -1,4 +1,4 @@
-import { Roster } from ".";
+import { Draft, Match, Owner, Roster, Transaction } from ".";
 
 export interface League {
   total_rosters: number;
@@ -149,119 +149,11 @@ export interface League {
       l: number | null;
     }[];
   };
-  draft: {
-    type: string;
-    status: string;
-    start_time: number;
-    sport: string;
-    slot_to_roster_id: {
-      [key: string]: number;
-    };
-    settings: {
-      teams: number;
-      slots_wrrb_flex: number;
-      slots_wr: number;
-      slots_te: number;
-      slots_super_flex: number;
-      slots_rb: number;
-      slots_qb: number;
-      slots_k: number;
-      slots_flex: number;
-      slots_def: number;
-      slots_bn: number;
-      rounds: number;
-      reversal_round: number;
-      position_limit_qb: number;
-      player_type: number;
-      pick_timer: number;
-      nomination_timer: number;
-      enforce_position_limits: number;
-      cpu_autopick: number;
-      autostart: number;
-      autopause_start_time: number;
-      autopause_end_time: number;
-      autopause_enabled: number;
-      alpha_sort: number;
-    };
-    season_type: string;
-    season: string;
-    metadata: {
-      scoring_type: string;
-      name: string;
-      description: string;
-    };
-    league_id: string;
-    last_picked: number;
-    last_message_time: number;
-    last_message_id: string;
-    draft_order: {
-      [key: string]: number;
-    };
-    draft_id: string;
-    creators: string[];
-    created: number;
-    picks: {
-      round: number;
-      roster_id: number;
-      player_id: string;
-      picked_by: string;
-      pick_no: number;
-      metadata: {
-          years_exp: string;
-          team: string;
-          status: string;
-          sport: string;
-          position: string;
-          player_id: string;
-          number: string;
-          news_updated: string;
-          last_name: string;
-          injury_status: string;
-          first_name: string;
-      };
-      is_keeper: null;
-      draft_slot: number;
-      draft_id: string;
-    }[];
-  };
-  matchups: any[][]; // Update this type as per your data
+  draft: Draft;
+  matchups: Match[][]; // Update this type as per your data
   rosters: Roster[];
-  transactions: {
-    waiver_budget: any[]; // Update this type as per your data
-    type: string;
-    transaction_id: string;
-    status_updated: number;
-    status: string;
-    settings: {
-      waiver_bid: number;
-      seq: number;
-    };
-    roster_ids: number[];
-    metadata: {
-      notes: string;
-    };
-    leg: number;
-    drops: any[]; // Update this type as per your data
-    draft_picks: any[]; // Update this type as per your data
-    creator: string;
-    created: number;
-    consenter_ids: number[];
-    adds: {
-      [key: string]: number;
-    };
-  }[];
-  users: {
-    user_id: string;
-    settings: null; // Update this type as per your data
-    metadata: {
-      [key: string]: string;
-    };
-    league_id: string;
-    is_owner: boolean;
-    is_bot: boolean;
-    display_name: string;
-    avatar: string;
-  }[];
+  transactions: Transaction[];
+  users: Owner[]
 };
   
 export interface LegacyLeagueProps {

@@ -13,3 +13,7 @@ export const roundToHundredth = (value: number): number => {
 export const winPCT = (wins: number, losses: number): number => {
     return roundToHundredth((wins / (wins + losses)) * 100);
 };
+
+export const calculatePercentageChange = (currentValue: number, prevValue: number): number => {
+    return roundToHundredth(((currentValue - prevValue) / prevValue) * 100);
+}

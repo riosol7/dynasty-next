@@ -12,8 +12,3 @@ export interface Match {
     matchup_id: number;
     custom_points: null | any;
 };
-
-export interface MatchContextType {
-    matches: Match[][];
-    loadMatches: boolean;
-};
