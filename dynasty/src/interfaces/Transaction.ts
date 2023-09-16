@@ -43,3 +43,7 @@ export interface WaiverBidProps {
     te: Transaction[];
   }
 }
+
+export interface WaiverProps {
+  waivers: Transaction[];
+}

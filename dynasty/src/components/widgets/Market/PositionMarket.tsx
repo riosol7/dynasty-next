@@ -73,7 +73,7 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                             </div>
                             {/* TREND */}
                             <div className="w-3/12">
-                                {/* <PositionChart waiverBids={waiverBids} position={position} roundToHundredth={roundToHundredth} /> */}
+                                {/* <PositionLineChart waivers={waivers[position as keyof Waivers]} /> */}
                             </div>
                             {/* LAST PRICE */}
                             <p className="w-1/12">{recentWaivers[0]?.settings?.waiver_bid}</p>
