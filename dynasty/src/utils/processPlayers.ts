@@ -81,7 +81,5 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
     // Combine employed and unemployed players arrays
     const updatedPlayers = updatedEmployedPlayers.concat(unemployedPlayers);
 
-    console.log(updatedPlayers)
-
     return updatedPlayers;
 };

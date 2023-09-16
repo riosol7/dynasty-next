@@ -58,14 +58,14 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                     }}>
                     </div>
                 </div>
-                <div className="col">
+                <div className="">
                     <div className="flex justify-between">
                         <div className="mt-2">
                             <p className="m-0">{mvp?.first_name}</p>
                             <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
                         </div>
                         <div className="p-2">
-                            <Image className={styles.ownerLogo} alt="avatar" width={24} height={24} src={`${avatarBaseURL}${roster?.owner?.avatar}`}/>
+                            <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${avatarBaseURL}${roster?.owner?.avatar}`}/>
                         </div>
                     </div>
                     <div className="my-1 flex items-center">

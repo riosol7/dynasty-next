@@ -43,28 +43,74 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
       return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
-    // const rbFiltered = foundPlayers.filter(player => player.position === "RB").sort((a, b) => {
-    //     return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    // });
-    // const rbTotal = rbFiltered.reduce((total, player) => {
-    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
-    // }, 0);
-
-    // const wrFiltered = foundPlayers.filter(player => player.position === "WR").sort((a, b) => {
-    //   return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    // });
-    // const wrTotal = wrFiltered.reduce((total, player) => {
-    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
-    // }, 0);
-
-    // const teFiltered = foundPlayers.filter(player => player.position === "TE").sort((a, b) => {
-    //   return (isNaN(b.value) ? 0 : parseInt(b.value)) - (isNaN(a.value) ? 0 : parseInt(a.value));
-    // });
-    // const teTotal = teFiltered.reduce((total, player) => {
-    //   return total + (isNaN(player.value) ? 0 : parseInt(player.value));
-    // }, 0);
-  
     const ktcTeamValue = ktcQBValue + ktcRBValue + ktcWRValue + ktcTEValue;
+
+    const fcQBValue = qbFiltered.reduce((total, player) => {
+      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      return total + (isNaN(fcValue) ? 0 : fcValue);
+    }, 0);
+
+    const fcRBValue = rbFiltered.reduce((total, player) => {
+      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      return total + (isNaN(fcValue) ? 0 : fcValue);
+    }, 0);
+
+    const fcWRValue = wrFiltered.reduce((total, player) => {
+      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      return total + (isNaN(fcValue) ? 0 : fcValue);
+    }, 0);
+
+    const fcTEValue = teFiltered.reduce((total, player) => {
+      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      return total + (isNaN(fcValue) ? 0 : fcValue);
+    }, 0);
+ 
+    const fcTeamValue = fcQBValue + fcRBValue + fcWRValue + fcTEValue;
+
+    const dpQBValue = qbFiltered.reduce((total, player) => {
+      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      return total + (isNaN(dpValue) ? 0 : dpValue);
+    }, 0);
+
+    const dpRBValue = rbFiltered.reduce((total, player) => {
+      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      return total + (isNaN(dpValue) ? 0 : dpValue);
+    }, 0);
+
+    const dpWRValue = wrFiltered.reduce((total, player) => {
+      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      return total + (isNaN(dpValue) ? 0 : dpValue);
+    }, 0);
+
+    const dpTEValue = teFiltered.reduce((total, player) => {
+      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      return total + (isNaN(dpValue) ? 0 : dpValue);
+    }, 0);
+
+    const dpTeamValue = dpQBValue + dpRBValue + dpWRValue + dpTEValue;
+
+    const sfQBValue = qbFiltered.reduce((total, player) => {
+      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      return total + (isNaN(sfValue) ? 0 : sfValue);
+    }, 0);
+
+    const sfRBValue = rbFiltered.reduce((total, player) => {
+      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      return total + (isNaN(sfValue) ? 0 : sfValue);
+    }, 0);
+
+    const sfWRValue = wrFiltered.reduce((total, player) => {
+      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      return total + (isNaN(sfValue) ? 0 : sfValue);
+    }, 0);
+
+    const sfTEValue = teFiltered.reduce((total, player) => {
+      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      return total + (isNaN(sfValue) ? 0 : sfValue);
+    }, 0);
+
+    const sfTeamValue = sfQBValue + sfRBValue + sfWRValue + sfTEValue;
+
     return {
       ...roster,
       players: foundPlayers,
@@ -76,16 +122,30 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
         wr: ktcWRValue,
         te: ktcTEValue,
       },
+      dp: {
+        team: dpTeamValue,
+        qb: dpQBValue,
+        rb: dpRBValue,
+        wr: dpWRValue,
+        te: dpTEValue,
+      },
+      fc: {
+        team: fcTeamValue,
+        qb: fcQBValue,
+        rb: fcRBValue,
+        wr: fcWRValue,
+        te: fcTEValue,
+      },
+      sf: {
+        team: sfTeamValue,
+        qb: sfQBValue,
+        rb: sfRBValue,
+        wr: sfWRValue,
+        te: sfTEValue,
+      },
     };
-  })
-  return uploadPlayersToRosters;
-}
+  });
 
-// return {
-//   totalRoster: uploadPlayersToRosters.sort((a,b) => { if (a.settings.wins === b.settings.wins) { return (b.settings.fpts) - (a.settings.fpts);} else { return b.settings.wins - a.settings.wins;}}).map((team, i) => ({...team, rank:i+1})),
-//   teamRank: uploadPlayersToRosters.sort((a, b) => parseFloat(b.kct.teamTotal) - parseFloat(a.kct.teamTotal)).map((roster, idx) => { return { kct: roster.kct, rank: idx + 1, roster_id: roster.roster_id } }),
-//   qbRank: uploadPlayersToRosters.sort((a, b) => parseFloat(b.kct.qb.total) - parseFloat(a.kct.qb.total)).map((roster, idx) => { return { kct: roster.kct, rank: idx + 1, roster_id: roster.roster_id } }),
-//   rbRank: uploadPlayersToRosters.sort((a, b) => parseFloat(b.kct.rb.total) - parseFloat(a.kct.rb.total)).map((roster, idx) => { return { kct: roster.kct, rank: idx + 1, roster_id: roster.roster_id } }),
-//   wrRank: uploadPlayersToRosters.sort((a, b) => parseFloat(b.kct.wr.total) - parseFloat(a.kct.wr.total)).map((roster, idx) => { return { kct: roster.kct, rank: idx + 1, roster_id: roster.roster_id } }),
-//   teRank: uploadPlayersToRosters.sort((a, b) => parseFloat(b.kct.te.total) - parseFloat(a.kct.te.total)).map((roster, idx) => { return { kct: roster.kct, rank: idx + 1, roster_id: roster.roster_id } }),
-// }
+  return uploadPlayersToRosters;
+
+};
