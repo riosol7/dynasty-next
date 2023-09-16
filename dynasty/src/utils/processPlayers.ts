@@ -48,11 +48,11 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
             player.fc.trend = fcPlayer.trend30day || player.fc.trend;
         };
         if (dpPlayer && player.dp) {
-            player.dp.ecr_1qb = dpPlayer.ecr_1qb || player.dp.ecr_1qb;
-            player.dp.ecr_2qb = dpPlayer.ecr_2qb || player.dp.ecr_2qb;
-            player.dp.ecr_pos = dpPlayer.ecr_pos || player.dp.ecr_pos;
-            player.dp.value_1qb = dpPlayer.value_1qb || player.dp.value_1qb;
-            player.dp.value_2qb = dpPlayer.value_2qb || player.dp.value_2qb;
+            // player.dp.ecr_1qb = dpPlayer.ecr_1qb || player.dp.ecr_1qb;
+            player.dp.rank = dpPlayer.ecr_2qb || player.dp.rank;
+            player.dp.positionRank = dpPlayer.ecr_pos || player.dp.positionRank;
+            // player.dp.value_1qb = dpPlayer.value_1qb || player.dp.value_1qb;
+            player.dp.value = dpPlayer.value_2qb || player.dp.value;
         };
         if (fpPlayer && player.fantasy_pro) {
             player.fantasy_pro.fantasypros_id = fpPlayer.fantasypros_id || player.fantasy_pro.fantasypros_id;

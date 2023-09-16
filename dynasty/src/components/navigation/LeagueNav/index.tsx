@@ -38,8 +38,7 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
 export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
     const { fantasyMarket, onChange } = useFantasyMarket()!;
 
-    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
-
+    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMB_BASE_URL;
 
     return (
         <nav className={styles.navigation}>

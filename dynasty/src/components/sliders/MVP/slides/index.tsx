@@ -21,8 +21,8 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
     const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialMVP);
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
 
-    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMBS_BASE_URL;
-    const playerBaseURL = process.env.NEXT_PUBLIC_SLEEPER_PLAYER_THUMBS_BASE_URL;
+    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_BASE_URL;
+    const playerBaseURL = process.env.NEXT_PUBLIC_SLEEPER_PLAYER_BASE_URL;
 
     useEffect(() => {
         async function fetchMVP() {
@@ -38,7 +38,6 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
     }, [fantasyMarket, mvp, roster.roster_id]);
 
     const logo = findLogo(mvp?.team);
-    // const position = mvp?.position ? mvp.position.match(/^[A-Z]+/)?.[0] : undefined;
 
     return (
         <div className={styles.mvpLayout} style={{background: logo.bgColor}}>
@@ -74,7 +73,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                             <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
                                 {mvp?.position}
                                 <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                    {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).pts}
+                                    {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
                                     <span style={{color: "lightgray"}}> pts</span>
                                 </span>
                             </p>

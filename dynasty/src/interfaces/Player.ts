@@ -13,7 +13,7 @@ export interface Player {
     cbs_id: string;
     college: string;
     depth_chart_order: number;
-    dp: DynastyProcessPlayerConcise;
+    dp: MarketContent;
     espn_id: number;
     fc: MarketContent;
     fantasy_calc_id: string;
@@ -110,17 +110,8 @@ export interface DynastyProcessPlayer {
     ecr_2qb: string;
     ecr_pos: string;
     value_1qb: string;
-    value: string;
+    value_2qb: string;
     scrape_date: string;
-    fp_id: string;  
-};
-
-export interface DynastyProcessPlayerConcise {
-    ecr_1qb: string;
-    ecr_2qb: string;
-    ecr_pos: string;
-    value_1qb: string;
-    value: string;
     fp_id: string;  
 };
 
@@ -229,12 +220,12 @@ export const initialMVP: Player = {
         positionRank: "",
     },
     dp: {
-        ecr_1qb: "",
-        ecr_2qb: "",
-        ecr_pos: "",
-        value_1qb: "",
-        value: "",
-        fp_id: "",
+        value: 0,
+        rank: "",
+        tier: "",
+        trend: "",
+        path: "",
+        positionRank: "",
     },
     fantasy_pro: {
         fantasypros_id: "",
