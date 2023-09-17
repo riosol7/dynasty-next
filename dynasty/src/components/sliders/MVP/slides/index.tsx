@@ -6,6 +6,7 @@ import value from "../../../../assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
 import { findLogo, getMVP, getTotalPts } from "@/utils";
 import { useFantasyMarket } from "@/context";
+import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "../../../../interfaces";
 
 const positionStyles = {
@@ -20,9 +21,6 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
 
     const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialPlayer);
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
-
-    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_BASE_URL;
-    const playerBaseURL = process.env.NEXT_PUBLIC_SLEEPER_PLAYER_BASE_URL;
 
     useEffect(() => {
         async function fetchMVP() {
@@ -49,7 +47,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
             }}>
                 <div className="px-1">
                     <div style={{
-                        backgroundImage: `url(${playerBaseURL}${mvp?.player_id}.jpg)`,
+                        backgroundImage: `url(${PLAYER_BASE_URL}${mvp?.player_id}.jpg)`,
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "bottom",
                         backgroundSize: "cover",
@@ -65,7 +63,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                             <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
                         </div>
                         <div className="p-2">
-                            <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${avatarBaseURL}${roster?.owner?.avatar}`}/>
+                            <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
                         </div>
                     </div>
                     <div className="my-1 flex items-center">

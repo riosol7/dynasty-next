@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { SERVER_URL } from "@/constants";
 import * as Interfaces from "../../interfaces";
 
 const defaultFantasyCalc: Interfaces.FantasyCalcPlayer[] = [];
@@ -22,7 +23,7 @@ export const FantasyCalcProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}players/fantasy_calc`);
+                const call = await fetch(`${SERVER_URL}players/fantasy_calc`);
                 const parsedData = await call.json();
                 setFC(parsedData);
                 setLoadFC(false);

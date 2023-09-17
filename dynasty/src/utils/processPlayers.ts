@@ -73,7 +73,7 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
             player.fantasy_pro.pos_rank = fpPlayer.pos_rank || player.fantasy_pro.pos_rank;
             player.fantasy_pro.start_sit_grade = fpPlayer.start_sit_grade || player.fantasy_pro.start_sit_grade;
             player.fantasy_pro.r2p_pts = fpPlayer.r2p_pts || player.fantasy_pro.r2p_pts;
-        }
+        };
 
         return player;
     });

@@ -1,7 +1,7 @@
 import NFLImages from "../assets/images/nfl";
 import * as Interfaces from "../interfaces";
 
-export const Logo: Interfaces.LogoObject[] = [
+export const LOGOS: Interfaces.LogoObject[] = [
     { ATL: { bgColor: "linear-gradient(27deg, rgba(167,25,48,1) 0%, rgba(15,15,15,1) 100%)", bgColor2: "#ac2135", color: "white", l: NFLImages.ATL.src } },
     { ARI: { bgColor: "linear-gradient(27deg, rgba(151,35,63,1) 0%, rgba(15,15,15,1) 100%)", bgColor2: "#97233f", color: "white", l: NFLImages.ARI.src } },
     { BAL: { bgColor: "linear-gradient(27deg, rgba(36,23,115,1) 0%, rgba(15,15,15,1) 100%)", bgColor2: "#241773", color: "#9e7c0d", l: NFLImages.BAL.src } },

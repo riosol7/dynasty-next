@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "next/image";
+import { Icon } from '@iconify-icon/react';
 import styles from "./LeagueNav.module.css";
 import { useFantasyMarket } from "@/context";
+import { SLEEPER_AVATAR_THMUB_BASE_URL } from "@/constants";
 import * as Interfaces from "../../../interfaces";
-import { Icon } from '@iconify-icon/react';
 
 function LeagueStatus({ league }: Interfaces.LeagueProps) {
     const statusClasses = {
@@ -38,8 +39,6 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
 export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
     const { fantasyMarket, onChange } = useFantasyMarket()!;
 
-    const avatarBaseURL = process.env.NEXT_PUBLIC_SLEEPER_AVATAR_THUMB_BASE_URL;
-
     return (
         <nav className={styles.navigation}>
             <div className="flex items-center">
@@ -48,7 +47,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                     <a href={`/`} id={styles.leagueAnchor} style={{ width: "270px" }}>
                         <div className="flex items-center">
                             <div className="flex justify-center mr-4">
-                                <Image className="rounded" width={36} height={36} alt="avatar" src={`${avatarBaseURL}${league.avatar}`}/>
+                                <Image className="rounded" width={36} height={36} alt="avatar" src={`${SLEEPER_AVATAR_THMUB_BASE_URL}${league.avatar}`}/>
                             </div>
                             <p className="font-bold m-0 text-2x1">{league.name}</p>
                         </div>

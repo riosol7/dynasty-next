@@ -1,7 +1,7 @@
 import styles from "./Market.module.css";
 import * as Interfaces from "../../../interfaces";
 import { Waivers } from "@/types";
-import { positionNames } from "@/constants";
+import { POSITIONS } from "@/constants";
 import { calculatePercentageChange, roundToHundredth } from "@/utils";
 
 const positionStyles = {
@@ -20,20 +20,20 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
     };
 
     function findLowestBid(position: keyof Waivers) {
-        return waivers[position]?.sort((a, b) => a.settings.waiver_bid - b.settings.waiver_bid)[0]?.settings?.waiver_bid;
+        return waivers[position]?.slice().sort((a, b) => a.settings.waiver_bid - b.settings.waiver_bid)[0]?.settings?.waiver_bid;
     };
 
     function findHighestBid(position: keyof Waivers) {
-        return waivers[position]?.sort((a, b) => b.settings.waiver_bid - a.settings.waiver_bid)[0]?.settings?.waiver_bid;
+        return waivers[position]?.slice().sort((a, b) => b.settings.waiver_bid - a.settings.waiver_bid)[0]?.settings?.waiver_bid;
     };
 
     function findRecentWaivers(position: keyof Waivers) {
-        return waivers[position]?.sort((a, b) => b.created - a.created);
+        return waivers[position]?.slice().sort((a, b) => b.created - a.created);
     };
 
     function findTopSpender(waiverData: Interfaces.Transaction[]) {
         return Object.entries(
-            waiverData.reduce((acc, team) => {
+            waiverData.slice().reduce((acc, team) => {
                 acc[team.creator] = acc[team.creator] || [];
                 acc[team.creator].push(team);
                 return acc;
@@ -48,7 +48,7 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
 
     return (
         <div className="py-3">
-            <div className="flex items-center font-bold pb-3 text-xs text-gray-600 border-b border-solid border-gray-900">
+            <div className="flex items-center font-bold pb-3 text-xs text-[#7d91a6] border-b border-solid border-[#2a2c3e]">
                 <div className="w-1/12">POSITION</div>
                 <div className="w-3/12">TREND</div>
                 <div className="w-1/12">LAST PRICE</div>
@@ -56,17 +56,17 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                 <div className="w-1/12">AVG</div>
                 <div className="w-1/12">LOW</div>
                 <div className="w-1/12">HIGH</div>
-                <div className="w-1/12">TRANSACTION</div>
+                <div className="w-1/12">QTY</div>
                 <div className="w-2/12">TOP SPENDER</div>
             </div>
             <div>
-                {positionNames.map((position, i) => {  
+                {POSITIONS.map((position, i) => {  
                     const recentWaivers = findRecentWaivers(position as keyof Waivers);
                     const highestBid = findHighestBid(position as keyof Waivers);
                     const lowestBid = findLowestBid(position as keyof Waivers);
                     return (
                         <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
-                            i === positionNames.length - 1 ? "" : "border-b border-solid border-gray-900"
+                            i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
                         }`}>
                             <div className="w-1/12">
                                 <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
@@ -92,7 +92,7 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                             <p className="w-1/12">{highestBid}</p>
                             {/* TRANSACTIONS */}
                             <p className="w-1/12">{waivers[position as keyof Waivers].length}</p>
-                            <p className="w-2/12">{findTopSpender(waivers[position as keyof Waivers]).owner} {findTopSpender(waivers[position as keyof Waivers]).pts}</p>
+                            <p className="w-2/12">{findTopSpender(waivers[position as keyof Waivers])?.owner} (${findTopSpender(waivers[position as keyof Waivers])?.pts})</p>
                         </div>
                     )
                 })}

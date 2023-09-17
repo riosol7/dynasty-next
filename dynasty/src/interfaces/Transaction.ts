@@ -31,7 +31,8 @@ export interface Transaction {
   adds: {
     [key: string]: any;
   };
-  players: Player | Player[] | undefined;
+  players: Player[];
+  waiver_player: Player;
 };
 
 export interface WaiverBidProps {

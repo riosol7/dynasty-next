@@ -1,1 +1,1 @@
-export const positionNames = ["QB", "RB", "WR", "TE"];
+export const POSITIONS = ["QB", "RB", "WR", "TE"];

@@ -1,4 +1,4 @@
-import { Logo } from "../constants";
+import { LOGOS } from "../constants";
 import * as Interfaces from "../interfaces";
 
 const noLogo: Interfaces.Logo = {
@@ -10,7 +10,7 @@ const noLogo: Interfaces.Logo = {
 }
 
 export const findLogo = (team: string): Interfaces.Logo => {
-    const foundLogo = Logo.find((logo) => logo.hasOwnProperty(team));
+    const foundLogo = LOGOS.find((logo) => logo.hasOwnProperty(team));
     if (foundLogo) {
         return foundLogo[team];
     }

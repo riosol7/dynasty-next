@@ -5,9 +5,9 @@ import MarketWidget from "@/components/widgets/Market";
 
 export default function MainDashboard() {
     return (
-        <div className={styles.mainDashboardLayout}>
+        <>
             <MVPSlider/>
             <MarketWidget/>
-        </div>
+        </>
     )
 }

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { SERVER_URL } from "@/constants";
 import * as Interfaces from "../../interfaces";
 
 const defaultPlayers: Interfaces.Player[] = [];
@@ -22,7 +23,7 @@ export const PlayerProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}players`);
+                const call = await fetch(`${SERVER_URL}players`);
                 const parsedData = await call.json();
                 setPlayers(parsedData);
                 setLoadPlayers(false);

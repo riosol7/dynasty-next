@@ -5,3 +5,5 @@ export * from "./stats/getTotalPts";
 export * from "./processRosters";
 export * from "./processPlayers";
 export * from "./processTransactions";
+export * from "./sortingUtils";
+export * from "./dateUtils";

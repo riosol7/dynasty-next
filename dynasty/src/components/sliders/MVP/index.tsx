@@ -30,7 +30,7 @@ export default function MVPSlider() {
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
 
     return (
-        <div className="my-5">
+        <div className="py-5">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                     <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { LEAGUE_ID, SERVER_URL } from "@/constants";
 import * as Interfaces from "../../interfaces";
 
 const LeagueContext = createContext<Interfaces.LegacyLeagueContextType | undefined>(undefined);
@@ -20,7 +21,7 @@ export const LeagueProvider = ({ children }: Interfaces.ChildrenProps) => {
     useEffect(() => {
         (async () => {
             try {
-                const call = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}league/${process.env.NEXT_PUBLIC_LEAGUE_ID}`);
+                const call = await fetch(`${SERVER_URL}league/${LEAGUE_ID}`);
                 const parsedData = await call.json();
                 setLegacyLeague(parsedData);
                 setLoadLegacyLeague(false);

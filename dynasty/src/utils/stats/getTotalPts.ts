@@ -9,15 +9,19 @@ export const getTotalPts = (legacyLeague: Interfaces.League[], rID: number, pID:
         ).reduce((partialSum: number , a: any) => partialSum + a, 0)
     ).reduce((partialSum: number , a: any) => partialSum + a, 0);
 
-    const maxPts = legacyLeague.map((league: Interfaces.League) => 
-        league.matchups.map(week => Object.entries(week.find(team => team.roster_id === rID).players_points).find(player => player[0] === pID)
-    )).flat().reduce((total, playerData: any) => {
-        if (playerData) {
-        total += playerData[1];
-        }
-        return total;
-    }, 0);
-        
+    const maxPts = legacyLeague.map((league: Interfaces.League) => league.matchups.map((week) => {
+        const team = week.find((team) => team.roster_id === rID);
+            if (team) {
+                const playerData = Object.entries(team.players_points).find((player) => player[0] === pID);
+                
+                if (playerData) {
+                    return playerData[1];
+                };
+            };
+            return 0; // Return a default value in case of undefined data
+        })
+    ).flat().reduce((total, playerPoints: any) => total + playerPoints, 0);
+
     return {
         pts: roundToHundredth(pts),
         maxPts: roundToHundredth(maxPts)
