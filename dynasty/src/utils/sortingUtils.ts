@@ -1,5 +1,20 @@
 import * as Interfaces from "../interfaces";
 
+export const handleSort = (
+    sort: string, 
+    sortKey: string, 
+    asc: boolean, 
+    setAsc: React.Dispatch<React.SetStateAction<boolean>>,
+    setSort: React.Dispatch<React.SetStateAction<string>>, 
+    ) => {
+    if (sort === sortKey) {
+      setAsc(!asc);
+    } else {
+      setSort(sortKey);
+      setAsc(true);
+    };
+};
+
 export const getSortedRecords = (
     records: Interfaces.Transaction[], 
     sort: string, asc: boolean, 

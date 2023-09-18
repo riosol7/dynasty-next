@@ -34,7 +34,7 @@ export default function MVPSlider() {
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                     <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
-                    <p className="m-0 mx-1 font-semibold">MVPs</p>
+                    <p className="mx-1 font-bold">MVPs</p>
                 </div>
                 <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
             </div>

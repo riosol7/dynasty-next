@@ -7,7 +7,10 @@ export const lineupEfficiency = (pf: number, maxPF: number): number => {
 };
 
 export const roundToHundredth = (value: number): number => {
-    return Number(value.toFixed(2));
+    if (typeof value === "number" && !isNaN(value)) {
+        return Number(value.toFixed(2));
+    
+    } else return 0;
 };
 
 export const winPCT = (wins: number, losses: number): number => {

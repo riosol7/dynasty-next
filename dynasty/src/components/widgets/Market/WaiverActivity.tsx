@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
-import { findLogo, getSortedRecords, toDateTime } from "@/utils";
+import { findLogo, getSortedRecords, handleSort, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "../../../interfaces";
 
@@ -24,17 +24,17 @@ interface TableHeaderCell {
     sort: string;
     asc: boolean;
     setAsc: React.Dispatch<React.SetStateAction<boolean>>;
-    handleSort: (sortKey: string) => void;
-}
+    setSort:  React.Dispatch<React.SetStateAction<string>>;
+};
 
-function TableHeaderCell({ label, sortKey, sort, asc, setAsc, handleSort }: TableHeaderCell) {
+function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: TableHeaderCell) {
     const isSorting = sort === sortKey;
 
     const handleClick = () => {
         if (isSorting) {
             setAsc(!asc);
         } else {
-            handleSort(sortKey);
+            handleSort(sort, sortKey, asc, setAsc, setSort);
         };
     };
 
@@ -74,15 +74,6 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
     const records = getSortedRecords(waiverBidsFiltered, sort, asc, currentPage, recordsPerPage);
     const npage = Math.ceil(waiverBidsFiltered?.length / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
-    
-    const handleSort = (sortKey: string) => {
-        if (sort === sortKey) {
-          setAsc(!asc);
-        } else {
-          setSort(sortKey);
-          setAsc(true);
-        };
-    };
       
     const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const valueAsNumber = +e.target.value;
@@ -154,7 +145,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
-                    handleSort={handleSort}
+                    setSort={setSort}
                 />
                 <TableHeaderCell
                     label="AGE"
@@ -162,7 +153,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
-                    handleSort={handleSort}
+                    setSort={setSort}
                 />
                 <div className="w-2/12">
                     <select style={SELECT_TAG} onChange={handlePosition} value={selectPosition}>
@@ -187,7 +178,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
-                    handleSort={handleSort}
+                    setSort={setSort}
                 />
                 <TableHeaderCell
                     label="DATE"
@@ -195,7 +186,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
-                    handleSort={handleSort}
+                    setSort={setSort}
                 />
             </div>
             {records?.map((record, i) => { 
