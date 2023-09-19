@@ -1,3 +1,23 @@
 .standingCell:hover{
     color: white;
 }
+
+
+.anchorCell:hover {
+    background: #1b2025;
+    border-radius: 2px;
+}
+.anchorCell, .anchorCell:hover, .anchorCell:active{
+    color: inherit;
+    text-decoration: none;
+}
+.anchorCell {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.userAvatar {
+    border-radius: 50%;
+    width: 29px;
+}

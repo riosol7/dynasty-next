@@ -43,3 +43,25 @@ export const getSortedRecords = (
         }
     }).slice(firstIdx, lastIdx);
 };
+
+export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, sort: string, fantasyMarket: string) => {
+    if (rosters) {
+        const sortedRosters = rosters.slice().sort((a, b) => {
+            const aValue = a[fantasyMarket as keyof typeof a];
+            const bValue = b[fantasyMarket as keyof typeof b];
+
+            if (typeof aValue === 'object' && typeof bValue === 'object' && aValue !== null && bValue !== null) {
+                const aSortValue = aValue[sort.toLowerCase() as keyof typeof aValue];
+                const bSortValue = bValue[sort.toLowerCase() as keyof typeof bValue];
+        
+                if (typeof aSortValue === 'number' && typeof bSortValue === 'number') {
+                    return asc ? aSortValue - bSortValue : bSortValue - aSortValue;
+                };
+            };
+            
+            return 0; 
+        });
+
+        return sortedRosters.map((roster, i) => { return ({...roster, rank: i + 1})});
+    };
+};

@@ -5,7 +5,7 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
   const users = league.users;
 
   const uploadPlayersToRosters = rosters.map(roster => {
-    const foundOwner = users.find(user => user.user_id === roster.owner_id);
+    const foundOwner = users.find(user => user.user_id === roster.owner_id) || Interfaces.initialOwner;
     const playerIDs = roster.players;
 
     const foundPlayers = playerIDs.map((playerID) => {

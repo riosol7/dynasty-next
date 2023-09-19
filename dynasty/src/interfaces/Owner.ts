@@ -5,7 +5,7 @@
   
 export interface Owner {
   user_id: string;
-  settings: null; // Update this type as per your data
+  settings: null;
   metadata: {
     [key: string]: string;
   };
@@ -15,3 +15,16 @@ export interface Owner {
   display_name: string;
   avatar: string;
 };
+
+export const initialOwner: Owner = {
+  user_id: "",
+  settings: null,
+  metadata: {
+    "": "",
+  },
+  league_id: "",
+  is_owner: false,
+  is_bot: false,
+  display_name: "",
+  avatar: ","
+}

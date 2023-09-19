@@ -31,7 +31,7 @@ export interface Roster {
     players: string[] | Player[];
     player_map: Record<string, string> | null;
     owner_id: string;
-    owner: Owner | undefined | null;
+    owner: Owner;
     metadata: {
         [key: string]: string;
     };
@@ -42,6 +42,7 @@ export interface Roster {
     sf: DynastyValue; // SuperFlex
     fc: DynastyValue; // FantasyCalc
     dp: DynastyValue; // DynastyProcess
+    rank: number;
 };
 
 export interface RosterProps {

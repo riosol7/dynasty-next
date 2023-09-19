@@ -7,3 +7,4 @@ export * from "./processPlayers";
 export * from "./processTransactions";
 export * from "./sortingUtils";
 export * from "./dateUtils";
+export * from "./userUtils";

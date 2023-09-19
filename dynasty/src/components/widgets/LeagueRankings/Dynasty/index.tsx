@@ -1,7 +1,19 @@
+"use client";
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
-import { handleSort } from "@/utils";
-import styles from "../LeagueRankings.module.css";
+import { handleSort, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
+import { 
+    useFantasyMarket,
+    useDynastyProcessContext,
+    useFantasyCalcContext,
+    useFantasyProContext,
+    useKTCContext,
+    useLeagueContext,
+    usePlayerContext,
+    useSuperFlexContext,
+ } from "@/context";
+ import DynastyRow from "./DynastyRow";
+ import styles from "../LeagueRankings.module.css";
 
 interface SortHeader {
     asc: boolean;
@@ -20,10 +32,10 @@ interface SortIcon {
 function SortHeader({ sort, label, asc, setAsc, setSort}: SortHeader) {
     return (
         <div className="w-1/12 flex items-center">
-            {sort === label || (label === "TOTAL" && sort === "TEAM") ? (
+            {sort === label || (label === "TEAM" && sort === "TEAM") ? (
                 <SortIcon onClick={() => setAsc(!asc)} asc={asc} label={label} />
             ) : (
-                <p className={styles.standingCell} onClick={() => handleSort(sort, label, asc, setAsc, setSort)}>{label}</p>
+                <p className={styles.standingCell} onClick={() => handleSort(sort, label, asc, setAsc, setSort)}>{label === "TEAM" ? "TOTAL" : label}</p>
             )}
         </div>
     );
@@ -38,8 +50,20 @@ function SortIcon({ onClick, asc, label }: SortIcon) {
 };
 
 export default function DynastyRankings() {
+    const { fantasyMarket } = useFantasyMarket()!;
+    const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
+    const { players, loadPlayers } = usePlayerContext();
+    const { ktc, loadKTC } = useKTCContext();
+    const { superFlex, loadSuperFlex } = useSuperFlexContext();
+    const { fc, loadFC } = useFantasyCalcContext();
+    const { dp, loadDP } = useDynastyProcessContext();
+    const { fantasyPro, loadFantasyPro } = useFantasyProContext();
+
     const [sort, setSort] = useState("TEAM")
     const [asc, setAsc] = useState(false)
+
+    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedRosters = processRosters(legacyLeague[0], processedPlayers);
 
     return (
         <>
@@ -56,7 +80,7 @@ export default function DynastyRankings() {
                         asc={asc}
                         setAsc={setAsc}
                         setSort={setSort}
-                        label="TOTAL"
+                        label="TEAM"
                     />
                     <SortHeader
                         sort={sort}
@@ -88,11 +112,9 @@ export default function DynastyRankings() {
                     />
                 </div>
             </div>
-            {/* <div>
-                {processedRosters?.[`${sort.toLowerCase()}Rank`].sort((a, b) => (asc ? a.rank - b.rank : b.rank - a.rank)).map((roster, i) => (
-                    <DynastyRow key={i} roster={roster} sort={sort}/>
-                ))}
-            </div> */}
+            {sortDynastyRosters(processedRosters, asc, sort, fantasyMarket)?.map((roster, i) => 
+                <DynastyRow key={i} roster={roster} sort={sort} fantasyMarket={fantasyMarket}/>
+            )}
         </>
     )
 }

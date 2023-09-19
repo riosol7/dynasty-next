@@ -1,4 +1,3 @@
-"use client";
 import styles from "../MVP.module.css";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
