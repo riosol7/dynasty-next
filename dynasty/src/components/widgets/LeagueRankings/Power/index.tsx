@@ -34,9 +34,7 @@ export default function PowerRankings({season}: PowerRankings) {
                     <div className="w-5/12 flex items-center justify-end space-x-2">
                         <p className={`w-1/12 ${styles.standingCell}`}>W</p>
                         <p className={`w-1/12 ${styles.standingCell}`}>L</p>
-                        <p className={`w-1/12 ${styles.standingCell}`}>PCT</p>
                         <p className={`w-1/12 flex items-center ${styles.standingCell}`}><Icon icon="emojione-monotone:four-leaf-clover"style={{fontSize:"13.2px", color:"#289a5d"}}/>Rate</p>
-                        <p className={`w-1/12 ${styles.standingCell}`}>GP</p>
                     </div>
                 </div>
             </div>
