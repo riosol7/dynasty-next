@@ -41,7 +41,7 @@ export default function PowerRankings({season}: PowerRankings) {
                 </div>
             </div>
             {powerRankings?.map((roster , i) => 
-                <PowerRow key={i} roster={roster}/>
+                <PowerRow key={i} roster={roster} season={season}/>
             )}
         </>
     );

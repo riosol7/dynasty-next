@@ -13,10 +13,10 @@ export const getPowerRankings = (season: string, legacyLeague: Interfaces.League
                 ...roster.settings, 
                 all_play_wins: ap_wins,
                 all_play_losses: ap_losses,
-                all_play_rate: winPCT(ap_wins, ap_losses),
+                all_play_win_rate: winPCT(ap_wins, ap_losses),
             }
         };
-    }).slice().sort((a, b) => b.settings.all_play_rate - a.settings.all_play_rate).map((roster, i) => {return {...roster, power_rank: i +1}});
+    }).slice().sort((a, b) => b.settings.all_play_win_rate - a.settings.all_play_win_rate).map((roster, i) => {return {...roster, power_rank: i +1}});
 };
 
 export const getAllPlayStats = (rID: number, season: string, legacyLeague: Interfaces.League[]) => {
@@ -123,7 +123,9 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
             }));
         });
     };
-      
+    const seasonalAllPlayWins = seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).wins || 0
+    const seasonalAllPlaylosses = seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).losses || 0
+
     const stats = season === "All Time" ? {
         opponents: historicalRecord.sort((a,b) =>  b.wins - a.wins).map((user, idx) => ({...user, rank: idx + 1})),
         wins: historicalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).wins || 0,
@@ -133,8 +135,8 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
             return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }
         )),
         opponents: seasonalRecord.sort((a,b) =>  b.wins - a.wins).map((user, idx) => ({...user, rank: idx + 1})),
-        wins: seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).wins || 0,
-        losses: seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).losses || 0,
+        wins: seasonalAllPlayWins,
+        losses: seasonalAllPlaylosses,
     };
 
     return stats;
