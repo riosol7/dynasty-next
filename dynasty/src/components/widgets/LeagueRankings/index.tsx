@@ -48,7 +48,7 @@ export default function LeagueRankings() {
                                 {legacyLeague?.slice().map((league, i) => 
                                     <option key={i} value={league.season}>{league.season}</option>
                                 )}
-                                {rankings ==="Standings" && playoffs === false ?
+                                {(rankings ==="Standings" || rankings === "Power") && playoffs === false ?
                                     <option value="All Time">All Time</option>
                                 :<></>
                                 }

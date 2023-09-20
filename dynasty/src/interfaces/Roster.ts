@@ -13,6 +13,9 @@ export interface Roster {
     taxi: string[];
     starters: string[];
     settings: {
+        all_play_wins: number,
+        all_play_losses: number,
+        all_play_rate: number,
         wins: number;
         waiver_position: number;
         waiver_budget_used: number;
@@ -31,6 +34,7 @@ export interface Roster {
     reserve: string[] | null;
     players: string[] | Player[];
     player_map: Record<string, string> | null;
+    power_rank: number;
     owner_id: string;
     owner: Owner;
     metadata: {

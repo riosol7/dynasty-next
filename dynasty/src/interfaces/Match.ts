@@ -12,3 +12,14 @@ export interface Match {
     matchup_id: number;
     custom_points: null | any;
 };
+
+export const initialMatch = {
+    starters_points: [],
+    starters: [],
+    roster_id: 0,
+    points: 0,
+    players_points: {"":0},
+    players: [],
+    matchup_id: 0,
+    custom_points: null,
+};
