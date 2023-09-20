@@ -1,6 +1,7 @@
 import { Owner, Player } from ".";
 
-interface DynastyValue {
+export interface DynastyValue {
+    rank: number;
     team: number;
     qb: number;
     rb: number;
@@ -42,7 +43,6 @@ export interface Roster {
     sf: DynastyValue; // SuperFlex
     fc: DynastyValue; // FantasyCalc
     dp: DynastyValue; // DynastyProcess
-    rank: number;
 };
 
 export interface RosterProps {

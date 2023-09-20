@@ -116,6 +116,7 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
       players: foundPlayers,
       owner: foundOwner,
       ktc: {
+        rank: 0,
         team: ktcTeamValue,
         qb: ktcQBValue,
         rb: ktcRBValue,
@@ -123,6 +124,7 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
         te: ktcTEValue,
       },
       dp: {
+        rank: 0,
         team: dpTeamValue,
         qb: dpQBValue,
         rb: dpRBValue,
@@ -130,6 +132,7 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
         te: dpTEValue,
       },
       fc: {
+        rank: 0,
         team: fcTeamValue,
         qb: fcQBValue,
         rb: fcRBValue,
@@ -137,6 +140,7 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
         te: fcTEValue,
       },
       sf: {
+        rank: 0,
         team: sfTeamValue,
         qb: sfQBValue,
         rb: sfRBValue,
@@ -145,7 +149,27 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
       },
     };
   });
+  const sortedRosters = {
+    ktc: [...uploadPlayersToRosters].sort((a, b) => b.ktc.team - a.ktc.team).map((roster, i) => { return {...roster, ktc :{...roster.ktc, rank: i + 1}}}),
+    dp: [...uploadPlayersToRosters].sort((a, b) => b.dp.team - a.dp.team).map((roster, i) => { return {...roster, dp :{...roster.dp, rank: i + 1}}}),
+    fc: [...uploadPlayersToRosters].sort((a, b) => b.fc.team - a.fc.team).map((roster, i) => { return {...roster, fc :{...roster.fc, rank: i + 1}}}),
+    sf: [...uploadPlayersToRosters].sort((a, b) => b.sf.team - a.sf.team).map((roster, i) => { return {...roster, sf :{...roster.sf, rank: i + 1}}}),
+  };
 
-  return uploadPlayersToRosters;
+  const updatedRankRosters = uploadPlayersToRosters.map((roster) => {
+    const ktcRank = sortedRosters.ktc.findIndex((r) => r.owner_id === roster.owner_id);
+    const dpRank = sortedRosters.dp.findIndex((r) => r.owner_id === roster.owner_id);
+    const fcRank = sortedRosters.fc.findIndex((r) => r.owner_id === roster.owner_id);
+    const sfRank = sortedRosters.sf.findIndex((r) => r.owner_id === roster.owner_id);
 
+    return {
+      ...roster,
+      ktc: { ...roster.ktc, rank: ktcRank + 1 },
+      dp: { ...roster.dp, rank: dpRank + 1 },
+      fc: { ...roster.fc, rank: fcRank + 1 },
+      sf: { ...roster.sf, rank: sfRank + 1 },
+    };
+  });
+
+  return updatedRankRosters;
 };

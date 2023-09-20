@@ -62,6 +62,6 @@ export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, s
             return 0; 
         });
 
-        return sortedRosters.map((roster, i) => { return ({...roster, rank: i + 1})});
+        return sortedRosters;
     };
 };

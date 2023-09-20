@@ -43,7 +43,7 @@ function SortHeader({ sort, label, asc, setAsc, setSort}: SortHeader) {
 function SortIcon({ onClick, asc, label }: SortIcon) {
     return (
         <div className="flex items-center">
-            <p className={styles.standingCell} onClick={onClick}>{label}</p>
+            <p className={styles.standingCell} onClick={onClick}>{label === "TEAM" ? "TOTAL" : label}</p>
             <Icon icon={`bi:caret-${asc ? "down" : "up"}-fill`} style={{color: "#a9dfd8"}}/>
         </div>
     );
