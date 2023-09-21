@@ -1,11 +1,7 @@
 import React from "react";
+import * as Interfaces from "../../../../interfaces";
 
-interface Standings {
-    season:string; 
-    playoffs: boolean;
-};
-
-export default function Standings({season, playoffs}: Standings) {
+export default function Standings({season, playoffs}: Interfaces.StandingProps) {
     
     return (
         season === "All Time" ?

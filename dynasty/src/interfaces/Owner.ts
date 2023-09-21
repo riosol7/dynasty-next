@@ -1,8 +1,3 @@
-// interface RatingEntry {
-//     date: string;
-//     value: number;
-// }
-  
 export interface Owner {
   user_id: string;
   settings: null;

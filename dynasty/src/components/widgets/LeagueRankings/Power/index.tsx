@@ -4,12 +4,9 @@ import { getPowerRankings, handleSort } from "@/utils";
 import { useLeagueContext } from "@/context";
 import styles from "../LeagueRankings.module.css";
 import PowerRow from "./PowerRow";
+import * as Interfaces from "../../../../interfaces";
 
-interface PowerRankings {
-    season: string;
-}
-
-export default function PowerRankings({season}: PowerRankings) {
+export default function PowerRankings({season}: Interfaces.PowerRankingProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const [sort, setSort] = useState("")
     const [asc, setAsc] = useState(false)

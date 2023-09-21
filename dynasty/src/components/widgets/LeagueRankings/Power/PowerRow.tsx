@@ -4,12 +4,7 @@ import * as Interfaces from "../../../../interfaces";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { roundToHundredth, winPCT } from "@/utils";
 
-interface PowerRow {
-    roster: Interfaces.Roster;
-    season: string;
-}
-
-export default function PowerRow({roster, season}: PowerRow) {
+export default function PowerRow({roster, season}: Interfaces.PowerRowProps) {
     const ap_wins = roster.settings.all_play_wins;
     const ap_losses = roster.settings.all_play_losses;
     const ap_win_rate = roster.settings.all_play_win_rate;

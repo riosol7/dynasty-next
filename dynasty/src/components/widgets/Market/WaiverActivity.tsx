@@ -18,16 +18,7 @@ const SHOW_PAGES={
     paddingBlock:"3px",
 };
 
-interface TableHeaderCell {
-    label: string;
-    sortKey: string;
-    sort: string;
-    asc: boolean;
-    setAsc: React.Dispatch<React.SetStateAction<boolean>>;
-    setSort:  React.Dispatch<React.SetStateAction<string>>;
-};
-
-function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: TableHeaderCell) {
+function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: Interfaces.TableHeaderCellProps) {
     const isSorting = sort === sortKey;
 
     const handleClick = () => {

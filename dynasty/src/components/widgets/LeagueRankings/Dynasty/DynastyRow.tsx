@@ -5,13 +5,7 @@ import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useLeagueContext } from "@/context";
 import { findUserEXP } from "@/utils";
 
-interface DynastyRow {
-    roster: Interfaces.Roster;
-    sort: string;
-    fantasyMarket: string;
-};
-
-export default function DynastyRow({roster, sort, fantasyMarket}: DynastyRow) {
+export default function DynastyRow({roster, sort, fantasyMarket}: Interfaces.DynastyRowProps) {
     const { legacyLeague } = useLeagueContext();
     const getStyle = (field: string) => {
         return {
