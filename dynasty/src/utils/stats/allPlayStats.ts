@@ -2,25 +2,46 @@ import * as Interfaces from "../../interfaces";
 import { winPCT } from "..";
 
 export const getPowerRankings = (season: string, legacyLeague: Interfaces.League[]) => {
-    // update to adjust for "All Time" season.
-    const foundSeason = legacyLeague.find(league => league.season === season);
+    if (season === "All Time") {
+        const currentSeason = legacyLeague[0];
 
-    return foundSeason?.rosters.map(roster => {
-        const foundOwner = foundSeason.users.find(user => user.user_id === roster.owner_id);
-        const ap_wins = getAllPlayStats(roster.roster_id, season, legacyLeague).wins;
-        const ap_losses = getAllPlayStats(roster.roster_id, season, legacyLeague).losses;
+        return currentSeason.rosters.map(roster => {
+            const foundOwner = currentSeason.users.find(user => user.user_id === roster.owner_id);
+            const ap_wins = getAllPlayStats(roster.roster_id, season, legacyLeague).wins;
+            const ap_losses = getAllPlayStats(roster.roster_id, season, legacyLeague).losses;
 
-        return {
-            ...roster, 
-            owner: foundOwner || Interfaces.initialOwner,
-            settings : {
-                ...roster.settings, 
-                all_play_wins: ap_wins,
-                all_play_losses: ap_losses,
-                all_play_win_rate: winPCT(ap_wins, ap_losses),
-            }
-        };
-    }).slice().sort((a, b) => b.settings.all_play_win_rate - a.settings.all_play_win_rate).map((roster, i) => {return {...roster, power_rank: i +1}});
+            return {
+                ...roster, 
+                owner: foundOwner || Interfaces.initialOwner,
+                settings : {
+                    ...roster.settings, 
+                    all_play_wins: ap_wins,
+                    all_play_losses: ap_losses,
+                    all_play_win_rate: winPCT(ap_wins, ap_losses),
+                }
+            };
+        }).slice().sort((a, b) => b.settings.all_play_win_rate - a.settings.all_play_win_rate).map((roster, i) => {return {...roster, power_rank: i +1}});
+
+    } else {
+        const foundSeason = legacyLeague.find(league => league.season === season);
+
+        return foundSeason?.rosters.map(roster => {
+            const foundOwner = foundSeason.users.find(user => user.user_id === roster.owner_id);
+            const ap_wins = getAllPlayStats(roster.roster_id, season, legacyLeague).wins;
+            const ap_losses = getAllPlayStats(roster.roster_id, season, legacyLeague).losses;
+
+            return {
+                ...roster, 
+                owner: foundOwner || Interfaces.initialOwner,
+                settings : {
+                    ...roster.settings, 
+                    all_play_wins: ap_wins,
+                    all_play_losses: ap_losses,
+                    all_play_win_rate: winPCT(ap_wins, ap_losses),
+                }
+            };
+        }).slice().sort((a, b) => b.settings.all_play_win_rate - a.settings.all_play_win_rate).map((roster, i) => {return {...roster, power_rank: i +1}});
+    };
 };
 
 export const getAllPlayStats = (rID: number, season: string, legacyLeague: Interfaces.League[]) => {
@@ -74,15 +95,9 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
             });
         }));
 
-
     } else {
-
-        const matches = legacyLeague.filter(league => league.season === season).map(league => 
-            Number(league.season) > 2020 ?
-                league.matchups.slice(0, 14)
-            :
-                league.matchups.slice(0, 13)
-        )[0];
+        const foundLeague = legacyLeague.find(league => league.season === season);
+        const matches = Number(foundLeague?.season) > 2020 ? foundLeague?.matchups.slice(0, 14) : foundLeague?.matchups.slice(0, 13);
 
         matches?.map(match => {
             const myMatchupInfo: Interfaces.Match = match.find(user => user.roster_id === rID) || Interfaces.initialMatch;
@@ -127,20 +142,20 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
             }));
         });
     };
-    const seasonalAllPlayWins = seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).wins || 0
-    const seasonalAllPlaylosses = seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).losses || 0
+    const seasonalAllPlayRecord = seasonalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 });
+    const allTimeAllPlayRecord = historicalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 });
 
     const stats = season === "All Time" ? {
-        opponents: historicalRecord.sort((a,b) =>  b.wins - a.wins).map((user, idx) => ({...user, rank: idx + 1})),
-        wins: historicalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).wins || 0,
-        losses: historicalRecord.reduce((prev, current) => {return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }).losses || 0,
+        opponents: historicalRecord.sort((a, b) =>  b.wins - a.wins).map((user, idx) => ({...user, rank: idx + 1})),
+        wins: allTimeAllPlayRecord.wins,
+        losses: allTimeAllPlayRecord.losses,
     } : {
         weeklyRecord: weeklyRecord.map((week) => week.reduce((prev, current) => { 
             return { wins: prev.wins + current.wins, losses: prev.losses + current.losses };}, { wins: 0, losses: 0 }
         )),
         opponents: seasonalRecord.sort((a,b) =>  b.wins - a.wins).map((user, idx) => ({...user, rank: idx + 1})),
-        wins: seasonalAllPlayWins,
-        losses: seasonalAllPlaylosses,
+        wins: seasonalAllPlayRecord.wins,
+        losses: seasonalAllPlayRecord.losses,
     };
 
     return stats;

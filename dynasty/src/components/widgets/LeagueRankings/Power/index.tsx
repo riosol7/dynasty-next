@@ -28,10 +28,12 @@ export default function PowerRankings({season}: Interfaces.PowerRankingProps) {
                         }
                         <p className={styles.standingCell}>TEAM</p>
                     </div>
-                    <div className="w-5/12 flex items-center justify-end space-x-2">
-                        <p className={`w-1/12 ${styles.standingCell}`}>W</p>
-                        <p className={`w-1/12 ${styles.standingCell}`}>L</p>
-                        <p className={`w-1/12 flex items-center ${styles.standingCell}`}><Icon icon="emojione-monotone:four-leaf-clover"style={{fontSize:"13.2px", color:"#289a5d"}}/>Rate</p>
+                    <div className="w-6/12 flex items-center justify-end space-x-2">
+                        <p className={`w-2/12 ${styles.standingCell}`}>W</p>
+                        <p className={`w-2/12 ${styles.standingCell}`}>L</p>
+                        <p className={`w-2/12 flex items-center ${styles.standingCell}`}>
+                            <Icon icon="emojione-monotone:four-leaf-clover" className="mr-1" style={{fontSize:"13.2px", color:"#289a5d"}}/>RATE
+                        </p>
                     </div>
                 </div>
             </div>
