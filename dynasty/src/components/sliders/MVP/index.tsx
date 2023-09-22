@@ -1,5 +1,5 @@
 "use client";
-import "swiper/swiper-bundle.min.css";
+import "swiper/swiper-bundle.css";
 import styles from "./MVP.module.css";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";

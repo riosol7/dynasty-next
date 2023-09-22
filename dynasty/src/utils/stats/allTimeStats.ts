@@ -1,45 +1,123 @@
 import * as Interfaces from "../../interfaces";
-import { roundToHundredth, winPCT } from "..";
+import { findLeague, getMatchups, roundToHundredth, winPCT } from "..";
 
-export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[], season: string | undefined) => {
+export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
-    const legacyRosters = legacyLeague.map(league => league.rosters.filter(roster => roster.roster_id === rID))[0];
-    const legacyMatches = legacyLeague.map(league => league.matchups.filter(matches => matches.filter(team => team.roster_id === rID)))[0];
+    const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));
+    const legacyMatches: Interfaces.Match[][] = legacyLeague.map(league => league.matchups
+        .map(matches => matches.find(team => team.roster_id === rID))
+        .filter(match => match !== undefined) // Filter out undefined values
+        .map(match => match as Interfaces.Match) // Type assertion to Match
+    );
     
-    const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item) => acc + item.settings.wins, 0);
-    const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item) => acc + item.settings.losses, 0);
-    const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item) =>  acc + Number(item.settings.fpts + "." + item.settings.fpts_decimal), 0));
-    const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item) =>  acc + Number(item.settings.ppts + "." + item.settings.ppts_decimal), 0));
-    const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item) =>  acc + Number(item.settings.fpts_against + "." + item.settings.fpts_against_decimal), 0));
-    const bestRecord = legacyRosters?.sort((a,b) => b.settings.wins - a.settings.wins)[0]?.settings;
+    const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item.settings.wins, 0);
+    const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item.settings.losses, 0);
+    const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts + "." + item.settings.fpts_decimal), 0));
+    const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.ppts + "." + item.settings.ppts_decimal), 0));
+    const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts_against + "." + item.settings.fpts_against_decimal), 0));
+    const bestRoster = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
+    const bestSeasonStats = bestRoster?.settings;
     const bestScore = legacyMatches?.map(match => match.sort((a, b) => b.points - a.points)[0]).sort((a,b) => b.points - a.points)[0].points;
+    const bestSeason = findLeague(bestRoster?.league_id || "", legacyLeague)?.season;
+
+    // Post Season
+    const toiletBowls: number = legacyLeague.map(league => { 
+        let toiletBowl = 0;
+
+        const bracket = league.brackets.toiletBowl.filter(match => match.t1 === rID || match.t2 === rID);
+        
+        if ((bracket.length === 3 && bracket[1].w === rID && bracket[2].w === rID)
+        || (bracket.length === 2 && bracket[0].w === rID && bracket[1].w === rID)) {
+            toiletBowl ++;
+        };
+        return toiletBowl;
     
-    // const postSeasonStats = getPostSeasonStats(rosterID, yr, processedLeague, myMatchups);
-    // const postSeasonAllTimeStats = getPostSeasonStats(rosterID, "All Time", processedLeague);
-    const allTime = {    
+    }).reduce((a, b) => {return +a + +b});
+        
+    const playoffRuns: Interfaces.PlayoffRuns[] = legacyLeague.map(league => {
+        const playoffBracket = league.brackets.playoffs.filter(match => match.t1 === rID || match.t2 === rID);
+        
+        if (playoffBracket.length > 0) {
+            const weeklyScore = getMatchups(rID, league.matchups);
+    
+            return {
+                bracket: playoffBracket,
+                season: league.season,
+                games: Number(league.season) > 2020 ? weeklyScore?.slice(14,17) : weeklyScore?.slice(13,16)
+            };
+        }
+    
+        return {
+            bracket: [],
+            season: league.season,
+            games: undefined,
+        };
+    }).filter((playoffSeason): playoffSeason is Interfaces.PlayoffRuns => playoffSeason.games !== undefined);    
+
+    const finalsRecord = () => {
+        const legacyFinalsRecord = playoffRuns?.map(season => {
+            let wins: number = 0;
+            let losses: number = 0;
+
+            if ((season?.bracket.length === 3 && season.bracket[1].w === rID && season.bracket[2].w === rID) 
+            || (season?.bracket.length === 2 && season.bracket[0].w === rID && season.bracket[1].w === rID)) {
+                wins ++
+            } else if ((season?.bracket.length === 3 && season.bracket[1].w === rID && season.bracket[2].l === rID) 
+            || (season?.bracket.length === 2 && season.bracket[0].w === rID && season.bracket[1].l === rID)) {
+                losses ++
+            };
+            
+            return {
+                wins: wins,
+                losses: losses
+            };
+        }).reduce((accumulator:any, currentValue:any) => {
+            for (const key in currentValue) {
+                if (accumulator.hasOwnProperty(key)) {
+                    accumulator[key] += currentValue[key];
+                } else {
+                    accumulator[key] = currentValue[key];
+                }
+            }
+            return accumulator;
+        }, {});
+
+        return legacyFinalsRecord;
+    };
+
+    const playoffAppearances = playoffRuns?.length;            
+    const totalPlayoffFPTS = roundToHundredth(playoffRuns.length > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter((team) => team.roster_id === rID)[0]).map((team: Interfaces.Match) => team && team.points).reduce((a, b) => {return +a + +b})).reduce((a, b) => {return +a + +b}): 0);
+    const totalPlayoffPPTS = 0;
+    const totalPlayoffPA = roundToHundredth(playoffRuns?.length > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter(team => team.roster_id !== rID)[0]).map(team => team && team.points).reduce((a,b) => {return +a + +b})).reduce((a,b) => {return +a + +b}): 0)
+    const highestPlayoffScore = roundToHundredth(playoffRuns?.length > 0 ? playoffRuns.map(season => season.games.map(game => game.filter(team => team.roster_id === rID)[0]).map(team => team && team.points).sort((a,b) => b - a)[0]).sort((a,b) => b - a)[0] : 0);
+    const totalPlayoffGames = playoffRuns?.length > 0 ? playoffRuns?.map(season => season.bracket.length).reduce((a,b) => {return +a + +b}) : 0;
+    const allTimePlayoffWins = playoffRuns?.map(season => season.bracket.filter(match => match.w === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0; 
+    const allTimePlayoffLosses = playoffRuns?.map(season => season.bracket.filter(match => match.l === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0;
+    
+    return {    
         best: {
-            record: `${bestRecord?.wins}-${bestRecord?.losses}`,
+            record: `${bestSeasonStats?.wins}-${bestSeasonStats?.losses}`,
             score: bestScore,
-            // year:,
-            winRate: winPCT(bestRecord?.wins, bestRecord?.losses),
+            season: bestSeason,
+            winRate: winPCT(bestSeasonStats?.wins || 0, bestSeasonStats?.losses || 0),
         },
-        percentage: roundToHundredth(((allTimeRegularSeasonWins)/(allTimeRegularSeasonWins + allTimeRegularSeasonLosses))*100),
+        winRate: roundToHundredth(((allTimeRegularSeasonWins)/(allTimeRegularSeasonWins + allTimeRegularSeasonLosses))*100),
         wins: allTimeRegularSeasonWins,
         losses: allTimeRegularSeasonLosses,
         fpts: allTimeRegularSeasonFPTS,
         ppts: allTimeRegularSeasonPPTS,
         pa: allTimeRegularSeasonPA,
-        // playoffs: {
-        //     appearances: postSeasonAllTimeStats.appearances,
-        //     wins: postSeasonAllTimeStats.wins,
-        //     losses: postSeasonAllTimeStats.losses,
-        //     games: postSeasonAllTimeStats.totalGames,
-        //     fpts: postSeasonAllTimeStats.pf,
-        //     // playoffMaxPF:0,
-        //     pa: postSeasonAllTimeStats.pa,
-        //     highestScore: postSeasonAllTimeStats.highestScore,
-        //     finals:(postSeasonAllTimeStats.finals.w + "-" + postSeasonAllTimeStats.finals.l),
-        // },
-        // toiletBowls: postSeasonAllTimeStats.toiletBowls,
-    }
+        playoffs: {
+            appearances: playoffAppearances,
+            wins: allTimePlayoffWins,
+            losses: allTimePlayoffLosses,
+            totalGames: totalPlayoffGames,
+            fpts: totalPlayoffFPTS,
+            ppts: totalPlayoffPPTS,
+            pa: totalPlayoffPA,
+            highestScore:  highestPlayoffScore,
+            finals:(finalsRecord().wins + "-" + finalsRecord().losses),
+        },
+        toiletBowls: toiletBowls,
+    };
 };

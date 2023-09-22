@@ -12,7 +12,7 @@ export default function PowerRankings({season}: Interfaces.PowerRankingProps) {
     const [asc, setAsc] = useState(false)
 
     const powerRankings = getPowerRankings(season, legacyLeague);
-  
+
     return (
         <>
             <div className="pt-2">

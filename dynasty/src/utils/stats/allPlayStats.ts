@@ -2,14 +2,18 @@ import * as Interfaces from "../../interfaces";
 import { winPCT } from "..";
 
 export const getPowerRankings = (season: string, legacyLeague: Interfaces.League[]) => {
+    // update to adjust for "All Time" season.
     const foundSeason = legacyLeague.find(league => league.season === season);
 
     return foundSeason?.rosters.map(roster => {
+        const foundOwner = foundSeason.users.find(user => user.user_id === roster.owner_id);
         const ap_wins = getAllPlayStats(roster.roster_id, season, legacyLeague).wins;
         const ap_losses = getAllPlayStats(roster.roster_id, season, legacyLeague).losses;
 
         return {
-            ...roster, settings : {
+            ...roster, 
+            owner: foundOwner || Interfaces.initialOwner,
+            settings : {
                 ...roster.settings, 
                 all_play_wins: ap_wins,
                 all_play_losses: ap_losses,

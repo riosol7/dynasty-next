@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
 import { Icon } from "@iconify-icon/react";
 import Standings from "./Standings";
@@ -12,7 +12,6 @@ export default function LeagueRankings() {
     const [rankings, setRankings] = useState("Standings");
     const [season, setSeason] = useState(legacyLeague[0].season);
     const [playoffs, setPlayoffs] = useState(false);
-
     
     const handleRankings = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setRankings(e.target.value);
@@ -25,6 +24,12 @@ export default function LeagueRankings() {
     const handlePlayoffs = () => {
         setPlayoffs(!playoffs);
     };
+
+    useEffect(() => {
+        if(season === undefined){
+          setSeason(legacyLeague[0].season)
+        }
+    }, [season, legacyLeague[0].season])
 
     return (
         <>
