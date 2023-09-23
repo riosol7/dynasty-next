@@ -18,14 +18,14 @@ const SHOW_PAGES={
     paddingBlock:"3px",
 };
 
-function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: Interfaces.TableHeaderProps) {
-    const isSorting = sort === sortKey;
+function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
+    const isSorting = sort === label;
 
     const handleClick = () => {
         if (isSorting) {
             setAsc(!asc);
         } else {
-            handleSort(sort, sortKey, asc, setAsc, setSort);
+            handleSort(sort, label, asc, setAsc, setSort);
         };
     };
 
@@ -132,7 +132,6 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
             <div className="flex items-center py-2 text-xs text-[#7d91a6]">
                 <TableHeaderCell
                     label="PLAYER"
-                    sortKey="PLAYER"
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
@@ -140,7 +139,6 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                 />
                 <TableHeaderCell
                     label="AGE"
-                    sortKey="AGE"
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
@@ -165,7 +163,6 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                 </div>
                 <TableHeaderCell
                     label="BID"
-                    sortKey="BID"
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
@@ -173,7 +170,6 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                 />
                 <TableHeaderCell
                     label="DATE"
-                    sortKey="DATE"
                     sort={sort}
                     asc={asc}
                     setAsc={setAsc}
@@ -210,7 +206,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                         <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
                         <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{record.creator}</p>
                         <p className="w-1/12" style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
-                        <p className="w-3/12" style={{color: sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
+                        <p className="w-3/12" style={{color:sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
                     </div>
                 );
             })}

@@ -1,4 +1,5 @@
 import * as Interfaces from "../interfaces";
+import { getAllTimeStats } from ".";
 
 export const handleSort = (
     sort: string, 
@@ -13,6 +14,35 @@ export const handleSort = (
       setSort(sortKey);
       setAsc(true);
     };
+};
+
+export const sortAllTimeRosters = (legacyLeague: Interfaces.League[]) => {
+    const currentLeague = legacyLeague[0];
+    return currentLeague.rosters.map(roster => {
+        const foundOwner = currentLeague.users.find(user => user.user_id === roster.owner_id);
+        const allTimeStats = getAllTimeStats(roster.roster_id, legacyLeague);
+        
+        return {
+            ...roster,
+            owner: foundOwner as Interfaces.Owner,
+            settings: {
+                ...roster.settings,
+                all_time_fpts: allTimeStats.fpts,
+                all_time_fpts_against: allTimeStats.pa,
+                all_time_ppts: allTimeStats.ppts,
+                all_time_wins: allTimeStats.wins,
+                all_time_losses: allTimeStats.losses,
+                all_time_win_rate: allTimeStats.winRate,
+                all_time_ties: allTimeStats.ties,
+            }
+        };
+    }).sort((a, b) => {
+        if (a.settings.all_time_wins === b.settings.all_time_wins) {
+            return b.settings.all_time_fpts - a.settings.all_time_fpts;
+        } else {
+            return b.settings.all_time_wins - a.settings.all_time_wins
+        };
+    });
 };
 
 export const getSortedRecords = (

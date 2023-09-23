@@ -12,6 +12,7 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
     
     const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item.settings.wins, 0);
     const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item.settings.losses, 0);
+    const allTimeRegularSeasonTies = legacyRosters.reduce((acc, item: any) => acc + item.settings.ties, 0);
     const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts + "." + item.settings.fpts_decimal), 0));
     const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.ppts + "." + item.settings.ppts_decimal), 0));
     const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts_against + "." + item.settings.fpts_against_decimal), 0));
@@ -104,6 +105,7 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
         winRate: roundToHundredth(((allTimeRegularSeasonWins)/(allTimeRegularSeasonWins + allTimeRegularSeasonLosses))*100),
         wins: allTimeRegularSeasonWins,
         losses: allTimeRegularSeasonLosses,
+        ties: allTimeRegularSeasonTies,
         fpts: allTimeRegularSeasonFPTS,
         ppts: allTimeRegularSeasonPPTS,
         pa: allTimeRegularSeasonPA,

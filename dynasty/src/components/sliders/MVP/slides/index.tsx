@@ -61,20 +61,16 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                             <p className="m-0">{mvp?.first_name}</p>
                             <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
                         </div>
-                        <div className="p-2">
-                            <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
-                        </div>
+                        <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
                     </div>
-                    <div className="my-1 flex items-center">
-                        <div className={`${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
-                            <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
-                                {mvp?.position}
-                                <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                    {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
-                                    <span style={{color: "lightgray"}}> pts</span>
-                                </span>
-                            </p>
-                        </div>
+                    <div className={`my-1 flex items-center ${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
+                        <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
+                            {mvp?.position}
+                            <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
+                                {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
+                                <span style={{color: "lightgray"}}> pts</span>
+                            </span>
+                        </p>
                     </div>
                     <div className="flex items-center mx-2" style={{marginTop: ".8em"}}>
                         <div className="flex items-center" style={{width: "60px"}}>

@@ -13,7 +13,15 @@ export interface Roster {
     taxi: string[];
     starters: string[];
     settings: {
+        all_time_wins: number;
+        all_time_ties: number;
+        all_time_losses: number;
+        all_time_win_rate: number;
+        all_time_fpts: number;
+        all_time_ppts: number;
+        all_time_fpts_against: number;
         all_play_wins: number;
+        all_play_ties: number;
         all_play_losses: number;
         all_play_win_rate: number;
         wins: number;
@@ -29,6 +37,7 @@ export interface Roster {
         fpts_against: number;
         fpts: number;
         division: number;
+        rank: number;
     };
     roster_id: number;
     reserve: string[] | null;

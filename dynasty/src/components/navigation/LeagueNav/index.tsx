@@ -61,14 +61,12 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
             <div className="flex justify-center items-center p-2 bg-gray-900 rounded-full w-10 h-10">
                 <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/>
             </div>
-            <div>
-                <select id={styles.selectMarket} onChange={onChange} value={fantasyMarket}>
-                    <option value={"ktc"}>{"KeepTradeCut"}</option>
-                    <option value={"fc"}>{"FantasyCalc"}</option>
-                    <option value={"sf"}>{"SuperFlex"}</option>
-                    <option value={"dp"}>{"DynastyProcess"}</option>
-                </select>
-            </div>
+            <select id={styles.selectMarket} onChange={onChange} value={fantasyMarket}>
+                <option value={"ktc"}>{"KeepTradeCut"}</option>
+                <option value={"fc"}>{"FantasyCalc"}</option>
+                <option value={"sf"}>{"SuperFlex"}</option>
+                <option value={"dp"}>{"DynastyProcess"}</option>
+            </select>
             <div className={styles.activity}>
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
             </div>

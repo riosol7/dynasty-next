@@ -14,22 +14,9 @@ import {
  } from "@/context";
  import DynastyRow from "./DynastyRow";
  import styles from "../LeagueRankings.module.css";
+ import * as Interfaces from "../../../../interfaces";
 
-interface SortHeader {
-    asc: boolean;
-    label: string;
-    sort: string;
-    setAsc: React.Dispatch<React.SetStateAction<boolean>>;
-    setSort: React.Dispatch<React.SetStateAction<string>>;
-};
-
-interface SortIcon {
-    asc: boolean;
-    label: string;
-    onClick: () => void;
-};
-
-function SortHeader({ sort, label, asc, setAsc, setSort}: SortHeader) {
+function SortHeader({ sort, label, asc, setAsc, setSort}: Interfaces.SortProps) {
     return (
         <div className="w-1/12 flex items-center">
             {sort === label || (label === "TEAM" && sort === "TEAM") ? (
@@ -40,7 +27,7 @@ function SortHeader({ sort, label, asc, setAsc, setSort}: SortHeader) {
         </div>
     );
 };
-function SortIcon({ onClick, asc, label }: SortIcon) {
+function SortIcon({ onClick, asc, label }: Interfaces.SortIcon) {
     return (
         <div className="flex items-center">
             <p className={styles.standingCell} onClick={onClick}>{label === "TEAM" ? "TOTAL" : label}</p>

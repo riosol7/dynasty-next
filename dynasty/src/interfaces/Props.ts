@@ -30,7 +30,7 @@ export interface PowerRankingProps {
     season: string;
 };
 
-export interface PowerRowProps {
+export interface RankingRowProps {
     roster: Roster;
     season: string;
 };
@@ -40,11 +40,21 @@ export interface StandingProps {
     playoffs: boolean;
 };
 
-export interface TableHeaderProps {
+export interface SortProps {
     label: string;
-    sortKey: string;
     sort: string;
     asc: boolean;
     setAsc: React.Dispatch<React.SetStateAction<boolean>>;
-    setSort:  React.Dispatch<React.SetStateAction<string>>;
+    setSort: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export interface SortIcon {
+    asc: boolean;
+    label?: string;
+    onClick: () => void;
+};
+
+export interface SortingConfig {
+    sort: string;
+    asc: boolean;
 };

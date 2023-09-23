@@ -33,6 +33,7 @@
 .ownerLogo {
     border-radius: 50%;
     width: 25px;
+    padding: 2em
 }
 .arrow {
     padding: 4px;

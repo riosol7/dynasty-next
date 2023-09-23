@@ -3,7 +3,7 @@ import { handleSort } from "@/utils";
 import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "../../../../interfaces";
 
-function SortIcon({ asc, onClick }) {
+function SortIcon({ asc, onClick }: Interfaces.SortIcon) {
     return (
         <div className="d-flex align-items-center" onClick={onClick}>
             <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/>
@@ -11,69 +11,86 @@ function SortIcon({ asc, onClick }) {
     );
 }
   
-function SortableHeader({ label, sortKey, asc, setAsc, sort }: Interfaces.TableHeaderProps) {
-    const isSorted = sort === sortKey;
+function SortableHeader({
+    label,
+    asc,
+    sort,
+    updateOverallStandings,
+    updateDivisionState,
+    division,
+  }: StandingTableHeaderProps) {
+    const isSorted = sort === label;
     const handleSortClick = () => {
         if (isSorted) {
-            setAsc(!asc);
+            // Call the update functions here
+            if (division !== undefined && updateDivisionState!) {
+                updateDivisionState(division, label, !asc);
+            } else if (updateOverallStandings!) {
+                updateOverallStandings({ sort: label, asc: !asc });
+            };
         } else {
-            handleSort(sort, sortKey, asc, setAsc, setSort);
-        }
+            // handleStandingSort(sort, label!, asc, updateOverallStandings, updateDivisionState);
+        };
     };
     return (
-        <div className={label === "RECORD" ? "col-sm-2 d-flex align-items-center" : "col-sm-1 d-flex align-items-center"}>
-            <p className="m-0 StandingCell" onClick={handleSortClick}>{label}</p>
-            {isSorted && <SortIcon asc={asc} onClick={handleSortClick} />}
+      <div className={label === "RECORD" ? "w-2/12 flex items-center" : "w-1/12 flex items-center"}>
+        <p className="m-0 StandingCell" onClick={handleSortClick}>
+          {label}
+        </p>
+        {isSorted && <SortIcon asc={asc} onClick={handleSortClick} />}
       </div>
     );
-}
+};
 
-export default function StandingTableHeader({asc, handleSort, setAsc, sort, division}: Interfaces.StandingTableHeaderProps) {
+export interface StandingTableHeaderProps {
+    label?: string;
+    sort: string;
+    asc: boolean;
+    updateOverallStandings?: (newSortingConfig: Interfaces.SortingConfig) => void;
+    updateDivisionState?: (divisionIndex: number, newSort: string, newAsc: boolean) => void;
+    division?: number;
+};
+export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: StandingTableHeaderProps) {
     return (
-        <div className="d-flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
-            <div className="col-sm-7 d-flex align-items-center"> 
-                <div className="col-sm-1">
+        <div className="flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
+            <div className="w-7/12 flex items-center"> 
+                <div className="w-1/12">
                     <SortableHeader
-                        title="RANK"
-                        sortKey="RANK"
+                        label="RANK"
                         asc={asc}
-                        handleSort={handleSort}
-                        setAsc={setAsc}
+                        updateOverallStandings={updateOverallStandings}
+                        updateDivisionState={updateDivisionState}
                         sort={sort}
                     />
                 </div>
-                <p className="m-0 StandingCell">{division === 1 ? "DIVISION 1" : division === 2 ? "DIVISION 2" : "TEAM"}</p>
+                <p className="StandingCell">{division? `DIVISION ${division}` : "TEAM"}</p>
             </div>
             <SortableHeader
-                title="RECORD"
-                sortKey="RECORD"
+                label="RECORD"
                 asc={asc}
-                handleSort={handleSort}
-                setAsc={setAsc}
+                updateOverallStandings={updateOverallStandings}
+                updateDivisionState={updateDivisionState}
                 sort={sort}
             />
             <SortableHeader
-                title="PF"
-                sortKey="PF"
+                label="PF"
                 asc={asc}
-                handleSort={handleSort}
-                setAsc={setAsc}
+                updateOverallStandings={updateOverallStandings}
+                updateDivisionState={updateDivisionState}
                 sort={sort}
             />
             <SortableHeader
-                title="MAX PF"
-                sortKey="MAX PF"
+                label="MAX PF"
                 asc={asc}
-                handleSort={handleSort}
-                setAsc={setAsc}
+                updateOverallStandings={updateOverallStandings}
+                updateDivisionState={updateDivisionState}
                 sort={sort}
             />
             <SortableHeader
-                title="PA"
-                sortKey="PA"
+                label="PA"
                 asc={asc}
-                handleSort={handleSort}
-                setAsc={setAsc}
+                updateOverallStandings={updateOverallStandings}
+                updateDivisionState={updateDivisionState}
                 sort={sort}
             />
         </div>
