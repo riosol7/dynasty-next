@@ -18,7 +18,7 @@ export const handleSort = (
 
 export const sortAllTimeRosters = (legacyLeague: Interfaces.League[]) => {
     const currentLeague = legacyLeague[0];
-    return currentLeague.rosters.map(roster => {
+    return currentLeague.rosters.map((roster) => {
         const foundOwner = currentLeague.users.find(user => user.user_id === roster.owner_id);
         const allTimeStats = getAllTimeStats(roster.roster_id, legacyLeague);
         
@@ -42,7 +42,7 @@ export const sortAllTimeRosters = (legacyLeague: Interfaces.League[]) => {
         } else {
             return b.settings.all_time_wins - a.settings.all_time_wins
         };
-    });
+    }).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
 };
 
 export const getSortedRecords = (

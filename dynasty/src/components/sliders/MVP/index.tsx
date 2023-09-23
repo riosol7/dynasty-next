@@ -38,37 +38,36 @@ export default function MVPSlider() {
                 </div>
                 <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
             </div>
-            <div className="flex" style={{ maxWidth: "1717.44px", cursor: "grab" }}>
+            <div className="flex" style={{ cursor: "grab" }}>
                 <Swiper
-                    breakpoints={{
-                    1850: {
-                        slidesPerView: 5,
-                        spaceBetween: 55,
-                        loop: true,
-                    },
-                    1520: {
-                        slidesPerView: 4,
-                        spaceBetween: 55,
-                        loop: true,
-                    },
-                    1200: {
-                        slidesPerView: 3,
-                        spaceBetween: 55,
-                        loop: true,
-                    },
-                    855: {
-                        slidesPerView: 2,
-                        spaceBetween: 25,
-                        loop: true,
-                    }
+                     breakpoints = {{
+                        1850: {
+                            slidesPerView: 5,
+                            spaceBetween: 25,
+                            loop: true,
+                        },
+                        1520:{
+                            slidesPerView: 4,
+                            spaceBetween: 25,
+                            loop: true,
+                        },
+                        1200:{
+                            slidesPerView: 3,
+                            spaceBetween: 45,
+                            loop: true,
+                        },
+                        855:{
+                            slidesPerView: 2,
+                            spaceBetween: 25,
+                            loop: true,
+                        },
                     }}
-                    spaceBetween={30}
-                    slidesPerGroup={1}
-                    loop={true}
+                    slidesPerGroup={1} 
+                    loop={true} 
                     modules={[Autoplay]}
                     autoplay={{
                         delay: 5500,
-                        disableOnInteraction: false
+                        disableOnInteraction: false,
                     }}
                 >
                     {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (

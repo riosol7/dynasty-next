@@ -58,14 +58,13 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                 <div className="">
                     <div className="flex justify-between">
                         <div className="mt-2">
-                            <p className="m-0">{mvp?.first_name}</p>
-                            <p className="m-0 font-bold truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
+                            <p className="text-truncate">{mvp?.first_name}</p>
+                            <p className="font-bold text-truncate text-3xl" style={{fontSize: "1.3em"}}>{mvp?.last_name}</p>
                         </div>
                         <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
                     </div>
                     <div className={`my-1 flex items-center ${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
-                        <p className="m-0 flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>
-                            {mvp?.position}
+                        <p className="flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp?.position}
                             <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
                                 {getTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
                                 <span style={{color: "lightgray"}}> pts</span>
@@ -75,11 +74,11 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                     <div className="flex items-center mx-2" style={{marginTop: ".8em"}}>
                         <div className="flex items-center" style={{width: "60px"}}>
                             <Icon icon="fa6-solid:ranking-star" style={{fontSize: "22px", color: "#a9dfd8"}}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).rank}</p>
+                            <p className="text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).rank}</p>
                         </div>
                         <div className="flex items-center">
                             <Image src={value} alt="value" width={25} height={25}/>
-                            <p className="m-0 text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value}</p>
+                            <p className="text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value}</p>
                         </div>
                     </div>
                 </div>

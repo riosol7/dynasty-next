@@ -1,3 +1,3 @@
-export * from "./Logo";
+export * from "./Logos";
 export * from "./Environments";
 export * from "./Positions";
