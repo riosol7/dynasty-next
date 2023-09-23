@@ -26,10 +26,10 @@ export default function LeagueRankings() {
     };
 
     useEffect(() => {
-        if(season === undefined){
-          setSeason(legacyLeague[0].season)
+        if (season === undefined) {
+            setSeason(legacyLeague[0].season)
         }
-    }, [season, legacyLeague[0].season])
+    }, [season])
 
     return (
         <>

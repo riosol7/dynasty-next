@@ -18,7 +18,7 @@ const SHOW_PAGES={
     paddingBlock:"3px",
 };
 
-function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: Interfaces.TableHeaderCellProps) {
+function TableHeaderCell({ label, sortKey, sort, asc, setAsc, setSort}: Interfaces.TableHeaderProps) {
     const isSorting = sort === sortKey;
 
     const handleClick = () => {

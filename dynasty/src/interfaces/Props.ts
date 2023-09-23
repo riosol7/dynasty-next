@@ -40,7 +40,7 @@ export interface StandingProps {
     playoffs: boolean;
 };
 
-export interface TableHeaderCellProps {
+export interface TableHeaderProps {
     label: string;
     sortKey: string;
     sort: string;
