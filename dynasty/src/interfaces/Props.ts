@@ -26,7 +26,7 @@ export interface DynastyRowProps {
     fantasyMarket: string;
 };
 
-export interface PowerRankingProps {
+export interface SeasonProps {
     season: string;
 };
 
@@ -37,7 +37,7 @@ export interface RankingRowProps {
 
 export interface StandingProps {
     season:string; 
-    playoffs: boolean;
+    tournament: boolean;
 };
 
 export interface SortProps {
@@ -62,4 +62,15 @@ export interface SortingConfigProps {
 export const sortingConfig: SortingConfigProps = {
     sort: 'rank',
     asc: true,
+};
+
+export interface BracketProps {
+    season: string;
+    sectionTitle: string;
+    children?: ReactNode;
+};
+
+export interface WeekLabelProps {
+    season: string;
+    weekNumber: number;
 };

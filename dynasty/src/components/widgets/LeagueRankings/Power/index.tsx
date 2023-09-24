@@ -6,7 +6,7 @@ import styles from "../LeagueRankings.module.css";
 import PowerRow from "./PowerRow";
 import * as Interfaces from "../../../../interfaces";
 
-export default function PowerRankings({season}: Interfaces.PowerRankingProps) {
+export default function PowerRankings({season}: Interfaces.SeasonProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const [sort, setSort] = useState("")
     const [asc, setAsc] = useState(false)

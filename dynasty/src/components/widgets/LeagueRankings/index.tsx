@@ -11,7 +11,7 @@ export default function LeagueRankings() {
 
     const [rankings, setRankings] = useState("Standings");
     const [season, setSeason] = useState(legacyLeague[0].season);
-    const [playoffs, setPlayoffs] = useState(false);
+    const [tournament, setTournament] = useState(false);
     
     const handleRankings = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setRankings(e.target.value);
@@ -21,8 +21,8 @@ export default function LeagueRankings() {
         setSeason(e.target.value);
     };
 
-    const handlePlayoffs = () => {
-        setPlayoffs(!playoffs);
+    const handleTournament = () => {
+        setTournament(!tournament);
     };
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function LeagueRankings() {
                 {rankings === "Standings" || rankings === "Power" ?
                     <div className="flex items-center">
                         {season !== "All Time" && rankings !== "Power" ?
-                            <Icon icon="mdi:bracket" onClick={() => handlePlayoffs()} className={`mx-4`} style={playoffs ? {fontSize:"1.4rem", color:"#a9dfd8"} : {fontSize:"1.4rem", color:"#cbcbcb"}}/>
+                            <Icon icon="mdi:bracket" onClick={() => handleTournament()} className={`mx-4`} style={tournament ? {fontSize:"1.4rem", color:"#a9dfd8"} : {fontSize:"1.4rem", color:"#cbcbcb"}}/>
                         : <></>
                         }
                         <div className="flex items-center">
@@ -53,7 +53,7 @@ export default function LeagueRankings() {
                                 {legacyLeague?.slice().map((league, i) => 
                                     <option key={i} value={league.season}>{league.season}</option>
                                 )}
-                                {(rankings ==="Standings" || rankings === "Power") && playoffs === false ?
+                                {(rankings ==="Standings" || rankings === "Power") && tournament === false ?
                                     <option value="All Time">All Time</option>
                                 :<></>
                                 }
@@ -63,7 +63,7 @@ export default function LeagueRankings() {
                 : <></>} 
             </div>
             {rankings === "Standings" ? 
-                <Standings playoffs={playoffs} season={season}/>
+                <Standings tournament={tournament} season={season}/>
             : rankings === "Dynasty" ?
                 <DynastyRankings/>
             : rankings === "Power" ?

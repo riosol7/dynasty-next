@@ -5,8 +5,9 @@ import { StatKeys } from "@/types";
 import * as Interfaces from "../../../../interfaces";
 import StandingRow from "./StandingRow";
 import StandingTableHeader from "./StandingTableHeader";
+import Tournament from "../Tournament";
 
-export default function Standings({season, playoffs}: Interfaces.StandingProps) {
+export default function Standings({season, tournament}: Interfaces.StandingProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
 
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
@@ -70,15 +71,7 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
                     <></>
                 )}
             </div>
-        // : playoffs ?
-            // <PostSeasonBracket
-            //     foundHistory={foundHistory}
-            //     handleRostersBySzn={handleRostersBySzn}
-            //     league={league}
-            //     processedRosters={processedRosters}
-            //     selectSzn={selectSzn} 
-            // />  
-        :
+        : tournament ? <Tournament season={season}/> :
         <>
             <div className="py-2">
                 {divisionStates.map((divisionState, index) => (
