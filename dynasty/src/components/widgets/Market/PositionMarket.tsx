@@ -59,44 +59,42 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                 <div className="w-1/12">QTY</div>
                 <div className="w-2/12">TOP SPENDER</div>
             </div>
-            <div>
-                {POSITIONS.map((position, i) => {  
-                    const recentWaivers = findRecentWaivers(position as keyof Waivers);
-                    const highestBid = findHighestBid(position as keyof Waivers);
-                    const lowestBid = findLowestBid(position as keyof Waivers);
-                    return (
-                        <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
-                            i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
-                        }`}>
-                            <div className="w-1/12">
-                                <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
-                            </div>
-                            {/* TREND */}
-                            <div className="w-3/12">
-                                {/* <PositionLineChart waivers={waivers[position as keyof Waivers]} /> */}
-                            </div>
-                            {/* LAST PRICE */}
-                            <p className="w-1/12">{recentWaivers[0]?.settings?.waiver_bid}</p>
-                            {/* % CHANGE */}
-                            <div className="w-1/12">
-                                <p className={`${calculatePercentageChange(
-                                    recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid) > 0 ? "text-green-500" : "text-red-500"}`
-                                }>
-                                {calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid) > 0 ? "+" : ""}
-                                {calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid)} %
-                                </p>
-                            </div>
-                            {/* AVG */}
-                            <p className="w-1/12">{roundToHundredth(waivers[position as keyof Waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0) / waivers[position as keyof Waivers].length)}</p>     
-                            <p className="w-1/12">{lowestBid}</p>
-                            <p className="w-1/12">{highestBid}</p>
-                            {/* TRANSACTIONS */}
-                            <p className="w-1/12">{waivers[position as keyof Waivers].length}</p>
-                            <p className="w-2/12">{findTopSpender(waivers[position as keyof Waivers])?.owner} (${findTopSpender(waivers[position as keyof Waivers])?.pts})</p>
+            {POSITIONS.map((position, i) => {  
+                const recentWaivers = findRecentWaivers(position as keyof Waivers);
+                const highestBid = findHighestBid(position as keyof Waivers);
+                const lowestBid = findLowestBid(position as keyof Waivers);
+                return (
+                    <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
+                        i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
+                    }`}>
+                        <div className="w-1/12">
+                            <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
-                    )
-                })}
-            </div>
+                        {/* TREND */}
+                        <div className="w-3/12">
+                            {/* <PositionLineChart waivers={waivers[position as keyof Waivers]} /> */}
+                        </div>
+                        {/* LAST PRICE */}
+                        <p className="w-1/12">{recentWaivers[0]?.settings?.waiver_bid}</p>
+                        {/* % CHANGE */}
+                        <div className="w-1/12">
+                            <p className={`${calculatePercentageChange(
+                                recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid) > 0 ? "text-green-500" : "text-red-500"}`
+                            }>
+                            {calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid) > 0 ? "+" : ""}
+                            {calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid)} %
+                            </p>
+                        </div>
+                        {/* AVG */}
+                        <p className="w-1/12">{roundToHundredth(waivers[position as keyof Waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0) / waivers[position as keyof Waivers].length)}</p>     
+                        <p className="w-1/12">{lowestBid}</p>
+                        <p className="w-1/12">{highestBid}</p>
+                        {/* TRANSACTIONS */}
+                        <p className="w-1/12">{waivers[position as keyof Waivers].length}</p>
+                        <p className="w-2/12">{findTopSpender(waivers[position as keyof Waivers])?.owner} (${findTopSpender(waivers[position as keyof Waivers])?.pts})</p>
+                    </div>
+                );
+            })}
         </div>
     );
 };

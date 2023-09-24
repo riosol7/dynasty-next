@@ -86,12 +86,12 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
         return legacyFinalsRecord;
     };
 
-    const playoffAppearances = playoffRuns?.length;            
-    const totalPlayoffFPTS = roundToHundredth(playoffRuns.length > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter((team) => team.roster_id === rID)[0]).map((team: Interfaces.Match) => team && team.points).reduce((a, b) => {return +a + +b})).reduce((a, b) => {return +a + +b}): 0);
+    const playoffAppearances = playoffRuns?.length;      
+    const totalPlayoffFPTS = roundToHundredth(playoffAppearances > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter((team) => team.roster_id === rID)[0]).map((team: Interfaces.Match) => team && team.points).reduce((a, b) => {return +a + +b})).reduce((a, b) => {return +a + +b}): 0);
     const totalPlayoffPPTS = 0;
-    const totalPlayoffPA = roundToHundredth(playoffRuns?.length > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter(team => team.roster_id !== rID)[0]).map(team => team && team.points).reduce((a,b) => {return +a + +b})).reduce((a,b) => {return +a + +b}): 0)
-    const highestPlayoffScore = roundToHundredth(playoffRuns?.length > 0 ? playoffRuns.map(season => season.games.map(game => game.filter(team => team.roster_id === rID)[0]).map(team => team && team.points).sort((a,b) => b - a)[0]).sort((a,b) => b - a)[0] : 0);
-    const totalPlayoffGames = playoffRuns?.length > 0 ? playoffRuns?.map(season => season.bracket.length).reduce((a,b) => {return +a + +b}) : 0;
+    const totalPlayoffPA = roundToHundredth(playoffAppearances > 0 ? playoffRuns.map((season) => season?.games.map((game) => game.filter(team => team.roster_id !== rID)[0]).map(team => team && team.points).reduce((a,b) => {return +a + +b})).reduce((a,b) => {return +a + +b}): 0)
+    const highestPlayoffScore = roundToHundredth(playoffAppearances > 0 ? playoffRuns.map(season => season.games.map(game => game.filter(team => team.roster_id === rID)[0]).map(team => team && team.points).sort((a,b) => b - a)[0]).sort((a,b) => b - a)[0] : 0);
+    const totalPlayoffGames = playoffAppearances > 0 ? playoffRuns?.map(season => season.bracket.length).reduce((a,b) => {return +a + +b}) : 0;
     const allTimePlayoffWins = playoffRuns?.map(season => season.bracket.filter(match => match.w === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0; 
     const allTimePlayoffLosses = playoffRuns?.map(season => season.bracket.filter(match => match.l === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0;
     

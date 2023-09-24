@@ -26,10 +26,10 @@ function LeagueStatus({ league }: Interfaces.LeagueProps) {
 function LeagueSettings({ league }: Interfaces.LeagueProps) {
     return (
         <div className="flex items-center">
-            <p className="m-0 mx-4 text-whitesmoke">
+            <p className="mx-4 text-whitesmoke">
                 Divisions <span className="ml-2 text-white">{league.settings?.divisions}</span>
             </p>
-            <p className="m-0 text-whitesmoke">
+            <p className="text-whitesmoke">
                 Rosters <span className="ml-2 text-white">{league.total_rosters}</span>
             </p>
         </div>
@@ -71,5 +71,5 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
             </div>
         </nav>
-    )
-}
+    );
+};

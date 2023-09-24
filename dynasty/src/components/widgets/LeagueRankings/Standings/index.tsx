@@ -36,7 +36,6 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
         if (owner.settings && owner.settings[statKey] !== undefined) {
             return owner.settings[statKey];
         };
-      
         return 0;
     };
 

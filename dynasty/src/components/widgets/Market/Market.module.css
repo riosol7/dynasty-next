@@ -46,7 +46,7 @@
     text-align: right; 
 }
 
-.selectTag {
+#selectTag {
     border: "none"; 
     background: "inherit";
     color: "#7d91a6";
@@ -54,7 +54,7 @@
     font-weight: "bold";
 }
 
-.showPages {
+#showPages {
     display: flex;
     align-items: center;
     border-bottom: "none"; 

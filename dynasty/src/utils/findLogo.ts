@@ -7,7 +7,7 @@ const noLogo: Interfaces.Logo = {
     bgColor3: "",
     color: "",
     l: "FA",
-}
+};
 
 export const findLogo = (team: string): Interfaces.Logo => {
     const foundLogo = LOGOS.find((logo) => logo.hasOwnProperty(team));

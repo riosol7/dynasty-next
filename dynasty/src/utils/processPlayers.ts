@@ -5,7 +5,7 @@ const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE"]
 function extractNumbersFromString(inputString: string): string {
     const numericPart = inputString.match(/\d+/);
     return numericPart ? numericPart[0] : "";
-}
+};
 
 export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.PlayerMarket[], sf: Interfaces.PlayerMarket[], fc: Interfaces.FantasyCalcPlayer[], dp: Interfaces.DynastyProcessPlayer[], fp: Interfaces.FantasyProPlayer[],) => {
     const unemployedPlayers = players.filter((player: Interfaces.Player) => !validPositions.includes(player.position) && player.team === null && player.depth_chart_order === null);

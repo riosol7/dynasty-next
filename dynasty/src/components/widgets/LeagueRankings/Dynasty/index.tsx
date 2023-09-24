@@ -103,5 +103,5 @@ export default function DynastyRankings() {
                 <DynastyRow key={i} roster={roster} sort={sort} fantasyMarket={fantasyMarket}/>
             )}
         </>
-    )
-}
+    );
+};

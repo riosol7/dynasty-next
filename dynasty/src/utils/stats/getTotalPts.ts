@@ -18,7 +18,7 @@ export const getTotalPts = (legacyLeague: Interfaces.League[], rID: number, pID:
                     return playerData[1];
                 };
             };
-            return 0; // Return a default value in case of undefined data
+            return 0;
         })
     ).flat().reduce((total, playerPoints: any) => total + playerPoints, 0);
 

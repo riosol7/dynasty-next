@@ -11,5 +11,5 @@ export default function MainDashboard() {
             <MarketWidget/>
             <LeagueRankings/>
         </>
-    )
-}
+    );
+};

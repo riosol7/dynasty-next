@@ -24,5 +24,5 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
                 </div>
             </div>
         </>
-    )
-}
+    );
+};

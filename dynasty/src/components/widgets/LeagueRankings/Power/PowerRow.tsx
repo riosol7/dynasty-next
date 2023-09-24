@@ -38,5 +38,5 @@ export default function PowerRow({roster, season}: Interfaces.RankingRowProps) {
                 }</p>  
             </div>
         </a>
-    )
-}
+    );
+};

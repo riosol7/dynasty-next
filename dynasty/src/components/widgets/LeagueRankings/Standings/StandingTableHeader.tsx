@@ -17,7 +17,7 @@ function SortableHeader({
     updateOverallStandings,
     updateDivisionState,
     division,
-  }: StandingTableHeaderProps) {
+  }: Interfaces.StandingTableHeaderProps) {
     const sortKey = label === "record" ? "rank" : label;
     const isSorted = sort === sortKey;
     const handleSortClick = () => {
@@ -46,16 +46,7 @@ function SortableHeader({
     );
 };
 
-export interface StandingTableHeaderProps {
-    label?: string;
-    sort: string;
-    asc: boolean;
-    updateOverallStandings?: (newSortingConfig: Interfaces.SortingConfigProps) => void;
-    updateDivisionState?: (divisionIndex: number, newSort: string, newAsc: boolean) => void;
-    division?: number;
-};
-
-export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: StandingTableHeaderProps) {
+export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: Interfaces.StandingTableHeaderProps) {
     return (
         <div className="flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
             <div className="w-7/12 flex items-center"> 

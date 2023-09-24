@@ -29,7 +29,7 @@ export default function LeagueRankings() {
         if (season === "") {
             setSeason(legacyLeague[0].season)
         }
-    }, [season, legacyLeague])
+    }, [season, legacyLeague]);
 
     return (
         <>

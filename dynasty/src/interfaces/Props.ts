@@ -40,6 +40,15 @@ export interface StandingProps {
     tournament: boolean;
 };
 
+export interface StandingTableHeaderProps {
+    label?: string;
+    sort: string;
+    asc: boolean;
+    updateOverallStandings?: (newSortingConfig: SortingConfigProps) => void;
+    updateDivisionState?: (divisionIndex: number, newSort: string, newAsc: boolean) => void;
+    division?: number;
+};
+
 export interface SortProps {
     label: string;
     sort: string;

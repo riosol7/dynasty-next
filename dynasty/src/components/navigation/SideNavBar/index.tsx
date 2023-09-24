@@ -22,5 +22,5 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
                 <Icon className={styles.iconSize} icon="carbon:blog" style={{color:"#7f7f7f"}}/>
             </div>
         </nav>
-    )
-}
+    );
+};

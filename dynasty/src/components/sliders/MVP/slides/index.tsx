@@ -55,7 +55,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                     }}>
                     </div>
                 </div>
-                <div className="">
+                <div>
                     <div className="flex justify-between">
                         <div className="mt-2">
                             <p className="text-truncate">{mvp?.first_name}</p>
@@ -84,5 +84,5 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
