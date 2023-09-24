@@ -1,5 +1,5 @@
 import * as Interfaces from "../../interfaces";
-import { findLeague, getMatchups, roundToHundredth, winPCT } from "..";
+import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
 
 export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
@@ -19,7 +19,7 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
     const bestRoster = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
     const bestSeasonStats = bestRoster?.settings;
     const bestScore = legacyMatches?.map(match => match.sort((a, b) => b.points - a.points)[0]).sort((a,b) => b.points - a.points)[0].points;
-    const bestSeason = findLeague(bestRoster?.league_id || "", legacyLeague)?.season;
+    const bestSeason = findLeagueByID(bestRoster?.league_id || "", legacyLeague)?.season;
 
     // Post Season
     const toiletBowls: number = legacyLeague.map(league => { 

@@ -4,7 +4,8 @@ import * as Interfaces from "../../../../interfaces";
 function WeekLabel({season, weekNumber}: Interfaces.WeekLabelProps) {
     const adjustedWeek = Number(season) <= 2020 ? weekNumber : weekNumber + 1;
     return <p className="text-center">{`Week ${adjustedWeek}`}</p>;
-}
+};
+
 function BracketSection({ sectionTitle, season, children }: Interfaces.BracketProps) {
     return (
         <div>
@@ -23,17 +24,19 @@ function BracketSection({ sectionTitle, season, children }: Interfaces.BracketPr
             <div>{children}</div>
         </div>
     );
-}
+};
 
 export default function Tournament({ season }: Interfaces.SeasonProps) {
     return (
         <div className="flex justify-center">
-            <BracketSection sectionTitle="PLAYOFFS" season={season}>
-                <Bracket sectionTitle="PLAYOFFS" season={season}/>
-            </BracketSection>
-            <BracketSection sectionTitle="TOILET BOWL" season={season}>
-                <Bracket sectionTitle="TOILET BOWL" season={season}/>
-            </BracketSection>
+            <div>
+                <BracketSection sectionTitle="PLAYOFFS" season={season}>
+                    <Bracket sectionTitle="playoffs" season={season}/>
+                </BracketSection>
+                <BracketSection sectionTitle="TOILET BOWL" season={season}>
+                    <Bracket sectionTitle="toiletBowl" season={season}/>
+                </BracketSection>
+            </div>
         </div>
-    )
-}
+    );
+};

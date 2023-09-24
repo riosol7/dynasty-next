@@ -1,17 +1,17 @@
 import * as Interfaces from "../interfaces";
 
-export const findLeague = (leagueID: string, legacyLeague: Interfaces.League[]) => {
+export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League[]) => {
     return legacyLeague.find(league => league.league_id === leagueID);
 };
 
-export const findRostersBySeason = (season: string, legacyLeague: Interfaces.League[]): Interfaces.Roster[] => {
+export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
     const foundLeague = legacyLeague.find(league => league.season === season);
 
     if (!foundLeague) {
-        return [];
+        return Interfaces.defaultLegacyLeague[0];
     };
 
-    return foundLeague.rosters.slice().sort((a, b) => {
+    const updatedRosters = foundLeague.rosters.slice().sort((a, b) => {
         if (a.settings.wins === b.settings.wins) {
             return Number(b.settings.fpts + "." + b.settings.fpts_decimal) - Number(a.settings.fpts + "." + a.settings.fpts_decimal);
         } else {
@@ -28,4 +28,9 @@ export const findRostersBySeason = (season: string, legacyLeague: Interfaces.Lea
             }
         };
     });
+
+    return {
+        ...foundLeague,
+        rosters: updatedRosters
+    };
 };

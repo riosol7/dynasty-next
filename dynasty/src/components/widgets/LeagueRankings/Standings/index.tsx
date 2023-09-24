@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
-import { findRostersBySeason, sortAllTimeRosters } from "@/utils";
+import { findLeagueBySeason, sortAllTimeRosters } from "@/utils";
 import { StatKeys } from "@/types";
 import * as Interfaces from "../../../../interfaces";
 import StandingRow from "./StandingRow";
@@ -13,8 +13,7 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
     const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (Interfaces.sortingConfig));
     const allTimeRosters = sortAllTimeRosters(legacyLeague);
-    const foundRostersBySeason = findRostersBySeason(season, legacyLeague);
-
+    const foundRostersBySeason = findLeagueBySeason(season, legacyLeague).rosters;
     const [overallStandings, setOverallStandings] = useState(Interfaces.sortingConfig);
     const [divisionStates, setDivisionStates] = useState(initialDivisionStates);
     

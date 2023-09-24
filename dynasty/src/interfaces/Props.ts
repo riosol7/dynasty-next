@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Roster, League } from "."
+import { Roster, League, Match, BracketMatch } from "."
 
 export interface ChildrenProps {
     children: ReactNode;
@@ -74,3 +74,16 @@ export interface WeekLabelProps {
     season: string;
     weekNumber: number;
 };
+
+export interface RosterHUDProps {
+    roster: Roster;
+    type: string
+};
+
+export interface PostSeasonMatchProps {
+    match: BracketMatch;
+    matchKey: number;
+    round: number;
+    season: string;
+    sectionTitle: string;
+}
