@@ -27,7 +27,7 @@ function SortHeader({ sort, label, asc, setAsc, setSort}: Interfaces.SortProps) 
         </div>
     );
 };
-function SortIcon({ onClick, asc, label }: Interfaces.SortIcon) {
+function SortIcon({ onClick, asc, label }: Interfaces.SortIconProps) {
     return (
         <div className="flex items-center">
             <p className={styles.standingCell} onClick={onClick}>{label === "TEAM" ? "TOTAL" : label}</p>

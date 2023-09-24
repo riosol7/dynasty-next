@@ -48,13 +48,18 @@ export interface SortProps {
     setSort: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export interface SortIcon {
+export interface SortIconProps {
     asc: boolean;
     label?: string;
     onClick: () => void;
 };
 
-export interface SortingConfig {
+export interface SortingConfigProps {
     sort: string;
     asc: boolean;
+};
+
+export const sortingConfig: SortingConfigProps = {
+    sort: 'rank',
+    asc: true,
 };

@@ -1,16 +1,15 @@
-import React from "react";
-import { handleSort } from "@/utils";
+import styles from "../LeagueRankings.module.css";
 import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "../../../../interfaces";
 
-function SortIcon({ asc, onClick }: Interfaces.SortIcon) {
+function SortIcon({ asc, onClick }: Interfaces.SortIconProps) {
     return (
-        <div className="d-flex align-items-center" onClick={onClick}>
+        <div className="flex items-center" onClick={onClick}>
             <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/>
         </div>
     );
-}
-  
+};
+
 function SortableHeader({
     label,
     asc,
@@ -19,26 +18,31 @@ function SortableHeader({
     updateDivisionState,
     division,
   }: StandingTableHeaderProps) {
-    const isSorted = sort === label;
+    const sortKey = label === "record" ? "rank" : label;
+    const isSorted = sort === sortKey;
     const handleSortClick = () => {
         if (isSorted) {
-            // Call the update functions here
-            if (division !== undefined && updateDivisionState!) {
-                updateDivisionState(division, label, !asc);
-            } else if (updateOverallStandings!) {
-                updateOverallStandings({ sort: label, asc: !asc });
+            if (division !== undefined && updateDivisionState !== undefined) {
+                updateDivisionState(division - 1, sortKey, !asc);
+            } else if (updateOverallStandings !== undefined) {
+                updateOverallStandings({ sort: sortKey, asc: !asc });
             };
         } else {
-            // handleStandingSort(sort, label!, asc, updateOverallStandings, updateDivisionState);
+            if (division !== undefined && updateDivisionState !== undefined && sortKey !== undefined) {
+                updateDivisionState(division - 1, sortKey, asc);
+            } else if (updateOverallStandings !== undefined && sortKey !== undefined) {
+                updateOverallStandings({ sort: sortKey, asc: asc });
+            };            
         };
     };
     return (
-      <div className={label === "RECORD" ? "w-2/12 flex items-center" : "w-1/12 flex items-center"}>
-        <p className="m-0 StandingCell" onClick={handleSortClick}>
-          {label}
-        </p>
-        {isSorted && <SortIcon asc={asc} onClick={handleSortClick} />}
-      </div>
+        <div className={label === "record" ? "w-2/12 flex items-center" : "w-1/12 flex items-center"}>
+            <p className={styles.standingCell} onClick={handleSortClick}>{
+            label === "fpts" ? "PF" : label === "ppts" ? "MAX PF" : label === "fpts_against" ? "PA" :
+                label?.toLocaleUpperCase()
+            }</p>
+            {isSorted && <SortIcon asc={asc} onClick={handleSortClick} />}
+        </div>
     );
 };
 
@@ -46,53 +50,59 @@ export interface StandingTableHeaderProps {
     label?: string;
     sort: string;
     asc: boolean;
-    updateOverallStandings?: (newSortingConfig: Interfaces.SortingConfig) => void;
+    updateOverallStandings?: (newSortingConfig: Interfaces.SortingConfigProps) => void;
     updateDivisionState?: (divisionIndex: number, newSort: string, newAsc: boolean) => void;
     division?: number;
 };
+
 export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: StandingTableHeaderProps) {
     return (
         <div className="flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
             <div className="w-7/12 flex items-center"> 
                 <div className="w-1/12">
                     <SortableHeader
-                        label="RANK"
+                        label="rank"
                         asc={asc}
                         updateOverallStandings={updateOverallStandings}
                         updateDivisionState={updateDivisionState}
                         sort={sort}
+                        division={division}
                     />
                 </div>
-                <p className="StandingCell">{division? `DIVISION ${division}` : "TEAM"}</p>
+                <p className={`ml-2 ${styles.standingCell}`}>{division? `DIVISION ${division}` : "TEAM"}</p>
             </div>
             <SortableHeader
-                label="RECORD"
+                label="record"
                 asc={asc}
                 updateOverallStandings={updateOverallStandings}
                 updateDivisionState={updateDivisionState}
                 sort={sort}
+                division={division}
             />
             <SortableHeader
-                label="PF"
+                label="fpts"
                 asc={asc}
                 updateOverallStandings={updateOverallStandings}
                 updateDivisionState={updateDivisionState}
                 sort={sort}
+                division={division}
             />
             <SortableHeader
-                label="MAX PF"
+                label="ppts"
                 asc={asc}
                 updateOverallStandings={updateOverallStandings}
                 updateDivisionState={updateDivisionState}
                 sort={sort}
+                division={division}
             />
             <SortableHeader
-                label="PA"
+                label="fpts_against"
                 asc={asc}
                 updateOverallStandings={updateOverallStandings}
                 updateDivisionState={updateDivisionState}
                 sort={sort}
+                division={division}
             />
         </div>
-    )
-}
+    );
+};

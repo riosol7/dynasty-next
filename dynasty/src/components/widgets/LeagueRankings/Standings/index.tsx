@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
 import { findRostersBySeason, sortAllTimeRosters } from "@/utils";
+import { StatKeys } from "@/types";
 import * as Interfaces from "../../../../interfaces";
 import StandingRow from "./StandingRow";
 import StandingTableHeader from "./StandingTableHeader";
 
-const sortingConfig: Interfaces.SortingConfig = {
-    sort: 'rank',
-    asc: false,
-};
-// Add rankings to all time and overall standings, minimize files and modulate interfaces and types.
 export default function Standings({season, playoffs}: Interfaces.StandingProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
 
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
-    const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (sortingConfig));
+    const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (Interfaces.sortingConfig));
     const allTimeRosters = sortAllTimeRosters(legacyLeague);
     const foundRostersBySeason = findRostersBySeason(season, legacyLeague);
 
-    const [overallStandings, setOverallStandings] = useState(sortingConfig);
+    const [overallStandings, setOverallStandings] = useState(Interfaces.sortingConfig);
     const [divisionStates, setDivisionStates] = useState(initialDivisionStates);
     
-    const updateOverallStandings = (newSortingConfig: Interfaces.SortingConfig) => {
+    const updateOverallStandings = (newSortingConfig: Interfaces.SortingConfigProps) => {
         setOverallStandings(newSortingConfig);
     };
 
@@ -36,12 +32,6 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
         .map((roster, i) => { return {...roster, settings:{...roster.settings, rank: i + 1}}});
     };
 
-    useEffect(() => {
-        if (divisionStates.length === 0) {
-            setDivisionStates(initialDivisionStates);
-        };
-    }, [divisionStates]);
-
     const getStatValue = (owner: Interfaces.Roster, statKey: StatKeys): number => {
         if (owner.settings && owner.settings[statKey] !== undefined) {
             return owner.settings[statKey];
@@ -49,8 +39,6 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
       
         return 0;
     };
-
-    type StatKeys = keyof Interfaces.Roster['settings'];
 
     const renderStandingRows = (rosters: Interfaces.Roster[], sortKey: StatKeys, ascending: boolean) => {
         return rosters?.slice().sort((a, b) => ascending ? 
@@ -60,19 +48,23 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
         ));
     };
 
+    useEffect(() => {
+        if (divisionStates.length === 0) {
+            setDivisionStates(initialDivisionStates);
+        };
+    }, [divisionStates, legacyLeague]);
+    
     return (
         season === "All Time" ?
             <div className="py-2">
                 <StandingTableHeader asc={overallStandings.asc} updateOverallStandings={updateOverallStandings} sort={overallStandings.sort}/>
                 {overallStandings.sort === "rank" ? (
-                    overallStandings.asc ?
-                    renderStandingRows(allTimeRosters, overallStandings.sort, true)
-                    : renderStandingRows(allTimeRosters, overallStandings.sort, false).reverse()
-                ) : overallStandings.sort === "PF" ? (
+                    renderStandingRows(allTimeRosters, overallStandings.sort, overallStandings.asc)
+                ) : overallStandings.sort === "fpts" ? (
                     renderStandingRows(allTimeRosters, "fpts", overallStandings.asc)
-                ) : overallStandings.sort === "MAX PF" ? (
+                ) : overallStandings.sort === "ppts" ? (
                     renderStandingRows(allTimeRosters, "ppts", overallStandings.asc)
-                ) : overallStandings.sort === "PA" ? (
+                ) : overallStandings.sort === "fpts_against" ? (
                     renderStandingRows(allTimeRosters, "fpts_against", overallStandings.asc)
                 ) : (
                     <></>
@@ -93,14 +85,12 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
                     <div key={index}>
                         <StandingTableHeader asc={divisionState.asc} updateDivisionState={updateDivisionState} sort={divisionState.sort} division={index + 1}/>
                         {divisionState.sort === "rank" ? (
-                            divisionState.asc ?
-                                renderStandingRows(findDivisionRosters(index + 1), divisionState.sort, true)
-                            : renderStandingRows(findDivisionRosters(index + 1), divisionState.sort, false).reverse()
-                        ) : divisionState.sort === "PF" ? (
+                            renderStandingRows(findDivisionRosters(index + 1), divisionState.sort, divisionState.asc)
+                        ) : divisionState.sort === "fpts" ? (
                         renderStandingRows(findDivisionRosters(index + 1), "fpts", divisionState.asc)
-                        ) : divisionState.sort === "MAX PF" ? (
+                        ) : divisionState.sort === "ppts" ? (
                         renderStandingRows(findDivisionRosters(index + 1), "ppts", divisionState.asc)
-                        ) : divisionState.sort === "PA" ? (
+                        ) : divisionState.sort === "fpts_against" ? (
                         renderStandingRows(findDivisionRosters(index + 1), "fpts_against", divisionState.asc)
                         ) : (
                         <></>
@@ -111,14 +101,12 @@ export default function Standings({season, playoffs}: Interfaces.StandingProps) 
             <div className="py-2">
                 <StandingTableHeader asc={overallStandings.asc} updateOverallStandings={updateOverallStandings} sort={overallStandings.sort}/>
                 {overallStandings.sort === "rank" ? (
-                    overallStandings.asc ? 
-                        renderStandingRows(foundRostersBySeason, overallStandings.sort, true)
-                    : renderStandingRows(foundRostersBySeason, overallStandings.sort, false).reverse()
-                ) : overallStandings.sort === "PF" ? (
+                    renderStandingRows(foundRostersBySeason, overallStandings.sort, overallStandings.asc)
+                ) : overallStandings.sort === "fpts" ? (
                 renderStandingRows(foundRostersBySeason, "fpts", overallStandings.asc)
-                ) : overallStandings.sort === "MAX PF" ? (
+                ) : overallStandings.sort === "ppts" ? (
                 renderStandingRows(foundRostersBySeason, "ppts", overallStandings.asc)
-                ) : overallStandings.sort === "PA" ? (
+                ) : overallStandings.sort === "fpts_against" ? (
                 renderStandingRows(foundRostersBySeason, "fpts_against", overallStandings.asc)
                 ) : (
                 <></>

@@ -11,7 +11,7 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
         <a href={`/Owner/${roster.roster_id}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
             <div className="w-7/12 text-truncate">
                 <div className="flex items-center">
-                    <p className="w-1/12 mx-2 font-bold" style={{color:"#acb6c3", fontSize:".9rem"}}>{roster.settings.rank}</p>
+                    <p className="w-1/12 ml-2 font-bold" style={{color:"#acb6c3", fontSize:".9rem"}}>{roster.settings.rank}</p>
                     <Image width={29} height={29} alt="avatar" src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`} className={styles.userAvatar}/>
                     <div className="mx-1">
                         {roster?.owner?.metadata?.team_name ?
