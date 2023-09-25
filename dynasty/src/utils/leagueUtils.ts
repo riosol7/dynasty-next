@@ -1,7 +1,13 @@
 import * as Interfaces from "../interfaces";
 
-export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League[]) => {
-    return legacyLeague.find(league => league.league_id === leagueID);
+export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
+    const foundLeague = legacyLeague.find(league => league.league_id === leagueID);
+    
+    if (!foundLeague) {
+        return Interfaces.defaultLegacyLeague[0];
+    };
+
+    return foundLeague;
 };
 
 export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
@@ -34,3 +40,8 @@ export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.Leag
         rosters: updatedRosters
     };
 };
+
+export const findTeamByName = (name: string, legacyLeague: Interfaces.League[]) => {
+    const foundTeam = legacyLeague.find(league => league.users.find(user => user.display_name === name));
+    return foundTeam;
+}

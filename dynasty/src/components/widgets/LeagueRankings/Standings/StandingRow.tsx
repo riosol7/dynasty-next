@@ -8,7 +8,7 @@ import { winPCT } from "../../../../utils";
 export default function StandingRow({roster, season}: Interfaces.RankingRowProps) { 
 
     return (
-        <a href={`/Owner/${roster.roster_id}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
+        <a href={`/teams/${roster.owner.display_name}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
             <div className="w-7/12 text-truncate">
                 <div className="flex items-center">
                     <p className="w-1/12 ml-2 font-bold" style={{color:"#acb6c3", fontSize:".9rem"}}>{roster.settings.rank}</p>

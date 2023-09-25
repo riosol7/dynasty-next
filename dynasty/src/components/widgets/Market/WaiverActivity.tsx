@@ -6,6 +6,18 @@ import { findLogo, getSortedRecords, handleSort, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "../../../interfaces";
 
+const SELECT_TAG={border:"none", background:"inherit",color:"#7d91a6",fontSize:".7rem",fontWeight:"bold"};
+const SHOW_PAGES={
+    display: "flex",
+    alignItems: "center",
+    borderBottom:"none", 
+    background:"inherit",
+    color:"#e4e1e0",
+    fontSize:"13.5px",
+    fontWeight:"normal",
+    paddingBlock:"3px",
+};
+
 function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
     const isSorting = sort === label;
 
@@ -108,7 +120,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     </div>
                     <Icon onClick={() => nextPage()} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color:waiverBidsFiltered?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
                 </div>
-                <div id={styles.showPages}>
+                <div style={SHOW_PAGES}>
                     <p>Show</p>
                     <select style={{background:"inherit", color:"white", border:"none"}} onChange={handleShowPage} value={recordsPerPage}>
                         <option value={5}>5</option>
@@ -133,7 +145,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     setSort={setSort}
                 />
                 <div className="w-2/12">
-                    <select id={styles.selectTag} onChange={handlePosition} value={selectPosition}>
+                    <select style={SELECT_TAG} onChange={handlePosition} value={selectPosition}>
                         <option value={"all"}>POSITIONS</option>
                         <option value={"QB"}>QB</option>
                         <option value={"RB"}>RB</option>
@@ -142,7 +154,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     </select>
                 </div>
                 <div className="w-2/12">
-                    <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
+                    <select style={SELECT_TAG} onChange={handleOwner} value={selectOwner}>
                     <option value={"all"}>OWNERS</option>
                     {legacyLeague[0]?.users?.map((user, i) => (
                         <option key={i} value={user.display_name}>{user.display_name}</option>

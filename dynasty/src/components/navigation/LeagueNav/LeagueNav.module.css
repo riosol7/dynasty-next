@@ -1,5 +1,6 @@
 .navigation {
     position: fixed;
+    padding-right: 10px;
     top: 0;
     left: 0;
     height: 4em;
@@ -8,9 +9,8 @@
     align-items: center;
     justify-content: space-between;
     z-index: 99999;
-    background-color: #a33333;
-    box-shadow: 0 2px 4px rgba(255, 254, 254, 0.1);
-
+    background-color: #000000;
+    /* box-shadow: 0 2px 4px rgba(255, 254, 254, 0.1); */
 }
 #leagueAnchor, #leagueAnchor:hover, #leagueAnchor:active {
     color: inherit;
@@ -46,4 +46,6 @@
     color: white;
     border: none;
     font-size: 14px;
+    border-bottom: 1px solid whitesmoke;
+    padding-bottom: 3px;
 }

@@ -15,7 +15,7 @@ export default function DynastyRow({roster, sort, fantasyMarket}: Interfaces.Dyn
     };
 
     return (
-        <a href={`/Owner/${roster.roster_id}`} className={`flex items-center py-3 ${styles.anchorCell}`}>
+        <a href={`/teams/${roster.owner.display_name}`} className={`flex items-center py-3 ${styles.anchorCell}`}>
             <div className="w-7/12 flex items-center">
                 <p className="w-1/12 mx-2 font-bold" style={{color:"#acb6c3", fontSize:".9rem"}}>{(roster[fantasyMarket as keyof typeof roster] as Interfaces.DynastyValue).rank}</p>
                 <Image width={29} height={29} alt="avatar" src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`} className={styles.userAvatar}/>

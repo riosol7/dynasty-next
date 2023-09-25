@@ -1,7 +1,7 @@
-import MainDashboard from "@/pages/Dashboard/MainDashboard";
+import DashboardPage from "@/pages/Dashboard";
 
 export default function Dashboard() {
     return (
-        <MainDashboard/>
-    )
-}
+        <DashboardPage/>
+    );
+};

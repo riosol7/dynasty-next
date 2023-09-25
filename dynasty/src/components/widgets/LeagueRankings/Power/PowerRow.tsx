@@ -13,7 +13,7 @@ export default function PowerRow({roster, season}: Interfaces.RankingRowProps) {
     const allPlayWinRate = roster.settings.all_play_win_rate;
 
     return (
-        <a href={`/Owner/${roster.roster_id}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
+        <a href={`/teams/${roster.owner.display_name}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
             <div className="w-7/12 flex items-center">
                 <p className="w-1/12 ml-2 font-bold" style={{color:"#acb6c3", fontSize:".9rem"}}>{roster.power_rank}</p>
                 <div className="flex items-center">

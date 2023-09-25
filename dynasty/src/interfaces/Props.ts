@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Roster, League, Match, BracketMatch } from "."
+import { ReactNode } from "react";
+import { Roster, League, Match, BracketMatch } from ".";
 
 export interface ChildrenProps {
     children: ReactNode;
@@ -95,4 +95,10 @@ export interface PostSeasonMatchProps {
     round: number;
     season: string;
     sectionTitle: string;
-}
+};
+
+export interface TeamLayoutProps {
+    children: ReactNode;
+    tab: string;
+    setTab: React.Dispatch<React.SetStateAction<string>>;
+};
