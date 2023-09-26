@@ -1,4 +1,21 @@
 .tab {
     text-align: center;
-    padding-bottom: 8px;
+    padding: 10px;
+    padding-inline: 35px;
+}
+
+#selectSeason {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    padding-inline: 12px;
+    
+
+}
+/* change the blue highlight color over hovering the options */
+#selectSeason:hover {
+    background: linear-gradient(49deg, rgba(15,15,15,1) 0%, rgba(17,17,17,1) 100%);
+    border-radius: 5px;
+    background-color: rgba(17,17,17,1);
+    color: white;
 }

@@ -1,10 +1,6 @@
 import { ReactNode } from "react";
 import { Roster, League, Match, BracketMatch } from ".";
 
-export interface ChildrenProps {
-    children: ReactNode;
-};
-
 export interface MVPSlideProps {
     legacyLeague: League[];
     roster: Roster 
@@ -102,4 +98,16 @@ export interface TeamLayoutProps {
     tab: string;
     setTab: React.Dispatch<React.SetStateAction<string>>;
     name: string;
+};
+
+export interface SelectSeasonProps {
+    name: string;
+    selectSeason: string;
+};
+
+export interface MatchupSlideProps {
+    idx: number;
+    name: string;
+    matchup: Match[];
+    selectSeason: string;
 };

@@ -1,13 +1,13 @@
 "use client";
-import React, { createContext, useContext, useState } from 'react';
-import { Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import * as Interfaces from "@/interfaces";
 
 type FantasyMarketContextType = {
-    fantasyMarket: string;
-    setFantasyMarket: Dispatch<SetStateAction<string>>;
-    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  };
+  fantasyMarket: string;
+  setFantasyMarket: Dispatch<SetStateAction<string>>;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
   
 const FantasyMarketContext = createContext<FantasyMarketContextType | undefined>(undefined);  
 

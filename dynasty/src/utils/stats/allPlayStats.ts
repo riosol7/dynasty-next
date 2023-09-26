@@ -1,4 +1,5 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 import { winPCT } from "..";
 
 export const getPowerRankings = (season: string, legacyLeague: Interfaces.League[]) => {
@@ -12,7 +13,7 @@ export const getPowerRankings = (season: string, legacyLeague: Interfaces.League
 
             return {
                 ...roster, 
-                owner: foundOwner || Interfaces.initialOwner,
+                owner: foundOwner || Constants.initOwner,
                 settings : {
                     ...roster.settings, 
                     all_play_wins: ap_wins,
@@ -32,7 +33,7 @@ export const getPowerRankings = (season: string, legacyLeague: Interfaces.League
 
             return {
                 ...roster, 
-                owner: foundOwner || Interfaces.initialOwner,
+                owner: foundOwner || Constants.initOwner,
                 settings : {
                     ...roster.settings, 
                     all_play_wins: ap_wins,

@@ -1,11 +1,12 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 export const processRosters = (league: Interfaces.League, players: Interfaces.Player[]): Interfaces.Roster[] => {
   const rosters = league.rosters;
   const users = league.users;
 
   const uploadPlayersToRosters = rosters.map(roster => {
-    const foundOwner = users.find(user => user.user_id === roster.owner_id) || Interfaces.initialOwner;
+    const foundOwner = users.find(user => user.user_id === roster.owner_id) || Constants.initOwner;
     const playerIDs = roster.players;
 
     const foundPlayers = playerIDs.map((playerID) => {

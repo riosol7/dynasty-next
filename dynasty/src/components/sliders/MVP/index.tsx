@@ -2,7 +2,7 @@
 import "swiper/swiper-bundle.css";
 import styles from "./MVP.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from 'swiper/modules';
+import { Autoplay } from "swiper/modules";
 import { Icon } from "@iconify-icon/react";
 import MVPSlide from "./slides";
 import { processPlayers, processRosters } from "@/utils";

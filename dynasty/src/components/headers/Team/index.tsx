@@ -3,15 +3,15 @@ import DraftWidget from "@/components/widgets/Draft";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import { findUserEXP, findLeagueByTeamName } from "@/utils";
+import { findUserEXP, findUserByName, findRosterByOwnerID, findLeagueByTeamName } from "@/utils";
 import * as Interfaces from "@/interfaces";
-
+// Change header background color from black to background gradient color similar to the DraftWidget background, the navbars should also inherit the new colors.
 export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
 
     const foundLeague = findLeagueByTeamName(name, legacyLeague);
-    const foundUser = foundLeague?.users.find(user => user.display_name === name);
-    const foundRoster = foundLeague?.rosters.find(roster => roster.owner_id === foundUser?.user_id);
+    const foundUser = findUserByName(name, foundLeague);
+    const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
 
     return (
         <div className="flex items-center justify-between flex-wrap my-4">
