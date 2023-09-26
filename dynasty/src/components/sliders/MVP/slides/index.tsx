@@ -1,12 +1,12 @@
 import styles from "../MVP.module.css";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import value from "../../../../assets/images/value.png";
+import value from "@/assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
 import { findLogo, getMVP, getTotalPts } from "@/utils";
 import { useFantasyMarket } from "@/context";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 const positionStyles = {
     QB: styles.qbHUD,

@@ -1,6 +1,6 @@
 import styles from "../LeagueRankings.module.css";
 import { Icon } from "@iconify-icon/react";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 function SortIcon({ asc, onClick }: Interfaces.SortIconProps) {
     return (

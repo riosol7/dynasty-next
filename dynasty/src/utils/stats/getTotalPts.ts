@@ -1,5 +1,5 @@
 import { roundToHundredth }from "./calculationUtils";
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export const getTotalPts = (legacyLeague: Interfaces.League[], rID: number, pID: string) : { pts: number, maxPts: number } => {
     

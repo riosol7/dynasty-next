@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "../LeagueRankings.module.css";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { getAllTimeStats, roundToHundredth, winPCT } from "@/utils";

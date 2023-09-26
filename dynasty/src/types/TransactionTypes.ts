@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export type Waivers = {
     QB: Interfaces.Transaction[];

@@ -2,7 +2,7 @@
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { LEAGUE_ID, SERVER_URL } from "@/constants";
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 const LeagueContext = createContext<Interfaces.LegacyLeagueContextType | undefined>(undefined);
 

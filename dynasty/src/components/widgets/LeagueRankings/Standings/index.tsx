@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
 import { findLeagueBySeason, sortAllTimeRosters } from "@/utils";
 import { StatKeys } from "@/types";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 import StandingRow from "./StandingRow";
 import StandingTableHeader from "./StandingTableHeader";
 import Tournament from "../Tournament";

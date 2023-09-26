@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export const processWaiverBids = (legacyLeague: Interfaces.League[], players: Interfaces.Player[]) => {
     const waiverBids = legacyLeague.map((league: Interfaces.League) => league.transactions.filter(transaction => 

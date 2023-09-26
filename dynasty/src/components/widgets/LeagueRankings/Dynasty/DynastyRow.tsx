@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 import styles from "../LeagueRankings.module.css";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useLeagueContext } from "@/context";

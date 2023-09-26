@@ -14,7 +14,7 @@ import {
  } from "@/context";
  import DynastyRow from "./DynastyRow";
  import styles from "../LeagueRankings.module.css";
- import * as Interfaces from "../../../../interfaces";
+ import * as Interfaces from "@/interfaces";
 
 function SortHeader({ sort, label, asc, setAsc, setSort}: Interfaces.SortProps) {
     return (

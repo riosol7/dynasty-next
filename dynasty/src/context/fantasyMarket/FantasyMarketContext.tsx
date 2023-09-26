@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState } from 'react';
 import { Dispatch, SetStateAction } from 'react';
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 type FantasyMarketContextType = {
     fantasyMarket: string;

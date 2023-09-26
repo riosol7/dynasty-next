@@ -1,9 +1,9 @@
 import Image from "next/image";
 import styles from "../LeagueRankings.module.css";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { Icon } from "@iconify-icon/react";
-import { winPCT } from "../../../../utils";
+import { winPCT } from "@/utils";
 
 export default function StandingRow({roster, season}: Interfaces.RankingRowProps) { 
 

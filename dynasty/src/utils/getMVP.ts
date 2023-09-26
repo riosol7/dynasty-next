@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export const getMVP = (roster: Interfaces.Roster, fantasyMarket: string): Interfaces.Player => {
     try {

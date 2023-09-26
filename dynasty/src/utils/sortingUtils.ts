@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 import { getAllTimeStats } from ".";
 
 export const handleSort = (

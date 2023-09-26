@@ -1,44 +1,48 @@
-import React from "react";
 import Image from "next/image";
+import DraftWidget from "@/components/widgets/Draft";
 import { Icon } from "@iconify-icon/react";
+import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { findUserEXP, findLeagueByTeamName } from "@/utils";
+import * as Interfaces from "@/interfaces";
 
-export default function TeamHeader() {
+export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
+    const { legacyLeague } = useLeagueContext();
+
+    const foundLeague = findLeagueByTeamName(name, legacyLeague);
+    const foundUser = foundLeague?.users.find(user => user.display_name === name);
+    const foundRoster = foundLeague?.rosters.find(roster => roster.owner_id === foundUser?.user_id);
 
     return (
-        <div className="flexitems-center justify-between flex-wrap my-4">
+        <div className="flex items-center justify-between flex-wrap my-4">
             <div className="flex items-center">
-                <Image style={{borderRadius:"50%", border:"4px outset #a9dfd8", padding:"4px", background:"black"}} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
+                <Image style={{borderRadius:"50%", border:"4px outset #a9dfd8", padding:"4px", background:"black"}} alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}/>
                 <div className="mx-3">
                     <div className="flex items-center">
-                        <p className="font-bold" style={{fontSize:"18px"}}>{roster.owner.team_name ? roster.owner.team_name : roster.owner.display_name}</p>
-                        <p style={{color:"#cbcbcb", fontWeight:"lighter", paddingLeft:"6px"}}>@{roster.owner.display_name}</p>         
+                        <p className="font-bold" style={{fontSize:"18px"}}>{foundUser?.metadata?.team_name ? foundUser?.metadata?.team_name : foundUser?.display_name}</p>
+                        <p style={{color:"#cbcbcb", fontWeight:"lighter", paddingLeft:"6px"}}>@{foundUser?.display_name}</p>         
                     </div>
                     <p className="flex items-center" style={{fontSize:"14.5px"}}>
-                        {roster.settings.wins}
+                        {foundRoster?.settings.wins}
                         <span style={{color:"whitesmoke"}}>-</span>  
-                        {roster.settings.losses}
+                        {foundRoster?.settings.losses}
+                        <span style={{color:"whitesmoke"}}>-</span>  
+                        {foundRoster?.settings.ties}
                         <Icon icon="ic:round-circle" className="mx-2" style={{fontSize:".35em", color:"#698b87"}}/>
-                        <span style={{color:"whitesmoke"}}>{roster.rank}</span>
+                        <span style={{color:"whitesmoke"}}>{foundRoster?.settings.rank}</span>
                         <span>{
-                            roster.rank === 1?
+                            foundRoster?.settings.rank === 1 ?
                                 "st"
-                            : roster.rank === 2?
+                            : foundRoster?.settings.rank === 2?
                                 "nd"
-                            : roster.rank === 3?
-                                "rd"
-                            : "th"
-                        } </span>
+                            : foundRoster?.settings.rank === 3?
+                                "rd" : "th"
+                        }</span>
                     </p>
-                    <p className="font-bold" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {roster.owner.exp}</p>
+                    <p className="font-bold" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {findUserEXP(foundUser?.user_id!, legacyLeague)}</p>
                 </div>
             </div>
-            {/* <DraftWidget
-                league={league}
-                topDraftPick={topDraftPick}
-                openModal={openModal}
-                players={players}
-            /> */}
+            <DraftWidget name={name}/>
         </div>
     );
 };

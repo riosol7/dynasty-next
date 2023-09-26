@@ -1,11 +1,12 @@
 import styles from "./Team.module.css";
 import * as Interfaces from "../../interfaces";
+import TeamHeader from "@/components/headers/Team";
 
-export default function TeamLayout({ children, tab, setTab }: Interfaces.TeamLayoutProps) {
+export default function TeamLayout({ children, tab, setTab, name }: Interfaces.TeamLayoutProps) {
 
     return (
         <>
-            {/* <TeamHeader/> */}
+            <TeamHeader name={name}/>
             <div className="flex items-center">
                 <div className="w-1/12">
                 {tab === "Summary" ?

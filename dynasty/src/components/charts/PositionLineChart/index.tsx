@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 //   () => import("react-apexcharts"),
 //   { ssr: false }
 // )
-import * as Interfaces from "../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export default function PositionLineChart({ waivers }: Interfaces.WaiverProps) {
 

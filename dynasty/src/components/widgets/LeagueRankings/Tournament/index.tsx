@@ -1,5 +1,5 @@
 import Bracket from "./Bracket";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 function WeekLabel({season, weekNumber}: Interfaces.WeekLabelProps) {
     const adjustedWeek = Number(season) <= 2020 ? weekNumber : weekNumber + 1;

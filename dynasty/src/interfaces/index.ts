@@ -6,4 +6,5 @@ export * from  "./Player";
 export * from "./Roster";
 export * from "./Transaction";
 export * from "./Draft";
+export * from "./Params";
 export * from "./Props";

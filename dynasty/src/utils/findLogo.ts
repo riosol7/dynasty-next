@@ -1,5 +1,5 @@
-import { LOGOS } from "../constants";
-import * as Interfaces from "../interfaces";
+import { LOGOS } from "@/constants";
+import * as Interfaces from "@/interfaces";
 
 const noLogo: Interfaces.Logo = {
     bgColor: "linear-gradient(27deg, rgba(165,172,175,1) 0%, rgba(15,15,15,1) 100%)",

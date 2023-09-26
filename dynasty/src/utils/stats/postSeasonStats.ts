@@ -1,4 +1,4 @@
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 import { getMatchups, roundToHundredth } from "..";
 
 export const getPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[], season: string) => {

@@ -1,4 +1,4 @@
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 import { winPCT } from "..";
 
 export const getPowerRankings = (season: string, legacyLeague: Interfaces.League[]) => {

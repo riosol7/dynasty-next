@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
 import { 
@@ -11,7 +11,7 @@ import {
   FantasyProProvider,
   FantasyMarketProvider,
 } from "@/context";
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 import DashboardLayout from "@/layouts/Dashboard";
 
 const inter = Inter({ subsets: ['latin'] })

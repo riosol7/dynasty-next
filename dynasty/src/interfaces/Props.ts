@@ -101,4 +101,5 @@ export interface TeamLayoutProps {
     children: ReactNode;
     tab: string;
     setTab: React.Dispatch<React.SetStateAction<string>>;
+    name: string;
 };

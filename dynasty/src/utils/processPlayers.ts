@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 
 const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE"];
 

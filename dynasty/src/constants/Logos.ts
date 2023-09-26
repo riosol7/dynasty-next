@@ -1,5 +1,5 @@
-import NFLImages from "../assets/images/nfl";
-import * as Interfaces from "../interfaces";
+import NFLImages from "@/assets/images/nfl";
+import * as Interfaces from "@/interfaces";
 
 export const LOGOS: Interfaces.LogoObject[] = [
     { ATL: { bgColor: "linear-gradient(27deg, rgba(167,25,48,1) 0%, rgba(15,15,15,1) 100%)", bgColor2: "#ac2135", color: "white", l: NFLImages.ATL.src } },

@@ -2,7 +2,7 @@
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { SERVER_URL } from "@/constants";
-import * as Interfaces from "../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 const defaultDynastyProcess: Interfaces.DynastyProcessPlayer[] = [];
 

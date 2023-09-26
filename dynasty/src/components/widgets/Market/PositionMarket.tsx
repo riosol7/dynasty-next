@@ -1,5 +1,5 @@
 import styles from "./Market.module.css";
-import * as Interfaces from "../../../interfaces";
+import * as Interfaces from "@/interfaces";
 import { Waivers } from "@/types";
 import { POSITIONS } from "@/constants";
 import { calculatePercentageChange, roundToHundredth } from "@/utils";

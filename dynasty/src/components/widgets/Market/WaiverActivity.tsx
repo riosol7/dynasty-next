@@ -4,7 +4,7 @@ import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { findLogo, getSortedRecords, handleSort, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
-import * as Interfaces from "../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 const SELECT_TAG={border:"none", background:"inherit",color:"#7d91a6",fontSize:".7rem",fontWeight:"bold"};
 const SHOW_PAGES={

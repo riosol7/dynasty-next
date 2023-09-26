@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./SideNavBar.module.css";
-import vs from "../../../assets/images/vs.png";
-import * as Interfaces from "../../../interfaces";
+import vs from "@/assets/images/vs.png";
+import * as Interfaces from "@/interfaces";
 import { Icon } from '@iconify-icon/react';
 
 export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) {

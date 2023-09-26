@@ -4,7 +4,7 @@ import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { findLeagueBySeason, getMatchups } from "@/utils";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import * as Interfaces from "../../../../interfaces";
+import * as Interfaces from "@/interfaces";
 
 function RosterHUD({roster, type}: Interfaces.RosterHUDProps) {
     const isWinner = type === "w";

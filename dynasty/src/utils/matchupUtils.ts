@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "@/interfaces";
 
 export const getMatchups = (rID: number, matchups: Interfaces.Match[][] | undefined) => {
     return matchups?.map(week => week.reduce((acc, team) => {

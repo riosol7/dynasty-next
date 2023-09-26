@@ -1,7 +1,6 @@
 "use client";
 import "swiper/swiper-bundle.css";
 import styles from "./MVP.module.css";
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from 'swiper/modules';
 import { Icon } from "@iconify-icon/react";
@@ -16,7 +15,7 @@ import {
     usePlayerContext,
     useSuperFlexContext,
  } from "@/context";
- import * as Interfaces from "../../../interfaces";
+ import * as Interfaces from "@/interfaces";
 
 export default function MVPSlider() {
     const  { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
