@@ -35,8 +35,8 @@ export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupS
     const playoffWeekLabel = is18GameSeason ? "Wk. 15 - 17" : "Wk. 14 - 16";
     const opponent = matchup.find(team => team.roster_id !== rID)!;
     const myMatchStats = matchup.find(team => team.roster_id === rID)!; 
-    const starterPts = myMatchStats.starters_points.sort((a,b) => b - a);
-    const topStarter = findPlayerByPts(myMatchStats, starterPts[0], players);
+    const starterPts = myMatchStats?.starters_points?.sort((a,b) => b - a);
+    const topStarter = findPlayerByPts(myMatchStats, starterPts[0]!, players);
     const foundAllPlayRecord = allPlayStats?.weeklyRecord?.[idx]!;
 
     const getTitle = () => {

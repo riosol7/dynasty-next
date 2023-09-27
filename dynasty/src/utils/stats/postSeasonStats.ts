@@ -20,11 +20,11 @@ export const getPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[
 
     const userScores = weeklyScore?.slice(sliceStart, sliceEnd)
         .map(matchups => matchups.filter((team: Interfaces.Match) => team.roster_id === rID)[0])
-        .map(a => a.points);
+        .map(a => a?.points);
     
     const opponentScores = weeklyScore?.slice(sliceStart, sliceEnd)
         .map(matchups => matchups.filter((team: Interfaces.Match) => team.roster_id !== rID)[0])
-        .map(a => a.points);
+        .map(a => a?.points);
 
     if (playoffBracket?.length === 0) {
         playoffHighestScore = 0;
