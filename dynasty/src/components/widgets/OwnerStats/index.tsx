@@ -9,8 +9,10 @@ import {
     getAllTimeStats,
     getPostSeasonStats, 
     lineupEfficiency, 
-    roundToHundredth, 
-    winPCT 
+    roundToHundredth,
+    totalPtsPerGame, 
+    winPCT, 
+    findSeasonStats
 } from "@/utils";
 import { useLeagueContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
@@ -27,17 +29,23 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
     const allPlayStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allTimeStats = getAllTimeStats(rID, legacyLeague);
     const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
-
+    const seasonFPTS = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const allTimeTotalWins = allTimeStats.wins + allTimeStats.playoffs.wins;
     const allTimeTotalLosses = allTimeStats.losses + allTimeStats.playoffs.losses;
+
+    const handleSelectStats = () => {
+        if (selectStats === "Season") {
+            setSelectStats("Post Season");
+        } else {
+            setSelectStats("Season")
+        };
+    };
 
     return (
         <div className="py-4" style={{minWidth:"300px"}}>
             <div className="flex items-center justify-between" style={{marginBottom:"8px"}}>
                 <p className="font-bold" style={{color:"lightgrey"}}>STATS</p>
-                {/* <div className="flex items-center">
-                    <Icon className="mx-3" icon="mdi:bracket" onClick={() => handleSelectStats()} style={ selectStats === "Post Season" ? {fontSize:"1.4em", color:"#a9dfd8"} : {fontSize:"1.4em", color:"#cbcbcb"}}/>
-                </div> */}
+                <Icon className="mx-3" icon="mdi:bracket" onClick={() => handleSelectStats()} style={ selectStats === "Post Season" ? {fontSize:"1.4em", color:"#a9dfd8"} : {fontSize:"1.4em", color:"#cbcbcb"}}/>
             </div>
             <div className="mt-4">
                 <div style={{fontSize:"14px"}}>
@@ -100,8 +108,8 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                                     }
                                 </div>
                                 {allTime && selectStats !== "Post Season" ?
-                                    <div className={`flex items-center justifybetween py-3 ${styles.fontHover}`} style={{ borderBottom: "1px dashed #0f0f0f" }}>
-                                        <p>Best</p>
+                                    <div className={`flex items-center justifybetween ${styles.fontHover}`} style={{ borderBottom: "1px dashed #0f0f0f" }}>
+                                        <p className="py-3">Best</p>
                                         <div className="flex items-center">
                                             <p style={{ width:"70px" }}>{allTimeStats.best.record}</p>
                                             <p style={{ width:"50px" }} className="flex items-center">
@@ -112,19 +120,17 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                                     </div> : <></>
                                 }
                                 {selectStats !== "Post Season" ?
-                                    <div className={`flex items-center justifybetween py-3 ${styles.fontHover}`} style={{ borderBottom: "1px dashed #0f0f0f" }}>
-                                        <p className="mt-3">All Play</p>
+                                    <div className={`flex items-center justify-between ${styles.fontHover}`} style={{ borderBottom: "1px dashed #0f0f0f" }}>
+                                        <p className="py-3">All Play</p>
                                         {selectStats === "Season" && allTime ?
-                                            <div className="mt-3">
-                                                <div className="flex items-center">
-                                                    {/* <p style={{ width:"70px" }}>{allTimeStats.allPlay.wins}-{allTimeStats.allPlay.losses}</p>
-                                                    <p className="flex items-center" style={{width:"50px"}}>{winPCT(allTimeStats.allPlay.wins, allTimeStats.allPlay.losses)}   
-                                                        <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
-                                                    </p> */}
-                                                </div>
+                                            <div className="flex items-center">
+                                                <p style={{ width:"70px" }}>{allPlayStats.wins}-{allPlayStats.losses}</p>
+                                                <p className="flex items-center" style={{width:"50px"}}>{winPCT(allPlayStats.wins, allPlayStats.losses)}   
+                                                    <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
+                                                </p>
                                             </div>
                                         : selectStats === "Season" ?
-                                            <div className="flex items-center mt-3">
+                                            <div className="flex items-center py-3">
                                                 <p style={{width:"70px"}}>{allPlayStats.wins}-{allPlayStats.losses}</p>
                                                 <p className="flex items-center justify-end" style={{ width:"50px" }}>{winPCT(allPlayStats.wins, allPlayStats.losses)}   
                                                     <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
@@ -178,11 +184,11 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                                 </div>
                                 <div className="flex items-center justify-between mt-3 pb-3">
                                     <p>Luck Rate</p>
-                                    {selectStats === "Season" && allTime ? <></>
-                                        // <div className="flex items-center">
-                                        //     <p>{roundToHundredth(winPCT(allTimeStats.wins, allTimeStats.losses)-winPCT(allTimeStats.allPlay.wins, allTimeStats.allPlay.losses))}</p>
-                                        //     <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
-                                        // </div>
+                                    {selectStats === "Season" && allTime ?
+                                        <div className="flex items-center">
+                                            <p>{roundToHundredth(winPCT(allTimeStats.wins, allTimeStats.losses)-winPCT(allPlayStats.wins, allPlayStats.losses))}</p>
+                                            <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
+                                        </div>
                                     : selectStats === "Season"?   
                                         <div className="flex items-center">
                                             <p>{roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlayStats.wins, allPlayStats.losses))}</p>
@@ -224,36 +230,30 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <div className="flex items-center justify-between pb-3" style={{ borderBottom:"2px solid #2a2c3e" }}>
                             <p>Total Points Per Game</p>
                             <div>
-                                {/* {selectStats === "Season" && allTime ?
-                                    <p>{totalPtsPerGame(allTimeStats.fpts, "All Time")}</p>
+                                {selectStats === "Season" && allTime ?
+                                    <p>{totalPtsPerGame(rID, allTimeStats.fpts, legacyLeague, undefined, true)}</p>
                                 : selectStats === "Season" ?
-                                    <p>{totalPtsPerGame(Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), selectSeason)}</p>
-                                : selectStats === "Post Season" && allTime ? 
-                                    allTimeStats.playoffs.totalGames > 0 ?
-                                        <p>{roundToHundredth(allTimeStats.playoffs.fpts / allTimeStats.playoffs.totalGames)}</p>
-                                    : 
-                                        <p>0</p>
-                                : selectStats === "Post Season" ?
-                                    postSeasonStats.appearance ?
-                                        <p>{roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}</p>
-                                    : 
-                                        <p>0</p>
+                                    <p>{totalPtsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
+                                : selectStats === "Post Season" && allTime && allTimeStats.playoffs.totalGames > 0 ? 
+                                    <p>{roundToHundredth(allTimeStats.playoffs.fpts / allTimeStats.playoffs.totalGames)}</p>
+                                : selectStats === "Post Season" && postSeasonStats.appearance ?
+                                    <p>{roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}</p> 
                                 :<></>
-                                } */}
+                                }
                             </div>
                         </div>
                         <div className="flex items-center justify-between mt-3 pb-3" style={{ borderBottom:"2px solid #2a2c3e" }}>
                             <p>Highest Score</p>
-                            {/* {selectStats === "Season" && allTime ?
+                            {selectStats === "Season" && allTime ?
                                 <p>{allTimeStats.best.score}</p>
                             : selectStats === "Season" ?
-                                <p>{foundHistory(id, selectSzn).regularSeason.highestScore}</p>
+                                <p>{findSeasonStats(rID, selectSeason, legacyLeague)?.bestScore}</p>
                             : selectStats === "Post Season" && allTime ?
                                 <p>{allTimeStats.playoffs.highestScore}</p>
                             : selectStats === "Post Season" ?
                                 <p>{postSeasonStats.highestScore}</p>
                             :<></>
-                            }   */}
+                            }  
                         </div>
                         <div className="flex items-center justify-between mt-3 pb-3" style={{ borderBottom:"2px solid #2a2c3e" }}>
                             <p>PF</p>

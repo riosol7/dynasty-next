@@ -203,7 +203,7 @@ export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupS
                                         }>
                                             {topStarter.position === "DEF" ? <></>
                                             :   <Image src={`${PLAYER_BASE_URL}${topStarter.player_id}.jpg`} alt="player" height={62} width={62} 
-                                                style={{ objectFit:"cover"}}/>
+                                                style={{ objectFit:"cover", width: "100%", height: "100%"}}/>
                                             }
                                         </div>
                                         <div className="mx-1">

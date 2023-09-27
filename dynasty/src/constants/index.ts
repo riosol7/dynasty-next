@@ -6,3 +6,4 @@ export * from "./Owner";
 export * from "./League";
 export * from "./Match";
 export * from "./Player";
+export * from "./SeasonStats";

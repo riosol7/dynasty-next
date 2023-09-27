@@ -1,24 +1,26 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
 
 export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
     const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));
+ 
     const legacyMatches: Interfaces.Match[][] = legacyLeague.map(league => league.matchups
         .map(matches => matches.find(team => team.roster_id === rID))
         .filter(match => match !== undefined) // Filter out undefined values
         .map(match => match as Interfaces.Match) // Type assertion to Match
     );
     
-    const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item.settings.wins, 0);
-    const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item.settings.losses, 0);
-    const allTimeRegularSeasonTies = legacyRosters.reduce((acc, item: any) => acc + item.settings.ties, 0);
-    const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts + "." + item.settings.fpts_decimal), 0));
-    const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.ppts + "." + item.settings.ppts_decimal), 0));
-    const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item.settings.fpts_against + "." + item.settings.fpts_against_decimal), 0));
+    const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.wins, 0);
+    const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.losses, 0);
+    const allTimeRegularSeasonTies = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.ties, 0);
+    const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts + "." + item?.settings?.fpts_decimal), 0));
+    const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.ppts + "." + item?.settings?.ppts_decimal), 0));
+    const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts_against + "." + item?.settings?.fpts_against_decimal), 0));
     const bestRoster = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
     const bestSeasonStats = bestRoster?.settings;
-    const bestScore = legacyMatches?.map(match => match.sort((a, b) => b.points - a.points)[0]).sort((a,b) => b.points - a.points)[0].points;
+    const bestScore = legacyMatches?.map(match => match.sort((a, b) => b?.points - a?.points)[0]).sort((a,b) => b?.points - a?.points)[0]?.points;
     const bestSeason = findLeagueByID(bestRoster?.league_id || "", legacyLeague)?.season;
 
     // Post Season
