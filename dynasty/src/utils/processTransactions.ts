@@ -1,4 +1,5 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 export const processWaiverBids = (legacyLeague: Interfaces.League[], players: Interfaces.Player[]) => {
     const waiverBids = legacyLeague.map((league: Interfaces.League) => league.transactions.filter(transaction => 
@@ -7,7 +8,7 @@ export const processWaiverBids = (legacyLeague: Interfaces.League[], players: In
             const creator = league.users.find(user => user.user_id === transaction.creator);
             const foundPlayer = players.find(player => player.player_id === Object.keys(transaction.adds)[0]); // Only adds for waiver pickups
 
-            return {...transaction, creator: creator?.display_name || "", waiver_player: foundPlayer || Interfaces.initialPlayer};
+            return {...transaction, creator: creator?.display_name || "", waiver_player: foundPlayer || Constants.initPlayer};
         }).filter(transaction => transaction.waiver_player?.position !== "DEF" && transaction.waiver_player?.position !== "K")
     ).flat();
 

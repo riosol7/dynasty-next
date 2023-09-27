@@ -1,20 +1,22 @@
+import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { useLeagueContext } from "@/context";
+import { useLeagueContext, useSeasonContext } from "@/context";
 import { findLeagueBySeason, findRosterByOwnerID, findUserByName, getMatchups } from "@/utils";
 import MatchupSlide from "./slides";
 import * as Interfaces from "@/interfaces";
 
-export default function MatchupSlider({ name, selectSeason }: Interfaces.SelectSeasonProps) {
+export default function MatchupSlider({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
+    const { selectSeason } = useSeasonContext();
 
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
     const matchups = getMatchups(foundRoster.roster_id, foundLeague.matchups);
-    console.log("matchups", foundRoster)
+
     return (
-        <div className="flex items-center" style={{ maxWidth: "1720px" }}>
+        <div className="flex items-center py-3">
             <Swiper breakpoints = {{
                 1850: {
                     slidesPerView: 8,
@@ -52,6 +54,7 @@ export default function MatchupSlider({ name, selectSeason }: Interfaces.SelectS
                     loop: true,
                 },
             }}
+            direction="horizontal"
             slidesPerGroup={1}
             loop={true}
             modules={[Autoplay]}
@@ -65,7 +68,6 @@ export default function MatchupSlider({ name, selectSeason }: Interfaces.SelectS
                             idx={i}
                             name={name}
                             matchup={matchup}
-                            selectSeason={selectSeason}
                         />
                     </SwiperSlide>
                 )}

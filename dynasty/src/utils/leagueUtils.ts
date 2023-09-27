@@ -1,10 +1,11 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
     const foundLeague = legacyLeague.find(league => league.league_id === leagueID);
     
     if (!foundLeague) {
-        return Interfaces.defaultLegacyLeague[0];
+        return Constants.initLegacyLeague[0];
     };
 
     return foundLeague;
@@ -14,10 +15,10 @@ export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.Leag
     const foundLeague = legacyLeague.find(league => league.season === season);
 
     if (!foundLeague) {
-        return Interfaces.defaultLegacyLeague[0];
+        return Constants.initLegacyLeague[0];
     };
 
-    const updatedRosters = foundLeague.rosters.slice().sort((a, b) => {
+    const updatedRosters = foundLeague?.rosters.slice().sort((a, b) => {
         if (a.settings.wins === b.settings.wins) {
             return Number(b.settings.fpts + "." + b.settings.fpts_decimal) - Number(a.settings.fpts + "." + a.settings.fpts_decimal);
         } else {
@@ -37,7 +38,7 @@ export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.Leag
 
     return {
         ...foundLeague,
-        rosters: updatedRosters
+        rosters: updatedRosters,
     };
 };
 
@@ -45,7 +46,7 @@ export const findLeagueByTeamName = (name: string, legacyLeague: Interfaces.Leag
     const foundLeague = legacyLeague.find(league => league.users.find(user => user.display_name === name));
     
     if (!foundLeague) {
-        return Interfaces.defaultLegacyLeague[0];
+        return Constants.initLegacyLeague[0];
     };
 
     const sortedRosters = foundLeague.rosters.slice().sort((a, b) => {

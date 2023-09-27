@@ -60,7 +60,7 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
         );
 
         legacyMatches.map(season => season.map(matches => {
-            const myMatchupInfo: Interfaces.Match = matches.find(match => match.roster_id === rID) || Interfaces.initialMatch;
+            const myMatchupInfo: Interfaces.Match = matches.find(match => match.roster_id === rID) || Constants.initMatch;
             let wins = 0;
             let losses = 0;
             let opponentID = 0;
@@ -101,7 +101,7 @@ export const getAllPlayStats = (rID: number, season: string, legacyLeague: Inter
         const matches = Number(foundLeague?.season) > 2020 ? foundLeague?.matchups.slice(0, 14) : foundLeague?.matchups.slice(0, 13);
 
         matches?.map(match => {
-            const myMatchupInfo: Interfaces.Match = match.find(user => user.roster_id === rID) || Interfaces.initialMatch;
+            const myMatchupInfo: Interfaces.Match = match.find(user => user.roster_id === rID) || Constants.initMatch;
             let wins = 0;
             let losses = 0;
             let opponentID = 0;

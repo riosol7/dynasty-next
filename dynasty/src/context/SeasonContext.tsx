@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
 import * as Interfaces from "@/interfaces";
 
@@ -25,6 +25,12 @@ export const SeasonProvider = ({ children, season }: Interfaces.SeasonProvider) 
     const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectSeason(event.target.value);
     };
+
+    useEffect(() => {
+        if (selectSeason === "" && season !== "") {
+            setSelectSeason(season);
+        }
+    }, [selectSeason, season]);
 
     return (
         <SeasonContext.Provider value={{ selectSeason, setSelectSeason, onChange }}>

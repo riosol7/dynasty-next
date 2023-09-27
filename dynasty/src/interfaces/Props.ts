@@ -109,5 +109,4 @@ export interface MatchupSlideProps {
     idx: number;
     name: string;
     matchup: Match[];
-    selectSeason: string;
 };

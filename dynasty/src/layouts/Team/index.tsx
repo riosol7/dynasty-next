@@ -6,7 +6,7 @@ import { useLeagueContext, useSeasonContext } from "@/context";
 export default function TeamLayout({ children, tab, setTab, name }: Interfaces.TeamLayoutProps) {
     const { selectSeason, onChange } = useSeasonContext()!;
     const { legacyLeague } = useLeagueContext();
-    
+
     return (
         <>
             <TeamHeader name={name}/>

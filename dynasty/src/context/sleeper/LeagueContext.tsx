@@ -3,6 +3,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { LEAGUE_ID, SERVER_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 const LeagueContext = createContext<Interfaces.LegacyLeagueContextType | undefined>(undefined);
 
@@ -15,7 +16,7 @@ export const useLeagueContext = () => {
 };
 
 export const LeagueProvider = ({ children }: Interfaces.ChildrenProps) => {
-    const [legacyLeague, setLegacyLeague] = useState<Interfaces.League[]>(Interfaces.defaultLegacyLeague);
+    const [legacyLeague, setLegacyLeague] = useState<Interfaces.League[]>(Constants.initLegacyLeague);
     const [loadLegacyLeague, setLoadLegacyLeague] = useState(true);
 
     useEffect(() => {

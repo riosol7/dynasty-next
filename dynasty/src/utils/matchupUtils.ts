@@ -12,3 +12,29 @@ export const getMatchups = (rID: number, matchups: Interfaces.Match[][] | undefi
         return acc;
     })).map((match: any) => match.sort((a:any, b:any) => b.points - a.points)).filter(game => game.length === 2);
 };
+
+export const findRecord = (rID: number, matches: Interfaces.Match[][], week: number) => {
+    let wins: number = 0;
+    let losses: number = 0;
+    let record: string = "0-0";
+
+    matches?.filter((_, idx) => idx <= week).forEach((team) => {
+        if (team[0].matchup_id === null || (team[0].points === 0 && team[1].points === 0)){
+            return record;
+        
+        } else if (team[0].roster_id === rID) {
+            wins ++;
+            record = wins.toLocaleString() + " - " + losses.toLocaleString();
+            return record;
+        }
+            losses ++;
+            record = wins.toLocaleString() + " - " + losses.toLocaleString();
+            return record;
+    });
+
+    return {
+        record: record,
+        wins: wins,
+        losses: losses
+    };
+};

@@ -1,6 +1,6 @@
 interface PlayerPoints {
     [playerId: string]: number;
-}
+};
 
 export interface BracketMatch {
     l: number | null;
@@ -9,7 +9,7 @@ export interface BracketMatch {
     t1: number;
     t2: number;
     w: number | null;
-}
+};
   
 export interface Match {
     starters_points: number[];
@@ -33,15 +33,4 @@ export interface PlayoffRuns {
     }[];
     season: string;
     games: Match[][];
-};
-
-export const initialMatch = {
-    starters_points: [],
-    starters: [],
-    roster_id: 0,
-    points: 0,
-    players_points: {"":0},
-    players: [],
-    matchup_id: 0,
-    custom_points: null,
 };

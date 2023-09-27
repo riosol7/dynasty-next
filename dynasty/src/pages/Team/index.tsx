@@ -11,17 +11,11 @@ export default function TeamPage({ name }: Interfaces.TeamParamProps) {
     const { selectSeason, setSelectSeason } = useSeasonContext();
     const [tab, setTab] = useState("Summary");
 
-    useEffect(() => {
-        if (selectSeason === undefined) {
-            setSelectSeason(legacyLeague[0].season);
-        };
-    }, [selectSeason]);
-
     return (
-        <SeasonProvider season={legacyLeague[0].season}>
+        <SeasonProvider season={legacyLeague[0].season || ""}>
             <TeamLayout tab={tab} setTab={setTab} name={name}>
             {tab === "Summary" ? 
-                <MatchupSlider name={name} selectSeason={selectSeason}/>
+                <MatchupSlider name={name}/>
             : tab === "Dynasty" ? 
             <></>
             : tab === "Power" ? <></> : <></>

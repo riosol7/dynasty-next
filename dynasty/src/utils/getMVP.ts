@@ -1,4 +1,5 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 export const getMVP = (roster: Interfaces.Roster, fantasyMarket: string): Interfaces.Player => {
     try {
@@ -16,6 +17,6 @@ export const getMVP = (roster: Interfaces.Roster, fantasyMarket: string): Interf
 
     } catch (error) {
         console.error("Error:", error);
-        return Interfaces.initialPlayer;
+        return Constants.initPlayer;
     };
 };

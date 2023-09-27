@@ -7,6 +7,7 @@ import { findLogo, getMVP, getTotalPts } from "@/utils";
 import { useFantasyMarket } from "@/context";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -18,7 +19,7 @@ const positionStyles = {
 export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProps) {
     const { fantasyMarket } = useFantasyMarket()!;
 
-    const [mvp, setMVP] = useState<Interfaces.Player>(Interfaces.initialPlayer);
+    const [mvp, setMVP] = useState<Interfaces.Player>(Constants.initPlayer);
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
 
     useEffect(() => {

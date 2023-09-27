@@ -3,43 +3,41 @@ import React from "react";
 import Image from "next/image";
 import { Icon } from "@iconify-icon/react";
 import { 
+    findLogo,
     findUserByRosterID,
     findLeagueBySeason, 
-    findUserByName, 
+    findUserByName,
+    findPlayerByPts,
+    findRecord,
     findRosterByOwnerID, 
-    getPostSeasonStats, 
+    getPostSeasonStats,
+    getMatchups,
     roundToHundredth, 
     getAllPlayStats } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import { useLeagueContext } from "@/context";
+import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 
-const UNDERLINE_TITLE_DIV = {
-    width:"205px",
-    height:"1.5px",
-    background:"linear-gradient(360deg, rgba(116,178,221,1) 0%, rgba(114,202,224,1) 20%, rgba(51,193,189,1) 50%, rgba(80,204,147,1) 100%)",
-    borderRadius:"0px 0px 18px 0px",
-}
-
-const WEEK_TITLE = {
-    fontSize:"11.5px", 
-    paddingBottom:"2px"
-}
-
-export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interfaces.MatchupSlideProps) {
+export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupSlideProps) {
     const { legacyLeague } = useLeagueContext();
+    const { selectSeason } = useSeasonContext();
+    const { players } = usePlayerContext();
     const is18GameSeason = Number(selectSeason) > 2020;
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
-    const roster = findRosterByOwnerID(foundUser.user_id, foundLeague);  
+    const roster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID = roster.roster_id;
+    const matchups = getMatchups(rID, foundLeague.matchups);
     const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
     const allPlayStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const playoffLabel = postSeasonStats.appearance ? "Playoffs" : "Toilet Bowl";
     const weekLabel = is18GameSeason ? "Wk. 1 - 14" : "Wk. 1 - 13";
     const playoffWeekLabel = is18GameSeason ? "Wk. 15 - 17" : "Wk. 14 - 16";
-
-    const foundAllPlayRecord = allPlayStats.weeklyRecord;
+    const opponent = matchup.find(team => team.roster_id !== rID)!;
+    const myMatchStats = matchup.find(team => team.roster_id === rID)!; 
+    const starterPts = myMatchStats.starters_points.sort((a,b) => b - a);
+    const topStarter = findPlayerByPts(myMatchStats, starterPts[0], players);
+    const foundAllPlayRecord = allPlayStats?.weeklyRecord?.[idx]!;
 
     const getTitle = () => {
         if (idx === 0) {
@@ -55,16 +53,15 @@ export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interf
     const semiFinals = matchup.find(t => t.roster_id === rID)?.matchup_id === 1 || matchup.find(t => t.roster_id === rID)?.matchup_id === 2 ? true : false;
     const seventhPlace = matchup.find(t => t.roster_id === rID)?.matchup_id === 6 ? true : false;
     const toiletBowl = matchup.find(t => t.roster_id === rID)?.matchup_id === 4 ? true : false;
-
     const exceptionCurrentOwnerAllPlayTotalRosters = foundLeague.rosters.length - 1;
-    console.log("matchup", matchup);
+
     return (
-        <div className="my-4"  style={{fontSize:"12px",width:"200px"}}>
-            <div style={{position:"absolute", zIndex:"9999", top:"-2px", width:"205px", color:"#e9f0f2"}}>
+        <div className="py-4"  style={{fontSize:"12px",width:"200px"}}>
+            <div style={{position:"absolute", zIndex:"5", top:"-2px", width:"205px", color:"#e9f0f2"}}>
                 {title && (
                     <div className="">
-                        <p style={WEEK_TITLE}>{title}</p>
-                        <div style={UNDERLINE_TITLE_DIV}></div>
+                        <p className={styles.weekTitle}>{title}</p>
+                        {/* <div className={styles.underlineTitle}></div> */}
                     </div>
                 )}
             </div>
@@ -147,27 +144,19 @@ export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interf
                                 onClick={() => openModal("Matchup", m.filter(t => t.roster_id !== Number(id))[0].roster_id, m)}style={{color:"#7f7f7f", fontSize:"1.4em"}}
                             /> */}
                         </div>
-                        <div className="flex items-center justify-start mb-2 px-2">
-                            {matchup.filter(team => team.roster_id !== rID).map((opponent, j) => 
-                                <div key={j}>
-                                    <div className="flex items-center">
-                                        <p style={{color:"#c9cfd1"}}>vs</p>
-                                        <div className="flex items-center mx-2">
-                                            <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${
-                                                findUserByRosterID(opponent.roster_id, foundLeague).avatar}`}/>
-                                        </div>
-                                        <p className="text-truncate" style={{maxWidth:"140px"}}>
-                                        {findUserByRosterID(opponent.roster_id, foundLeague)?.metadata.team_name ?
-                                            findUserByRosterID(opponent.roster_id, foundLeague)?.metadata.team_name
-                                        : findUserByRosterID(opponent.roster_id, foundLeague)?.display_name ?
-                                        findUserByRosterID(opponent.roster_id, foundLeague)?.display_name
-                                        : null
-                                        }</p>
-                                    </div>
-                                </div>
-                            )}
+                        <div className="flex items-center mb-2 px-2">
+                            <p style={{color:"#c9cfd1"}}>vs</p>
+                            <Image className={`mx-2 ${styles.ownerLogo}`} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${
+                                findUserByRosterID(opponent.roster_id, foundLeague).avatar}`}/>
+                            <p className="text-truncate" style={{maxWidth:"140px"}}>
+                            {findUserByRosterID(opponent.roster_id, foundLeague)?.metadata.team_name ?
+                                findUserByRosterID(opponent.roster_id, foundLeague)?.metadata.team_name
+                            : findUserByRosterID(opponent.roster_id, foundLeague)?.display_name ?
+                            findUserByRosterID(opponent.roster_id, foundLeague)?.display_name
+                            : null
+                            }</p>
                         </div>
-                        <div className="flex items-center justify-between px-2">
+                        <div className="flex items-center justify-between px-2 py-1">
                             <div className="flex items-center justify-start">
                                 {matchup[0].points === 0 && matchup[1].points === 0 ?
                                     <div>
@@ -189,25 +178,19 @@ export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interf
                                     </div>
                                 )} 
                             </div>
-                            {/* <p>
-                                {findRecord(findWeeklyMatchups(), idx).w}
-                                <span className="" style={{color:"whitesmoke"}}>-</span>
-                                {findRecord(findWeeklyMatchups(), idx).l}
-                            </p> */}
+                            <p>{findRecord(rID, matchups!, idx).wins}<span style={{color:"whitesmoke"}}>-</span>{findRecord(rID, matchups!, idx).losses}</p>
                         </div>
-                        {/* <div className="pt-2">
-                            {m[0].points === 0 && m[1].points === 0 ?
-                                <></>
-                            : m.filter(t => t.roster_id === Number(id)).map((o, j) => 
-                                <div key={j} style={(players.length > 0) ? {background:findLogo(findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).team || "FA").bgColor}:{}}>
-                                    <div className="d-flex align-items-center" style={{borderRadius:"0px 0px 2px 2px"}}>
-                                        <div style={findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).position === "DEF" ?
+                        <div className="pt-2">
+                            {matchup[0].points === 0 && matchup[1].points === 0 ? <></> :
+                                <div style={(players.length > 0) ? {background:findLogo(topStarter.team || "FA").bgColor}:{}}>
+                                    <div className="flex items-center" style={{borderRadius:"0px 0px 2px 2px"}}>
+                                        <div style={topStarter.position === "DEF" ?
                                             {
                                                 width:"65px", height:"50px", 
                                                 backgroundPosition:"center",
                                                 backgroundRepeat:"no-repeat",
                                                 backgroundSize:"40px",
-                                                backgroundImage:`url(${findLogo(findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).team).l})`
+                                                backgroundImage:`url(${findLogo(topStarter.team).l})`
                                             }
                                         :
                                             {
@@ -215,72 +198,58 @@ export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interf
                                                 backgroundPosition:"left top",
                                                 backgroundRepeat:"no-repeat",
                                                 backgroundSize:"40px",
-                                                backgroundImage:`url(${findLogo(findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).team).l})`
+                                                backgroundImage:`url(${findLogo(topStarter.team).l})`
                                             }
                                         }>
-                                            {findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).position === "DEF" ?
-                                                <></>
-                                            :   // Player Image
-                                                <img src={`${playerBaseURL}${findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).player_id}.jpg`} 
-                                                    alt="player" 
-                                                    style={{width:"100%", height:"100%", objectFit:"cover"}}
-                                                />
+                                            {topStarter.position === "DEF" ? <></>
+                                            :   <Image src={`${PLAYER_BASE_URL}${topStarter.player_id}.jpg`} alt="player" height={62} width={62} 
+                                                style={{ objectFit:"cover"}}/>
                                             }
                                         </div>
                                         <div className="mx-1">
-                                            {findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).position === "DEF" ?
-                                                <div>
-                                                    <p className="m-0 bold text-truncate">
-                                                        {findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).first_name} {findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).last_name} 
-                                                    </p>
-                                                    <p className="m-0" style={{fontSize:"11.5px"}}>scored {o.starters_points.sort((a,b) => b - a)[0]}pts</p>
-                                                </div>
-                                            :
-                                                <div>
-                                                    <p className="m-0 bold text-truncate">{findPlayerByPts(o, o.starters_points.sort((a,b) => b - a)[0]).full_name}</p>
-                                                    <p className="m-0" style={{fontSize:"11.5px"}}>scored {o.starters_points.sort((a,b) => b - a)[0]}pts</p>
-                                                </div>
-                                            }
+                                            <p className="font-bold text-truncate">
+                                                {topStarter.first_name} {topStarter.last_name} 
+                                            </p>
+                                            <p style={{fontSize:"11.5px"}}>scored {starterPts[0]}pts</p>
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            }
                         </div>
-                        <div className="pt-2" style={{background:"black"}}>
-                            {m[0].points === 0 && m[1].points === 0 ?
-                                <></>
+                        <div className="pt-2" style={{ background:"black" }}>
+                            {matchup[0].points === 0 && matchup[1].points === 0 ? <></>
                             : (is18GameSeason && idx < 14) || (!is18GameSeason && idx < 13) ?
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="d-flex align-items-center">
-                                        <div className="d-flex align-items-center">
-                                            <Icon icon="material-symbols:arrow-drop-up-rounded" style={{color:"#42f3e9",fontSize:"2.5em"}}/>
-                                            <p className="m-0">{foundAllPlayRecord?.w}</p>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center">
+                                        <div className="flex items-center">
+                                            <Icon icon="material-symbols:arrow-drop-up-rounded" style={{color:"#42f3e9", fontSize:"2.5em"}}/>
+                                            <p>{foundAllPlayRecord?.wins}</p>
                                         </div>
-                                        <div className="d-flex align-items-center">
-                                            <Icon icon="material-symbols:arrow-drop-down-rounded" style={{color:"#f85012",fontSize:"2.5em"}}/>
-                                            <p className="m-0">{foundAllPlayRecord?.l}</p>
+                                        <div className="flex items-center">
+                                            <Icon icon="material-symbols:arrow-drop-down-rounded" style={{color:"#f85012", fontSize:"2.5em"}}/>
+                                            <p>{foundAllPlayRecord?.losses}</p>
                                         </div>
                                     </div>
-                                    <div className="">
-                                        {m.map((team, index) => 
-                                            <div key={index} className="d-flex align-items-center">
-                                                {index === 0 ?
-                                                    index === 0 && team.roster_id === Number(id) ?
-                                                        roundToHundredth(100-(foundAllPlayRecord?.w/exceptionCurrentOwnerAllPlayTotalRosters)*100) !== 0 ?
-                                                            <div className="d-flex align-items-center">
-                                                                <p className="m-0 px-1">{roundToHundredth(100-(foundAllPlayRecord?.w/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
-                                                                <Icon icon="emojione-monotone:four-leaf-clover" style={{fontSize:"14px", color:"#289a5d"}}/>
+                                    <div>
+                                        {matchup.map((team, index) => 
+                                            <div key={index} className="flex items-center">
+                                                { index === 0 ?
+                                                    index === 0 && team.roster_id === rID ?
+                                                        roundToHundredth(100-(foundAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100) !== 0 ?
+                                                            <div className="flex items-center">
+                                                                <p className="px-1">{roundToHundredth(100-(foundAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
+                                                                <Icon icon="emojione-monotone:four-leaf-clover" style={{ fontSize:"14px", color:"#289a5d" }}/>
                                                             </div>
-                                                        : <Icon icon="fluent-emoji-flat:crown" style={{fontSize:"16px"}}/>
+                                                        : <Icon icon="fluent-emoji-flat:crown" style={{ fontSize:"16px" }}/>
                                                     :
-                                                        foundAllPlayRecord?.l === exceptionCurrentOwnerAllPlayTotalRosters ?
-                                                            <Icon icon="emojione-v1:pile-of-poo" style={{fontSize:"16px", color:"#724b21"}}/>
+                                                        foundAllPlayRecord?.losses === exceptionCurrentOwnerAllPlayTotalRosters ?
+                                                            <Icon icon="emojione-v1:pile-of-poo" style={{ fontSize:"16px", color:"#724b21" }}/>
                                                         :
-                                                            <div className="d-flex align-items-center">
-                                                                <p className="m-0 px-1">{roundToHundredth(0-(foundAllPlayRecord?.w/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
-                                                                <Icon icon="emojione-monotone:four-leaf-clover" style={{fontSize:"14px", color:"#dab0af"}}/>
-                                                            </div>   
-                                                :<></>
+                                                            <div className="flex items-center">
+                                                                <p className="px-1">{roundToHundredth(0-(foundAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
+                                                                <Icon icon="emojione-monotone:four-leaf-clover" style={{ fontSize:"14px", color:"#dab0af" }}/>
+                                                            </div>
+                                                : <></>
                                                 }
                                             </div>
                                         )}
@@ -288,7 +257,7 @@ export default function MatchupSlide({ idx, name, matchup, selectSeason}: Interf
                                 </div>
                             :<></>
                             }
-                        </div> */}
+                        </div>
                     </div>
                 } 
             </div>
