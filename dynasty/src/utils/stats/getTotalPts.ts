@@ -1,7 +1,7 @@
 import { roundToHundredth }from "./calculationUtils";
 import * as Interfaces from "@/interfaces";
 
-export const getTotalPts = (legacyLeague: Interfaces.League[], rID: number, pID: string) : { pts: number, maxPts: number } => {
+export const getPlayerTotalPts = (legacyLeague: Interfaces.League[], rID: number, pID: string) : { pts: number, maxPts: number } => {
     
     const pts = legacyLeague.map((league: Interfaces.League) => 
         league.matchups.map(week => week.find(team => team.roster_id === rID)?.starters.find((starter: string) => starter === pID) !== undefined ? 

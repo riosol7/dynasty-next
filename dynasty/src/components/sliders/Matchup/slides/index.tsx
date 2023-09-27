@@ -156,7 +156,7 @@ export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupS
                             : null
                             }</p>
                         </div>
-                        <div className="flex items-center justify-between px-2 py-1">
+                        <div className="flex items-center justify-between px-2 pt-1">
                             <div className="flex items-center justify-start">
                                 {matchup[0].points === 0 && matchup[1].points === 0 ?
                                     <div>
