@@ -1,3 +1,7 @@
 .fontHover:hover{
     font-weight: normal;
 }
+
+.fontHover{
+    font-weight: lighter;
+}

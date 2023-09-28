@@ -57,6 +57,28 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
             </div>
             <div className="mt-5">
                 <div style={{fontSize:"14px"}}>
+
+                    <div className="flex">
+                        <div className="w-8/12">
+                            <p style={{ color:"#7d91a6", fontSize:"12.85px" }}>{foundLeague.season} Season</p>
+                        
+                        
+                        </div>
+
+                        <div className="w-4/12 flex items-center justify-between">
+                            <div className="w-5/12">
+                                <p style={{ color:"#7d91a6", fontSize:"12.85px" }}>Record</p>
+                            </div>
+                            <div className="w-5/12">
+                                <p style={{ color:"#7d91a6", fontSize:"12.85px" }}>Rate</p>
+                            </div>
+                            <div className="w-2/12 w-2/12 flex justify-end">
+                                <p style={{ color:"#7d91a6", fontSize:"12.85px" }}>Rank</p>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div className="flex items-center justify-between" style={{ color:"#7d91a6", fontSize:"12.85px" }}> 
                         <p className="w-8/12">{foundLeague.season} Season</p>
                         <div className="w-4/12 flex items-center justify-between">
