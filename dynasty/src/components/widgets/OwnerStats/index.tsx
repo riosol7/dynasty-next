@@ -1,4 +1,5 @@
 import styles from "./OwnerStats.module.css";
+import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import {
     findLeagueBySeason,
@@ -19,6 +20,7 @@ import * as Interfaces from "@/interfaces";
 export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
+    const [ showTopScoringPlayers, setShowTopScoringPlayers ] = useState<Boolean>(false);
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
@@ -44,16 +46,43 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <div className={styles.performanceHeader}> 
                             <p>General</p>
                         </div>
-                        <div> 
-                            <div className="flex items-center justify-between py-3" style={{ borderBottom:"2px solid #2a2c3e" }}>
+                        <div>
+                            {/* Make a dropdown list of the your top performing players */}
+                            <div className={styles.performanceRow}>
+                                <div className="flex items-center">
+                                    <Icon onClick={() => setShowTopScoringPlayers(!showTopScoringPlayers)} 
+                                    style={{fontSize:"21px", marginRight:"6px", color: "lightgray"}} 
+                                    icon={!showTopScoringPlayers ? "mingcute:square-arrow-down-line" : "mingcute:square-arrow-up-line"}
+                                    />
+                                    <p>Top Scoring Player w/ Yr, Week</p>
+                                </div>
+                                <p style={{ color:"whitesmoke" }}>{allTimeStats.topScorerList[0].points}</p>
+                            </div>
+                            { showTopScoringPlayers ?
+                            allTimeStats.topScorerList.slice(1,11).map((record, i) => 
+                                <div key={i}>
+                                    <p>{record.points}</p>       
+                                </div>
+                            ):<></>}
+                            {/* Make a dropdown list by using the rivalry component. */}
+                            <div className={styles.performanceRow}>
+                                <p>Most Wins against</p>
+                                <p style={{ color:"whitesmoke" }}>{0}</p>
+                            </div>
+                            {/* Make a dropdown list by using the rivalry component. */}
+                            <div className={styles.performanceRow}>
+                                <p>Most Losses against</p>
+                                <p style={{ color:"whitesmoke" }}>{0}</p>
+                            </div>
+                            <div className={styles.performanceRow}>
                                 <p>Toilet Bowl</p>
                                 <p style={{ color:"whitesmoke" }}>{allTimeStats.toiletBowls}</p>
                             </div>
-                            <div className="flex items-center justify-between py-3" style={{ borderBottom:"2px solid #2a2c3e" }}>
+                            <div className={styles.performanceRow}>
                                 <p>Playoff Appearances</p>
                                 <p style={{ color:"whitesmoke" }}>{allTimeStats.playoffs.appearances}</p>
                             </div>
-                            <div className="flex items-center justify-between py-3" style={{ borderBottom:"0px solid #2a2c3e" }}>
+                            <div className={styles.performanceRow}>
                                 <p>Finals</p>
                                 <p style={{ color:"whitesmoke" }}>{allTimeStats.playoffs.finals}</p>
                             </div>

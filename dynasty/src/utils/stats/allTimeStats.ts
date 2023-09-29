@@ -1,6 +1,7 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
+import { match } from "assert";
 
 export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
@@ -8,7 +9,7 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
  
     const legacyMatches: Interfaces.Match[][] = legacyLeague.map(league => league.matchups
         .map(matches => matches.find(team => team.roster_id === rID))
-        .filter(match => match !== undefined) // Filter out undefined values
+        .filter(match => match !== undefined && match.matchup_id !== null) // Filter out undefined values
         .map(match => match as Interfaces.Match) // Type assertion to Match
     );
     
@@ -97,6 +98,25 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
     const allTimePlayoffWins = playoffRuns?.map(season => season.bracket.filter(match => match.w === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0; 
     const allTimePlayoffLosses = playoffRuns?.map(season => season.bracket.filter(match => match.l === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0;
     
+    // Top Scoring Players 
+    const topScorerList = legacyLeague.slice().map((league) => {
+        const addedWeekLabel = league.matchups.map((matchup, i) => { return {...matchup.find(team => team.roster_id === rID), week: i + 1 } } ).filter(matchup => matchup.matchup_id !== null);
+        const topPlayerScorerList = addedWeekLabel.sort((a: any, b: any) => Math.max(...b.starters_points) - Math.max(...a.starters_points)).map((match) => {
+            const startersPoints = match.starters_points!;
+            const highestStarterIndex = startersPoints?.indexOf(Math.max(...startersPoints!));
+            const highestStarterPoints = startersPoints[highestStarterIndex!];
+            const highestStarter = match?.starters![highestStarterIndex!];
+            
+            return {
+                season: league.season,
+                week: match.week,
+                player_id: highestStarter,
+                points: highestStarterPoints
+            };
+        }); 
+        return topPlayerScorerList;
+    }).flat().sort((a, b) => b.points - a.points);
+
     return {    
         best: {
             record: `${bestSeasonStats?.wins}-${bestSeasonStats?.losses}`,
@@ -123,5 +143,6 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
             finals:(finalsRecord().wins + "-" + finalsRecord().losses),
         },
         toiletBowls: toiletBowls,
+        topScorerList: topScorerList,
     };
 };
