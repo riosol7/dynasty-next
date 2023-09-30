@@ -1,3 +1,7 @@
+.playerImage {
+    object-fit: cover;
+}
+
 .fontHover:hover{
     font-weight: normal;
 }
@@ -18,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-block: 16px;
+    padding-block: 0px;
     border-bottom: 2px solid #2a2c3e
 }
 

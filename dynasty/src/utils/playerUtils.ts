@@ -17,3 +17,8 @@ export const findPlayerByPts = (team: Interfaces.Match, pts: number, players: In
     const foundPlayer = players.find(player => player.player_id === playerID);
     return foundPlayer || Constants.initPlayer;
 };
+
+export const findPlayerByID = (id: string, players: Interfaces.Player[]): Interfaces.Player => {
+    const foundPlayer = players.find(player => player.player_id === id);
+    return foundPlayer || Constants.initPlayer;
+};

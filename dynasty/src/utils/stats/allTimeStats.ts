@@ -1,8 +1,11 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
-import { match } from "assert";
 
+export const overallHighScoreRanking = (pts: number, list: Interfaces.TopScoringPlayerRecord[]) => {
+    const foundRecord = list.find((record) => record.starter_points === pts);
+    return foundRecord;
+};
 export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
     const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));

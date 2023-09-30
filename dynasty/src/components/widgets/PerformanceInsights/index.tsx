@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./PerformanceInsights.module.css";
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
@@ -6,20 +7,25 @@ import {
     findUserByName,
     findRosterByOwnerID,
     getAllPlayStats, 
+    getAllTimeLeagueStats,
     getAllTimeRosterStats,
-    getPostSeasonStats, 
+    getPostSeasonStats,
+    overallHighScoreRanking, 
     lineupEfficiency, 
     roundToHundredth,
     totalPtsPerGame, 
     winPCT, 
-    findSeasonStats
+    findSeasonStats,
+    findPlayerByID
 } from "@/utils";
-import { useLeagueContext, useSeasonContext } from "@/context";
+import { PLAYER_BASE_URL } from "@/constants";
+import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import TopScoringPlayer from "./TopScoringPlayer";
 
 export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
+    const { players } = usePlayerContext();
     const { selectSeason } = useSeasonContext();
     const [ showTopScoringPlayers, setShowTopScoringPlayers ] = useState<Boolean>(false);
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
@@ -28,6 +34,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const rID = foundRoster.roster_id;
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
+    const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
     const allTimeRosterStats = getAllTimeRosterStats(rID, legacyLeague);
     const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
     const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
@@ -35,7 +42,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const allTimeTotalLosses: number = allTimeRosterStats.losses + allTimeRosterStats.playoffs.losses || 0;
     const totalSeasonWins: number = foundRoster.settings.wins + postSeasonStats.wins || 0;
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
-
+    const myHighestScoringPlayer = allTimeRosterStats.topScorerList[0] || { starter:"", starter_points: 0, week: 0, season:""};
     return (
         <div className="py-4" style={{minWidth:"300px"}}>
             <div className="flex items-center justify-between" style={{marginBottom:"8px"}}>
@@ -44,38 +51,45 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
             <div className="mt-5">
                 <div style={{fontSize:"14px"}}>
                     <div className="pb-5">
-                        <div className={styles.performanceHeader}> 
-                            <p className="w-8/12">General</p>
+                        <div className={`pb-3 ${styles.performanceHeader}`}> 
+                            <p className="w-8/12">Highest Scoring Player(s)</p>
                             <div className="w-4/12 flex items-center">
-                                <p className="w-5/12">Season</p>
-                                <p className="w-5/12">Points</p>
-                                <p className="w-2/12 flex justify-end">Ovr Rank</p>
+                                <p className="w-3/12">Week</p>
+                                <p className="w-3/12">Season</p>
+                                <p className="w-3/12">Points</p>
+                                <p className="w-3/12 flex justify-end">Overall Rank</p>
                             </div>
                         </div>
                         <div>
                             {/* Make a dropdown list of the your top performing players */}
                             <div className={styles.performanceRow}>
-                                <div className="flex items-center">
+                                <div className="w-8/12 flex items-center">
                                     <Icon onClick={() => setShowTopScoringPlayers(!showTopScoringPlayers)} 
-                                    style={{fontSize:"21px", marginRight:"6px", color: "lightgray"}} 
+                                    style={{fontSize:"21.5px", width:"25px", color: "lightgray"}} 
                                     icon={!showTopScoringPlayers ? "mingcute:square-arrow-down-line" : "mingcute:square-arrow-up-line"}
                                     />
-                                    <p>Top Scoring Player w/ Yr, Week</p>
+                                    <Image className={styles.playerImage} src={`${PLAYER_BASE_URL}${myHighestScoringPlayer.starter}.jpg`} alt="player" width={60} height={60}/>
+                                    <div>
+                                        <p className="font-bold">
+                                            {findPlayerByID(myHighestScoringPlayer.starter, players).first_name} {findPlayerByID(myHighestScoringPlayer.starter, players).last_name}
+                                        </p>
+                                        <p className="font-light text-xs">{findPlayerByID(myHighestScoringPlayer.starter, players).position}</p>
+                                    </div>
                                 </div>
-                                <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.topScorerList[0]?.starter_points}</p>
+                                <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">
+                                    <p className="w-3/12">{myHighestScoringPlayer.week}</p>
+                                    <p className="w-3/12">{myHighestScoringPlayer.season}</p>
+                                    <p className="w-3/12">{myHighestScoringPlayer?.starter_points}</p>
+                                    <p className="w-3/12 flex justify-end">{overallHighScoreRanking(myHighestScoringPlayer?.starter_points!, allTimeLeagueStats?.playerHighScores!)?.rank}</p>
+                                </div>
                             </div>
                             {showTopScoringPlayers ?
-                            allTimeRosterStats.topScorerList.slice(0,10).map((record: Interfaces.TopScoringPlayerRecord, i) => 
+                            allTimeRosterStats.topScorerList.slice(1,11).map((record: Interfaces.TopScoringPlayerRecord, i) => 
                                 <TopScoringPlayer key={i} record={record}/>)
                             :<></>}
                             {/* Make a dropdown list by using the rivalry component. */}
                             <div className={styles.performanceRow}>
-                                <p>Most Wins against</p>
-                                <p style={{ color:"whitesmoke" }}>{0}</p>
-                            </div>
-                            {/* Make a dropdown list by using the rivalry component. */}
-                            <div className={styles.performanceRow}>
-                                <p>Most Losses against</p>
+                                <p>Most Wins / Losses Against</p>
                                 <p style={{ color:"whitesmoke" }}>{0}</p>
                             </div>
                             <div className={styles.performanceRow}>
