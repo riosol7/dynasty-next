@@ -3,7 +3,7 @@ import * as Constants from "@/constants";
 import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
 import { match } from "assert";
 
-export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) => {
+export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
     const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));
  
@@ -100,22 +100,33 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
     
     // Top Scoring Players 
     const topScorerList = legacyLeague.slice().map((league) => {
-        const addedWeekLabel = league.matchups.map((matchup, i) => { return {...matchup.find(team => team.roster_id === rID), week: i + 1 } } ).filter(matchup => matchup.matchup_id !== null);
-        const topPlayerScorerList = addedWeekLabel.sort((a: any, b: any) => Math.max(...b.starters_points) - Math.max(...a.starters_points)).map((match) => {
-            const startersPoints = match.starters_points!;
-            const highestStarterIndex = startersPoints?.indexOf(Math.max(...startersPoints!));
-            const highestStarterPoints = startersPoints[highestStarterIndex!];
-            const highestStarter = match?.starters![highestStarterIndex!];
-            
+        const addedWeekLabel = league.matchups.map((matchup: Interfaces.Match[], i) => { return {...matchup.find(team => team.roster_id === rID), week: i + 1 } } ).filter(matchup => matchup.matchup_id !== null);
+        const topPlayerScorerList = addedWeekLabel.sort((a, b) => {
+            const aMatch = a as Interfaces.Match;
+            const bMatch = b as Interfaces.Match;
+          
+            const aStartersPoints = aMatch.starters_points || [];
+            const bStartersPoints = bMatch.starters_points || [];
+          
+            const maxA = Math.max(...aStartersPoints);
+            const maxB = Math.max(...bStartersPoints);
+          
+            return maxB - maxA;
+          }).map((match) => {
+            const startersPoints = (match as Interfaces.Match).starters_points || [];
+            const highestStarterIndex = startersPoints.indexOf(Math.max(...startersPoints));
+            const highestStarterPoints = startersPoints[highestStarterIndex];
+            const highestStarter = (match as Interfaces.Match).starters && (match as Interfaces.Match).starters[highestStarterIndex];
+          
             return {
-                season: league.season,
-                week: match.week,
-                player_id: highestStarter,
-                points: highestStarterPoints
+              season: league.season,
+              week: match.week,
+              starter: highestStarter,
+              starter_points: highestStarterPoints,
             };
-        }); 
+        });
         return topPlayerScorerList;
-    }).flat().sort((a, b) => b.points - a.points);
+    }).flat().sort((a, b) => b.starter_points - a.starter_points).map((starter, i)=> { return {...starter, rank: i + 1}});
 
     return {    
         best: {
@@ -145,4 +156,33 @@ export const getAllTimeStats = (rID: number, legacyLeague: Interfaces.League[]) 
         toiletBowls: toiletBowls,
         topScorerList: topScorerList,
     };
+};
+
+export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
+
+    // Top Scoring Players     
+    const unsortedList = legacyLeague.slice().map((league) => {
+        const recordLabels = league.matchups.map((match) => match.filter(matchup => matchup.matchup_id !== null)).filter(matchups => matchups.length > 0).map((matchups, idx) =>
+            matchups.map(match => {
+                const extractedData = match.starters.map((starter, index) => {
+                    return {
+                        roster_id: match.roster_id,
+                        starter: starter,
+                        starter_points: match.starters_points[index],
+                        season: league.season,
+                        week: idx + 1,
+                    };
+                });
+
+                return extractedData;
+            })
+        ).flat();
+        return recordLabels.flat()
+    });
+    const topPlayerScorerList: Interfaces.TopScoringPlayerRecord[] = unsortedList.flat().sort((a, b) => b.starter_points - a.starter_points).map((_, idx) => {return {..._, rank: idx + 1}});
+
+    return {
+        playerHighScores: topPlayerScorerList
+    }
+    
 };

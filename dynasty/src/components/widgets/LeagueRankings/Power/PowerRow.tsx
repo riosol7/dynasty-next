@@ -3,11 +3,11 @@ import styles from "../LeagueRankings.module.css";
 import * as Interfaces from "@/interfaces";
 import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import { getAllTimeStats, roundToHundredth, winPCT } from "@/utils";
+import { getAllTimeRosterStats, roundToHundredth, winPCT } from "@/utils";
 
 export default function PowerRow({roster, season}: Interfaces.RankingRowProps) {
     const { legacyLeague } = useLeagueContext(); 
-    const allTimeStats = getAllTimeStats(roster.roster_id, legacyLeague);
+    const allTimeStats = getAllTimeRosterStats(roster.roster_id, legacyLeague);
     const allPlayWins = roster.settings.all_play_wins;
     const allPlayLosses = roster.settings.all_play_losses;
     const allPlayWinRate = roster.settings.all_play_win_rate;

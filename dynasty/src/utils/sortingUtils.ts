@@ -1,5 +1,5 @@
 import * as Interfaces from "@/interfaces";
-import { getAllTimeStats } from ".";
+import { getAllTimeRosterStats } from ".";
 
 export const handleSort = (
     sort: string, 
@@ -20,7 +20,7 @@ export const sortAllTimeRosters = (legacyLeague: Interfaces.League[]) => {
     const currentLeague = legacyLeague[0];
     return currentLeague.rosters.map((roster) => {
         const foundOwner = currentLeague.users.find(user => user.user_id === roster.owner_id);
-        const allTimeStats = getAllTimeStats(roster.roster_id, legacyLeague);
+        const allTimeStats = getAllTimeRosterStats(roster.roster_id, legacyLeague);
         
         return {
             ...roster,

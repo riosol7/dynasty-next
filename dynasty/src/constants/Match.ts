@@ -1,8 +1,8 @@
 import * as Interfaces from "@/interfaces";
 
 export const initMatch: Interfaces.Match = {
-    starters_points: [],
-    starters: [],
+    starters_points: [0],
+    starters: [""],
     roster_id: 0,
     points: 0,
     players_points: {"":0},

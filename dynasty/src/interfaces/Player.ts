@@ -170,3 +170,15 @@ export interface FantasyCalcContextType {
     fc: FantasyCalcPlayer[];
     loadFC: boolean;
 };
+
+export interface TopScoringPlayerRecord {
+    season: string;
+    week: number;
+    starter: string;
+    starter_points: number;
+    rank: number;
+};
+
+export interface TopScoringPlayerRecordProps {
+    record: TopScoringPlayerRecord;
+};

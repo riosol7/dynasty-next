@@ -4,7 +4,7 @@ import TeamLayout from "@/layouts/Team";
 import MatchupSlider from "@/components/sliders/Matchup";
 import * as Interfaces from "@/interfaces";
 import { SeasonProvider, useSeasonContext, useLeagueContext } from "@/context";
-import OwnerStatsWidget from "@/components/widgets/OwnerStats";
+import PerformanceInsightsWidget from "@/components/widgets/PerformanceInsights";
 
 // for summary & power let the all time stats be a comparison to the selected season.
 export default function TeamPage({ name }: Interfaces.TeamParamProps) {
@@ -18,7 +18,7 @@ export default function TeamPage({ name }: Interfaces.TeamParamProps) {
             {tab === "Summary" ? 
                 <>
                 <MatchupSlider name={name}/>
-                <OwnerStatsWidget name={name}/>
+                <PerformanceInsightsWidget name={name}/>
                 </>
             : tab === "Dynasty" ? 
             <></>

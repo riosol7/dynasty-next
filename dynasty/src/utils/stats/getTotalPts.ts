@@ -1,4 +1,4 @@
-import { findRosterByRosterID, getAllTimeStats } from "..";
+import { findRosterByRosterID, getAllTimeRosterStats } from "..";
 import { roundToHundredth }from "./calculationUtils";
 import * as Interfaces from "@/interfaces";
 
@@ -32,7 +32,7 @@ export const getPlayerTotalPts = (legacyLeague: Interfaces.League[], rID: number
 export const totalPtsPerGame = (rID: number, pts: number, legacyLeague: Interfaces.League[], season?: string, allTime?: boolean) => {
     const foundSeason = legacyLeague.find(league => league.season === season);
     const roster = findRosterByRosterID(rID, foundSeason?.rosters!);
-    const allTimeStats = getAllTimeStats(rID, legacyLeague);
+    const allTimeStats = getAllTimeRosterStats(rID, legacyLeague);
 
     if (season === legacyLeague[0].season && roster && foundSeason) {
         return roundToHundredth(Number(pts/(roster.settings.losses + roster.settings.wins + roster.settings.ties)));

@@ -1,4 +1,4 @@
-import styles from "./OwnerStats.module.css";
+import styles from "./PerformanceInsights.module.css";
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import {
@@ -6,7 +6,7 @@ import {
     findUserByName,
     findRosterByOwnerID,
     getAllPlayStats, 
-    getAllTimeStats,
+    getAllTimeRosterStats,
     getPostSeasonStats, 
     lineupEfficiency, 
     roundToHundredth,
@@ -16,8 +16,9 @@ import {
 } from "@/utils";
 import { useLeagueContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
+import TopScoringPlayer from "./TopScoringPlayer";
 
-export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
+export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const [ showTopScoringPlayers, setShowTopScoringPlayers ] = useState<Boolean>(false);
@@ -27,11 +28,11 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
     const rID = foundRoster.roster_id;
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
-    const allTimeStats = getAllTimeStats(rID, legacyLeague);
+    const allTimeRosterStats = getAllTimeRosterStats(rID, legacyLeague);
     const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
-    const seasonFPTS = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
-    const allTimeTotalWins: number = allTimeStats.wins + allTimeStats.playoffs.wins || 0;
-    const allTimeTotalLosses: number = allTimeStats.losses + allTimeStats.playoffs.losses || 0;
+    const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
+    const allTimeTotalWins: number = allTimeRosterStats.wins + allTimeRosterStats.playoffs.wins || 0;
+    const allTimeTotalLosses: number = allTimeRosterStats.losses + allTimeRosterStats.playoffs.losses || 0;
     const totalSeasonWins: number = foundRoster.settings.wins + postSeasonStats.wins || 0;
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
 
@@ -44,7 +45,12 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                 <div style={{fontSize:"14px"}}>
                     <div className="pb-5">
                         <div className={styles.performanceHeader}> 
-                            <p>General</p>
+                            <p className="w-8/12">General</p>
+                            <div className="w-4/12 flex items-center">
+                                <p className="w-5/12">Season</p>
+                                <p className="w-5/12">Points</p>
+                                <p className="w-2/12 flex justify-end">Ovr Rank</p>
+                            </div>
                         </div>
                         <div>
                             {/* Make a dropdown list of the your top performing players */}
@@ -56,14 +62,12 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                                     />
                                     <p>Top Scoring Player w/ Yr, Week</p>
                                 </div>
-                                <p style={{ color:"whitesmoke" }}>{allTimeStats.topScorerList[0].points}</p>
+                                <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.topScorerList[0]?.starter_points}</p>
                             </div>
-                            { showTopScoringPlayers ?
-                            allTimeStats.topScorerList.slice(1,11).map((record, i) => 
-                                <div key={i}>
-                                    <p>{record.points}</p>       
-                                </div>
-                            ):<></>}
+                            {showTopScoringPlayers ?
+                            allTimeRosterStats.topScorerList.slice(0,10).map((record: Interfaces.TopScoringPlayerRecord, i) => 
+                                <TopScoringPlayer key={i} record={record}/>)
+                            :<></>}
                             {/* Make a dropdown list by using the rivalry component. */}
                             <div className={styles.performanceRow}>
                                 <p>Most Wins against</p>
@@ -76,15 +80,15 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                             </div>
                             <div className={styles.performanceRow}>
                                 <p>Toilet Bowl</p>
-                                <p style={{ color:"whitesmoke" }}>{allTimeStats.toiletBowls}</p>
+                                <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.toiletBowls}</p>
                             </div>
                             <div className={styles.performanceRow}>
                                 <p>Playoff Appearances</p>
-                                <p style={{ color:"whitesmoke" }}>{allTimeStats.playoffs.appearances}</p>
+                                <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.appearances}</p>
                             </div>
                             <div className={styles.performanceRow}>
                                 <p>Finals</p>
-                                <p style={{ color:"whitesmoke" }}>{allTimeStats.playoffs.finals}</p>
+                                <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.finals}</p>
                             </div>
                         </div>
                     </div>
@@ -152,9 +156,9 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                     <div className={styles.performanceTitleRow}>
                         <p className="w-8/12">All Time Record</p>
                         <div className="w-4/12 flex items-center">
-                            <p className="w-5/12">{allTimeStats.wins}-{allTimeStats.losses}</p>
+                            <p className="w-5/12">{allTimeRosterStats.wins}-{allTimeRosterStats.losses}</p>
                             <p className="w-5/12 flex items-center">
-                                {winPCT(allTimeStats.wins, allTimeStats.losses) || 0}
+                                {winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses) || 0}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
                             {/* get allTimeStandings */}
@@ -162,7 +166,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         </div>
                     </div>
                     <div>
-                        {allTimeStats.playoffs.appearances > 0 ?
+                        {allTimeRosterStats.playoffs.appearances > 0 ?
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">w/ Playoffs</p>   
                             <div className="w-4/12 flex items-center">
@@ -180,9 +184,9 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">Best</p>
                             <div className="w-4/12 flex items-center">
-                                <p className="w-5/12">{allTimeStats.best.record}</p>
+                                <p className="w-5/12">{allTimeRosterStats.best.record}</p>
                                 <p className="w-5/12 flex items-center">
-                                    {allTimeStats.best.winRate}
+                                    {allTimeRosterStats.best.winRate}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
                                 <p className="w-2/12 flex justify-end">1st</p>
@@ -214,7 +218,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <div className="w-5/12 flex items-center">
-                                <p>{lineupEfficiency(allTimeStats.fpts, allTimeStats.ppts)}</p>
+                                <p>{lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
                             <p className="w-2/12 flex justify-end">0</p>
@@ -236,7 +240,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <div className="w-5/12 flex items-center">
-                            <p>{roundToHundredth(winPCT(allTimeStats.wins, allTimeStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}</p>
+                            <p>{roundToHundredth(winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
                             <p className="w-2/12 flex justify-end">0</p>
@@ -263,7 +267,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                             <p className="w-8/12">All Time</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
-                                <p className="w-5/12">{totalPtsPerGame(rID, allTimeStats.fpts, legacyLeague, undefined, true)}</p>
+                                <p className="w-5/12">{totalPtsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
                                 <p className="w-2/12 flex justify-end">0</p>
                             </div>
                         </div>
@@ -281,7 +285,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                                     <p className="w-8/12">All Time w/ Playoffs</p>
                                     <div className="w-4/12 flex items-center">
                                         <p className="w-5/12"></p>
-                                        <p className="w-5/12">{roundToHundredth(allTimeStats.playoffs.fpts / allTimeStats.playoffs.totalGames)}</p>
+                                        <p className="w-5/12">{roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}</p>
                                         <p className="w-2/12 flex justify-end">0</p>
                                     </div>
                                 </div>
@@ -301,7 +305,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.best.score}</p>
+                            <p className="w-5/12">{allTimeRosterStats.best.score}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -317,7 +321,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time w/ Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.playoffs.highestScore}</p>
+                            <p className="w-5/12">{allTimeRosterStats.playoffs.highestScore}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -333,7 +337,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.fpts}</p>
+                            <p className="w-5/12">{allTimeRosterStats.fpts}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -349,7 +353,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time w/ Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.playoffs.fpts}</p>
+                            <p className="w-5/12">{allTimeRosterStats.playoffs.fpts}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -366,7 +370,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.ppts}</p>
+                            <p className="w-5/12">{allTimeRosterStats.ppts}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -398,7 +402,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.pa}</p>
+                            <p className="w-5/12">{allTimeRosterStats.pa}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -414,7 +418,7 @@ export default function OwnerStatsWidget({ name }: Interfaces.TeamParamProps) {
                         <p className="w-8/12">All Time w/ Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeStats.playoffs.pa}</p>
+                            <p className="w-5/12">{allTimeRosterStats.playoffs.pa}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
