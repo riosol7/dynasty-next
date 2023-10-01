@@ -110,3 +110,17 @@ export interface MatchupSlideProps {
     name: string;
     matchup: Match[];
 };
+
+export interface HighScoreRecord {
+    roster_id?: number;
+    season: string;
+    week: number;
+    starter?: string;
+    points: number;
+    rank?: number | undefined;
+};
+
+export interface HighScoreRecordProps {
+    record: HighScoreRecord;
+    type?: string;
+};

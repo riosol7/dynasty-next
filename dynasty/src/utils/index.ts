@@ -4,6 +4,7 @@ export * from "./stats/allTimeStats";
 export * from "./stats/calculationUtils";
 export * from "./stats/getTotalPts";
 export * from "./stats/seasonStats";
+export * from "./stats/rivarlyStats";
 export * from "./stats/postSeasonStats";
 export * from "./stats/allPlayStats";
 export * from "./processRosters";

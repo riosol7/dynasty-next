@@ -10,3 +10,14 @@ export interface Owner {
   display_name: string;
   avatar: string;
 };
+
+export interface RivalryRecord {
+  wins: number;
+  losses: number;
+  opponentID: number;
+  rank: number
+}
+
+export interface RivalryRecordProps {
+  record: RivalryRecord;
+};

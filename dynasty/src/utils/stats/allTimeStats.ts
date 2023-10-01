@@ -2,10 +2,11 @@ import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 import { findLeagueByID, getMatchups, roundToHundredth, winPCT } from "..";
 
-export const overallHighScoreRanking = (pts: number, list: Interfaces.TopScoringPlayerRecord[]) => {
-    const foundRecord = list.find((record) => record.starter_points === pts);
+export const overallHighScoreRanking = (pts: number, list: Interfaces.HighScoreRecord[]) => {
+    const foundRecord = list.find((record) => record.points === pts);
     return foundRecord;
 };
+
 export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.League[]) => {
 
     const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));
@@ -46,14 +47,12 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         
         if (playoffBracket.length > 0) {
             const weeklyScore = getMatchups(rID, league.matchups);
-    
             return {
                 bracket: playoffBracket,
                 season: league.season,
                 games: Number(league.season) > 2020 ? weeklyScore?.slice(14,17) : weeklyScore?.slice(13,16)
             };
-        }
-    
+        };
         return {
             bracket: [],
             season: league.season,
@@ -102,7 +101,7 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
     const allTimePlayoffLosses = playoffRuns?.map(season => season.bracket.filter(match => match.l === rID))?.map(szn => szn.length).reduce((acc, n) => acc + n, 0) || 0;
     
     // Top Scoring Players 
-    const topScorerList = legacyLeague.slice().map((league) => {
+    const topPlayerScores = legacyLeague.slice().map((league) => {
         const addedWeekLabel = league.matchups.map((matchup: Interfaces.Match[], i) => { return {...matchup.find(team => team.roster_id === rID), week: i + 1 } } ).filter(matchup => matchup.matchup_id !== null);
         const topPlayerScorerList = addedWeekLabel.sort((a, b) => {
             const aMatch = a as Interfaces.Match;
@@ -122,14 +121,28 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
             const highestStarter = (match as Interfaces.Match).starters && (match as Interfaces.Match).starters[highestStarterIndex];
           
             return {
-              season: league.season,
-              week: match.week,
-              starter: highestStarter,
-              starter_points: highestStarterPoints,
+                roster_id: match.roster_id,
+                season: league.season,
+                week: match.week,
+                starter: highestStarter,
+                points: highestStarterPoints,
             };
         });
         return topPlayerScorerList;
-    }).flat().sort((a, b) => b.starter_points - a.starter_points).map((starter, i)=> { return {...starter, rank: i + 1}});
+    }).flat().sort((a, b) => b.points - a.points).map((record, i)=> { return {...record, rank: i + 1}});
+
+    const topTeamScores: Interfaces.HighScoreRecord[] = legacyLeague.slice().map(league => {
+        const myMatches = league.matchups.map((matchup, i) => {
+            const team = matchup.find(match => match.roster_id === rID);
+            return {
+                roster_id: team?.roster_id,
+                points: team?.points || 0,
+                season: league.season,
+                week: i + 1
+            };
+        });
+        return myMatches;
+    }).flat().sort((a, b) => b?.points! - a?.points!).map((record, i)=> { return {...record, rank: i + 1}});
 
     return {    
         best: {
@@ -157,7 +170,8 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
             finals:(finalsRecord().wins + "-" + finalsRecord().losses),
         },
         toiletBowls: toiletBowls,
-        topScorerList: topScorerList,
+        topPlayerScores: topPlayerScores,
+        topTeamScore: topTeamScores,
     };
 };
 
@@ -171,7 +185,7 @@ export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
                     return {
                         roster_id: match.roster_id,
                         starter: starter,
-                        starter_points: match.starters_points[index],
+                        points: match.starters_points[index],
                         season: league.season,
                         week: idx + 1,
                     };
@@ -182,10 +196,25 @@ export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
         ).flat();
         return recordLabels.flat()
     });
-    const topPlayerScorerList: Interfaces.TopScoringPlayerRecord[] = unsortedList.flat().sort((a, b) => b.starter_points - a.starter_points).map((_, idx) => {return {..._, rank: idx + 1}});
+    const topPlayerScorerList: Interfaces.HighScoreRecord[] = unsortedList.flat().sort((a, b) => b.points - a.points).map((_, idx) => {return {..._, rank: idx + 1}});
+    
+    const teamHighScores = legacyLeague.slice().map(league => {
+        const myMatches = league.matchups.map((matchup, i) => {
+            return matchup.map((match) => {
+                return {
+                    roster_id: match.roster_id,
+                    points: match.points,
+                    season: league.season,
+                    week: i + 1
+                };
+            });
+        });
+        return myMatches.flat();
+    }).flat().sort((a, b) => b?.points! - a?.points!).map((_, idx) => {return {..._, rank: idx + 1}});
 
     return {
-        playerHighScores: topPlayerScorerList
+        playerHighScores: topPlayerScorerList,
+        teamHighScores: teamHighScores,
     }
     
 };

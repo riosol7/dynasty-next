@@ -1,5 +1,11 @@
 .playerImage {
     object-fit: cover;
+    height: max-content;
+    width: max-content;
+}
+
+.selectVS{
+    background-color: inherit;
 }
 
 .fontHover:hover{
