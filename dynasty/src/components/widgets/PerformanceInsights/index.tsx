@@ -9,7 +9,8 @@ import {
     getAllPlayStats, 
     getAllTimeLeagueStats,
     getAllTimeRosterStats,
-    getPostSeasonStats,
+    getRosterPostSeasonStats,
+    getLeaguePostSeasonStats,
     overallHighScoreRanking, 
     lineupEfficiency, 
     roundToHundredth,
@@ -39,7 +40,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
     const allTimeRosterStats = getAllTimeRosterStats(rID, legacyLeague);
-    const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
+    const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
     const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const allTimeTotalWins: number = allTimeRosterStats.wins + allTimeRosterStats.playoffs.wins || 0;
     const allTimeTotalLosses: number = allTimeRosterStats.losses + allTimeRosterStats.playoffs.losses || 0;
@@ -48,7 +49,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const myHighestScoringPlayer = allTimeRosterStats.topPlayerScores[0];
     const rivalryStats = getRivalryStats(rID, legacyLeague);
     const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
-
+    getLeaguePostSeasonStats(legacyLeague, "2022")
     const handleSelectVS = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectVS(event.target.value);
     };
@@ -76,8 +77,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 {winPCT(foundRoster.settings.wins, foundRoster.settings.losses)}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            {/* Get Standings */}
-                            <p className="w-2/12 flex justify-end">1st</p> 
+                            <p className="w-2/12 flex justify-end">{foundRoster.settings.rank}</p> 
                         </div>
                     </div>
                     {postSeasonStats.appearance ?
@@ -91,8 +91,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {winPCT(postSeasonStats.wins, postSeasonStats.losses).toString().length === 2 ? ".00" : ""}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                {/* compare playoff records: Get the playoff bracket and compare the wins and place */}
-                                <p className="w-2/12 flex justify-end">1st</p>
+                                <p className="w-2/12 flex justify-end">{}</p>
                             </div>
                         </div>
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>

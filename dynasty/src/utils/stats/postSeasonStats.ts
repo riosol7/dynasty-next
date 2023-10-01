@@ -1,7 +1,8 @@
 import * as Interfaces from "@/interfaces";
+import * as Constants from "@/constants";
 import { getMatchups, roundToHundredth } from "..";
 
-export const getPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[], season: string) => {
+export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[], season: string) => {
 
     let playoffBracket: Interfaces.BracketMatch[] = [];
     let playoffAppearance: boolean = false;
@@ -42,6 +43,7 @@ export const getPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[
     };
 
     return { 
+        roster_id: rID,
         appearance: playoffAppearance,
         bracket: playoffBracket,
         fpts: playoffFPTS,
@@ -50,5 +52,30 @@ export const getPostSeasonStats = (rID: number, legacyLeague: Interfaces.League[
         losses: playoffLosses,
         totalGames: playoffBracket?.length || 0,
         wins: playoffWins,
+    };
+};
+
+export const getLeaguePostSeasonStats = (legacyLeague: Interfaces.League[], season:string) => {
+
+    if (season === "All Time") {
+
+    } else {
+        const foundSeasonLeague = legacyLeague.find(league => league.season === season) || Constants.initLegacyLeague[0];
+
+        const allPostSeasonRostersStats = foundSeasonLeague.rosters.map(roster => {
+            return getRosterPostSeasonStats(roster.roster_id, legacyLeague, foundSeasonLeague.season);
+        });
+
+        const playoffLabel = allPostSeasonRostersStats.map(roster => {
+            const test = foundSeasonLeague.brackets;
+            const placement = 0;
+            return {
+                ...roster,
+                rank: placement
+            };
+        })
+
+        console.log(playoffLabel)
+        
     };
 };

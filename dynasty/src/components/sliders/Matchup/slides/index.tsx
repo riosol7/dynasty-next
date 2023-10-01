@@ -10,7 +10,7 @@ import {
     findPlayerByPts,
     findRecord,
     findRosterByOwnerID, 
-    getPostSeasonStats,
+    getRosterPostSeasonStats,
     getMatchups,
     roundToHundredth, 
     getAllPlayStats } from "@/utils";
@@ -28,7 +28,7 @@ export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupS
     const roster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID = roster.roster_id;
     const matchups = getMatchups(rID, foundLeague.matchups);
-    const postSeasonStats = getPostSeasonStats(rID, legacyLeague, selectSeason);
+    const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
     const allPlayStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const playoffLabel = postSeasonStats.appearance ? "Playoffs" : "Toilet Bowl";
     const weekLabel = is18GameSeason ? "Wk. 1 - 14" : "Wk. 1 - 13";
