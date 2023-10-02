@@ -70,40 +70,4 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
 };
 
 // export const getLeaguePostSeasonStats = (legacyLeague: Interfaces.League[], season:string) => {
-
-//     if (season === "All Time") {
-
-//     } else {
-//         const foundSeasonLeague = legacyLeague.find(league => league.season === season) || Constants.initLegacyLeague[0];
-
-//         const allPostSeasonRostersStats = foundSeasonLeague.rosters.map(roster => {
-//             return getRosterPostSeasonStats(roster.roster_id, legacyLeague, foundSeasonLeague.season);
-//         });
-
-//         const playoffLabel = allPostSeasonRostersStats.map(roster => {
-//             const foundPlayoffMatches = foundSeasonLeague.brackets.playoffs.filter((game) => game.t1 === roster.roster_id || game.t2 === roster.roster_id);
-//             let placement: number = 0;
-//             if (foundPlayoffMatches.filter(game => game.r === 3 && game.p === 1 && game.w === roster.roster_id).length > 0) {
-//                 placement = 1;
-//             } else if (foundPlayoffMatches.filter(game => game.r === 3 && game.p === 1 && game.l === roster.roster_id).length > 0) {
-//                 placement = 2;
-//             } else if (foundPlayoffMatches.filter(game => game.r === 3 && game.p !== 1 && game.w === roster.roster_id).length > 0) {
-//                 placement = 3;
-//             } else if (foundPlayoffMatches.filter(game => game.r === 3 && game.p !== 1 && game.l === roster.roster_id).length > 0) {
-//                 placement = 4;
-//             } else if (foundPlayoffMatches.filter(game => game.r === 2 && game.w === roster.roster_id).length > 0) {
-//                 placement = 5;
-//             } else if (foundPlayoffMatches.filter(game => game.r === 2 && game.l === roster.roster_id).length > 0) {
-//                 placement = 6;
-//             }
-//             return {
-//                 ...roster,
-//                 playoff_rank: placement
-//             };
-//         })
-
-//         return {
-//             rosters: playoffLabel
-//         };
-//     };
 // };

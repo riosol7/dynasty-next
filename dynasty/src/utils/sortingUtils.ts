@@ -97,5 +97,6 @@ export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, s
 };
 
 export const sortAllTimeRostersWithPlayoffs = (legacyLeague: Interfaces.League[]) => {
-
+    const test = sortAllTimeRosters(legacyLeague);
+    // const test2 = getAllTimeRosterStats(7, legacyLeague, "");
 };
