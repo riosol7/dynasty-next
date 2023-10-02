@@ -10,7 +10,7 @@ import {
     getAllTimeLeagueStats,
     getAllTimeRosterStats,
     getRosterPostSeasonStats,
-    getLeaguePostSeasonStats,
+    getPowerRankings,
     overallHighScoreRanking, 
     lineupEfficiency, 
     roundToHundredth,
@@ -19,6 +19,7 @@ import {
     findSeasonStats,
     findPlayerByID,
     getRivalryStats,
+    sortAllTimeRosters,
 } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
@@ -35,7 +36,8 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
-    const rID = foundRoster.roster_id;
+    const rID: number = foundRoster.roster_id;
+    const allTimeRankings = sortAllTimeRosters(legacyLeague).find(roster => roster.roster_id === rID)?.settings.rank;
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
@@ -49,7 +51,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const myHighestScoringPlayer = allTimeRosterStats.topPlayerScores[0];
     const rivalryStats = getRivalryStats(rID, legacyLeague);
     const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
-    getLeaguePostSeasonStats(legacyLeague, "2022")
+    const myPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const handleSelectVS = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectVS(event.target.value);
     };
@@ -91,7 +93,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {winPCT(postSeasonStats.wins, postSeasonStats.losses).toString().length === 2 ? ".00" : ""}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                <p className="w-2/12 flex justify-end">{}</p>
+                                <p className="w-2/12 flex justify-end">{postSeasonStats.playoff_rank}</p>
                             </div>
                         </div>
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -103,8 +105,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {winPCT(totalSeasonWins, totalSeasonLosses).toString().length === 2 ? ".00" : ""}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                {/* compare w/playoff records: standings + Get the playoff bracket and compare the wins and place */}
-                                <p className="w-2/12 flex justify-end">1st</p>
+                                <p className="w-2/12 flex justify-end">{foundRoster.settings.rank < 7 ? postSeasonStats.playoff_rank : foundRoster.settings.rank}</p>
                             </div>
                         </div>
                     </>
@@ -116,8 +117,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-5/12 flex items-center">{winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </p>
-                            {/* get PowerRankings */}
-                            <p className="w-2/12 flex justify-end">1st</p>
+                            <p className="w-2/12 flex justify-end">{myPowerRank}</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
@@ -128,8 +128,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 {winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses) || 0}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            {/* get allTimeStandings */}
-                            <p className="w-2/12 flex justify-end">1st</p>
+                            <p className="w-2/12 flex justify-end">{allTimeRankings}</p>
                         </div>
                     </div>
                     <div>

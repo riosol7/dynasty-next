@@ -1,4 +1,4 @@
-import { Draft, Match, Owner, Roster, Transaction } from ".";
+import { BracketMatch, Draft, Match, Owner, Roster, Transaction } from ".";
 
 export interface League {
   total_rosters: number;
@@ -132,22 +132,8 @@ export interface League {
   bracket_id: string | null;
   avatar: string;
   brackets: {
-    playoffs: {
-      w: number | null;
-      t2: number;
-      t1: number;
-      r: number;
-      m: number;
-      l: number | null;
-    }[];
-    toiletBowl: {
-      w: number | null;
-      t2: number;
-      t1: number;
-      r: number;
-      m: number;
-      l: number | null;
-    }[];
+    playoffs: BracketMatch[];
+    toiletBowl: BracketMatch[];
   };
   draft: Draft;
   matchups: Match[][]; // Update this type as per your data

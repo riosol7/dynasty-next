@@ -6,10 +6,20 @@ export interface BracketMatch {
     l: number | null;
     m: number;
     r: number;
+    p?: number | null;
     t1: number;
     t2: number;
+    t1_from?: {
+      w?: number | null;
+      l?: number | null;
+    } | null;
+    t2_from?: {
+      w?: number | null;
+      l?: number | null;
+    } | null;
     w: number | null;
-};
+  }
+  
   
 export interface Match {
     starters_points: number[];
@@ -23,14 +33,7 @@ export interface Match {
 };
 
 export interface PlayoffRuns {
-    bracket: {
-        w: number | null;
-        t2: number;
-        t1: number;
-        r: number;
-        m: number;
-        l: number | null;
-    }[];
+    bracket: BracketMatch[];
     season: string;
     games: Match[][];
 };
