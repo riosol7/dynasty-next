@@ -9,17 +9,25 @@ export interface DynastyValue {
     te: number;
 };
 
+interface RosterStats {
+    fpts: number;
+    fpts_against: number;
+    ppts: number;
+    wins: number;
+    losses: number;
+    win_rate: number;
+    ties?: number;
+}
+
 export interface Roster {
     taxi: string[];
     starters: string[];
     settings: {
-        all_time_wins: number;
-        all_time_ties: number;
-        all_time_losses: number;
-        all_time_win_rate: number;
-        all_time_fpts: number;
-        all_time_ppts: number;
-        all_time_fpts_against: number;
+        all_time : {
+            season: RosterStats;
+            total: RosterStats;
+            playoffs: RosterStats;
+        };
         all_play_wins: number;
         all_play_ties: number;
         all_play_losses: number;
@@ -38,6 +46,15 @@ export interface Roster {
         fpts: number;
         division: number;
         rank: number;
+        best: {
+            fpts: number;
+            pa: number;
+            ppts: number;
+            score: number;
+            wins: number;
+            losses: number;
+            season :string;
+        };
     };
     roster_id: number;
     reserve: string[] | null;

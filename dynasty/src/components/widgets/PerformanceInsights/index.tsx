@@ -19,7 +19,8 @@ import {
     findSeasonStats,
     findPlayerByID,
     getRivalryStats,
-    sortAllTimeRosters,
+    sortAllTimeRostersByType,
+    sortSeasonalRostersByType,
 } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
@@ -37,7 +38,13 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID: number = foundRoster.roster_id;
-    const allTimeRankings = sortAllTimeRosters(legacyLeague).find(roster => roster.roster_id === rID)?.settings.rank;
+    const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Lineup Efficiency");
+    const seasonalLineupEfficiencyRank = seasonalLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const myAllTimeBest = sortAllTimeRostersByType(legacyLeague, "Best")?.find(roster => roster.roster_id === rID);
+    const allTimeBestStats = myAllTimeBest?.settings.all_time.best;
+    const allTimeBestRankings = myAllTimeBest?.settings?.rank;
+    const allTimeRankings = sortAllTimeRostersByType(legacyLeague, "All Time")?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePlayoffsRankings = sortAllTimeRostersByType(legacyLeague, "All Time w/ Playoffs")?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
@@ -51,7 +58,8 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const myHighestScoringPlayer = allTimeRosterStats.topPlayerScores[0];
     const rivalryStats = getRivalryStats(rID, legacyLeague);
     const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
-    const myPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
+    const mySeasonalPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
+    const myAllTimePowerRank = getPowerRankings("All Time", legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const handleSelectVS = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectVS(event.target.value);
     };
@@ -117,7 +125,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-5/12 flex items-center">{winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">{myPowerRank}</p>
+                            <p className="w-2/12 flex justify-end">{mySeasonalPowerRank}</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
@@ -142,8 +150,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                {/* get allTimeStandings + all Playoffs wins / losses and rank among the rest */}
-                                <p className="w-2/12 flex justify-end">1st</p>
+                                <p className="w-2/12 flex justify-end">{allTimePlayoffsRankings}</p>
                             </div>
                         </div>
                         : <></>}
@@ -155,7 +162,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {allTimeRosterStats.best.winRate}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                <p className="w-2/12 flex justify-end">1st</p>
+                                <p className="w-2/12 flex justify-end">{allTimeBestRankings}</p>
                             </div>
                         </div>
                         <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
@@ -165,7 +172,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p className="w-5/12 flex items-center">{winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses)}   
                                     <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                                 </p>
-                                <p className="w-2/12 flex justify-end">1st</p>
+                                <p className="w-2/12 flex justify-end">{myAllTimePowerRank}</p>
                             </div>
                         </div>
                     </div>
@@ -176,7 +183,18 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-5/12 flex items-center">{lineupEfficiency(Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), Number(foundRoster.settings.ppts + "." + foundRoster.settings.ppts_decimal))}
                             <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">1st</p>
+                            <p className="w-2/12 flex justify-end">{seasonalLineupEfficiencyRank}</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                            <p>{lineupEfficiency(allTimeBestStats?.fpts!, allTimeBestStats?.ppts!)}</p>
+                                <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                            </p>
+                            <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
@@ -475,6 +493,14 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <RivalryRecord key={i} record={record}/>
                         )}
                     </div>
+
+
+                    <div>
+
+                    </div>
+
+
+
                 </div>
             </div>
         </div>

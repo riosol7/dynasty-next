@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
-import { findLeagueBySeason, sortAllTimeRosters } from "@/utils";
+import { findLeagueBySeason, sortAllTimeRostersByType } from "@/utils";
 import { StatKeys } from "@/types";
 import * as Interfaces from "@/interfaces";
 import StandingRow from "./StandingRow";
@@ -12,7 +12,7 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
 
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
     const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (Interfaces.sortingConfig));
-    const allTimeRosters = sortAllTimeRosters(legacyLeague);
+    const allTimeRosters = sortAllTimeRostersByType(legacyLeague, "All Time");
     const foundRostersBySeason = findLeagueBySeason(season, legacyLeague).rosters;
     const [overallStandings, setOverallStandings] = useState(Interfaces.sortingConfig);
     const [divisionStates, setDivisionStates] = useState(initialDivisionStates);
@@ -34,11 +34,13 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
 
     const getStatValue = (owner: Interfaces.Roster, statKey: StatKeys): number => {
         if (owner.settings && owner.settings[statKey] !== undefined) {
-            return owner.settings[statKey];
-        };
+            // Attempt to convert the value to a number, or default to 0 if not possible
+            const value = Number(owner.settings[statKey]);
+            return isNaN(value) ? 0 : value;
+        }
         return 0;
     };
-
+    
     const renderStandingRows = (rosters: Interfaces.Roster[], sortKey: StatKeys, ascending: boolean) => {
         return rosters?.slice().sort((a, b) => ascending ? 
             getStatValue(a, sortKey) - getStatValue(b, sortKey) : getStatValue(b, sortKey) - getStatValue(a, sortKey)
@@ -58,13 +60,13 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
             <div className="py-2">
                 <StandingTableHeader asc={overallStandings.asc} updateOverallStandings={updateOverallStandings} sort={overallStandings.sort}/>
                 {overallStandings.sort === "rank" ? (
-                    renderStandingRows(allTimeRosters, overallStandings.sort, overallStandings.asc)
+                    renderStandingRows(allTimeRosters!, overallStandings.sort, overallStandings.asc)
                 ) : overallStandings.sort === "fpts" ? (
-                    renderStandingRows(allTimeRosters, "fpts", overallStandings.asc)
+                    renderStandingRows(allTimeRosters!, "fpts", overallStandings.asc)
                 ) : overallStandings.sort === "ppts" ? (
-                    renderStandingRows(allTimeRosters, "ppts", overallStandings.asc)
+                    renderStandingRows(allTimeRosters!, "ppts", overallStandings.asc)
                 ) : overallStandings.sort === "fpts_against" ? (
-                    renderStandingRows(allTimeRosters, "fpts_against", overallStandings.asc)
+                    renderStandingRows(allTimeRosters!, "fpts_against", overallStandings.asc)
                 ) : (
                     <></>
                 )}

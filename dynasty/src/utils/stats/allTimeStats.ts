@@ -23,10 +23,17 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
     const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts + "." + item?.settings?.fpts_decimal), 0));
     const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.ppts + "." + item?.settings?.ppts_decimal), 0));
     const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts_against + "." + item?.settings?.fpts_against_decimal), 0));
-    const bestRoster = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
-    const bestSeasonStats = bestRoster?.settings;
+    const bestRosterByWins = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
+    const bestRosterByFPTS = legacyRosters?.sort((a: any, b: any) => Number(b.settings.fpts + "." + b.settings.fpts_decimal) - Number(a.settings.fpts + "." + a.settings.fpts_decimal))[0];
+    const bestRosterByPPTS = legacyRosters?.sort((a: any, b: any) => Number(b.settings.ppts + "." + b.settings.ppts_decimal) - Number(a.settings.ppts + "." + a.settings.ppts_decimal))[0];
+    const bestRosterByPA = legacyRosters?.sort((a: any, b: any) => Number(b.settings.pa + "." + b.settings.pa) - Number(a.settings.pa + "." + a.settings.pa))[0];
+
+    const bestSeasonByWinsStats = bestRosterByWins?.settings;
     const bestScore = legacyMatches?.map(match => match.sort((a, b) => b?.points - a?.points)[0]).sort((a,b) => b?.points - a?.points)[0]?.points;
-    const bestSeason = findLeagueByID(bestRoster?.league_id || "", legacyLeague)?.season;
+    const bestSeasonByWins = findLeagueByID(bestRosterByWins?.league_id || "", legacyLeague)?.season;
+    const bestSeasonByFPTS = findLeagueByID(bestRosterByFPTS?.league_id || "", legacyLeague)?.season;
+    const bestSeasonByPPTS = findLeagueByID(bestRosterByPPTS?.league_id || "", legacyLeague)?.season;
+    const bestSeasonByPA = findLeagueByID(bestRosterByPA?.league_id || "", legacyLeague)?.season;
 
     // Post Season
     const toiletBowls: number = legacyLeague.map(league => { 
@@ -146,10 +153,26 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
 
     return {    
         best: {
-            record: `${bestSeasonStats?.wins}-${bestSeasonStats?.losses}`,
+            wins: { 
+                score: bestSeasonByWinsStats?.wins,
+                season: bestSeasonByWins,
+            },
+            losses: bestSeasonByWinsStats?.losses,
+            fpts: { 
+                score: Number(bestRosterByFPTS?.settings.fpts + "." + bestRosterByFPTS?.settings.fpts_decimal),
+                season: bestSeasonByFPTS,
+            },
+            ppts: { 
+                score: Number(bestRosterByFPTS?.settings.ppts + "." + bestRosterByFPTS?.settings.ppts_decimal),
+                season: bestSeasonByPPTS,
+            },
+            pa: { 
+                score: Number(bestRosterByPA?.settings.fpts_against + "." + bestRosterByPA?.settings.fpts_against_decimal),
+                season: bestSeasonByPA,
+            },
+            record: `${bestSeasonByWinsStats?.wins}-${bestSeasonByWinsStats?.losses}`,
             score: bestScore,
-            season: bestSeason,
-            winRate: winPCT(bestSeasonStats?.wins || 0, bestSeasonStats?.losses || 0),
+            winRate: winPCT(bestSeasonByWinsStats?.wins || 0, bestSeasonByWinsStats?.losses || 0),
         },
         winRate: roundToHundredth(((allTimeRegularSeasonWins)/(allTimeRegularSeasonWins + allTimeRegularSeasonLosses))*100),
         wins: allTimeRegularSeasonWins,
@@ -194,7 +217,7 @@ export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
                 return extractedData;
             })
         ).flat();
-        return recordLabels.flat()
+        return recordLabels.flat();
     });
     const topPlayerScorerList: Interfaces.HighScoreRecord[] = unsortedList.flat().sort((a, b) => b.points - a.points).map((_, idx) => {return {..._, rank: idx + 1}});
     
@@ -215,6 +238,5 @@ export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
     return {
         playerHighScores: topPlayerScorerList,
         teamHighScores: teamHighScores,
-    }
-    
+    };
 };

@@ -68,6 +68,3 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
         playoff_rank: placement,
     };
 };
-
-// export const getLeaguePostSeasonStats = (legacyLeague: Interfaces.League[], season:string) => {
-// };
