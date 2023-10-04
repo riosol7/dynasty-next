@@ -19,6 +19,11 @@ interface RosterStats {
     ties?: number;
 }
 
+interface BestStats {
+    score: number;
+    season: string;
+}
+
 export interface Roster {
     taxi: string[];
     starters: string[];
@@ -47,13 +52,12 @@ export interface Roster {
         division: number;
         rank: number;
         best: {
-            fpts: number;
-            pa: number;
-            ppts: number;
+            fpts: BestStats;
+            pa: BestStats;
+            ppts: BestStats;
             score: number;
-            wins: number;
-            losses: number;
-            season :string;
+            wins: BestStats;
+            losses: BestStats;
         };
     };
     roster_id: number;

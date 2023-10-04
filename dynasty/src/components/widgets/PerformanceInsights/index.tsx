@@ -38,11 +38,15 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID: number = foundRoster.roster_id;
-    const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Lineup Efficiency");
+    const bestLineupEfficiency = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best Lineup Efficiency");
+    const bestLineupEfficiencyRank = bestLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Lineup Efficiency");
     const seasonalLineupEfficiencyRank = seasonalLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const myAllTimeBest = sortAllTimeRostersByType(legacyLeague, "Best")?.find(roster => roster.roster_id === rID);
-    const allTimeBestStats = myAllTimeBest?.settings.all_time.best;
+    const allTimeBestStats = myAllTimeBest?.settings.best;
     const allTimeBestRankings = myAllTimeBest?.settings?.rank;
+    const allTimeLineupEfficiency = sortAllTimeRostersByType(legacyLeague, "All Time Lineup Efficiency");
+    const allTimeLineupEfficiencyRankings = allTimeLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeRankings = sortAllTimeRostersByType(legacyLeague, "All Time")?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimePlayoffsRankings = sortAllTimeRostersByType(legacyLeague, "All Time w/ Playoffs")?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
@@ -191,10 +195,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12 flex items-center">
-                            <p>{lineupEfficiency(allTimeBestStats?.fpts!, allTimeBestStats?.ppts!)}</p>
+                                {lineupEfficiency(allTimeBestStats?.fpts.score!, allTimeBestStats?.ppts.score!)}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{bestLineupEfficiencyRank}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
@@ -205,7 +209,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p>{lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{allTimeLineupEfficiencyRankings}</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
@@ -216,6 +220,17 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p>{roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                0
+                                <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                            </p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -248,6 +263,16 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             </div>
                         </div>
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                            <p className="w-8/12">Best</p>
+                            <div className="w-4/12 flex items-center">
+                                <p className="w-5/12"></p>
+                                <p className="w-5/12 flex items-center">
+                                    0
+                                </p>
+                                <p className="w-2/12 flex justify-end">0</p>
+                            </div>
+                        </div>
+                        <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">All Time</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
@@ -332,6 +357,16 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                0
+                            </p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">All Time w/ Playoffs</p>
                         <div className="w-4/12 flex items-center">
@@ -362,6 +397,16 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">0</p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                0
+                            </p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -397,6 +442,16 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                0
+                            </p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">All Time w/ Playoffs</p>
                         <div className="w-4/12 flex items-center">
@@ -411,12 +466,20 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-2/12 flex justify-end"></p>
                         </div>
                         <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
+                            <p>Longest Win Streak w/ Season </p>
+                            <p style={{ color:"whitesmoke" }}></p>
+                        </div>
+                        <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
                             <p>Toilet Bowl</p>
                             <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.toiletBowls}</p>
                         </div>
                         <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
                             <p>Playoff Appearances</p>
                             <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.appearances}</p>
+                        </div>
+                        <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
+                            <p>Playoff Streak Appearances </p>
+                            <p style={{ color:"whitesmoke" }}></p>
                         </div>
                         <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
                             <p>Finals</p>

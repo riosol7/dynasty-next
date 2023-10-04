@@ -150,7 +150,6 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         });
         return myMatches;
     }).flat().sort((a, b) => b?.points! - a?.points!).map((record, i)=> { return {...record, rank: i + 1}});
-
     return {    
         best: {
             wins: { 
