@@ -1,6 +1,6 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
-import { getAllTimeRosterStats, lineupEfficiency, winPCT } from ".";
+import { findLeagueByID, getAllPlayStats, getAllTimeRosterStats, lineupEfficiency, roundToHundredth, winPCT } from ".";
 
 export const handleSort = (
     sort: string, 
@@ -225,13 +225,16 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                     rank: idx + 1,
                 },
                 }));
+
+        case "Luck Rate":
+            return [];
               
         default:
             return [];
     };
 };
 
-export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: string) => {
+export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: string, legacyLeague?: Interfaces.League[]) => {
     
     switch(type) {
         case "Seasonal Lineup Efficiency":
@@ -246,8 +249,38 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
             ).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
         
         case "Seasonal Luck Rate":
-        
+            const foundLeague = findLeagueByID(rosters[0].league_id, legacyLeague!)
+            const sortedSeasonalLuckRateRosters = rosters.map(roster => {
+                const allPlaySeasonStats = getAllPlayStats(roster.roster_id, foundLeague.season, legacyLeague!);
+                return {
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        all_play_wins: allPlaySeasonStats.wins,
+                        all_play_losses: allPlaySeasonStats.losses,
+                        all_play_win_rate: winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses),
+                    }
+                };
+            }).sort((a ,b) => roundToHundredth(winPCT(b.settings.wins, b.settings.losses)- b.settings.all_play_win_rate) - roundToHundredth(winPCT(a.settings.wins, a.settings.losses)- a.settings.all_play_win_rate))
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+            
+            return sortedSeasonalLuckRateRosters;
+
         case "Best Luck Rate":
-        
+            const sortedBestLuckRateRosters = rosters.map(roster => {
+                const allTimeRosterStats = getAllTimeRosterStats(roster.roster_id, legacyLeague!);
+                const allPlayBestSeasonStats = getAllPlayStats(roster.roster_id, allTimeRosterStats.best.wins.season, legacyLeague!); 
+                {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
+                return {
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        luckRate: roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses)),
+                    }
+                };
+            }).sort((a ,b) => b.settings.luckRate - a.settings.luckRate)
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));;
+            
+            return sortedBestLuckRateRosters;
     };
 };

@@ -38,6 +38,12 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID: number = foundRoster.roster_id;
+    const sortedByAllTimeLuckRate = 0;
+    const allTimeLuckRateRankings = 0;
+    const sortedByLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Luck Rate", legacyLeague);
+    const sortedByBestLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Best Luck Rate", legacyLeague);
+    const luckRateRankings = sortedByLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const bestLuckRateRankings = sortedByBestLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestLineupEfficiency = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best Lineup Efficiency");
     const bestLineupEfficiencyRank = bestLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Lineup Efficiency");
@@ -49,14 +55,17 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const allTimeLineupEfficiencyRankings = allTimeLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeRankings = sortAllTimeRostersByType(legacyLeague, "All Time")?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimePlayoffsRankings = sortAllTimeRostersByType(legacyLeague, "All Time w/ Playoffs")?.find(roster => roster.roster_id === rID)?.settings.rank;
-    const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
-    const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
     const allTimeRosterStats = getAllTimeRosterStats(rID, legacyLeague);
-    const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
-    const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const allTimeTotalWins: number = allTimeRosterStats.wins + allTimeRosterStats.playoffs.wins || 0;
     const allTimeTotalLosses: number = allTimeRosterStats.losses + allTimeRosterStats.playoffs.losses || 0;
+    
+    const allPlayBestSeasonStats = getAllPlayStats(rID, allTimeRosterStats.best.wins.season, legacyLeague); 
+    const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
+    const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
+    
+    const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
+    const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const totalSeasonWins: number = foundRoster.settings.wins + postSeasonStats.wins || 0;
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
     const myHighestScoringPlayer = allTimeRosterStats.topPlayerScores[0];
@@ -220,7 +229,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p>{roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{luckRateRankings}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -228,10 +237,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12 flex items-center">
-                                0
+                                {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{bestLuckRateRankings}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
@@ -242,7 +251,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p>{roundToHundredth(winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{allTimeLuckRateRankings}</p>
                         </div>
                     </div>
                     <div className={`pt-5 ${styles.performanceHeader}`}> 

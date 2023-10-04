@@ -8,13 +8,12 @@ export const overallHighScoreRanking = (pts: number, list: Interfaces.HighScoreR
 };
 
 export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.League[]) => {
-
     const legacyRosters = legacyLeague.map(league => league.rosters.find(roster => roster.roster_id === rID));
  
     const legacyMatches: Interfaces.Match[][] = legacyLeague.map(league => league.matchups
         .map(matches => matches.find(team => team.roster_id === rID))
-        .filter(match => match !== undefined && match.matchup_id !== null) // Filter out undefined values
-        .map(match => match as Interfaces.Match) // Type assertion to Match
+        .filter(match => match !== undefined && match.matchup_id !== null)
+        .map(match => match as Interfaces.Match)
     );
     
     const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.wins, 0);
@@ -198,7 +197,6 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
 };
 
 export const getAllTimeLeagueStats = (legacyLeague: Interfaces.League[]) => {
-
     // Top Scoring Players     
     const unsortedList = legacyLeague.slice().map((league) => {
         const recordLabels = league.matchups.map((match) => match.filter(matchup => matchup.matchup_id !== null)).filter(matchups => matchups.length > 0).map((matchups, idx) =>
