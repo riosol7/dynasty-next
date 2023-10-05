@@ -1,6 +1,6 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
-import { findLeagueByID, getAllPlayStats, getAllTimeRosterStats, lineupEfficiency, roundToHundredth, winPCT } from ".";
+import { findLeagueByID, getAllPlayStats, getAllTimeRosterStats, lineupEfficiency, roundToHundredth, totalPtsPerGame, winPCT } from ".";
 
 export const handleSort = (
     sort: string, 
@@ -71,8 +71,11 @@ export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, s
 export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type: string): Interfaces.Roster[] => {
     const currentLeague = legacyLeague[0];
     const updatedRosters: Interfaces.Roster[] = currentLeague.rosters.map((roster) => {
+        const rID = roster.roster_id;
+        const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
+
         const foundOwner = currentLeague.users.find((user) => user.user_id === roster.owner_id);
-        const allTimeStats = getAllTimeRosterStats(roster.roster_id, legacyLeague);
+        const allTimeStats = getAllTimeRosterStats(rID, legacyLeague);
         return {
             ...roster,
             owner: foundOwner as Interfaces.Owner,
@@ -106,6 +109,7 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                         win_rate: winPCT(allTimeStats.playoffs.wins, allTimeStats.playoffs.losses),
                     },
                 },
+                all_play_win_rate: -winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses),
                 best: {
                     wins: {
                         score: allTimeStats.best.wins?.score ?? 0,
@@ -204,9 +208,7 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
             }));  
       
         case "Best":
-            return (updatedRosters ?? [])
-                .slice()
-                .sort((a, b) => {
+            return (updatedRosters ?? []).slice().sort((a, b) => {
                 const winsA = (a.settings.best?.wins.score ?? 0) as number;
                 const winsB = (b.settings.best?.wins.score ?? 0) as number;
                 const fptsA = (a.settings.best?.fpts.score ?? 0) as number;
@@ -216,18 +218,47 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                     return fptsB - fptsA;
                 } else {
                     return winsB - winsA;
-                }
-                })
-                .map((roster, idx) => ({
+                };
+                }).map((roster, idx) => ({
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        rank: idx + 1,
+                    },
+                }));
+
+        case "Best Total Pts Per Game":
+            return  (updatedRosters ?? []).slice().sort((a, b) => 
+            totalPtsPerGame(b.roster_id, b.settings.best.fpts.score, legacyLeague, undefined, true)! - totalPtsPerGame(a.roster_id, a.settings.best.fpts.score, legacyLeague, undefined, true)!
+            ).map((roster, idx) => ({
                 ...roster,
                 settings: {
                     ...roster.settings,
                     rank: idx + 1,
                 },
-                }));
+            }));
+
+        case "All Time Total Pts Per Game":
+            return (updatedRosters ?? []).slice().sort((a, b) => 
+            totalPtsPerGame(b.roster_id, b.settings.all_time.season.fpts, legacyLeague, undefined, true)! - totalPtsPerGame(a.roster_id, a.settings.all_time.season.fpts, legacyLeague, undefined, true)!
+            ).map((roster, idx) => ({
+                ...roster,
+                settings: {
+                    ...roster.settings,
+                    rank: idx + 1,
+                },
+            }));
 
         case "Luck Rate":
-            return [];
+            return (updatedRosters ?? []).slice().sort((a ,b) => 
+                (b.settings.all_time.season.win_rate - b.settings.all_play_win_rate) - (a.settings.all_time.season.win_rate - a.settings.all_play_win_rate))
+                .map((roster, idx) => ({
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        rank: idx + 1,
+                    },
+                }));
               
         default:
             return [];
@@ -249,7 +280,7 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
             ).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
         
         case "Seasonal Luck Rate":
-            const foundLeague = findLeagueByID(rosters[0].league_id, legacyLeague!)
+            const foundLeague = findLeagueByID(rosters[0]?.league_id, legacyLeague!)
             const sortedSeasonalLuckRateRosters = rosters.map(roster => {
                 const allPlaySeasonStats = getAllPlayStats(roster.roster_id, foundLeague.season, legacyLeague!);
                 return {
@@ -279,8 +310,24 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
                     }
                 };
             }).sort((a ,b) => b.settings.luckRate - a.settings.luckRate)
-            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));;
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
             
             return sortedBestLuckRateRosters;
+    
+        case "Total Pts Per Game":
+            const sortedTotalPtsPerGame = rosters.map(roster => {
+                const foundLeague = findLeagueByID(roster?.league_id, legacyLeague!);
+                const seasonFPTS: number = Number(roster.settings.fpts + "." + roster.settings.fpts_decimal);
+                return {
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        totalPtsPerGame: totalPtsPerGame(roster.roster_id, seasonFPTS, legacyLeague!, foundLeague.season) || 0, 
+                    }
+                };
+            }).sort((a ,b) => b.settings.totalPtsPerGame - a.settings.totalPtsPerGame)
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+            return sortedTotalPtsPerGame;
+        
     };
 };

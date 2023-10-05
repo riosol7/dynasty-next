@@ -27,7 +27,7 @@ import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context"
 import * as Interfaces from "@/interfaces";
 import RivalryRecord from "./RivalryRecord";
 import HighScoreRecord from "./HighScoreRecord";
-
+// 35 TODOs Perforamance insights for sorting rankings; then add rosters
 export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
@@ -36,12 +36,17 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const [ selectVS, setSelectVS ] = useState<string>("Rivalry");
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
-    const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
+    const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
     const rID: number = foundRoster.roster_id;
-    const sortedByAllTimeLuckRate = 0;
-    const allTimeLuckRateRankings = 0;
+    const sortedByAllTimeLuckRate = sortAllTimeRostersByType(legacyLeague, "Luck Rate");
+    const allTimeLuckRateRankings = sortedByAllTimeLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const sortedByLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Luck Rate", legacyLeague);
     const sortedByBestLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Best Luck Rate", legacyLeague);
+    const sortedByTotalPtsPerGame = sortSeasonalRostersByType(foundLeague.rosters, "Total Pts Per Game", legacyLeague);
+    const sortedByBestTotalPtsPerGame = sortAllTimeRostersByType(legacyLeague, "Best Total Pts Per Game")!;
+    const sortedByAllTimeTotalPtsPerGame = sortAllTimeRostersByType(legacyLeague, "All Time Total Pts Per Game")!;
+    const bestTotalPtsPerGameRankings = sortedByBestTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const totalPtsPerGameRankings = sortedByTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
     const luckRateRankings = sortedByLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestLuckRateRankings = sortedByBestLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestLineupEfficiency = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best Lineup Efficiency");
@@ -49,6 +54,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Lineup Efficiency");
     const seasonalLineupEfficiencyRank = seasonalLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const myAllTimeBest = sortAllTimeRostersByType(legacyLeague, "Best")?.find(roster => roster.roster_id === rID);
+    const allTimeTotalPtsPerGameRankings = sortedByAllTimeTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeBestStats = myAllTimeBest?.settings.best;
     const allTimeBestRankings = myAllTimeBest?.settings?.rank;
     const allTimeLineupEfficiency = sortAllTimeRostersByType(legacyLeague, "All Time Lineup Efficiency");
@@ -268,17 +274,15 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
                                 <p className="w-5/12">{totalPtsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
-                                <p className="w-2/12 flex justify-end">0</p>
+                                <p className="w-2/12 flex justify-end">{totalPtsPerGameRankings}</p>
                             </div>
                         </div>
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">Best</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
-                                <p className="w-5/12 flex items-center">
-                                    0
-                                </p>
-                                <p className="w-2/12 flex justify-end">0</p>
+                                <p className="w-5/12 flex items-center">{totalPtsPerGame(rID, allTimeBestStats?.fpts.score!, legacyLeague, allTimeBestStats?.fpts.season)}</p>
+                                <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRankings}</p>
                             </div>
                         </div>
                         <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
@@ -286,7 +290,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
                                 <p className="w-5/12">{totalPtsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
-                                <p className="w-2/12 flex justify-end">0</p>
+                                <p className="w-2/12 flex justify-end">{allTimeTotalPtsPerGameRankings}</p>
                             </div>
                         </div>
                         {postSeasonStats.appearance ?
@@ -327,7 +331,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                     </div>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Playoffs</p>
+                        <p className="w-8/12">{foundLeague.season} Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{postSeasonStats.highestScore}</p>
@@ -335,7 +339,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                     </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time w/ Playoffs</p>
+                        <p className="w-8/12">All Time Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{allTimeRosterStats.playoffs.highestScore}</p>

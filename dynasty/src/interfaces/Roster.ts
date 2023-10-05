@@ -41,6 +41,7 @@ export interface Roster {
         waiver_position: number;
         waiver_budget_used: number;
         total_moves: number;
+        totalPtsPerGame: number
         ties: number;
         ppts_decimal: number;
         ppts: number;

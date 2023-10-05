@@ -55,6 +55,7 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
     
     };
 
+    console.log(playoffHighestScore)
     return { 
         roster_id: rID,
         appearance: playoffAppearance,
