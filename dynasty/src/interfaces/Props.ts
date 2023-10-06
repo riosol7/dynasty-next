@@ -123,4 +123,6 @@ export interface HighScoreRecord {
 export interface HighScoreRecordProps {
     record: HighScoreRecord;
     type?: string;
+    index: number;
+    max: number;
 };

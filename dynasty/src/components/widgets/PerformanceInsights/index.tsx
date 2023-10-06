@@ -32,8 +32,9 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const { selectSeason } = useSeasonContext();
-    const [ showTopScoringPlayers, setShowTopScoringPlayers ] = useState<Boolean>(false);
     const [ selectVS, setSelectVS ] = useState<string>("Rivalry");
+    const [ showWeeklyHighScores, setShowWeeklyHighScores ] = useState<Boolean>(false);
+    const [ showPlayerHighScores, setShowPlayerHighScores ] = useState<Boolean>(false);
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
@@ -367,22 +368,66 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">{highestPostSeasonScoreRanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12 flex items-center"><Icon icon="mingcute:down-fill" style={{fontSize: "1.3em"}}/> All Time Highest Score(s)</p>
+                <div className={`${styles.fontHover} ${showWeeklyHighScores ? styles.performanceTitleRow : styles.performanceSubTitleRow}`}>
+                    <p className={`w-8/12 flex items-center`} onClick={() => setShowWeeklyHighScores(!showWeeklyHighScores)}>
+                        <Icon icon={showWeeklyHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
+                        <span>{showWeeklyHighScores ? "All Time Weekly High Scores": "All Time Weekly High Score"}</span>
+                    </p>
                     <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.best.score}</p>
-                        <p className="w-2/12 flex justify-end">{allTimeHighestScoreRanking}</p>
+                        <div className="w-5/12">
+                        {showWeeklyHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
+                        : 
+                            <p>Week {allTimeRosterStats.topTeamScore[0].week}, {allTimeRosterStats.topTeamScore[0].season}</p>
+                        }</div>                        <div className="w-5/12">
+                        {showWeeklyHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
+                        : 
+                            <p>{allTimeRosterStats.best.score}</p>
+                        }</div>
+                        <div className="w-2/12 flex justify-end">
+                        {showWeeklyHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
+                        : 
+                            <p>{allTimeHighestScoreRanking}</p>
+                        }</div>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12 flex items-center"><Icon icon="mingcute:down-fill" style={{fontSize: "1.3em"}}/> All Time Highest Playoff Score(s)</p>
+                {showWeeklyHighScores ?
+                    allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
+                        <HighScoreRecord key={i} record={record} type="team" index={i} max={10}/>
+                    )) : <></>
+                }
+                <div className={`${styles.fontHover} ${showPlayerHighScores ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
+                    <p className={`w-8/12 flex items-center`} onClick={() => setShowPlayerHighScores(!showPlayerHighScores)}>
+                        <Icon icon={showPlayerHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
+                        <span>{showPlayerHighScores ? "All Time Player High Scores": "All Time Player High Score"}</span>
+                    </p>
                     <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.playoffs.highestScore}</p>
-                        <p className="w-2/12 flex justify-end">{allTimeHighestPlayoffScoreRanking}</p>
+                        <div className="w-5/12">
+                        {showPlayerHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
+                        : 
+                            <p>Week {myHighestScoringPlayer?.week}, {myHighestScoringPlayer?.season}</p>
+                        }</div>
+                        <div className="w-5/12">
+                        {showPlayerHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
+                        : 
+                            <p>{myHighestScoringPlayer?.points}</p>
+                        }</div>
+                        <div className="w-2/12 flex justify-end">
+                        {showPlayerHighScores ?
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
+                        : 
+                            <p>{overallHighScoreRanking(myHighestScoringPlayer?.points!, allTimeLeagueStats?.playerHighScores!)?.rank}</p>
+                        }</div>
                     </div>
                 </div>
+                {showPlayerHighScores ?
+                    allTimeRosterStats.topPlayerScores.slice(1,11).map((record: Interfaces.HighScoreRecord, i) => 
+                        <HighScoreRecord key={i} record={record} type="player" index={i} max={10}/>)
+                :<></>}
                 <div className={styles.performanceTitleRow}>
                     <p className="w-8/12">{foundLeague.season} PF</p>
                     <div className="w-4/12 flex items-center">
@@ -534,58 +579,12 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                 </div>
                 <div className="py-5">
-                    <div className={`${styles.performanceHeader}`}> 
-                        <p className="w-8/12">Highest Team Score</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-4/12">Week</p>
-                            <p className="w-4/12">Season</p>
-                            <p className="w-4/12 flex justify-end">Overall Rank</p>
-                        </div>
-                    </div>
-                    {allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
-                        <HighScoreRecord key={i} record={record} type="team"/>
-                    ))}
-                </div>
-                <div className="py-5">
-                    <div className={`${styles.performanceHeader}`}> 
-                        <p className="w-8/12">Highest Scoring Player(s)</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-3/12">Week</p>
-                            <p className="w-3/12">Season</p>
-                            <p className="w-3/12">Points</p>
-                            <p className="w-3/12 flex justify-end">Overall Rank</p>
-                        </div>
-                    </div>
-                    <div className={styles.performanceRow} style={{ paddingTop: ".8em"}}>
-                        <div className="w-8/12 flex items-center">
-                            <Icon onClick={() => setShowTopScoringPlayers(!showTopScoringPlayers)} 
-                            style={{fontSize:"21.5px", width:"25px", color: "lightgray"}} 
-                            icon={!showTopScoringPlayers ? "mingcute:square-arrow-down-line" : "mingcute:square-arrow-up-line"}
-                            />
-                            <Image className={styles.playerImage} src={`${PLAYER_BASE_URL}${myHighestScoringPlayer?.starter}.jpg`} alt="player" width={60} height={60}/>
-                            <div>
-                                <p className="font-bold">{foundPlayer?.first_name} {foundPlayer.last_name}</p>
-                                <p className="font-light text-xs">{foundPlayer.position}</p>
-                            </div>
-                        </div>
-                        <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">
-                            <p className="w-3/12">{myHighestScoringPlayer?.week}</p>
-                            <p className="w-3/12">{myHighestScoringPlayer?.season}</p>
-                            <p className="w-3/12">{myHighestScoringPlayer?.points}</p>
-                            <p className="w-3/12 flex justify-end">{overallHighScoreRanking(myHighestScoringPlayer?.points!, allTimeLeagueStats?.playerHighScores!)?.rank}</p>
-                        </div>
-                    </div>
-                    {showTopScoringPlayers ?
-                    allTimeRosterStats.topPlayerScores.slice(1,11).map((record: Interfaces.HighScoreRecord, i) => 
-                        <HighScoreRecord key={i} record={record} type="player"/>)
-                    :<></>}
-                </div>
-                <div className="py-5">
                     <div className={`pb-2 ${styles.performanceHeader}`}> 
                         <p className="w-8/12">Most Wins / Losses Against
                             (<select className={styles.selectVS} onChange={handleSelectVS} value={selectVS}>
-                                <option value={"Rivalry"}>Rivalry</option>
-                                <option value={"All Play"}>All Play</option>
+                                <option value={"Rivalry"}>Head to Head</option>
+                                <option value={"All Play All Time"}>All Play All Time</option>
+                                <option value={`All Play ${legacyLeague[0].season}`}>All Play {legacyLeague[0].season}</option>
                             </select>)
                         </p>
                         <div className="w-4/12 flex items-center">
@@ -599,8 +598,11 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         rivalryStats.records.map(((record, i) => 
                             <RivalryRecord key={i} record={record}/>
                         ))
-                    : allPlayAllTimeStats.opponents.map((record, i) =>
-                            <RivalryRecord key={i} record={record}/>
+                    : selectVS === "All Play All Time" ? 
+                        allPlayAllTimeStats.opponents.map((record, i) =>
+                            <RivalryRecord key={i} record={record}/> 
+                    ): allPlaySeasonStats.opponents.map((record, i) =>
+                        <RivalryRecord key={i} record={record}/>
                     )}
                 </div>
 

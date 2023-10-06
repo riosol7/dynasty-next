@@ -5,7 +5,7 @@ import { PLAYER_BASE_URL } from "@/constants";
 import { findPlayerByID, getAllTimeLeagueStats, overallHighScoreRanking } from "@/utils";
 import { useLeagueContext, usePlayerContext } from "@/context";
 
-export default function HighScoreRecord({ record, type }: Interfaces.HighScoreRecordProps) {
+export default function HighScoreRecord({ record, type, index, max }: Interfaces.HighScoreRecordProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
@@ -15,15 +15,14 @@ export default function HighScoreRecord({ record, type }: Interfaces.HighScoreRe
 
     return (
         type === "team" ? 
-        <div className={`${styles.performanceRow}`} style={{ paddingBlock:"1em" }}>
+        <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`} style={{ paddingBlock:"1em" }}>
             <div className="w-8/12 flex items-center">
-                <p className="font-bold" style={{ width: "25px" }}>{record.rank}</p>
-                <p>{record.points}</p>
+                <p className="" style={{ width: "30px" }}>{record.rank}</p>
             </div>
             <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">
-                <p className="w-4/12">{record.week}</p>
-                <p className="w-4/12">{record.season}</p>
-                <p className="w-4/12 text-end">{overallHighScoreRanking(record.points, overallLeagueHighScoreList)?.rank}</p>
+                <p className="w-5/12">Week {record.week}, {record.season}</p>
+                <p className="w-5/12">{record.points}</p>
+                <p className="w-2/12 text-end">{overallHighScoreRanking(record.points, overallLeagueHighScoreList)?.rank}</p>
             </div>
         </div>
         : 
@@ -32,17 +31,16 @@ export default function HighScoreRecord({ record, type }: Interfaces.HighScoreRe
                 <p className="font-bold" style={{width: "25px"}}>{record.rank}</p>
                 <Image className={styles.playerImage} src={`${PLAYER_BASE_URL}${record.starter}.jpg`} alt="player" width={60} height={60}/>
                 <div>
-                    <p className="font-bold">
+                    <p className="">
                         {foundPlayer.first_name} {foundPlayer.last_name}
                     </p>
                     <p className="font-light text-xs">{foundPlayer.position}</p>
                 </div>
             </div>
             <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">
-                <p className="w-3/12">{record.week}</p>
-                <p className="w-3/12">{record.season}</p>
-                <p className="w-3/12">{record.points}</p>
-                <p className="w-3/12 flex justify-end">{overallHighScoreRanking(record?.points!, overallPlayerHighScoreList)?.rank}</p>
+                <p className="w-5/12">Week {record.week}, {record.season}</p>
+                <p className="w-5/12">{record.points}</p>
+                <p className="w-2/12 flex justify-end">{overallHighScoreRanking(record?.points!, overallPlayerHighScoreList)?.rank}</p>
             </div>
         </div>
     );
