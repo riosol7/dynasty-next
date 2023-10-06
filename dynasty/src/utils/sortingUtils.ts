@@ -314,6 +314,17 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                     rank: idx + 1,
                 },
             }));
+
+        case "All Time MAX PF":
+            return (updatedRosters ?? []).slice().sort((a, b) => 
+                b.settings.all_time.season.ppts - a.settings.all_time.season.ppts
+            ).map((roster, idx) => ({
+                ...roster,
+                settings: {
+                    ...roster.settings,
+                    rank: idx + 1,
+                },
+            }));
               
         default:
             return [];
@@ -400,9 +411,9 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
             return sortedTotalPlayoffPtsPerGame;
 
         case "Best PF":
-            const sortedRostersByPF = rosters.sort((a ,b) => b?.settings?.best?.fpts?.score! - a.settings.best?.fpts?.score!)
+            const sortedRostersByBestPF = rosters.sort((a ,b) => b?.settings?.best?.fpts?.score! - a.settings.best?.fpts?.score!)
             .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
-            return sortedRostersByPF;
+            return sortedRostersByBestPF;
 
         case "Seasonal Highest Score":
             const sortedRostersByHighestScore = rosters.slice().map(roster => {
@@ -435,7 +446,7 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
             }).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
             return sortedRostersByPostSeasonHighestScore;
 
-        case "PF":
+        case "Seasonal PF":
             return rosters.slice().sort((a, b) => {
                 return Number(b.settings.fpts + "." + b.settings.fpts_decimal) - Number(a.settings.fpts + "." + a.settings.fpts_decimal)
             }).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
@@ -453,6 +464,16 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
                 }
             }).sort((a, b) => b.settings.playoff_fpts - a.settings.playoff_fpts
             ).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+
+        case "Seasonal MAX PF":
+            return rosters.slice().sort((a, b) => {
+                return Number(b.settings.ppts + "." + b.settings.ppts_decimal) - Number(a.settings.ppts + "." + a.settings.ppts_decimal)
+            }).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+
+        case "Best PF":
+            const sortedRostersByBestMAXPF = rosters.sort((a ,b) => b?.settings?.best?.ppts?.score! - a.settings.best?.ppts?.score!)
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+            return sortedRostersByBestMAXPF;
 
         default: 
             return rosters;
