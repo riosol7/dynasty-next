@@ -29,13 +29,16 @@ export const getPlayerTotalPts = (legacyLeague: Interfaces.League[], rID: number
     };
 };
 
-export const totalPtsPerGame = (rID: number, pts: number, legacyLeague: Interfaces.League[], season?: string, allTime?: boolean) => {
+export const totalPtsPerGame = (rID: number, pts: number, legacyLeague: Interfaces.League[], season?: string, allTime?: boolean, playoffs?: boolean) => {
     const foundSeason = legacyLeague.find(league => league.season === season);
     const roster = findRosterByRosterID(rID, foundSeason?.rosters!);
     const allTimeStats = getAllTimeRosterStats(rID, legacyLeague);
 
     if (season === legacyLeague[0].season && roster && foundSeason) {
         return roundToHundredth(Number(pts/(roster.settings.losses + roster.settings.wins + roster.settings.ties)));
+    } else if (playoffs) {
+        const playoffMatches: number = foundSeason?.brackets.playoffs.filter(game => game.t1 === rID || game.t2 === rID).length || 0;
+        return roundToHundredth(pts/playoffMatches)
     } else if (allTime && allTimeStats) {
         return roundToHundredth(Number(pts/(allTimeStats.wins + allTimeStats.losses)));
     } else if(Number(season) <= 2020) {

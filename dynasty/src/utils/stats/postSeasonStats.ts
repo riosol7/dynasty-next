@@ -7,12 +7,13 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
     let playoffBracket: Interfaces.BracketMatch[] = [];
     let playoffAppearance: boolean = false;
     let playoffFPTS: number = 0;
+    let playoffPPTS: number = 0;
     let playoffPA: number = 0;
     let playoffHighestScore: number = 0;
     let playoffWins: number = 0;
     let playoffLosses: number = 0;
     
-    const foundSeasonLeague = legacyLeague.find(league => league.season === season);        
+    const foundSeasonLeague = legacyLeague?.find(league => league.season === season) || Constants.initLegacyLeague[0];        
     playoffBracket = foundSeasonLeague?.brackets?.playoffs.filter(match => match.t2 === rID || match.t1 === rID) as Interfaces.BracketMatch[];
     let placement: number = 0;
     if (playoffBracket?.filter(game => game.r === 3 && game.p === 1 && game.w === rID).length > 0) {
@@ -43,6 +44,7 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
     if (playoffBracket?.length === 0) {
         playoffHighestScore = 0;
         playoffFPTS = 0;
+        playoffPPTS = 0;
         playoffPA = 0;
     
     } else if (Array.isArray(userScores) && userScores.length > 0) {
@@ -55,12 +57,12 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
     
     };
 
-    console.log(playoffHighestScore)
     return { 
         roster_id: rID,
         appearance: playoffAppearance,
         bracket: playoffBracket,
         fpts: playoffFPTS,
+        ppts: playoffPPTS,
         pa: playoffPA,
         highestScore: playoffHighestScore,
         losses: playoffLosses,

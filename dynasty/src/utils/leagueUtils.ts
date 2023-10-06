@@ -2,7 +2,7 @@ import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 
 export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
-    const foundLeague = legacyLeague.find(league => league.league_id === leagueID);
+    const foundLeague = legacyLeague?.find(league => league.league_id === leagueID) || Constants.initLegacyLeague[0];
     
     if (!foundLeague) {
         return Constants.initLegacyLeague[0];
@@ -12,7 +12,7 @@ export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League
 };
 
 export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
-    const foundLeague = legacyLeague.find(league => league.season === season);
+    const foundLeague = legacyLeague?.find(league => league.season === season) || Constants.initLegacyLeague[0];
 
     if (!foundLeague) {
         return Constants.initLegacyLeague[0];

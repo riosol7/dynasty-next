@@ -17,6 +17,16 @@ interface RosterStats {
     losses: number;
     win_rate: number;
     ties?: number;
+    score?: number;
+}
+
+export interface BestOverview {
+    fpts?: BestStats;
+    pa?: BestStats;
+    ppts?: BestStats;
+    score?: number;
+    wins?: BestStats;
+    losses?: BestStats;
 }
 
 interface BestStats {
@@ -52,14 +62,7 @@ export interface Roster {
         fpts: number;
         division: number;
         rank: number;
-        best: {
-            fpts: BestStats;
-            pa: BestStats;
-            ppts: BestStats;
-            score: number;
-            wins: BestStats;
-            losses: BestStats;
-        };
+        best?: BestOverview;
     };
     roster_id: number;
     reserve: string[] | null;

@@ -38,39 +38,68 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
     const rID: number = foundRoster.roster_id;
-    const sortedByAllTimeLuckRate = sortAllTimeRostersByType(legacyLeague, "Luck Rate");
-    const allTimeLuckRateRankings = sortedByAllTimeLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
+
+    const sortedByAllTimeLuckRate = sortAllTimeRostersByType(legacyLeague, "Luck Rate");    
     const sortedByLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Luck Rate", legacyLeague);
     const sortedByBestLuckRate = sortSeasonalRostersByType(foundLeague.rosters, "Best Luck Rate", legacyLeague);
     const sortedByTotalPtsPerGame = sortSeasonalRostersByType(foundLeague.rosters, "Total Pts Per Game", legacyLeague);
     const sortedByBestTotalPtsPerGame = sortAllTimeRostersByType(legacyLeague, "Best Total Pts Per Game")!;
     const sortedByAllTimeTotalPtsPerGame = sortAllTimeRostersByType(legacyLeague, "All Time Total Pts Per Game")!;
-    const bestTotalPtsPerGameRankings = sortedByBestTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
-    const totalPtsPerGameRankings = sortedByTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
-    const luckRateRankings = sortedByLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
-    const bestLuckRateRankings = sortedByBestLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const sortedPostSeasonStats = sortSeasonalRostersByType(foundLeague.rosters, "Total Playoff Pts Per Game", legacyLeague);
+    const sortedBestPFStats = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best PF", legacyLeague);
+    const sortedBySeasonalHighestScore = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Highest Score", legacyLeague);
+    const sortedAllTimeTotalPlayoffPtsPerGame = sortAllTimeRostersByType(legacyLeague, "All Time Total Playoff Pts Per Game");
+    const sortedPostSeasonHighestScore = sortSeasonalRostersByType(foundLeague.rosters, "Post Season Highest Score");
+    const sortedAllTimeHighestScore = sortAllTimeRostersByType(legacyLeague, "All Time Highest Score");
+    const sortedAllTimeHighestPlayoffScore = sortAllTimeRostersByType(legacyLeague, "All Time Highest Playoff Score");
+    const sortedBySeasonalPF = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal PF", legacyLeague);
+    const sortedByPlayoffPF = sortSeasonalRostersByType(foundLeague.rosters, "Playoff PF", legacyLeague);
+    const sortedByAllTimePF = sortAllTimeRostersByType(legacyLeague, "All Time PF");
+    const sortedByAllTimePlayoffPF = sortAllTimeRostersByType(legacyLeague, "All Time Playoff PF");
+
+    const highestPostSeasonScoreRanking = sortedPostSeasonHighestScore?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const totalPlayoffPtsPerGameRanking = sortedPostSeasonStats?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const totalPtsPerGameRanking = sortedByTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const luckRateRanking = sortedByLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
+
+    const myBest: Interfaces.BestOverview = sortedBestPFStats?.find(roster => roster.roster_id === rID)?.settings.best!;
+    const myBestPF = myBest?.fpts?.score;
+    const bestPFRanking = sortedBestPFStats?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const bestLuckRateRanking = sortedByBestLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestLineupEfficiency = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best Lineup Efficiency");
     const bestLineupEfficiencyRank = bestLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const bestTotalPtsPerGameRanking = sortedByBestTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
+
+    const seasonalPFRanking = sortedBySeasonalPF?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Lineup Efficiency");
     const seasonalLineupEfficiencyRank = seasonalLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const seasonalHighestScoreRankings = sortedBySeasonalHighestScore?.find(roster => roster.roster_id === rID)?.settings.rank;
+
     const myAllTimeBest = sortAllTimeRostersByType(legacyLeague, "Best")?.find(roster => roster.roster_id === rID);
-    const allTimeTotalPtsPerGameRankings = sortedByAllTimeTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimeLuckRateRankings = sortedByAllTimeLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimeTotalPtsPerGameRanking = sortedByAllTimeTotalPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeBestStats = myAllTimeBest?.settings.best;
     const allTimeBestRankings = myAllTimeBest?.settings?.rank;
     const allTimeLineupEfficiency = sortAllTimeRostersByType(legacyLeague, "All Time Lineup Efficiency");
-    const allTimeLineupEfficiencyRankings = allTimeLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimeLineupEfficiencyRanking = allTimeLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeRankings = sortAllTimeRostersByType(legacyLeague, "All Time")?.find(roster => roster.roster_id === rID)?.settings.rank;
-    const allTimePlayoffsRankings = sortAllTimeRostersByType(legacyLeague, "All Time w/ Playoffs")?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePlayoffsRanking = sortAllTimeRostersByType(legacyLeague, "All Time w/ Playoffs")?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeLeagueStats = getAllTimeLeagueStats(legacyLeague);
     const allTimeRosterStats = getAllTimeRosterStats(rID, legacyLeague);
     const allTimeTotalWins: number = allTimeRosterStats.wins + allTimeRosterStats.playoffs.wins || 0;
     const allTimeTotalLosses: number = allTimeRosterStats.losses + allTimeRosterStats.playoffs.losses || 0;
+    const allTimeTotalPlayoffPtsPerGameRanking = sortedAllTimeTotalPlayoffPtsPerGame?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimeHighestScoreRanking = sortedAllTimeHighestScore?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimeHighestPlayoffScoreRanking = sortedAllTimeHighestPlayoffScore?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePFRanking = sortedByAllTimePF?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePlayoffPFRanking = sortedByAllTimePlayoffPF?.find(roster => roster.roster_id === rID)?.settings.rank;
     
     const allPlayBestSeasonStats = getAllPlayStats(rID, allTimeRosterStats.best.wins.season, legacyLeague); 
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
-    
+
     const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
+    const postSeasonPFRanking = sortedByPlayoffPF?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const totalSeasonWins: number = foundRoster.settings.wins + postSeasonStats.wins || 0;
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
@@ -169,7 +198,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                     {winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}
                                     <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                                 </p>
-                                <p className="w-2/12 flex justify-end">{allTimePlayoffsRankings}</p>
+                                <p className="w-2/12 flex justify-end">{allTimePlayoffsRanking}</p>
                             </div>
                         </div>
                         : <></>}
@@ -196,7 +225,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">Lineup Efficiency</p>
+                        <p className="w-8/12">{foundLeague.season} Lineup Efficiency</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12 flex items-center">{lineupEfficiency(Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), Number(foundRoster.settings.ppts + "." + foundRoster.settings.ppts_decimal))}
@@ -210,7 +239,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12 flex items-center">
-                                {lineupEfficiency(allTimeBestStats?.fpts.score!, allTimeBestStats?.ppts.score!)}
+                                {lineupEfficiency(allTimeBestStats?.fpts?.score!, allTimeBestStats?.ppts?.score!)}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
                             <p className="w-2/12 flex justify-end">{bestLineupEfficiencyRank}</p>
@@ -224,18 +253,18 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p>{lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
-                            <p className="w-2/12 flex justify-end">{allTimeLineupEfficiencyRankings}</p>
+                            <p className="w-2/12 flex justify-end">{allTimeLineupEfficiencyRanking}</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">Luck Rate</p>
+                        <p className="w-8/12">{foundLeague.season} Luck Rate</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <div className="w-5/12 flex items-center">
                                 <p>{roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}</p>
                                 <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                             </div>                                
-                            <p className="w-2/12 flex justify-end">{luckRateRankings}</p>
+                            <p className="w-2/12 flex justify-end">{luckRateRanking}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -246,7 +275,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
                                 <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">{bestLuckRateRankings}</p>
+                            <p className="w-2/12 flex justify-end">{bestLuckRateRanking}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
@@ -270,64 +299,56 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                     <div>
                         <div className={styles.performanceTitleRow}>
-                            <p className="w-8/12">Total Points Per Game</p>
+                            <p className="w-8/12">{foundLeague.season} Total Points Per Game</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
                                 <p className="w-5/12">{totalPtsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
-                                <p className="w-2/12 flex justify-end">{totalPtsPerGameRankings}</p>
+                                <p className="w-2/12 flex justify-end">{totalPtsPerGameRanking}</p>
                             </div>
                         </div>
+                        {postSeasonStats.appearance ?
+                            <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                                <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                                <div className="w-4/12 flex items-center">
+                                    <p className="w-5/12"></p>
+                                    <p className="w-5/12">{roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}</p>
+                                    <p className="w-2/12 flex justify-end">{totalPlayoffPtsPerGameRanking}</p>
+                                </div>
+                            </div> : <></>
+                        }
                         <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">Best</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
-                                <p className="w-5/12 flex items-center">{totalPtsPerGame(rID, allTimeBestStats?.fpts.score!, legacyLeague, allTimeBestStats?.fpts.season)}</p>
-                                <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRankings}</p>
+                                <p className="w-5/12 flex items-center">{totalPtsPerGame(rID, allTimeBestStats?.fpts?.score!, legacyLeague, allTimeBestStats?.fpts?.season)}</p>
+                                <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRanking}</p>
                             </div>
                         </div>
-                        <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                        <div className={`${postSeasonStats.appearance ? styles.performanceSubTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                             <p className="w-8/12">All Time</p>
                             <div className="w-4/12 flex items-center">
                                 <p className="w-5/12"></p>
                                 <p className="w-5/12">{totalPtsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
-                                <p className="w-2/12 flex justify-end">{allTimeTotalPtsPerGameRankings}</p>
+                                <p className="w-2/12 flex justify-end">{allTimeTotalPtsPerGameRanking}</p>
                             </div>
                         </div>
                         {postSeasonStats.appearance ?
-                            <>
-                                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                                    <p className="w-8/12">Playoffs</p>
-                                    <div className="w-4/12 flex items-center">
-                                        <p className="w-5/12"></p>
-                                        <p className="w-5/12">{roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}</p>
-                                        <p className="w-2/12 flex justify-end">0</p>
-                                    </div>
+                            <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                                <p className="w-8/12">All Time Playoffs</p>
+                                <div className="w-4/12 flex items-center">
+                                    <p className="w-5/12"></p>
+                                    <p className="w-5/12">{roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}</p>
+                                    <p className="w-2/12 flex justify-end">{allTimeTotalPlayoffPtsPerGameRanking}</p>
                                 </div>
-                                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                                    <p className="w-8/12">All Time w/ Playoffs</p>
-                                    <div className="w-4/12 flex items-center">
-                                        <p className="w-5/12"></p>
-                                        <p className="w-5/12">{roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}</p>
-                                        <p className="w-2/12 flex justify-end">0</p>
-                                    </div>
-                                </div>
-                            </>
-                        :<></>}
+                            </div> : <></>
+                        }
                     </div>
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">Highest Score</p>
+                        <p className="w-8/12">{foundLeague.season} Highest Score</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{findSeasonStats(rID, selectSeason, legacyLeague)?.bestScore}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12">{allTimeRosterStats.best.score}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{seasonalHighestScoreRankings}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -335,23 +356,47 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{postSeasonStats.highestScore}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{highestPostSeasonScoreRanking}</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12 flex items-center"><Icon icon="mingcute:down-fill" style={{fontSize: "1.3em"}}/> All Time Highest Score(s)</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12">{allTimeRosterStats.best.score}</p>
+                            <p className="w-2/12 flex justify-end">{allTimeHighestScoreRanking}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time Playoffs</p>
+                        <p className="w-8/12 flex items-center"><Icon icon="mingcute:down-fill" style={{fontSize: "1.3em"}}/> All Time Highest Playoff Score(s)</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{allTimeRosterStats.playoffs.highestScore}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{allTimeHighestPlayoffScoreRanking}</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">PF</p>
+                        <p className="w-8/12">{foundLeague.season} PF</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{foundRoster.settings.fpts}.{foundRoster.settings.fpts_decimal}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{seasonalPFRanking}</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12">{postSeasonStats.fpts}</p>
+                            <p className="w-2/12 flex justify-end">{postSeasonPFRanking}</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className={`w-8/12 ${styles.bestRowHover}`}>Best <span>Season {myBest?.fpts?.season}</span></p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">{myBestPF}</p>
+                            <p className="w-2/12 flex justify-end">{bestPFRanking}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -359,41 +404,39 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{allTimeRosterStats.fpts}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Playoffs</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12">{postSeasonStats.fpts}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Best</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12 flex items-center">
-                                0
-                            </p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{allTimePFRanking}</p>
                         </div>
                     </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time w/ Playoffs</p>
+                        <p className="w-8/12">All Time Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{allTimeRosterStats.playoffs.fpts}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-2/12 flex justify-end">{allTimePlayoffPFRanking}</p>
                         </div>
                     </div>
 
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">MAX PF</p>
+                        <p className="w-8/12">{foundLeague.season} MAX PF</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{foundRoster.settings.ppts}.{foundRoster.settings.ppts_decimal}</p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12">-</p>
+                            <p className="w-2/12 flex justify-end">-</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best <span>Season {myBest?.ppts?.season}</span></p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">{myBest?.ppts?.score}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -405,37 +448,35 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Playoffs</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12">0</p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Best</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12 flex items-center">
-                                0
-                            </p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time w/ Playoffs</p>
+                        <p className="w-8/12">All Time Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
-                            <p className="w-5/12">0</p>
-                            <p className="w-2/12 flex justify-end">0</p>
+                            <p className="w-5/12">-</p>
+                            <p className="w-2/12 flex justify-end">-</p>
                         </div>
                     </div>
                     <div className={styles.performanceTitleRow}>
-                        <p className="w-8/12">PA</p>
+                        <p className="w-8/12">{foundLeague.season} PA</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{foundRoster.settings.fpts_against}.{foundRoster.settings.fpts_against_decimal}</p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12">{postSeasonStats.pa || 0}</p>
+                            <p className="w-2/12 flex justify-end">0</p>
+                        </div>
+                    </div>
+                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best <span>Season {myBest?.pa?.season}</span></p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">{myBest?.pa?.score}</p>
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
@@ -447,26 +488,8 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <p className="w-2/12 flex justify-end">0</p>
                         </div>
                     </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Playoffs</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12">{postSeasonStats.pa || 0}</p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
-                    <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">Best</p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-5/12"></p>
-                            <p className="w-5/12 flex items-center">
-                                0
-                            </p>
-                            <p className="w-2/12 flex justify-end">0</p>
-                        </div>
-                    </div>
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
-                        <p className="w-8/12">All Time w/ Playoffs</p>
+                        <p className="w-8/12">All Time Playoffs</p>
                         <div className="w-4/12 flex items-center">
                             <p className="w-5/12"></p>
                             <p className="w-5/12">{allTimeRosterStats.playoffs.pa}</p>
@@ -480,6 +503,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                         <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
                             <p>Longest Win Streak w/ Season </p>
+                            <p style={{ color:"whitesmoke" }}></p>
+                        </div>
+                        <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
+                            <p>Losing Streak w/ Season </p>
                             <p style={{ color:"whitesmoke" }}></p>
                         </div>
                         <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
