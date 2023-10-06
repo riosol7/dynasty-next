@@ -48,7 +48,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const sortedPostSeasonStats = sortSeasonalRostersByType(foundLeague.rosters, "Total Playoff Pts Per Game", legacyLeague);
     const sortedBestPFStats = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best PF", legacyLeague);
     const sortedBestMAXPFStats = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best MAX PF", legacyLeague);
-
+    const sortedBestPAStats = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best PA", legacyLeague);
     const sortedBySeasonalHighestScore = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Highest Score", legacyLeague);
     const sortedAllTimeTotalPlayoffPtsPerGame = sortAllTimeRostersByType(legacyLeague, "All Time Total Playoff Pts Per Game");
     const sortedPostSeasonHighestScore = sortSeasonalRostersByType(foundLeague.rosters, "Post Season Highest Score");
@@ -60,6 +60,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const sortedByAllTimePlayoffPF = sortAllTimeRostersByType(legacyLeague, "All Time Playoff PF");
     const sortedBySeasonalMAXPF = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal MAX PF", legacyLeague);
     const sortedByAllTimeMAXPF = sortAllTimeRostersByType(legacyLeague, "All Time MAX PF");
+    const sortedBySeasonalPA = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal PA", legacyLeague);
+    const sortedByPlayoffPA = sortSeasonalRostersByType(foundLeague.rosters, "Playoff PA", legacyLeague);
+    const sortedByAllTimePA = sortAllTimeRostersByType(legacyLeague, "All Time PA");
+    const sortedByAllTimePlayoffPA = sortAllTimeRostersByType(legacyLeague, "All Time Playoff PA");
 
     const highestPostSeasonScoreRanking = sortedPostSeasonHighestScore?.find(roster => roster.roster_id === rID)?.settings.rank;
     const totalPlayoffPtsPerGameRanking = sortedPostSeasonStats?.find(roster => roster.roster_id === rID)?.settings.rank;
@@ -70,6 +74,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const myBestPF = myBest?.fpts?.score;
     const bestPFRanking = sortedBestPFStats?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestMAXPFRanking = sortedBestMAXPFStats?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const bestPARanking = sortedBestPAStats?.find(roster => roster.roster_id === rID)?.settings.rank;
 
     const bestLuckRateRanking = sortedByBestLuckRate?.find(roster => roster.roster_id === rID)?.settings.rank;
     const bestLineupEfficiency = sortSeasonalRostersByType(sortAllTimeRostersByType(legacyLeague, "Best")!, "Best Lineup Efficiency");
@@ -78,6 +83,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
 
     const seasonalPFRanking = sortedBySeasonalPF?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonalMAXPFRanking = sortedBySeasonalMAXPF?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const seasonalPARanking = sortedBySeasonalPA?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonalLineupEfficiency = sortSeasonalRostersByType(foundLeague.rosters, "Seasonal Lineup Efficiency");
     const seasonalLineupEfficiencyRank = seasonalLineupEfficiency?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonalHighestScoreRankings = sortedBySeasonalHighestScore?.find(roster => roster.roster_id === rID)?.settings.rank;
@@ -101,6 +107,8 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const allTimePFRanking = sortedByAllTimePF?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimePlayoffPFRanking = sortedByAllTimePlayoffPF?.find(roster => roster.roster_id === rID)?.settings.rank;
     const allTimeMAXPFRanking = sortedByAllTimeMAXPF?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePARanking = sortedByAllTimePA?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const allTimePlayoffPARanking = sortedByAllTimePlayoffPA?.find(roster => roster.roster_id === rID)?.settings.rank;
 
     const allPlayBestSeasonStats = getAllPlayStats(rID, allTimeRosterStats.best.wins.season, legacyLeague); 
     const allPlaySeasonStats = getAllPlayStats(rID, selectSeason, legacyLeague);
@@ -108,6 +116,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
 
     const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
     const postSeasonPFRanking = sortedByPlayoffPF?.find(roster => roster.roster_id === rID)?.settings.rank;
+    const postSeasonPARanking = sortedByPlayoffPA?.find(roster => roster.roster_id === rID)?.settings.rank;
     const seasonFPTS: number = Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal);
     const totalSeasonWins: number = foundRoster.settings.wins + postSeasonStats.wins || 0;
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
@@ -459,7 +468,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{foundRoster.settings.fpts_against}.{foundRoster.settings.fpts_against_decimal}</p>
-                        <p className="w-2/12 flex justify-end">0</p>
+                        <p className="w-2/12 flex justify-end">{seasonalPARanking}</p>
                     </div>
                 </div>
                 <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -467,7 +476,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{postSeasonStats.pa || 0}</p>
-                        <p className="w-2/12 flex justify-end">0</p>
+                        <p className="w-2/12 flex justify-end">{postSeasonPARanking}</p>
                     </div>
                 </div>
                 <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -475,7 +484,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12 flex items-center">{myBest?.pa?.score}</p>
-                        <p className="w-2/12 flex justify-end">0</p>
+                        <p className="w-2/12 flex justify-end">{bestPARanking}</p>
                     </div>
                 </div>
                 <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
@@ -483,7 +492,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{allTimeRosterStats.pa}</p>
-                        <p className="w-2/12 flex justify-end">0</p>
+                        <p className="w-2/12 flex justify-end">{allTimePARanking}</p>
                     </div>
                 </div>
                 <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
@@ -491,7 +500,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{allTimeRosterStats.playoffs.pa}</p>
-                        <p className="w-2/12 flex justify-end">0</p>
+                        <p className="w-2/12 flex justify-end">{allTimePlayoffPARanking}</p>
                     </div>
                 </div>
                 <div className="py-5">

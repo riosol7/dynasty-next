@@ -325,6 +325,28 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                     rank: idx + 1,
                 },
             }));
+
+        case "All Time PA":
+            return (updatedRosters ?? []).slice().sort((a, b) => 
+                b.settings.all_time.season.fpts_against - a.settings.all_time.season.fpts_against
+            ).map((roster, idx) => ({
+                ...roster,
+                settings: {
+                    ...roster.settings,
+                    rank: idx + 1,
+                },
+            }));
+        
+        case "All Time Playoff PA":
+            return (updatedRosters ?? []).slice().sort((a, b) => 
+                b.settings.all_time.playoffs.fpts_against - a.settings.all_time.playoffs.fpts_against
+            ).map((roster, idx) => ({
+                ...roster,
+                settings: {
+                    ...roster.settings,
+                    rank: idx + 1,
+                },
+            }));
               
         default:
             return [];
@@ -474,6 +496,30 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
             const sortedRostersByBestMAXPF = rosters.sort((a ,b) => b?.settings?.best?.ppts?.score! - a.settings.best?.ppts?.score!)
             .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
             return sortedRostersByBestMAXPF;
+
+        case "Seasonal PA":
+            return rosters.slice().sort((a, b) => {
+                return Number(b.settings.fpts_against + "." + b.settings.fpts_against_decimal) - Number(a.settings.fpts_against + "." + a.settings.fpts_against_decimal)
+            }).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+
+        case "Playoff PA":
+            return rosters.slice().map(roster => {
+                const postSeasonStats = getRosterPostSeasonStats(roster.roster_id, legacyLeague!, foundLeague.season);
+
+                return {
+                    ...roster,
+                    settings: {
+                        ...roster.settings,
+                        playoff_pa: postSeasonStats.pa
+                    }
+                }
+            }).sort((a, b) => b.settings.playoff_pa - a.settings.playoff_pa
+            ).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+        
+        case "Best PF":
+            const sortedRostersByBestPA = rosters.sort((a ,b) => b?.settings?.best?.pa?.score! - a.settings.best?.pa?.score!)
+            .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+            return sortedRostersByBestPA;
 
         default: 
             return rosters;
