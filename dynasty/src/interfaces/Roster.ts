@@ -85,4 +85,5 @@ export interface Roster {
 
 export interface RosterProps {
     roster: Roster;
+    tab?: string;
 };

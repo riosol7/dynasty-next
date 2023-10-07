@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as Interfaces from "@/interfaces";
 import { Icon } from "@iconify-icon/react";
+import { PLAYER_BASE_URL } from "@/constants";
 import { 
     useDynastyProcessContext, 
     useFantasyCalcContext, 
@@ -19,7 +20,7 @@ import {
 // } from "../utils";
 import { findLogo, getTopFantasyMarketPlayerByPosition, processPlayers, processRosters, roundToHundredth } from "@/utils";
 
-export default function Roster({ roster }: Interfaces.RosterProps) {
+export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
     const { fantasyMarket } = useFantasyMarket()!;
     const { players } = usePlayerContext();
@@ -31,6 +32,10 @@ export default function Roster({ roster }: Interfaces.RosterProps) {
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
     const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === roster.roster_id); 
+    const qbs = (updatedRoster?.players as Interfaces.Player[]).filter((player) => player.position === "QB");
+    const rbs = (updatedRoster?.players as Interfaces.Player[]).filter((player) => player.position === "RB");
+    const wrs = (updatedRoster?.players as Interfaces.Player[]).filter((player) => player.position === "WR");
+    const tes = (updatedRoster?.players as Interfaces.Player[]).filter((player) => player.position === "TE");
 
     const [showQBs, setShowQBs] = useState(true)
     const [qbArrow, setQbArrow] = useState(false)
@@ -113,28 +118,29 @@ export default function Roster({ roster }: Interfaces.RosterProps) {
     //     : rank = foundTeam.rank + "th"
     //     return rank;
     // }
-    const playerBaseURL = process.env.REACT_APP_SLEEPER_PLAYER_THUMBS_BASE_URL;
-    // const playerTypes = [
-    // {
-    //     type: "qb",
-    //     data: roster.kct.qb.players,
-    //     thresholds: { "#42f3e9": 25, "#3cf20a": 30, "#f2c306": 33, "#f26307": 35, "#e9230b" : 50 }
-    // },
-    // {
-    //     type: "rb",
-    //     data: roster.kct.rb.players,
-    //     thresholds: { "#42f3e9": 24, "#3cf20a": 26, "#f2c306": 27, "#f26307": 28, "#e9230b" : 35 }
-    // },
-    // {
-    //     type: "wr",
-    //     data: roster.kct.wr.players,
-    //     thresholds: { "#42f3e9": 24, "#3cf20a": 28, "#f2c306": 29, "#f26307": 30, "#e9230b" : 35 }
-    // },
-    // {
-    //     type: "te",
-    //     data: roster.kct.te.players,
-    //     thresholds: { "#42f3e9": 25, "#3cf20a": 28, "#f2c306": 30, "#f26307": 31, "#e9230b" : 37 }
-    // }];
+
+    const playerTypes = [
+    {
+        type: "qb",
+        data: qbs,
+        thresholds: { "#42f3e9": 25, "#3cf20a": 30, "#f2c306": 33, "#f26307": 35, "#e9230b" : 50 }
+    },
+    {
+        type: "rb",
+        data: rbs,
+        thresholds: { "#42f3e9": 24, "#3cf20a": 26, "#f2c306": 27, "#f26307": 28, "#e9230b" : 35 }
+    },
+    {
+        type: "wr",
+        data: wrs,
+        thresholds: { "#42f3e9": 24, "#3cf20a": 28, "#f2c306": 29, "#f26307": 30, "#e9230b" : 35 }
+    },
+    {
+        type: "te",
+        data: tes,
+        thresholds: { "#42f3e9": 25, "#3cf20a": 28, "#f2c306": 30, "#f26307": 31, "#e9230b" : 37 }
+    }];
+
     // const playerStats = playerTypes.map(playerType => calculatePositionStats(playerType.data, playerType));
     // const playerCount = playerStats.reduce((sum, player) => sum + player.count, 0);
     // const avgTeamAge = roundToHundredth(playerStats.reduce((sum, player) => sum + player.avgAge, 0) / playerTypes.length);
@@ -240,8 +246,8 @@ export default function Roster({ roster }: Interfaces.RosterProps) {
     // );
     return (
         <div className="py-4" style={{minWidth:"388px"}}>
-            {/* <div className="d-flex align-items-center justify-content-between pb-3" style={{borderBottom:"3px solid #2a2c3e"}}>
-                <div className="d-flex align-items-center bold" style={{color:"lightgrey"}}>
+            <div className="d-flex align-items-center justify-content-between pb-3" style={{borderBottom:"3px solid #2a2c3e"}}>
+                {/* <div className="d-flex align-items-center bold" style={{color:"lightgrey"}}>
                     <Icon icon="game-icons:american-football-player"style={{color:"#a9dfd8",fontSize:"24px", marginRight:"4px"}}/>
                     <div className="d-flex align-items-center">
                         <p className="m-0">{playerCount} </p>
@@ -267,8 +273,8 @@ export default function Roster({ roster }: Interfaces.RosterProps) {
                         </div> 
                     :<></>
                     }
-                </div>
-            </div> */}
+                </div> */}
+            </div>
             {/* <div className="d-flex flex-wrap">
                 <div className="col">
                     {positionHeader(qbArrow, showMoreQBs, playerStats[0].count, "QB", "#f8296d", qbRankings, playerStats[0].avgAge, roster.kct.qb.total, playerStats[0].totalPts)}
