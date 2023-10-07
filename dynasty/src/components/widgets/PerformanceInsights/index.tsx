@@ -379,8 +379,9 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         {showWeeklyHighScores ?
                             <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
                         : 
-                            <p>Week {allTimeRosterStats.topTeamScore[0].week}, {allTimeRosterStats.topTeamScore[0].season}</p>
-                        }</div>                        <div className="w-5/12">
+                            <p>Week {allTimeRosterStats.topTeamScore[0]?.week}, {allTimeRosterStats.topTeamScore[0]?.season}</p>
+                        }</div>                        
+                        <div className="w-5/12">
                         {showWeeklyHighScores ?
                             <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
                         : 
@@ -606,7 +607,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <RivalryRecord key={i} record={record}/>
                     )}
                 </div>
-                {/* <Roster roster={foundRoster}/> */}
+                <Roster roster={foundRoster}/>
             </div>
         </div>
     );
