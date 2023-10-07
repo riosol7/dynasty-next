@@ -27,6 +27,7 @@ import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context"
 import * as Interfaces from "@/interfaces";
 import RivalryRecord from "./RivalryRecord";
 import HighScoreRecord from "./HighScoreRecord";
+import Roster from "./Roster";
 // 35 TODOs Perforamance insights for sorting rankings; then add rosters
 export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
@@ -605,11 +606,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <RivalryRecord key={i} record={record}/>
                     )}
                 </div>
-
-
-                <div>
-
-                </div>
+                {/* <Roster roster={foundRoster}/> */}
             </div>
         </div>
     );
