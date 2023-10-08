@@ -1,3 +1,4 @@
+import styles from "./PerformanceInsights.module.css";
 import React, { useState } from "react";
 import * as Interfaces from "@/interfaces";
 import { Icon } from "@iconify-icon/react";
@@ -12,6 +13,7 @@ import {
     usePlayerContext, 
     useSuperFlexContext 
 } from "@/context";
+import { calculateAverage, totalPlayerPoints } from "@/utils";
 // import { 
 //     calculatePositionStats,
 //     getPrimeIndicatorColor,
@@ -31,11 +33,23 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-    const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === roster.roster_id); 
-    const qbs = (updatedRoster?.players as Interfaces.Player[])?.filter((player) => player.position === "QB");
-    const rbs = (updatedRoster?.players as Interfaces.Player[])?.filter((player) => player.position === "RB");
-    const wrs = (updatedRoster?.players as Interfaces.Player[])?.filter((player) => player.position === "WR");
-    const tes = (updatedRoster?.players as Interfaces.Player[])?.filter((player) => player.position === "TE");
+    const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === roster.roster_id)!;
+    const updatedPlayers = (updatedRoster?.players as Interfaces.Player[]);
+    const qbs = updatedPlayers?.filter((player) => player.position === "QB");
+    const rbs = updatedPlayers?.filter((player) => player.position === "RB");
+    const wrs = updatedPlayers?.filter((player) => player.position === "WR");
+    const tes = updatedPlayers?.filter((player) => player.position === "TE");
+    const avgQBAge = calculateAverage(qbs.reduce((total, obj) => {return total + obj.age}, 0), qbs.length);
+    const avgRBAge = calculateAverage(rbs.reduce((total, obj) => {return total + obj.age}, 0), rbs.length);
+    const avgWRAge = calculateAverage(wrs.reduce((total, obj) => {return total + obj.age}, 0), wrs.length);
+    const avgTEAge = calculateAverage(tes.reduce((total, obj) => {return total + obj.age}, 0), tes.length);
+    const qbMarketValue = (updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue).qb;
+    const rbMarketValue = (updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue).rb;
+    const wrMarketValue = (updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue).wr;
+    const teMarketValue = (updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue).te;
+
+    const totalTeamPoints = updatedPlayers?.map((player) => totalPlayerPoints(legacyLeague, updatedRoster.roster_id, player.player_id).pts).reduce((sum, pts) => sum + pts, 0);
+    const totalTeamMaxPoints = updatedPlayers?.map((player) => totalPlayerPoints(legacyLeague, updatedRoster.roster_id, player.player_id).maxPts).reduce((sum, maxPts) => sum + maxPts, 0);
 
     const [showQBs, setShowQBs] = useState(true)
     const [qbArrow, setQbArrow] = useState(false)
@@ -96,7 +110,7 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     // const totalTeamPts = playerStats.reduce((sum, player) => sum + player.totalPts, 0);
     // const totalTeamMaxPts = roundToHundredth(playerStats.reduce((sum, player) => sum + player.totalMaxPts, 0));
 
-    // const positionHeader = (arrow, showMorePlayers, positionCount, position, color, positionRankings, avgPositionAge, kctPositionValue, totalPts,) => (
+    // const positionHeader = (arrow, showMorePlayers, positionCount, position, color, avgPositionAge, kctPositionValue, totalPts,) => (
     //     <div className="flex items-center pt-3">
     //         <div className="flex items-center">
     //             {arrow ?
@@ -129,7 +143,7 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     //                 </div>  
     //                 <p className="mx-2"> | </p>
     //                 <p className="font-bold" style={{fontSize:"16px",color: color, marginRight:"6px"}}>{position}</p> 
-    //                 <p className="mx-1"style={{color:"#b0b0b2", fontSize:"14px"}}>{positionRankings(roster)}</p> 
+    //                 {/* <p className="mx-1"style={{color:"#b0b0b2", fontSize:"14px"}}>{positionRankings(roster)}</p>  */}
     //             </div>
     //         </div>
     //         <div className="flex items-center" style={{ fontFamily:"Arial" }}>
@@ -190,46 +204,25 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     
     return (
         <div className="py-4" style={{minWidth:"388px"}}>
-            <div className="flex items-center justify-between pb-3" style={{ borderBottom: "3px solid #2a2c3e" }}>
-                <div className="flex items-center font-bold" style={{ color:"lightgrey" }}>
-                    <Icon icon="game-icons:american-football-player"style={{color:"#a9dfd8", fontSize:"24px", marginRight:"4px"}}/>
-                    <div className="flex items-center">
-                        {/* <p>{playerCount}</p> */}
-                        <p className="ml-1">Players</p>
-                    </div>
-                </div>
-                <div className="flex items-center" style={{ fontFamily:"Arial", fontSize:"14.5px" }}>
-                    <div className="flex items-center" style={{ minWidth:"85px" }}>
-                        <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"4px" }}/>
-                        {/* <p className="flex items-center">{avgTeamAge}</p> */}
-                    </div>                    
-                    <div className="flex items-center" style={{minWidth:"85px"}}>
-                        <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"4px" }}/>
-                        {/* <p>{roster.kct.teamTotal}</p> */}
-                    </div>
-                    <div className="flex items-center">
-                        {/* <p>{totalTeamPts}</p>
-                        <span className="bold"style={{color:"#718396"}}>/</span>
-                        <p>{totalTeamMaxPts}</p>
-                        <p style={{color:"#a9dfd8", paddingRight:"4px"}}>pts</p> */}
-                    </div> 
-                </div>
+            <div className={`${styles.performanceHeader}`}> 
+                <p className="w-10/12">Roster</p>
+                <p className="w-2/12 flex justify-end"></p>
             </div>
             {/* <div className="flex flex-wrap">
                 <div className="col">
-                    {positionHeader(qbArrow, showMoreQBs, playerStats[0].count, "QB", "#f8296d", qbRankings, playerStats[0].avgAge, roster.kct.qb.total, playerStats[0].totalPts)}
+                    {positionHeader(qbArrow, showMoreQBs, qbs.length, "QB", "#f8296d", avgQBAge, qbMarketValue, playerStats[0].totalPts)}
                     {showQBs ? qbs.map((player, i) => playerProfileRow(player, i, getPrimeIndicatorColor, playerTypes[0].thresholds)) : playerProfileRow(topQB, 0, getPrimeIndicatorColor, playerTypes[0].thresholds)}
                 </div>
                 <div className="col">
-                    {positionHeader(rbArrow, showMoreRBs, playerStats[1].count, "RB", "#36ceb8", rbRankings, playerStats[1].avgAge, roster.kct.rb.total, playerStats[1].totalPts)}
+                    {positionHeader(rbArrow, showMoreRBs, rbs.length, "RB", "#36ceb8", avgRBAge, rbMarketValue, playerStats[1].totalPts)}
                     {showRBs ? rbs.map((player, i) => playerProfileRow(player, i, getPrimeIndicatorColor, playerTypes[1].thresholds)) : playerProfileRow(topRB, 0, getPrimeIndicatorColor, playerTypes[1].thresholds)}   
                 </div>
                 <div className="col">
-                    {positionHeader(wrArrow, showMoreWRs, playerStats[2].count, "WR", "#58a7ff", wrRankings, playerStats[2].avgAge, roster.kct.wr.total, playerStats[2].totalPts)}
+                    {positionHeader(wrArrow, showMoreWRs, wrs.length, "WR", "#58a7ff", avgWRAge, wrMarketValue, playerStats[2].totalPts)}
                     {showWRs ? wrs.map((player, i) => playerProfileRow(player, i, getPrimeIndicatorColor, playerTypes[2].thresholds)) : playerProfileRow(topWR, 0, getPrimeIndicatorColor, playerTypes[2].thresholds)}
                 </div>
                 <div className="col">
-                    {positionHeader(teArrow, showMoreTEs, playerStats[3].count, "TE", "#faae58", teRankings, playerStats[3].avgAge, roster.kct.te.total, playerStats[3].totalPts)}
+                    {positionHeader(teArrow, showMoreTEs, tes.length, "TE", "#faae58", avgTEAge, teMarketValue, playerStats[3].totalPts)}
                     {showTEs ? tes.map((player, i) => playerProfileRow(player, i, getPrimeIndicatorColor, playerTypes[3].thresholds)) : playerProfileRow(topTE, 0, getPrimeIndicatorColor, playerTypes[3].thresholds)}
                 </div>
             </div> */}

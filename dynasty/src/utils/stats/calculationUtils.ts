@@ -24,16 +24,20 @@ export const calculatePercentageChange = (currentValue: number, prevValue: numbe
     return roundToHundredth(((currentValue - prevValue) / prevValue) * 100);
 };
 
-export const calculatePositionStats = (players: Interfaces.Player[], playerType, league, matches, rID) => {
-    const count = players.length;
-    const avgAge = roundToHundredth(players.reduce((sum, player) => sum + Number(player.age), 0) / count);
-    const totalPts = roundToHundredth(players.map((player) => totalPlayerPoints(league, matches, rID, player.player_id).pts).reduce((sum, pts) => sum + pts, 0));
-    const totalMaxPts = roundToHundredth(players.map((player) => getTotalPts(league, matches, rID, player.player_id).maxPts).reduce((sum, maxPts) => sum + maxPts, 0));
-    return {
-        count,
-        avgAge,
-        totalPts,
-        totalMaxPts,
-        primeIndicator: getPrimeIndicatorColor(avgAge, playerType.thresholds)
-    };
+export const calculateAverage = (sum: number, count: number) => {
+    return roundToHundredth(sum/count);
 };
+
+// export const calculatePositionStats = (players: Interfaces.Player[], playerType, league, matches, rID) => {
+//     const count = players.length;
+//     const avgAge = roundToHundredth(players.reduce((sum, player) => sum + Number(player.age), 0) / count);
+//     const totalPts = roundToHundredth(players.map((player) => totalPlayerPoints(league, matches, rID, player.player_id).pts).reduce((sum, pts) => sum + pts, 0));
+//     const totalMaxPts = roundToHundredth(players.map((player) => getTotalPts(league, matches, rID, player.player_id).maxPts).reduce((sum, maxPts) => sum + maxPts, 0));
+//     return {
+//         count,
+//         avgAge,
+//         totalPts,
+//         totalMaxPts,
+//         primeIndicator: getPrimeIndicatorColor(avgAge, playerType.thresholds)
+//     };
+// };
