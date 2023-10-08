@@ -14,28 +14,31 @@ import {
     overallHighScoreRanking, 
     lineupEfficiency, 
     roundToHundredth,
-    totalPtsPerGame, 
+    totalPointsPerGame,
     winPCT, 
     findSeasonStats,
     findPlayerByID,
     getRivalryStats,
     sortAllTimeRostersByType,
     sortSeasonalRostersByType,
+    findRosterByRosterID,
 } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import RivalryRecord from "./RivalryRecord";
 import HighScoreRecord from "./HighScoreRecord";
-import Roster from "./Roster";
+import Roster from "./RosterV2";
 // 35 TODOs Perforamance insights for sorting rankings; then add rosters
 export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const { selectSeason } = useSeasonContext();
-    const [ selectVS, setSelectVS ] = useState<string>("Rivalry");
+    const [ showSeasonalAllPlay, setShowSeasonalAllPlay ] = useState<Boolean>(false);
+    const [ showAllTimeAllPlay, setShowAllTimeAllPlay ] = useState<Boolean>(false);
     const [ showWeeklyHighScores, setShowWeeklyHighScores ] = useState<Boolean>(false);
     const [ showPlayerHighScores, setShowPlayerHighScores ] = useState<Boolean>(false);
+    const [ showMostWinsAgainst, setShowMostWinsAgainst ] = useState<Boolean>(false);
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
@@ -127,15 +130,11 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
     const mySeasonalPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const myAllTimePowerRank = getPowerRankings("All Time", legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
-    const handleSelectVS = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectVS(event.target.value);
-    };
+
+    const opponent = findRosterByRosterID(rivalryStats.records[0]?.opponentID, foundLeague.rosters);
 
     return (
         <div className="" style={{minWidth:"300px"}}>
-            <div className="flex items-center justify-between py-3">
-                <p className="font-bold" style={{color:"lightgrey"}}>PERFORMANCE INSIGHTS</p>
-            </div>
             <div style={{fontSize:"14px"}}>
                 <div className={styles.performanceHeader}> 
                     <p className="w-8/12">{foundLeague.season} Season</p>
@@ -183,8 +182,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                     </div>
                 </> : <></>}
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Play</p>
+                <div className={`${showSeasonalAllPlay ? styles.performanceTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                    <p onClick={() => setShowSeasonalAllPlay(!showSeasonalAllPlay)} className="w-8/12 flex item-center">
+                        <Icon icon={showSeasonalAllPlay ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/> All Play
+                    </p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12">{allPlaySeasonStats.wins}-{allPlaySeasonStats.losses}</p>
                         <p className="w-5/12 flex items-center">{winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
@@ -193,6 +194,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">{mySeasonalPowerRank}</p>
                     </div>
                 </div>
+                {showSeasonalAllPlay ? 
+                allPlaySeasonStats.opponents.map((record, i) =>
+                    <RivalryRecord key={i} record={record}/>
+                ):<></>}
                 <div className={styles.performanceTitleRow}>
                     <p className="w-8/12">All Time Record</p>
                     <div className="w-4/12 flex items-center">
@@ -228,8 +233,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">{allTimeBestRankings}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Play</p>
+                <div className={`${showAllTimeAllPlay ? styles.performanceTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                    <p onClick={() => setShowAllTimeAllPlay(!showAllTimeAllPlay)} className="w-8/12 flex item-center">
+                        <Icon icon={showAllTimeAllPlay ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/> All Time All Play
+                    </p>                    
                     <div className="w-4/12 flex items-center"> 
                         <p className="w-5/12">{allPlayAllTimeStats.wins}-{allPlayAllTimeStats.losses}</p>
                         <p className="w-5/12 flex items-center">{winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses)}   
@@ -238,6 +245,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">{myAllTimePowerRank}</p>
                     </div>
                 </div>
+                {showAllTimeAllPlay ?
+                    allPlayAllTimeStats.opponents.map((record, i) =>
+                        <RivalryRecord key={i} record={record}/> 
+                ) : <></>}
                 <div className={styles.performanceTitleRow}>
                     <p className="w-8/12">{foundLeague.season} Lineup Efficiency</p>
                     <div className="w-4/12 flex items-center">
@@ -315,7 +326,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <p className="w-8/12">{foundLeague.season} Total Points Per Game</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{totalPtsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
+                        <p className="w-5/12">{totalPointsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
                         <p className="w-2/12 flex justify-end">{totalPtsPerGameRanking}</p>
                     </div>
                 </div>
@@ -332,7 +343,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <p className="w-8/12">Best</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">{totalPtsPerGame(rID, allTimeBestStats?.fpts?.score!, legacyLeague, allTimeBestStats?.fpts?.season)}</p>
+                        <p className="w-5/12 flex items-center">{totalPointsPerGame(rID, allTimeBestStats?.fpts?.score!, legacyLeague, allTimeBestStats?.fpts?.season)}</p>
                         <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRanking}</p>
                     </div>
                 </div>
@@ -340,7 +351,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <p className="w-8/12">All Time</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{totalPtsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
+                        <p className="w-5/12">{totalPointsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
                         <p className="w-2/12 flex justify-end">{allTimeTotalPtsPerGameRanking}</p>
                     </div>
                 </div>
@@ -427,7 +438,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                 </div>
                 {showPlayerHighScores ?
-                    allTimeRosterStats.topPlayerScores.slice(1,11).map((record: Interfaces.HighScoreRecord, i) => 
+                    allTimeRosterStats.topPlayerScores.slice(0,10).map((record: Interfaces.HighScoreRecord, i) => 
                         <HighScoreRecord key={i} record={record} type="player" index={i} max={10}/>)
                 :<></>}
                 <div className={styles.performanceTitleRow}>
@@ -555,6 +566,23 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-10/12">General</p>
                         <p className="w-2/12 flex justify-end"></p>
                     </div>
+                    <div className={`${styles.fontHover} ${showMostWinsAgainst ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
+                        <p className={`w-8/12 flex items-center`} onClick={() => setShowMostWinsAgainst(!showMostWinsAgainst)}>
+                            <Icon icon={showMostWinsAgainst ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
+                            <span>Most Wins Against</span>
+                        </p>
+                        {showMostWinsAgainst ?
+                            <div className={`${styles.performanceHeader} w-4/12 flex items-center`}>
+                                <p className="w-5/12">Record</p>
+                                <p className="w-5/12">Win Rate</p>
+                                <p className="w-2/12 flex justify-end">Games Played</p>
+                            </div>  
+                        : <p>{opponent.owner.display_name}</p>}
+                    </div>
+                    {showMostWinsAgainst ?
+                        rivalryStats.records.map(((record, i) => 
+                            <RivalryRecord key={i} record={record} type={"Rivalry"}/>
+                    )) : <></>}
                     <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
                         <p>Longest Win Streak w/ Season </p>
                         <p style={{ color:"whitesmoke" }}></p>
@@ -579,33 +607,6 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p>Finals</p>
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.finals}</p>
                     </div>
-                </div>
-                <div className="py-5">
-                    <div className={`pb-2 ${styles.performanceHeader}`}> 
-                        <p className="w-8/12">Most Wins / Losses Against
-                            (<select className={styles.selectVS} onChange={handleSelectVS} value={selectVS}>
-                                <option value={"Rivalry"}>Head to Head</option>
-                                <option value={"All Play All Time"}>All Play All Time</option>
-                                <option value={`All Play ${legacyLeague[0].season}`}>All Play {legacyLeague[0].season}</option>
-                            </select>)
-                        </p>
-                        <div className="w-4/12 flex items-center">
-                            <p className="w-3/12">Wins</p>
-                            <p className="w-3/12">Losses</p>
-                            <p className="w-3/12">Rate</p>
-                            <p className="w-3/12">GP</p>
-                        </div>
-                    </div>
-                    {selectVS === "Rivalry" ?
-                        rivalryStats.records.map(((record, i) => 
-                            <RivalryRecord key={i} record={record}/>
-                        ))
-                    : selectVS === "All Play All Time" ? 
-                        allPlayAllTimeStats.opponents.map((record, i) =>
-                            <RivalryRecord key={i} record={record}/> 
-                    ): allPlaySeasonStats.opponents.map((record, i) =>
-                        <RivalryRecord key={i} record={record}/>
-                    )}
                 </div>
                 <Roster roster={foundRoster}/>
             </div>

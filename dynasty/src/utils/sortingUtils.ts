@@ -1,6 +1,6 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
-import { findLeagueByID, findSeasonStats, getAllPlayStats, getAllTimeRosterStats, getRosterPostSeasonStats, lineupEfficiency, roundToHundredth, totalPtsPerGame, winPCT } from ".";
+import { findLeagueByID, findSeasonStats, getAllPlayStats, getAllTimeRosterStats, getRosterPostSeasonStats, lineupEfficiency, roundToHundredth, totalPointsPerGame, winPCT } from ".";
 
 export const handleSort = (
     sort: string, 
@@ -229,7 +229,7 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
 
         case "Best Total Pts Per Game":
             return  (updatedRosters ?? []).slice().sort((a, b) => 
-            totalPtsPerGame(b.roster_id, b.settings?.best?.fpts?.score!, legacyLeague, undefined, true)! - totalPtsPerGame(a.roster_id, a?.settings.best?.fpts?.score!, legacyLeague, undefined, true)!
+            totalPointsPerGame(b.roster_id, b.settings?.best?.fpts?.score!, legacyLeague, undefined, true)! - totalPointsPerGame(a.roster_id, a?.settings.best?.fpts?.score!, legacyLeague, undefined, true)!
             ).map((roster, idx) => ({
                 ...roster,
                 settings: {
@@ -240,7 +240,7 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
 
         case "All Time Total Pts Per Game":
             return (updatedRosters ?? []).slice().sort((a, b) => 
-            totalPtsPerGame(b.roster_id, b.settings.all_time.season.fpts, legacyLeague, undefined, true)! - totalPtsPerGame(a.roster_id, a.settings.all_time.season.fpts, legacyLeague, undefined, true)!
+            totalPointsPerGame(b.roster_id, b.settings.all_time.season.fpts, legacyLeague, undefined, true)! - totalPointsPerGame(a.roster_id, a.settings.all_time.season.fpts, legacyLeague, undefined, true)!
             ).map((roster, idx) => ({
                 ...roster,
                 settings: {
@@ -410,7 +410,7 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
                     ...roster,
                     settings: {
                         ...roster.settings,
-                        totalPtsPerGame: totalPtsPerGame(roster.roster_id, seasonFPTS, legacyLeague!, foundLeague.season) || 0, 
+                        totalPtsPerGame: totalPointsPerGame(roster.roster_id, seasonFPTS, legacyLeague!, foundLeague.season) || 0, 
                     }
                 };
             }).sort((a ,b) => b.settings.totalPtsPerGame - a.settings.totalPtsPerGame)
@@ -425,7 +425,7 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
                     ...roster,
                     settings: {
                         ...roster.settings,
-                        totalPtsPerGame: totalPtsPerGame(roster.roster_id, postSeasonStats.fpts, legacyLeague!, foundLeague.season) || 0, 
+                        totalPtsPerGame: totalPointsPerGame(roster.roster_id, postSeasonStats.fpts, legacyLeague!, foundLeague.season) || 0, 
                     }
                 };
             }).sort((a ,b) => b.settings.totalPtsPerGame - a.settings.totalPtsPerGame)
@@ -524,4 +524,22 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
         default: 
             return rosters;
     };
+};
+
+export const sortRostersByFantasyMarketPosition = (rosters: Interfaces.Roster[], fantasyMarket: string, position: string): Interfaces.Roster[] => {
+    const sortedRosters = rosters?.sort((a: Interfaces.Roster, b: Interfaces.Roster) => {
+        const aValue: number = Number((a[fantasyMarket as keyof typeof a] as Interfaces.DynastyValue)[position as keyof Interfaces.DynastyValue]);
+        const bValue: number = Number((b[fantasyMarket as keyof typeof b] as Interfaces.DynastyValue)[position as keyof Interfaces.DynastyValue]);
+        return bValue - aValue;
+    }).slice().map((roster, i) => {
+        const updatedRoster = {
+            ...roster,
+            [fantasyMarket as keyof typeof roster]: {
+                ...(roster[fantasyMarket as keyof typeof roster] as any), // Use type assertion here
+                rank: i + 1,
+            },
+        };
+        return updatedRoster;
+    });
+    return sortedRosters;
 };

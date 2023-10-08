@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import value from "@/assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
-import { findLogo, getMVP, getPlayerTotalPts } from "@/utils";
+import { findLogo, getMVP, totalPlayerPoints } from "@/utils";
 import { useFantasyMarket } from "@/context";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
@@ -67,7 +67,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                     <div className={`my-1 flex items-center ${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
                         <p className="flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp?.position}
                             <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                {getPlayerTotalPts(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
+                                {totalPlayerPoints(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
                                 <span style={{color: "lightgray"}}> pts</span>
                             </span>
                         </p>

@@ -10,20 +10,12 @@ import PerformanceInsightsWidget from "@/components/widgets/PerformanceInsights"
 export default function TeamPage({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason, setSelectSeason } = useSeasonContext();
-    const [tab, setTab] = useState("Summary");
 
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
-            <TeamLayout tab={tab} setTab={setTab} name={name}>
-            {tab === "Summary" ? 
-                <>
+            <TeamLayout name={name}>
                 <MatchupSlider name={name}/>
                 <PerformanceInsightsWidget name={name}/>
-                </>
-            : tab === "Dynasty" ? 
-            <></>
-            : tab === "Power" ? <></> : <></>
-            }
             </TeamLayout>
         </SeasonProvider>
     );

@@ -20,3 +20,16 @@ export const findRosterByRosterID = (id: number, rosters: Interfaces.Roster[]): 
 
     return foundRoster;
 };
+
+export const placementRankings = (rank: number): string => {
+    switch(rank) {
+        case 1:
+            return `${rank}st`;
+        case 2:
+            return `${rank}nd`;
+        case 3:
+            return `${rank}rd`;
+        default:
+            return `${rank}th`; 
+    };
+};

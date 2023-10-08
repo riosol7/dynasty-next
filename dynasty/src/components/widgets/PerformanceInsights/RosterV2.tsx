@@ -20,7 +20,7 @@ import {
 // } from "../utils";
 import { findLogo, getTopFantasyMarketPlayerByPosition, processPlayers, processRosters, roundToHundredth } from "@/utils";
 
-export default function Roster({ roster, tab }: Interfaces.RosterProps) {
+export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
     const { fantasyMarket } = useFantasyMarket()!;
     const { players } = usePlayerContext();

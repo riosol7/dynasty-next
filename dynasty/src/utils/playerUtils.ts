@@ -24,12 +24,16 @@ export const findPlayerByID = (id: string, players: Interfaces.Player[]): Interf
 };
 
 export const getTopFantasyMarketPlayerByPosition = (roster: Interfaces.Roster, position: string, fantasyMarket: string): Interfaces.Player => {
-    const players = (roster.players as Interfaces.Player[]);
-    const filteredPlayers = players.filter((player) => player.position === position)
-    const sortedPlayers = filteredPlayers.sort((a, b) => {
+    const players = (roster?.players as Interfaces.Player[]);
+    const filteredPlayers = players?.filter((player) => player.position === position)
+    const sortedPlayers = filteredPlayers?.sort((a, b) => {
         const aValue: number = Number((a[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value);
         const bValue: number = Number((b[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent).value);
         return bValue - aValue;
     });
-    return sortedPlayers[0];
+    if (sortedPlayers && sortedPlayers.length > 0) {
+        return sortedPlayers[0];
+    } else {
+        return Constants.initPlayer;
+    };
 };

@@ -20,4 +20,5 @@ export interface RivalryRecord {
 
 export interface RivalryRecordProps {
   record: RivalryRecord;
+  type?: string;
 };
