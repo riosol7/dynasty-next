@@ -2,7 +2,7 @@ import * as Interfaces from "@/interfaces";
 import { totalPlayerPoints } from "..";
 
 export const isOdd = (num: number): boolean => {
-    return num % 2 ! == 0;
+    return num % 2 !== 0;
 };
 
 export const lineupEfficiency = (pf: number, maxPF: number): number => {
