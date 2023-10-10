@@ -67,7 +67,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                     <div className={`my-1 flex items-center ${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
                         <p className="flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp?.position}
                             <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
-                                {totalPlayerPoints(legacyLeague, roster.roster_id, mvp?.player_id).maxPts}
+                                {totalPlayerPoints(legacyLeague, roster.roster_id, mvp?.player_id).ppts}
                                 <span style={{color: "lightgray"}}> pts</span>
                             </span>
                         </p>

@@ -46,7 +46,7 @@ export const getSortedRecords = (
     }).slice(firstIdx, lastIdx);
 };
 
-export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, sort: string, fantasyMarket: string) => {
+export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, sort: string, fantasyMarket: string): Interfaces.Roster[] => {
     if (rosters) {
         const sortedRosters = rosters.slice().sort((a, b) => {
             const aValue = a[fantasyMarket as keyof typeof a];
@@ -66,6 +66,21 @@ export const sortDynastyRosters = (rosters: Interfaces.Roster[], asc: boolean, s
 
         return sortedRosters;
     };
+    return [Constants.initRoster]
+};
+
+export const sortDynastyRostersByPosition = (rosters: Interfaces.Roster[], fantasyMarket: string, position: string) => {
+    const sortedRosters = sortDynastyRosters(rosters, false, position, fantasyMarket).map((roster, idx) => {
+        return {
+            ...roster,
+            settings: {
+                ...roster.settings,
+                rank: idx + 1
+            }
+        }
+    });
+
+    return sortedRosters;
 };
 
 export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type: string): Interfaces.Roster[] => {

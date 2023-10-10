@@ -4,15 +4,14 @@
     width: max-content;
 }
 
-.displayPlayerImage {
+.teamLogo {
     position: relative;
     z-index: 1;
-    top: 28px;
-    left: 13px;
-    text-align: right; 
+    top: 30px;
+    left: 30px;
 }
 
-.smallHeadShot{
+.smallHeadShot {
     background-color:#dbdbde;
     background-repeat: no-repeat;
     background-position: center;

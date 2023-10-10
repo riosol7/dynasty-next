@@ -49,8 +49,8 @@ export const totalPointsPerGame = (rID: number, pts: number, legacyLeague: Inter
 };
 
 export const accumulatePoints = (rID: number, players: Interfaces.Player[], legacyLeague: Interfaces.League[]) : { fpts: number, ppts: number } => {
-    const fpts = players?.map((player) => totalPlayerPoints(legacyLeague, rID, player.player_id).fpts).reduce((sum, pts) => sum + pts, 0);
-    const ppts = players?.map((player) => totalPlayerPoints(legacyLeague, rID, player.player_id).ppts).reduce((sum, maxPts) => sum + maxPts, 0);
+    const fpts = roundToHundredth(players?.map((player) => totalPlayerPoints(legacyLeague, rID, player.player_id).fpts).reduce((sum, pts) => sum + pts, 0));
+    const ppts = roundToHundredth(players?.map((player) => totalPlayerPoints(legacyLeague, rID, player.player_id).ppts).reduce((sum, maxPts) => sum + maxPts, 0));
     return {
         fpts: fpts,
         ppts: ppts

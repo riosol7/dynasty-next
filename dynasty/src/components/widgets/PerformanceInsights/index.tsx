@@ -1,4 +1,3 @@
-import Image from "next/image";
 import styles from "./PerformanceInsights.module.css";
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
@@ -23,13 +22,12 @@ import {
     sortSeasonalRostersByType,
     findRosterByRosterID,
 } from "@/utils";
-import { PLAYER_BASE_URL } from "@/constants";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import RivalryRecord from "./RivalryRecord";
 import HighScoreRecord from "./HighScoreRecord";
-import Roster from "./RosterV2";
-// 35 TODOs Perforamance insights for sorting rankings; then add rosters
+import Roster from "./Roster";
+
 export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
@@ -127,7 +125,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const totalSeasonLosses: number = foundRoster.settings.losses + postSeasonStats.losses || 0;
     const myHighestScoringPlayer = allTimeRosterStats.topPlayerScores[0];
     const rivalryStats = getRivalryStats(rID, legacyLeague);
-    const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
+    // const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
     const mySeasonalPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const myAllTimePowerRank = getPowerRankings("All Time", legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
 
@@ -407,10 +405,9 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                 </div>
                 {showWeeklyHighScores ?
-                    allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
-                        <HighScoreRecord key={i} record={record} type="team" index={i} max={10}/>
-                    )) : <></>
-                }
+                allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
+                    <HighScoreRecord key={i} record={record} type="team" index={i} max={10}/>
+                )) : <></>}
                 <div className={`${styles.fontHover} ${showPlayerHighScores ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
                     <p className={`w-8/12 flex items-center`} onClick={() => setShowPlayerHighScores(!showPlayerHighScores)}>
                         <Icon icon={showPlayerHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
