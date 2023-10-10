@@ -144,24 +144,27 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
                         borderRadius:"50%"
                     }}
                 />}
-                <p className="font-bold mx-2" style={{fontSize:"16px",color: color}}>{position}</p> 
+                <p className="font-bold mx-1" style={{fontSize:"16px",color: color}}>{position}</p>
+                <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
             </div>
-            <p className="w-2/12 flex items-center">
-                <Icon icon="icon-park-outline:ranking-list"  style={{color:"#a9dfd8", fontSize:"22px",  marginRight:"4px"}}/>
-                {placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}
-            </p> 
-            <div className="w-2/12 bg-gray-700 h-1.5 my-1">
-                <div className="bg-indigo-400 h-1.5" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
-            </div>
+            <p className="w-1/12 flex items-center mx-2"><Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>{positionCount}</p>
             <div className="w-2/12 flex items-center">
-                <Icon icon="material-symbols:avg-pace-sharp" style={{fontSize:"24px", color:"#a9dfd8",marginRight:"4px"}}/>
+                <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
                 <p className="mx-1 flex items-center">{avgPositionAge}</p>
             </div>
             <div className="w-2/12 flex items-center">
-                <Icon icon="fluent:person-tag-20-regular" style={{fontSize:"24px", color:"#a9dfd8", marginRight:"2px"}}/>
+                <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"2px" }}/>
                 <p>{marketValue}</p>
             </div>
-            <p className="w-2/12 flex items-center mx-2"><Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"4px"}}/>{positionCount}</p>
+            <div className="w-5/12 mx-2">
+                <p className="text-center" style={{fontSize: "10px"}}>
+                    {totalPts.fpts} / {totalPts.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
+                    ({calculatePercentage(totalPts.fpts, totalPts.ppts)}%)
+                </p>
+                <div className="bg-gray-700 h-1 mt-1 rounded-full">
+                    <div className="bg-indigo-400 h-1 rounded-full" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
+                </div>
+            </div>
         </div>
     );
 
@@ -171,26 +174,26 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
         return (
             <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
-                <div className={`${styles.smallHeadShot} mx-2`} style={{width:"60px", height:"60px", backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
+                <div className={`${styles.smallHeadShot} mx-2`} style={{width:"100px", height:"70px", backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
                     {findLogo(player.team)?.l !== ""?
                         <div className={styles.teamLogo}>
                             <Image width={40} height={40} alt="" src={findLogo(player.team)?.l!}/>
                         </div>
                     : <></>}
                 </div> 
-                <div className="mx-2" style={{ fontSize: ".9rem" }}>
+                <div className="mx-2 w-full" style={{ fontSize: ".9rem" }}>
                     <p className="font-bold">{player.full_name}</p>
                     <p style={{fontSize:"10px", color:"#cbcbcb"}}>#{player.number} {player.position} - {player.team}</p>
-                    <p className="font-bold" style={{ color:"#7c90a5", fontSize:"10px" }}>{player.years_exp === 0 ? <span>ROOKIE</span> : <span>EXP {player.years_exp}</span>}</p>
-                    <div className="flex items-center" style={{fontSize:"11.5px"}}>
-                        <p style={{ color:"#b0b0b2", width:"80px" }}>{player.position} rank <span style={{color:"white"}}>{marketContent?.positionRank}</span></p>
-                        <p style={{ color:"#b0b0b2", width:"100px" }}>overall rank <span style={{color:"white"}}>{marketContent?.rank}</span></p>
-                        <p style={{ color:"#b0b0b2", width:"60px" }}>age 
-                        <span style={{color: primeIndicator(player.age, player.position)}}> {player.age}</span>
-                        </p>
-                        <div className="flex items-center" style={{width:"80px"}}>
-                            <p style={{color:"#b0b0b2"}}>value</p>
-                            <p className="mx-1">{marketContent?.value}</p>
+                    <p className="font-bold flex items-center" style={{ color:"#7c90a5", fontSize:"10px" }}>
+                        <span className="mr-2">{player.years_exp === 0 ? `ROOKIE` : `EXP ${player.years_exp}`}</span>
+                        AGE <span style={{color: primeIndicator(player.age, player.position), marginLeft: "4px"}}>{player.age}</span>
+                    </p>
+                    <div className="flex items-center" style={{fontSize:"11.5px", color:"#b0b0b2" }}>
+                        <p className="w-3/12">{player.position} rank <span style={{color:"white"}}>{marketContent?.positionRank}</span></p>
+                        <p className="w-4/12">overall rank <span style={{color:"white"}}>{marketContent?.rank}</span></p>
+                        <div className="w-5/12 flex items-center">
+                            <p>value</p>
+                            <p className="mx-1" style={{color:"white"}}>{marketContent?.value} {marketContent.trend}</p>
                         </div>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-1.5 my-1">

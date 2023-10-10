@@ -7,15 +7,15 @@
 .teamLogo {
     position: relative;
     z-index: 1;
-    top: 30px;
-    left: 30px;
+    top: 40px;
+    left: 40px;
 }
 
 .smallHeadShot {
     background-color:#dbdbde;
     background-repeat: no-repeat;
     background-position: center;
-    background-size:90px;
+    background-size: 100px;
     height: 56px;
     width: 56.11px;
     border-radius: 50%;
