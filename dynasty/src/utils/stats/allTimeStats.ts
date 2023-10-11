@@ -139,10 +139,13 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
 
     const topTeamScores: Interfaces.HighScoreRecord[] = legacyLeague.slice().map(league => {
         const myMatches = league.matchups.map((matchup, i) => {
-            const team = matchup.find(match => match.roster_id === rID);
+            const myTeam = matchup.find(match => match.roster_id === rID);
+            const opponent = matchup.find(match => match.roster_id !== rID && myTeam?.matchup_id === match.matchup_id);
             return {
-                roster_id: team?.roster_id,
-                points: team?.points || 0,
+                roster_id: myTeam?.roster_id,
+                points: myTeam?.points || 0,
+                opponent_rID: opponent?.roster_id,
+                opponent_points: opponent?.points || 0,
                 season: league.season,
                 week: i + 1
             };

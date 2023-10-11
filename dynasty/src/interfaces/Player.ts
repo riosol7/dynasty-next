@@ -23,6 +23,7 @@ export interface Player {
     full_name: string;
     height: string;
     high_school: string;
+    injury_status: string;
     ktc: MarketContent;
     last_name: string;
     mfl_id: string;

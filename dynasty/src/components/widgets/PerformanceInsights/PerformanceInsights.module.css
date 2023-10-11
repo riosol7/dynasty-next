@@ -82,3 +82,30 @@
     padding-block: 16px;
     border-bottom: 0px solid #2a2c3e
 }
+
+.anchorCell:hover {
+    background: #1b2025;
+    border-radius: 2px;
+}
+  
+.anchorCell, .anchorCell:hover, .anchorCell:active{
+    color: inherit;
+    text-decoration: none;
+}
+
+.anchorCell {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.playerHeadShot{
+    background-color:#dbdbde;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:90px;
+    height: 55px;
+    width: 40px;
+    border-radius: 5%;
+    border: 0px solid black;
+}

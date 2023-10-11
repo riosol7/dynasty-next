@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
@@ -182,16 +183,10 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                     <div key={i} className={`flex items-center py-2 text-sm text-white ${i === records.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"}`}>
                         <div className="w-3/12 flex items-top">
                             <div className={styles.playerHeadShot}
-                                style={{
-                                    borderRadius: "5%",
-                                    width: "40px",
-                                    height: "55px",
-                                    backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,
-                                }}
-                            >
+                                style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                                 {findLogo(player?.team).l !== "" ? (
                                 <div className={styles.positionedLogo}>
-                                    <img style={{ width: "2.8em", left: "15px" }} alt="" src={findLogo(player?.team).l}/>
+                                    <Image style={{ left: "15px" }} alt="" width={44.8} height={44.8} src={findLogo(player?.team).l!}/>
                                 </div>
                                 ) : (
                                 <></>

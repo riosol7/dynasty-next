@@ -23,7 +23,7 @@ export const findPlayerByID = (id: string, players: Interfaces.Player[]): Interf
     return foundPlayer || Constants.initPlayer;
 };
 
-export const getTopFantasyMarketPlayerByPosition = (roster: Interfaces.Roster, position: string, fantasyMarket: string): Interfaces.Player => {
+export const sortedFantasyMarketPlayerByPosition = (roster: Interfaces.Roster, position: string, fantasyMarket: string): Interfaces.Player[] => {
     const players = (roster?.players as Interfaces.Player[]);
     const filteredPlayers = players?.filter((player) => player.position === position)
     const sortedPlayers = filteredPlayers?.sort((a, b) => {
@@ -32,8 +32,8 @@ export const getTopFantasyMarketPlayerByPosition = (roster: Interfaces.Roster, p
         return bValue - aValue;
     });
     if (sortedPlayers && sortedPlayers.length > 0) {
-        return sortedPlayers[0];
+        return sortedPlayers;
     } else {
-        return Constants.initPlayer;
+        return [Constants.initPlayer];
     };
 };

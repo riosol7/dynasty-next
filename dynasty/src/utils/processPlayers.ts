@@ -8,8 +8,8 @@ function extractNumbersFromString(inputString: string): string {
 };
 
 export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.PlayerMarket[], sf: Interfaces.PlayerMarket[], fc: Interfaces.FantasyCalcPlayer[], dp: Interfaces.DynastyProcessPlayer[], fp: Interfaces.FantasyProPlayer[],) => {
-    const unemployedPlayers = players.filter((player: Interfaces.Player) => !validPositions.includes(player.position) && player.team === null && player.depth_chart_order === null);
-    const employedPlayers = players.filter((player: Interfaces.Player) => validPositions.includes(player.position) && player.team !== null && player.depth_chart_order !== null);
+    const unemployedPlayers = players.filter((player: Interfaces.Player) => !validPositions.includes(player.position) && player.team === null);
+    const employedPlayers = players.filter((player: Interfaces.Player) => validPositions.includes(player.position) && player.team !== null);
 
     const updatedEmployedPlayers = employedPlayers.map((player: Interfaces.Player) => {
         const ktcPlayer = ktc.find((ktcPlayer: Interfaces.PlayerMarket) => ktcPlayer.player === player.full_name);

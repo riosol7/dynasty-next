@@ -19,7 +19,7 @@ import {
     accumulatePoints, 
     calculateAverage, 
     calculatePercentage,
-    findLogo, getTopFantasyMarketPlayerByPosition, processPlayers, processRosters, 
+    findLogo, sortedFantasyMarketPlayerByPosition, processPlayers, processRosters, 
     isOdd, totalPlayerPoints, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
 
 export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
@@ -47,11 +47,16 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
         WR: dynastyWRRank || 0,
         TE: dynastyTERank || 0
     }
-    const updatedPlayers = (updatedRoster?.players as Interfaces.Player[]);
-    const qbs = updatedPlayers?.filter((player) => player.position === "QB");
-    const rbs = updatedPlayers?.filter((player) => player.position === "RB");
-    const wrs = updatedPlayers?.filter((player) => player.position === "WR");
-    const tes = updatedPlayers?.filter((player) => player.position === "TE");
+    const qbs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "QB", fantasyMarket);
+    const rbs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "RB", fantasyMarket);
+    const wrs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "WR", fantasyMarket);
+    const tes = sortedFantasyMarketPlayerByPosition(updatedRoster!, "TE", fantasyMarket);
+
+    const topQB = qbs[0];
+    const topRB = rbs[0];
+    const topWR = wrs[0];
+    const topTE = tes[0];
+
     const avgQBAge = calculateAverage(qbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), qbs?.length);
     const avgRBAge = calculateAverage(rbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), rbs?.length);
     const avgWRAge = calculateAverage(wrs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), wrs?.length);
@@ -62,7 +67,6 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     const wrMarketValue = selectedRoster?.wr;
     const teMarketValue = selectedRoster?.te;
 
-    const totalTeamPoints = accumulatePoints(rID, updatedPlayers, legacyLeague);
     const totalQBPoints = accumulatePoints(rID, qbs, legacyLeague);
     const totalRBPoints = accumulatePoints(rID, rbs, legacyLeague);
     const totalWRPoints = accumulatePoints(rID, wrs, legacyLeague);
@@ -76,11 +80,6 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     const [wrArrow, setWrArrow] = useState<Boolean>(false)
     const [showTEs, setShowTEs] = useState<Boolean>(true)
     const [teArrow, setTeArrow] = useState<Boolean>(false)
-
-    const topQB = getTopFantasyMarketPlayerByPosition(updatedRoster!, "QB", fantasyMarket);
-    const topRB = getTopFantasyMarketPlayerByPosition(updatedRoster!, "RB", fantasyMarket);
-    const topWR = getTopFantasyMarketPlayerByPosition(updatedRoster!, "WR", fantasyMarket);
-    const topTE = getTopFantasyMarketPlayerByPosition(updatedRoster!, "TE", fantasyMarket);
 
     const showMoreQBs = () => {
         setShowQBs(!showQBs);
@@ -175,14 +174,17 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
             <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
                 <div className={`${styles.smallHeadShot} mx-2`} style={{width:"100px", height:"70px", backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
-                    {findLogo(player.team)?.l !== ""?
+                    {findLogo(player.team)?.l !== "FA" ?
                         <div className={styles.teamLogo}>
                             <Image width={40} height={40} alt="" src={findLogo(player.team)?.l!}/>
                         </div>
                     : <></>}
                 </div> 
                 <div className="mx-2 w-full" style={{ fontSize: ".9rem" }}>
-                    <p className="font-bold">{player.full_name}</p>
+                    <div className="flex items-center">
+                        {player.injury_status === "IR" ? <Icon icon="fa-solid:user-injured" style={{color: "#a9dfd8", fontSize: "1.3em", marginRight: "4px"}}/>: <></>}
+                        <p className="font-bold">{player.full_name}</p>
+                    </div>
                     <p style={{fontSize:"10px", color:"#cbcbcb"}}>#{player.number} {player.position} - {player.team}</p>
                     <p className="font-bold flex items-center" style={{ color:"#7c90a5", fontSize:"10px" }}>
                         <span className="mr-2">{player.years_exp === 0 ? `ROOKIE` : `EXP ${player.years_exp}`}</span>
@@ -193,7 +195,16 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
                         <p className="w-4/12">overall rank <span style={{color:"white"}}>{marketContent?.rank}</span></p>
                         <div className="w-5/12 flex items-center">
                             <p>value</p>
-                            <p className="mx-1" style={{color:"white"}}>{marketContent?.value} {marketContent.trend}</p>
+                            <p className="mx-1" style={{color:"white"}}>{marketContent?.value}</p>
+                            {Number(marketContent.trend) > 0 ? 
+                                <p className="flex items-center" style={{color:"white"}}>
+                                    (+{marketContent.trend}<Icon icon="mingcute:trending-up-fill" style={{color:"#a9dfd8", fontSize: "1.6em", marginLeft:"2px"}}/>)
+                                </p>
+                            : Number(marketContent.trend) < 0 ?  
+                                <p className="flex items-center" style={{color:"white"}}>
+                                    ({marketContent.trend}<Icon icon="mingcute:trending-down-fill" style={{color:"#ff6565", fontSize: "1.6em", marginLeft:"2px"}}/>)
+                                </p>
+                            :""}
                         </div>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-1.5 my-1">
@@ -215,19 +226,19 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
                 <p className="w-2/12 flex justify-end"></p>
             </div>
             <div className="flex flex-wrap">
-                <div className="col">
+                <div className="w-5/12">
                     {positionHeader(qbArrow, showMoreQBs, qbs?.length, "QB", "#f8296d", avgQBAge, qbMarketValue, totalQBPoints)}
                     {showQBs ? qbs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topQB, 0)}
                 </div>
-                <div className="col">
+                <div className="w-5/12">
                     {positionHeader(rbArrow, showMoreRBs, rbs?.length, "RB", "#36ceb8", avgRBAge, rbMarketValue, totalRBPoints)}
                     {showRBs ? rbs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topRB, 0)}   
                 </div>
-                <div className="col">
+                <div className="w-5/12">
                     {positionHeader(wrArrow, showMoreWRs, wrs?.length, "WR", "#58a7ff", avgWRAge, wrMarketValue, totalWRPoints)}
                     {showWRs ? wrs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topWR, 0)}
                 </div>
-                <div className="col">
+                <div className="w-5/12">
                     {positionHeader(teArrow, showMoreTEs, tes?.length, "TE", "#faae58", avgTEAge, teMarketValue, totalTEPoints)}
                     {showTEs ? tes?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topTE, 0)}
                 </div>

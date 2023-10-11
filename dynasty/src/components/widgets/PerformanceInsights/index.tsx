@@ -406,7 +406,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                 </div>
                 {showWeeklyHighScores ?
                 allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
-                    <HighScoreRecord key={i} record={record} type="team" index={i} max={10}/>
+                    <HighScoreRecord key={i} record={record} type="team" index={i} max={9}/>
                 )) : <></>}
                 <div className={`${styles.fontHover} ${showPlayerHighScores ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
                     <p className={`w-8/12 flex items-center`} onClick={() => setShowPlayerHighScores(!showPlayerHighScores)}>
@@ -436,7 +436,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                 </div>
                 {showPlayerHighScores ?
                     allTimeRosterStats.topPlayerScores.slice(0,10).map((record: Interfaces.HighScoreRecord, i) => 
-                        <HighScoreRecord key={i} record={record} type="player" index={i} max={10}/>)
+                        <HighScoreRecord key={i} record={record} type="player" index={i} max={9}/>)
                 :<></>}
                 <div className={styles.performanceTitleRow}>
                     <p className="w-8/12">{foundLeague.season} PF</p>

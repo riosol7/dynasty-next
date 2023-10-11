@@ -115,6 +115,8 @@ export interface HighScoreRecord {
     week: number;
     starter?: string;
     points: number;
+    opponent_points?: number;
+    opponent_rID?: number;
     rank?: number | undefined;
 };
 

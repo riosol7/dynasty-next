@@ -33,7 +33,7 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
             </div>
             <div className="w-2/12 text-truncate">
                 {season === "All Time" ?
-                    <p>{roster.settings.all_time_wins}-{roster.settings.all_time_losses}</p>
+                    <p>{roster.settings.all_time.season.wins}-{roster.settings.all_time.season.losses}</p>
                 :
                     <p>{roster.settings.wins}-{roster.settings.losses}-{roster.settings.ties}
                     {roster?.metadata?.streak ?
@@ -46,9 +46,9 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
             </div>
             {season === "All Time" ?
                 <div className="w-3/12 flex items-center" style={{fontSize:"12px", color:"white"}}>
-                    <p className="w-4/12">{roster.settings.all_time_fpts}</p>
-                    <p className="w-4/12">{roster.settings.all_time_ppts}</p>
-                    <p className="w-4/12">{roster.settings.all_time_fpts_against}</p>
+                    <p className="w-4/12">{roster.settings.all_time.season.fpts}</p>
+                    <p className="w-4/12">{roster.settings.all_time.season.ppts}</p>
+                    <p className="w-4/12">{roster.settings.all_time.season.fpts_against}</p>
                 </div>
             :
                 <div className="w-3/12 flex items-center" style={{fontSize:"12px", color:"white"}}>
