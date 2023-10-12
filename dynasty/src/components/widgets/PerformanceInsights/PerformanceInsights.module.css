@@ -12,12 +12,12 @@
 }
 
 .smallHeadShot {
+    width: 100px; 
+    height: 70px;
     background-color:#dbdbde;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 100px;
-    height: 56px;
-    width: 56.11px;
+    background-size: 105px;
     border-radius: 50%;
     border: 0px solid black;
 }

@@ -21,7 +21,7 @@ function LeagueStatus({ league }: Interfaces.LeagueProps) {
             <span className="ml-2 text-white">{league.season}</span>
         </p>
     );
-}
+};
 
 function LeagueSettings({ league }: Interfaces.LeagueProps) {
     return (
@@ -58,18 +58,24 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center items-center p-2 bg-gray-900 rounded-full w-10 h-10">
-                <Icon icon="ion:search-outline" style={{fontSize: "18px"}}/>
+            <div className="flex items-center rounded-full px-3  border border-gray-700">
+                <Icon icon="ion:search-outline" style={{ fontSize: "18px", color: "white" }} />
+                <input
+                    type="text"
+                    className="bg-black outline-none px-2 py-1 w-45"
+                    placeholder="Search"
+                />
+                <Icon icon="iconamoon:microphone-duotone" style={{ fontSize: "20px", color: "white" }} />
             </div>
-            <select id={styles.selectMarket} onChange={onChange} value={fantasyMarket}>
+            <select id={styles.selectMarket} className="mr-3" onChange={onChange} value={fantasyMarket}>
                 <option value={"ktc"}>{"KeepTradeCut"}</option>
                 <option value={"fc"}>{"FantasyCalc"}</option>
                 <option value={"sf"}>{"SuperFlex"}</option>
                 <option value={"dp"}>{"DynastyProcess"}</option>
             </select>
-            <div className={styles.activity}>
+            {/* <div className={styles.activity}>
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
-            </div>
+            </div> */}
         </nav>
     );
 };

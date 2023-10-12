@@ -16,6 +16,38 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         .map(match => match as Interfaces.Match)
     );
     
+    const seasonalStreaks = legacyLeague.map(league => {
+        const matchups = getMatchups(rID, league.matchups);
+        let winStreak: number = 0;
+        let losingStreak: number = 0;
+        let longestWinStreak: number = 0;
+        let longestLosingStreak: number = 0;
+
+        matchups?.forEach(matchup => {
+            const opponent = matchup.find((team: Interfaces.Match) => team.roster_id !== rID);
+            const myTeam = matchup.find((team: Interfaces.Match) => team.roster_id === rID);
+            
+            if (myTeam?.points > opponent?.points) {
+                if (losingStreak > longestLosingStreak) {
+                    longestLosingStreak = losingStreak;
+                };
+                winStreak ++;
+                losingStreak = 0;
+            } else if (myTeam?.points < opponent?.points) {
+                if (winStreak > longestWinStreak) {
+                    longestWinStreak = winStreak;
+                };
+                losingStreak ++;
+                winStreak = 0;
+            };
+        });
+        return {
+            losses: longestLosingStreak,
+            wins: longestWinStreak,
+            season: league.season,
+        };
+    });
+    
     const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.wins, 0);
     const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.losses, 0);
     const allTimeRegularSeasonTies = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.ties, 0);
@@ -64,7 +96,28 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
             season: league.season,
             games: undefined,
         };
-    }).filter((playoffSeason): playoffSeason is Interfaces.PlayoffRuns => playoffSeason.games !== undefined);    
+    }).filter((playoffSeason): playoffSeason is Interfaces.PlayoffRuns => playoffSeason.games !== undefined); 
+    
+      
+    function calculatePlayoffStreak(data: any) {
+    let currentStreak = 0;
+    let maxStreak = 0;
+    
+    for (let i = 0; i < data.length; i++) {
+        const currentYear = parseInt(data[i].season);
+    
+        // If it's the first season or there's a gap in playoff appearances, reset the streak
+        if (i === 0 || currentYear - parseInt(data[i - 1].season) > 1) {
+        currentStreak = 1;
+        } else {
+        currentStreak++;
+        }
+    
+        maxStreak = Math.max(maxStreak, currentStreak);
+    }
+    
+    return maxStreak;
+    }
 
     const finalsRecord = () => {
         const legacyFinalsRecord = playoffRuns?.map(season => {
@@ -152,6 +205,10 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         });
         return myMatches;
     }).flat().sort((a, b) => b?.points! - a?.points!).map((record, i)=> { return {...record, rank: i + 1}});
+
+    const longestWinStreak = seasonalStreaks.reduce((max, current) => (current.wins > max.wins ? current : max), seasonalStreaks[0]);
+    const longestLosingStreak = seasonalStreaks.reduce((max, current) => (current.losses > max.losses ? current : max), seasonalStreaks[0]);
+
     return {    
         best: {
             wins: { 
@@ -175,6 +232,8 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
             score: bestScore,
             winRate: winPCT(bestSeasonByWinsStats?.wins || 0, bestSeasonByWinsStats?.losses || 0),
         },
+        winStreak: longestWinStreak,
+        losingStreak: longestLosingStreak,
         winRate: roundToHundredth(((allTimeRegularSeasonWins)/(allTimeRegularSeasonWins + allTimeRegularSeasonLosses))*100),
         wins: allTimeRegularSeasonWins,
         losses: allTimeRegularSeasonLosses,
@@ -183,6 +242,7 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         ppts: allTimeRegularSeasonPPTS,
         pa: allTimeRegularSeasonPA,
         playoffs: {
+            appearanceStreak: calculatePlayoffStreak(playoffRuns),
             appearances: playoffAppearances,
             wins: allTimePlayoffWins,
             losses: allTimePlayoffLosses,

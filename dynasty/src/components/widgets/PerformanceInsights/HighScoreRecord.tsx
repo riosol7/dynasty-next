@@ -17,7 +17,7 @@ export default function HighScoreRecord({ record, type, index, max }: Interfaces
 
     return (
         type === "team" ? 
-        <div className={`${styles.performanceSubTitleRow} ${styles.fontHover} ${styles.anchorCell}`} style={{ paddingBlock:"1em" }}>
+        <div className={`${index === max ? styles.performanceRow : styles.performanceSubTitleRow} ${styles.fontHover} ${styles.anchorCell}`} style={{ paddingBlock:"1em" }}>
             <div className="w-8/12 flex items-center">
                 <p className="" style={{ width: "30px" }}>{record.rank}</p>
                 <p>{opponent.display_name}</p>

@@ -173,7 +173,7 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
         return (
             <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
-                <div className={`${styles.smallHeadShot} mx-2`} style={{width:"100px", height:"70px", backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
+                <div className={`${styles.smallHeadShot} mx-2`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
                     {findLogo(player.team)?.l !== "FA" ?
                         <div className={styles.teamLogo}>
                             <Image width={40} height={40} alt="" src={findLogo(player.team)?.l!}/>

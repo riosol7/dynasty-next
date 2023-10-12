@@ -581,24 +581,20 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             <RivalryRecord key={i} record={record} type={"Rivalry"}/>
                     )) : <></>}
                     <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
-                        <p>Longest Win Streak w/ Season </p>
-                        <p style={{ color:"whitesmoke" }}></p>
+                        <p>Longest Win Streak</p>
+                        <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.winStreak.wins}W, {allTimeRosterStats.winStreak.season}</p>
                     </div>
                     <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
-                        <p>Losing Streak w/ Season </p>
-                        <p style={{ color:"whitesmoke" }}></p>
+                        <p>Longest Losing Streak</p>
+                        <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.losingStreak.losses}L, {allTimeRosterStats.losingStreak.season}</p>
+                    </div>
+                    <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
+                        <p>Playoff Appearances (w/ Consecutive Streak)</p>
+                        <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.appearances} ({allTimeRosterStats.playoffs.appearanceStreak})</p>
                     </div>
                     <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
                         <p>Toilet Bowl</p>
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.toiletBowls}</p>
-                    </div>
-                    <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
-                        <p>Playoff Appearances</p>
-                        <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.appearances}</p>
-                    </div>
-                    <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>
-                        <p>Playoff Streak Appearances </p>
-                        <p style={{ color:"whitesmoke" }}></p>
                     </div>
                     <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
                         <p>Finals</p>

@@ -41,11 +41,16 @@
     border-radius: 50%;
     background-color: #111111;
 }
+
 #selectMarket {
     background-color: black;
     color: white;
     border: none;
     font-size: 14px;
-    border-bottom: 1px solid whitesmoke;
-    padding-bottom: 3px;
+    border-bottom: 1px solid #a9dfd8;
+    padding: 6px;
+}
+
+#selectMarket:hover {
+    background-color: #111111;
 }
