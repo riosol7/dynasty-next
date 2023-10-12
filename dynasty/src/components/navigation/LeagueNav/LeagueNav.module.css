@@ -3,7 +3,7 @@
     padding-right: 10px;
     top: 0;
     left: 0;
-    height: 4em;
+    min-height: 4em;
     width: 100%;
     display: flex;
     align-items: center;
@@ -59,7 +59,6 @@
     color: white;
     padding: 4px;
 }
-
 .mic:hover {
     border-radius: 50%;
     background-color: #111111;

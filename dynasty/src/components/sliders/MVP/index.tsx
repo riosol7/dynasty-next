@@ -14,11 +14,12 @@ import {
     useLeagueContext,
     usePlayerContext,
     useSuperFlexContext,
- } from "@/context";
- import * as Interfaces from "@/interfaces";
+} from "@/context";
+import * as Interfaces from "@/interfaces";
+import LoadMVP from "./slides/loadMVP";
 
 export default function MVPSlider() {
-    const  { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
+    const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
     const { superFlex, loadSuperFlex } = useSuperFlexContext();
@@ -27,7 +28,7 @@ export default function MVPSlider() {
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-
+    const loading = loadLegacyLeague && loadPlayers && loadKTC && loadSuperFlex && loadFC && loadDP && loadFantasyPro;
     return (
         <div className="py-5">
             <div className="flex items-center justify-between mb-3">
@@ -37,43 +38,44 @@ export default function MVPSlider() {
                 </div>
                 <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
             </div>
-            <div className="flex" style={{ cursor: "grab" }}>
-                <Swiper breakpoints = {{
-                    1850: {
-                        slidesPerView: 5,
-                        spaceBetween: 25,
-                        loop: true,
-                    },
-                    1520:{
-                        slidesPerView: 4,
-                        spaceBetween: 25,
-                        loop: true,
-                    },
-                    1200:{
-                        slidesPerView: 3,
-                        spaceBetween: 45,
-                        loop: true,
-                    },
-                    855:{
-                        slidesPerView: 2,
-                        spaceBetween: 25,
-                        loop: true,
-                    },
-                }}
-                slidesPerGroup={1} 
-                loop={true} 
-                modules={[Autoplay]}
-                autoplay={{
-                    delay: 5500,
-                    disableOnInteraction: false,
-                }}>
-                    {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (
-                    <SwiperSlide key={i}>
-                        <MVPSlide legacyLeague={legacyLeague} roster={roster}/>
-                    </SwiperSlide>
-                    ))}
-                </Swiper>
-            </div>
+            {loading ?
+                <LoadMVP/> 
+            : <Swiper breakpoints = {{
+                1850: {
+                    slidesPerView: 5,
+                    spaceBetween: 25,
+                    loop: true,
+                },
+                1520:{
+                    slidesPerView: 4,
+                    spaceBetween: 25,
+                    loop: true,
+                },
+                1200:{
+                    slidesPerView: 3,
+                    spaceBetween: 45,
+                    loop: true,
+                },
+                855:{
+                    slidesPerView: 2,
+                    spaceBetween: 25,
+                    loop: true,
+                },
+            }}
+            style={{ cursor: "grab" }}
+            slidesPerGroup={1} 
+            loop={true} 
+            modules={[Autoplay]}
+            autoplay={{
+                delay: 5500,
+                disableOnInteraction: false,
+            }}>
+                {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (
+                <SwiperSlide key={i}>
+                    <MVPSlide legacyLeague={legacyLeague} roster={roster}/>
+                </SwiperSlide>
+                ))}
+            </Swiper>}
         </div>
     );
 };

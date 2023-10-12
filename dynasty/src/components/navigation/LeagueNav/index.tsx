@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Icon } from '@iconify-icon/react';
 import styles from "./LeagueNav.module.css";
-import { useFantasyMarket } from "@/context";
+import { useFantasyMarket, useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_THMUB_BASE_URL } from "@/constants";
 import * as Interfaces from "../../../interfaces";
 
@@ -38,6 +38,7 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
 
 export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
     const { fantasyMarket, onChange } = useFantasyMarket()!;
+    const { loadLegacyLeague } = useLeagueContext();
 
     return (
         <nav className={styles.navigation}>
@@ -47,7 +48,9 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                     <a href={`/`} id={styles.leagueAnchor} style={{ width: "270px" }}>
                         <div className="flex items-center">
                             <div className="flex justify-center mr-4">
-                                <Image className="rounded" width={36} height={36} alt="avatar" src={`${SLEEPER_AVATAR_THMUB_BASE_URL}${league.avatar}`}/>
+                                {loadLegacyLeague ?
+                                    <Icon icon="line-md:loading-twotone-loop" style={{fontSize:"35px", color: "#a9dfd8"}} />
+                                : <Image className="rounded" width={36} height={36} alt="avatar" src={`${SLEEPER_AVATAR_THMUB_BASE_URL}${league.avatar}`}/>}
                             </div>
                             <p className="font-bold m-0 text-2x1">{league.name}</p>
                         </div>
@@ -62,7 +65,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 <Icon icon="ion:search-outline" style={{ fontSize: "18px", color: "white" }} />
                 <input
                     type="text"
-                    className="bg-black outline-none pl-2 py-1 w-45"
+                    className="bg-black outline-none pl-2 py-1"
                     placeholder="Search"
                 />
                 <Icon icon="iconamoon:microphone-duotone" className={styles.mic}/>

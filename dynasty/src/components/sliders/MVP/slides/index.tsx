@@ -4,10 +4,11 @@ import Image from "next/image";
 import value from "@/assets/images/value.png";
 import { Icon } from "@iconify-icon/react";
 import { findLogo, getMVP, totalPlayerPoints } from "@/utils";
-import { useFantasyMarket } from "@/context";
+import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
+import LoadMVP from "./loadMVP";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -37,7 +38,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
 
     const logo = findLogo(mvp?.team);
 
-    return (
+    return ( 
         <div className={styles.mvpLayout} style={{background: logo.bgColor}}>
             <div className="flex" style={{
                 backgroundImage: `url(${logo.l})`,
