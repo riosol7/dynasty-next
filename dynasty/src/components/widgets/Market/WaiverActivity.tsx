@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
-import { findLogo, getSortedRecords, handleSort, toDateTime } from "@/utils";
+import { findLogo, getSortedRecords, handleSort, primeIndicator, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
@@ -54,8 +54,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
     const [recordsPerPage, setRecordsPerPage] = useState(5);
     const [selectOwner, setSelectOwner] = useState("all");
     const [selectPosition, setSelectPosition] = useState("all");
-
-    const waiverBidsFiltered = waiverBids[selectPosition as keyof typeof waiverBids].filter(waiver => {
+    const waiverBidsFiltered = waiverBids[selectPosition as keyof typeof waiverBids]?.filter(waiver => {
         if (selectOwner !== "all") {
             return waiver.creator === selectOwner;
         } else {
@@ -147,11 +146,11 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                 />
                 <div className="w-2/12">
                     <select style={SELECT_TAG} onChange={handlePosition} value={selectPosition}>
-                        <option value={"all"}>POSITIONS</option>
-                        <option value={"QB"}>QB</option>
-                        <option value={"RB"}>RB</option>
-                        <option value={"WR"}>WR</option>
-                        <option value={"TE"}>TE</option>
+                        <option value={"all"}>POSITION</option>
+                        <option value={"qb"}>QB</option>
+                        <option value={"rb"}>RB</option>
+                        <option value={"wr"}>WR</option>
+                        <option value={"te"}>TE</option>
                     </select>
                 </div>
                 <div className="w-2/12">
@@ -184,20 +183,21 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                         <div className="w-3/12 flex items-top">
                             <div className={styles.playerHeadShot}
                                 style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
-                                {findLogo(player?.team).l !== "" ? (
+                                {findLogo(player?.team).l !== "FA" ? (
                                 <div className={styles.positionedLogo}>
-                                    <Image style={{ left: "15px" }} alt="" width={44.8} height={44.8} src={findLogo(player?.team).l!}/>
+                                    <Image alt="" width={35.8} height={35.8} src={findLogo(player?.team).l!}/>
                                 </div>
                                 ) : (
                                 <></>
                                 )}
                             </div>
-                            <div className="mx-2 pl-1">
+                            <div className="pl-4">
                                 <p style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
-                                <p className="m-0 font-bold text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
+                                <p className="text-xs text-gray-400 font-light">{player.team} #{player.number}</p>
+                                <p className="font-bold text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
                             </div>
                         </div>
-                        <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : ""}}>{player?.age}</p>
+                        <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
                         <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
                         <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{record.creator}</p>
                         <p className="w-1/12" style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>

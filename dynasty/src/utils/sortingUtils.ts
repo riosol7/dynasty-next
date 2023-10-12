@@ -26,7 +26,7 @@ export const getSortedRecords = (
     const lastIdx = currentPage * recordsPerPage;
     const firstIdx = lastIdx - recordsPerPage;
 
-    return records.slice().sort((a, b) => {
+    return records?.slice().sort((a, b) => {
         switch (sort) {
             case "DATE":
                 return (asc ? a.created - b.created : b.created - a.created);
@@ -77,7 +77,7 @@ export const sortDynastyRostersByPosition = (rosters: Interfaces.Roster[], fanta
                 ...roster.settings,
                 rank: idx + 1
             }
-        }
+        };
     });
 
     return sortedRosters;

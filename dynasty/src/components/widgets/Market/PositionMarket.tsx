@@ -3,6 +3,7 @@ import * as Interfaces from "@/interfaces";
 import { Waivers } from "@/types";
 import { POSITIONS } from "@/constants";
 import { calculatePercentageChange, roundToHundredth } from "@/utils";
+import TrendChart from "@/components/charts/TrendChart";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -63,6 +64,7 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                 const recentWaivers = findRecentWaivers(position as keyof Waivers);
                 const highestBid = findHighestBid(position as keyof Waivers);
                 const lowestBid = findLowestBid(position as keyof Waivers);
+                const averageBid = roundToHundredth(waivers[position as keyof Waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0) / waivers[position as keyof Waivers].length);
                 return (
                     <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
                         i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
@@ -70,9 +72,8 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                         <div className="w-1/12">
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
-                        {/* TREND */}
                         <div className="w-3/12">
-                            {/* <TrendChart waivers={waivers[position as keyof Waivers]} /> */}
+                            <TrendChart waivers={waivers[position as keyof Waivers]} />
                         </div>
                         {/* LAST PRICE */}
                         <p className="w-1/12">{recentWaivers[0]?.settings?.waiver_bid}</p>
@@ -86,7 +87,7 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                             </p>
                         </div>
                         {/* AVG */}
-                        <p className="w-1/12">{roundToHundredth(waivers[position as keyof Waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0) / waivers[position as keyof Waivers].length)}</p>     
+                        <p className="w-1/12">{averageBid}</p>     
                         <p className="w-1/12">{lowestBid}</p>
                         <p className="w-1/12">{highestBid}</p>
                         {/* TRANSACTIONS */}
