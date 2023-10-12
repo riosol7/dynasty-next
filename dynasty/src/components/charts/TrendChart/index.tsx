@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 // )
 import * as Interfaces from "@/interfaces";
 
-export default function PositionLineChart({ waivers }: Interfaces.WaiverProps) {
+export default function TrendChart({ waivers }: Interfaces.WaiverProps) {
 
     const series = [{ data: waivers.map(waiver => waiver.settings.waiver_bid)} ];
     const options = {

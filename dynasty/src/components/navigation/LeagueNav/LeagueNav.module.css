@@ -54,3 +54,13 @@
 #selectMarket:hover {
     background-color: #111111;
 }
+.mic {
+    font-size: 20px; 
+    color: white;
+    padding: 4px;
+}
+
+.mic:hover {
+    border-radius: 50%;
+    background-color: #111111;
+}

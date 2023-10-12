@@ -58,14 +58,14 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                     </div>
                 </div>
             </div>
-            <div className="flex items-center rounded-full px-3  border border-gray-700">
+            <div className="flex items-center rounded-full pl-2 pr-1 border border-gray-700">
                 <Icon icon="ion:search-outline" style={{ fontSize: "18px", color: "white" }} />
                 <input
                     type="text"
-                    className="bg-black outline-none px-2 py-1 w-45"
+                    className="bg-black outline-none pl-2 py-1 w-45"
                     placeholder="Search"
                 />
-                <Icon icon="iconamoon:microphone-duotone" style={{ fontSize: "20px", color: "white" }} />
+                <Icon icon="iconamoon:microphone-duotone" className={styles.mic}/>
             </div>
             <select id={styles.selectMarket} className="mr-3" onChange={onChange} value={fantasyMarket}>
                 <option value={"ktc"}>{"KeepTradeCut"}</option>
