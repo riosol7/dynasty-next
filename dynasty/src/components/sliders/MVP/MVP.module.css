@@ -49,3 +49,16 @@
     background-color: #111111;
     /* color: #a9dfd8;  not working? check Owner page match colon icon*/ 
 }
+
+.anchorCell, .anchorCell:hover, .anchorCell:active{
+    color: inherit;
+    text-decoration: none;
+}
+
+.headshot {
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    min-height: 145px;
+    min-width: 175px;
+}

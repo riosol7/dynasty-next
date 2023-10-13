@@ -56,3 +56,7 @@ export const accumulatePoints = (rID: number, players: Interfaces.Player[], lega
         ppts: ppts
     };
 };
+
+export const totalFantasyPoints = (pID: string, legacyLeague: Interfaces.League[]) => {
+    
+}

@@ -36,11 +36,12 @@ export default function MVPSlider() {
                     <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
                     <p className="mx-1 font-bold">MVPs</p>
                 </div>
-                <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
+                <a className={styles.anchorCell} href={`/players`}>
+                    <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }}/>
+                </a>
             </div>
-            {loading ?
-                <LoadMVP/> 
-            : <Swiper breakpoints = {{
+            {loading ? <LoadMVP/> : 
+            <Swiper breakpoints = {{
                 1850: {
                     slidesPerView: 5,
                     spaceBetween: 25,

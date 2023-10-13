@@ -19,7 +19,7 @@ import {
     accumulatePoints, 
     calculateAverage, 
     calculatePercentage,
-    findLogo, sortedFantasyMarketPlayerByPosition, processPlayers, processRosters,
+    findLogo, sortPlayersByFantasyMarket, processPlayers, processRosters,
     primeIndicator, 
     isOdd, totalPlayerPoints, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
 
@@ -48,10 +48,10 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
         WR: dynastyWRRank || 0,
         TE: dynastyTERank || 0
     }
-    const qbs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "QB", fantasyMarket);
-    const rbs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "RB", fantasyMarket);
-    const wrs = sortedFantasyMarketPlayerByPosition(updatedRoster!, "WR", fantasyMarket);
-    const tes = sortedFantasyMarketPlayerByPosition(updatedRoster!, "TE", fantasyMarket);
+    const qbs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "QB");
+    const rbs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "RB");
+    const wrs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "WR");
+    const tes = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "TE");
 
     const topQB = qbs[0];
     const topRB = rbs[0];

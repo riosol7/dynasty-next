@@ -8,7 +8,6 @@ import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useF
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
-import LoadMVP from "./loadMVP";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -47,15 +46,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
                 backgroundSize: "150px",
             }}>
                 <div className="px-1">
-                    <div style={{
-                        backgroundImage: `url(${PLAYER_BASE_URL}${mvp?.player_id}.jpg)`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "bottom",
-                        backgroundSize: "cover",
-                        minHeight: "145px",
-                        minWidth: "175px"
-                    }}>
-                    </div>
+                    <div className={styles.headshot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${mvp?.player_id}.jpg)`}}></div>
                 </div>
                 <div>
                     <div className="flex justify-between">

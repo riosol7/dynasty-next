@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
-import { findLogo, getSortedRecords, handleSort, primeIndicator, toDateTime } from "@/utils";
+import { findLogo, getSortedTransactionRecords, handleSort, nextPage, prevPage, primeIndicator, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
@@ -62,10 +62,10 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
         };
     });
 
-    const records = getSortedRecords(waiverBidsFiltered, sort, asc, currentPage, recordsPerPage);
+    const records = getSortedTransactionRecords(waiverBidsFiltered, sort, asc, currentPage, recordsPerPage);
     const npage = Math.ceil(waiverBidsFiltered?.length / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
-      
+    
     const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const valueAsNumber = +e.target.value;
         setRecordsPerPage(valueAsNumber);
@@ -73,22 +73,13 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
     const handlePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectPosition(e.target.value)
     };
+
     const handleOwner = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectOwner(e.target.value)
     };
     const paginate = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const valueAsNumber = +e.target.value;
         setCurrentPage(valueAsNumber)
-    };
-    function prevPage () {
-        if(currentPage !== 1){
-            setCurrentPage(currentPage-1)
-        };
-    };
-    function nextPage () {
-        if(currentPage !== npage){
-            setCurrentPage(currentPage+1)
-        };
     };
 
     useEffect(() => {
@@ -110,7 +101,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
         <div className="pt-4">
             <div className="flex items-center justify-between pb-1">
                 <div className="flex items-center">
-                    <Icon onClick={() => prevPage()} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                    <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
                     <div className="mx-2 flex items-center text-sm">
                         <select className="font-bold bg-transparent text-white border-none" onChange={paginate} value={currentPage}>
                             {pageNumbers.map((number, i) => (
@@ -118,7 +109,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                             ))}
                         </select>
                     </div>
-                    <Icon onClick={() => nextPage()} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color:waiverBidsFiltered?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color:waiverBidsFiltered?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
                 </div>
                 <div style={SHOW_PAGES}>
                     <p>Show</p>
