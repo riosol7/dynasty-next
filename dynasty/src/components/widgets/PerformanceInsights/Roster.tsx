@@ -21,7 +21,7 @@ import {
     calculatePercentage,
     findLogo, sortPlayersByFantasyMarket, processPlayers, processRosters,
     primeIndicator, 
-    isOdd, totalPlayerPoints, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
+    isOdd, totalFantasyPointsByRoster, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
 
 export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
@@ -154,7 +154,7 @@ export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
 
     const playerProfileRow = (player: Interfaces.Player, i: number) => {
         const marketContent = player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent;
-        const playerPoints = totalPlayerPoints(legacyLeague, roster.roster_id, player.player_id);
+        const playerPoints = totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id);
         return (
             <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>

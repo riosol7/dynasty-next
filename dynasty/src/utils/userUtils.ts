@@ -37,3 +37,11 @@ export const findUserByRosterID = (rID: number, league: Interfaces.League): Inte
 
     return foundUser;
 };
+
+export const findUserByPlayerID = (pID: string, league: Interfaces.League): Interfaces.Owner => {
+    const owners = league.users;
+    const foundRoster = league.rosters.find(roster => roster.players.find(player => player === pID));
+    const foundUser = owners.find(owner => owner.user_id === foundRoster?.owner_id);
+    
+    return foundUser || Constants.initOwner;
+};

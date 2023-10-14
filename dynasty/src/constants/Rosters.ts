@@ -52,15 +52,7 @@ export const initRoster: Interfaces.Roster = {
         fpts: 0,
         division: 0,
         rank: 0,
-        best: {
-            fpts: 0,
-            pa: 0,
-            ppts: 0,
-            score: 0,
-            wins: 0,
-            losses: 0,
-            season: ""
-        }
+        totalPtsPerGame: 0
     },
     roster_id: 0,
     reserve: null,

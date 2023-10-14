@@ -36,3 +36,9 @@ export const sortPlayersByFantasyMarket = (players: Interfaces.Player[], fantasy
         return [Constants.initPlayer];
     };
 };
+
+export const convertToFeet = (heightInches: number): string => {
+    const feet = Math.floor(heightInches / 12);
+    const inches = heightInches % 12;
+    return `${feet}'${inches}"`;
+};
