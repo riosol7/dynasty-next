@@ -15,9 +15,8 @@ export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.Pla
         const ktcPlayer = ktc.find((ktcPlayer: Interfaces.PlayerMarket) => ktcPlayer.player === player.full_name);
         const sfPlayer = sf.find((superFlexPlayer: Interfaces.PlayerMarket) => superFlexPlayer.player === player.full_name);
         const fcPlayer = fc.find((fcPlayer: Interfaces.FantasyCalcPlayer) => fcPlayer.name === player.full_name);
-        const dpPlayer = dp.find((dpPlayer: Interfaces.DynastyProcessPlayer) => dpPlayer.player === player.full_name);
-        const fpPlayer = fp.find((fpPlayer: Interfaces.FantasyProPlayer) => fpPlayer.player_name === player.full_name);
-
+        const fpPlayer = fp.find((fpPlayer: Interfaces.FantasyProPlayer) => fpPlayer.player_name === player.full_name || fpPlayer.player_short_name === `${player.first_name[0]}. ${player.last_name}`);
+        const dpPlayer = dp.find((dpPlayer: Interfaces.DynastyProcessPlayer) => dpPlayer.player === player.full_name || dpPlayer.fp_id === fpPlayer?.fantasypros_id);
         // Initialize properties
         player.ktc = player.ktc || {};
         player.sf = player.sf || {};

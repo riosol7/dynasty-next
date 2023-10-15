@@ -20,6 +20,8 @@ import {
     findUserByPlayerID, 
     formatDate, 
     getSortedPlayerRecords, 
+    nextPage, 
+    prevPage, 
     primeIndicator, 
     processPlayers, 
     processRosters, 
@@ -40,9 +42,10 @@ export default function PlayerList() {
     const [asc, setAsc] = useState(false);
     const [sort, setSort] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordsPerPage, setRecordsPerPage] = useState(5);
-    const [selectOwner, setSelectOwner] = useState("all");
-    const [selectPosition, setSelectPosition] = useState("all");
+    const [recordsPerPage, setRecordsPerPage] = useState(15);
+    const [selectOwner, setSelectOwner] = useState("");
+    const [selectPosition, setSelectPosition] = useState("");
+    const [selectFantasySeason, setSelectFantasySeason] = useState("All Time");
 
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
@@ -66,85 +69,99 @@ export default function PlayerList() {
         const valueAsNumber = +e.target.value;
         setCurrentPage(valueAsNumber)
     };
+    const handleSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectFantasySeason(e.target.value);
+    }
     return (
         <div>
-            <div className="flex items-center text-xs font-bold text-[#7d91a6]">
-                <div className="w-1/12">
-                    <p className="text-center">FANTASY</p>
-                    <div className="flex items-center">
-                        <p className="w-6/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
-                        
-                        <p className="w-6/12">POS</p>
+            <div className="flex items-center justify-between p-2 border border-solid border-[#0f0f0f]">
+                <div className="flex items-center">
+                    <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                    <div className="mx-2 flex items-center text-sm">
+                        <select className="font-bold bg-transparent text-white border-none" onChange={paginate} value={currentPage}>
+                            {pageNumbers.map((number, i) => (
+                                <option key={i} value={number}>{number}</option>
+                            ))}
+                        </select>
                     </div>
+                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color: sortedPlayers?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
                 </div>
-                <div className="w-1/12 text-center">
-                    <p>POSITION</p>
-                    <div className="flex items-center">
-                        {POSITIONS.map((position, idx) =>
-                            <p key={idx} className="w-3/12">{position}</p>
+                <div className="flex align-items-center">
+                    <div className={styles.showPages}>
+                        <p>Show</p>
+                        <select style={{background:"inherit", color:"white", border:"none"}} onChange={handleShowPage} value={recordsPerPage}>
+                            <option value={15}>15</option>
+                            {sortedPlayers?.length > 15 ? <option value={30}>30</option> : <></>}
+                            {sortedPlayers?.length > 30 ? <option value={50}>50</option> : <></>}
+                        </select>
+                    </div>
+                    <select className="ml-5" onChange={handleSeason} value={selectFantasySeason} style={{fontSize:".8em",background:"black", color:"white"}}>
+                        {legacyLeague?.slice().map((league, i) => 
+                            <option key={i} value={league.season}>{league.season}</option>
                         )}
+                        <option value="All Time">All Time</option>
+                    </select>
+                </div>
+            </div>
+            <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b border-dashed border-[#2a2c3e] py-1">
+                <p className="w-1/12">FANTASY</p>
+                <p className="w-1/12">POSITION</p>
+                <div className="w-3/12 flex text-center">
+                    <p className="w-7/12">PLAYER</p>
+                    <p className="w-5/12">SCORE</p>
+                </div>
+                <p className="w-2/12">PASSING</p>
+                <p className="w-2/12">RECEIVING</p>
+                <p className="w-2/12">RUSHING</p>
+                <p className="w-1/12">DYNASTY</p>
+            </div>
+            <div className="flex items-center text-xs font-bold text-[#7d91a6] border-b border-solid border-[#0f0f0f] py-1">
+                <div className="w-1/12 flex items-center">
+                    <p className="w-6/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
+                    <p className="w-6/12">POS</p>
+                </div>
+                <div className="w-1/12 text-center flex items-center">
+                    {POSITIONS.map((position, idx) =>
+                        <p key={idx} className="w-3/12">{position}</p>
+                    )}
+                </div>
+                <div className="w-3/12 flex">
+                    <div className="w-7/12 flex items-center pl-3">
+                        <p className="w-6/12">AGE</p>
+                        <p className="w-6/12">TEAM</p>
+                    </div>
+                    <div className="w-5/12 flex items-center">
+                        <p className="w-6/12">FPTS</p>
+                        <p className="w-6/12 flex items-center">PPTS <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
                     </div>
                 </div>
-                <div className="w-3/12 pl-2 flex">
-                    <div className="w-7/12">
-                        <p className="text-center">PLAYER</p>
-                        <div className="flex items-center">
-                            <p className="w-6/12">AGE</p>
-                            <p className="w-6/12">TEAM</p>
-                        </div>
-                    </div>
-                    <div className="w-5/12">
-                        <p className="text-center">SCORE</p>
-                        <div className="flex items-center">
-                            <p className="w-6/12">FPTS</p>
-                            <p className="w-6/12 flex items-center">PPTS <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
-                        </div>
-                    </div>
+                <div className="w-2/12 flex items-center text-center">
+                    <p className="w-3/12">CMP</p>
+                    <p className="w-3/12">ATT</p>
+                    <p className="w-3/12">YD</p>
+                    <p className="w-3/12">TD</p>
                 </div>
-                <div className="w-2/12">
-                    <p className="text-center">PASSING</p>
-                    <div className="flex items-center">
-                        <p className="w-3/12">CMP</p>
-                        <p className="w-3/12">ATT</p>
-                        <p className="w-3/12">YD</p>
-                        <p className="w-3/12">TD</p>
-                    </div>
+                <div className="w-2/12 flex items-center text-center">                
+                    <p className="w-3/12">REC</p>
+                    <p className="w-3/12">TAR</p>
+                    <p className="w-3/12">YD</p>
+                    <p className="w-3/12">TD</p>
                 </div>
-                <div className="w-2/12">
-                    <p className="text-center">RECEIVING</p>
-                    <div className="flex items-center">
-                        <p className="w-3/12">REC</p>
-                        <p className="w-3/12">TAR</p>
-                        <p className="w-3/12">YD</p>
-                        <p className="w-3/12">TD</p>
-                    </div>
+                <div className="w-2/12 flex items-center text-center">
+                    <p className="w-4/12">ATT</p>
+                    <p className="w-4/12">YD</p>
+                    <p className="w-4/12">TD</p>
                 </div>
-                <div className="w-1/12">
-                    <p className="text-center">RUSHING</p>
-                    <div className="flex items-center">
-                        <p className="w-4/12">ATT</p>
-                        <p className="w-4/12">YD</p>
-                        <p className="w-4/12">TD</p>
-                    </div>
-                </div>
-                <div className="w-2/12">
-                    <p className="text-center">DYNASTY</p>
-                    <div className="flex items-center">
-                        <p className="w-3/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
-                        <p className="w-3/12">POS</p>
-                        <p className="w-6/12 text-center">VALUE</p>
-                    </div>
-                </div>
-
+                <p className="w-1/12 text-center">VALUE</p>
             </div>
             {records?.map((record, i) => {
                 const user = findUserByPlayerID(record.player_id, legacyLeague[0]);
-                const fantasyPoints = totalFantasyPointsByPlayerID(record.player_id, legacyLeague)
+                const fantasyPoints = totalFantasyPointsByPlayerID(record.player_id, legacyLeague, selectFantasySeason);
                 return (
-                    <div key={i} className="text-sm flex items-center py-2">
-                        <div className="w-1/12 flex items-center justify-center">
-                            <p className="font-bold">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).rank}</p>
-                            <p className="ml-1">({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).positionRank})</p>
+                    <div key={i} className="text-sm flex items-center py-2 border-b border-dashed border-[#0f0f0f]">
+                        <div className="w-1/12 font-bold flex items-center justify-center">
+                            <p className="w-6/12">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.rank || 0}</p>
+                            <p className="w-6/12">({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.positionRank || 0})</p>
                         </div>
                         <div className={`w-1/12`}>
                             <div className={`${styles.headshot}`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.player_id}.jpg)`}}></div>
@@ -196,28 +213,24 @@ export default function PlayerList() {
                                 </div> 
                             </div>
                         </div>
-                        <div className="w-2/12 flex items-center">
+                        <div className="w-2/12 flex items-center text-center">
                             <p className="w-3/12">CMP</p>
                             <p className="w-3/12">ATT</p>
                             <p className="w-3/12">YD</p>
                             <p className="w-3/12">TD</p>
                         </div>
-                        <div className="w-2/12 flex items-center">
+                        <div className="w-2/12 flex items-center text-center">
                             <p className="w-3/12">REC</p>
                             <p className="w-3/12">TAR</p>
                             <p className="w-3/12">YD</p>
                             <p className="w-3/12">TD</p>
                         </div>
-                        <div className="w-1/12 flex items-center">
+                        <div className="w-2/12 flex items-center text-center">
                             <p className="w-4/12">ATT</p>
                             <p className="w-4/12">YD</p>
                             <p className="w-4/12">TD</p>
                         </div>
-                        <div className="w-2/12 flex items-center justify-center">
-                            <p className="w-3/12 font-bold">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).rank}</p>
-                            <p className="w-3/12">({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).positionRank})</p>
-                            <p className="w-6/12 text-center">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).value} ({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).trend})</p>
-                        </div>
+                        <p className="w-1/12 text-center">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).value} ({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).trend})</p>
                     </div>
                 )
             })}

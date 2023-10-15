@@ -2,7 +2,7 @@ export * from "./findLogo";
 export * from "./getMVP";
 export * from "./stats/allTimeStats";
 export * from "./stats/calculationUtils";
-export * from "./stats/getTotalPts";
+export * from "./stats/totalPts";
 export * from "./stats/seasonStats";
 export * from "./stats/rivarlyStats";
 export * from "./stats/postSeasonStats";
