@@ -9,6 +9,7 @@ export * from "./stats/postSeasonStats";
 export * from "./stats/allPlayStats";
 export * from "./processRosters";
 export * from "./processPlayers";
+export * from "./processUsers";
 export * from "./processTransactions";
 export * from "./leagueUtils";
 export * from "./matchupUtils";

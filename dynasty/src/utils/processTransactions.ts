@@ -1,6 +1,12 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 
+export const processTransactions = (legacyLeague: Interfaces.League[]): Interfaces.Transaction[] => {
+    const transactions = legacyLeague.map(league => league.transactions).flat();
+    
+    return transactions;
+};
+
 export const processWaiverBids = (legacyLeague: Interfaces.League[], players: Interfaces.Player[]) => {
     const waiverBids = legacyLeague.map((league: Interfaces.League) => league.transactions.filter(transaction => 
         transaction.settings?.waiver_bid !== null && transaction.settings?.waiver_bid > 0 && transaction.status === "complete" && transaction.type === "waiver")

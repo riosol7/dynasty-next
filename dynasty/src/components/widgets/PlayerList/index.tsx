@@ -71,7 +71,7 @@ export default function PlayerList() {
     };
     const handleSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectFantasySeason(e.target.value);
-    }
+    };
     return (
         <div>
             <div className="flex items-center justify-between p-2 border border-solid border-[#0f0f0f]">

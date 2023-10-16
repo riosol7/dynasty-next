@@ -19,7 +19,9 @@ export default function MarketWidget() {
                     <Icon icon="ant-design:stock-outlined"  style={{color:"#a9dfd8", fontSize:"1.1rem"}} />
                     <p className="font-bold mx-1">Market</p>
                 </div>
-                <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }} />
+                <a className={styles.anchorCell} href={`/market`}>
+                    <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }}/>
+                </a>
             </div>
             <PositionMarket waiverBids={waiverBids}/>
             <WaiverActivity waiverBids={waiverBids}/>

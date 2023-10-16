@@ -12,8 +12,8 @@ export const findUserByName = (name: string, league: Interfaces.League): Interfa
     return foundOwner;
 };
 
-export const findUserByOwnerID = (id: string, league: Interfaces.League): Interfaces.Owner => {
-    const foundOwner = league.users.find(user => user.user_id === id);
+export const findUserByOwnerID = (id: string, users: Interfaces.Owner[]): Interfaces.Owner => {
+    const foundOwner = users.find(user => user.user_id === id);
     
     if (!foundOwner) {
         return Constants.initOwner;
@@ -29,7 +29,7 @@ export const findUserEXP = (uID: string, legacyLeague: Interfaces.League[]) => {
 
 export const findUserByRosterID = (rID: number, league: Interfaces.League): Interfaces.Owner => {
     const foundRoster = findRosterByRosterID(rID, league.rosters);
-    const foundUser = findUserByOwnerID(foundRoster.owner_id, league);
+    const foundUser = findUserByOwnerID(foundRoster.owner_id, league.users);
 
     if (!foundUser) {
         return Constants.initOwner;

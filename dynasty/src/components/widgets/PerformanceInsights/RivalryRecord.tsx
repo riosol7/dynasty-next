@@ -9,7 +9,7 @@ import { findRosterByRosterID, findUserByOwnerID, winPCT } from "@/utils";
 export default function RivalryRecord({ record, type }: Interfaces.RivalryRecordProps) {
     const { legacyLeague } = useLeagueContext();
     const foundOpponentRoster = findRosterByRosterID(record.opponentID, legacyLeague[0].rosters);
-    const foundOpponentUser = findUserByOwnerID(foundOpponentRoster.owner_id, legacyLeague[0]);
+    const foundOpponentUser = findUserByOwnerID(foundOpponentRoster.owner_id, legacyLeague[0].users);
     return (
         <a href={`/teams/${foundOpponentUser.display_name}`} className={`${styles.performanceSubTitleRow} ${styles.fontHover} ${styles.anchorCell}`}>
             <div className="w-8/12 flex items-center">
