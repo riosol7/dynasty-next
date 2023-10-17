@@ -1,0 +1,18 @@
+.ownerImage {
+    border-radius: 5%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    height: 25px;
+    width: 25px;
+}
+
+.headshot {
+    border-radius: 50%;
+    background-color: lightgray;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    height: 60px;
+    width: 60px;
+}

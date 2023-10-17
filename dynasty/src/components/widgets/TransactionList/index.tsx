@@ -1,18 +1,23 @@
 "use client";
+import { Icon } from "@iconify-icon/react";
 import React, { useState, useEffect } from "react";
 import styles from "./TransactionList.module.css";
 import { 
   useDynastyProcessContext, 
   useFantasyCalcContext, 
+  useFantasyMarket, 
   useFantasyProContext, 
   useKTCContext, 
   useLeagueContext, 
   usePlayerContext, 
   useSuperFlexContext 
 } from "@/context";
-import { allUsers, findPlayerByID, findUserByOwnerID, getSortedTransactionRecords, processPlayers, processTransactions, toDateTime } from "@/utils";
+import { allUsers, findPlayerByID, findUserByOwnerID, findUserByRosterID, getSortedTransactionRecords, processPlayers, processTransactions, toDateTime } from "@/utils";
+import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import * as Interfaces from "@/interfaces";
 
 export default function TransactionList() {
+  const { fantasyMarket } = useFantasyMarket()!;
   const { legacyLeague } = useLeagueContext();
   const { players, loadPlayers } = usePlayerContext();
   const { ktc, loadKTC } = useKTCContext();
@@ -53,17 +58,79 @@ export default function TransactionList() {
     setSelectSeason(e.target.value);
   };
 
+  console.log("records: ", records)
   
   return (
     <div>
-      <p></p>
       <div>
-      {records.map((record, i) => 
-        <div key={i}>
-          <p>{findUserByOwnerID(record.creator, users).display_name}</p>
-          <p>{toDateTime(record.created)}</p>
+      {records.map((record, i) => {
+        const creator = findUserByOwnerID(record.creator, users);
+        return(
+        <div key={i} className="py-2">
+
+          <div className="flex items-center text-sm">
+            <div className={`mr-1 ${styles.ownerImage}`} style={{backgroundImage:`url(${SLEEPER_AVATAR_BASE_URL}${creator.avatar})`}}></div>
+            <div>
+              <p className="text-xs">{toDateTime(record.created)}</p>
+              <p>{record.type === "comissioner" ?
+                "Commissioner made a move"
+              : record.type === "trade" ? 
+                `${creator.display_name}'s trade completed`
+              : (record.type === "waiver" || record.type === "free_agent") && record.drops === null ?
+                `${creator.display_name} signed`
+              : (record.type === "waiver" || record.type === "free_agent") && record.adds === null ?
+                `${creator.display_name} released FA`
+              : record.type === "waiver" || record.type === "free_agent" ?
+                `${creator.display_name} made a move` : ""
+              }</p>
+            </div>
+          </div>          
+          <div>
+            {record.adds ? Object.keys(record.adds)?.map((pID, idx)=> {
+              const user = findUserByRosterID(record.adds[pID], legacyLeague[0]);
+              const player = findPlayerByID(pID, processedPlayers);
+              return (
+                <div key={idx} className="flex items-center pt-2">
+                  <div style={{border: `2px solid ${POSITION_COLORS[player.position as keyof typeof POSITION_COLORS]}`, borderRadius:"50%", padding:".2em"}}>
+                    <div className={styles.headshot} style={{ backgroundImage: `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, display: "flex", alignItems:"end", justifyContent:"end"}}>
+                      <Icon icon="ph:user-circle-plus-duotone" style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
+                    </div>
+                  </div>
+                  <div className="ml-1">
+                    <p className="text-sm font-bold">{player.position === "DEF" ? `${player.first_name} ${player.last_name}` : player.full_name}</p>
+                    <p className="text-xs">#{player.number} {player.team} - {player.position}</p>
+                    <p className="text-xs flex items-center">
+                      <Icon icon="mdi:tag-plus-outline" style={{marginRight:"2px", color:"#a9dfd8", fontSize:"1.25em"}}/>
+                      {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
+                    </p>
+                  </div>
+                </div>
+              );
+            }): Object.keys(record.drops)?.map((pID, idx)=> {
+              const user = findUserByRosterID(record.drops[pID], legacyLeague[0]);
+              const player = findPlayerByID(pID, processedPlayers);
+              return (
+                <div key={idx} className="flex items-center pt-2">
+                  <div style={{border: `2px solid ${POSITION_COLORS[player.position as keyof typeof POSITION_COLORS]}`, borderRadius:"50%", padding:".2em"}}>
+                    <div className={styles.headshot} style={{ backgroundImage: `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, display: "flex", alignItems:"end", justifyContent:"end"}}>
+                      <Icon icon="ph:user-circle-plus-duotone" style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
+                    </div>
+                  </div>
+                  <div className="ml-1">
+                    <p className="text-sm font-bold">{player.position === "DEF" ? `${player.first_name} ${player.last_name}` : player.full_name}</p>
+                    <p className="text-xs">#{player.number} {player.team} - {player.position}</p>
+                    <p className="text-xs flex items-center">
+                      <Icon icon="mdi:tag-minus-outline" style={{marginRight:"2px", color:"#a9dfd8", fontSize:"1.25em"}}/>
+                      {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
+                    </p>                  
+                    </div>
+                </div>
+              );
+            })}
+          </div>
+         
         </div>
-      )}
+      )})}
       </div>
     </div>
   );

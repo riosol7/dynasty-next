@@ -1,6 +1,6 @@
 import * as Interfaces from "@/interfaces";
 
-const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE"];
+const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE", "DEF"];
 
 function extractNumbersFromString(inputString: string): string {
     const numericPart = inputString.match(/\d+/);
