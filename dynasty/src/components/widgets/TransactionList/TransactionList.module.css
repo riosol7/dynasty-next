@@ -16,3 +16,43 @@
     height: 60px;
     width: 60px;
 }
+
+.dashedRow {
+    border-bottom: 1px dashed #2a2c3e
+}
+
+.solidRow {
+    border-bottom: 2px solid #2a2c3e
+}
+
+.transactionList {
+    width: max-content;
+    height: max-content;
+}
+
+.filterBtn {
+    display: flex;
+    align-items: center;
+    background-color: #0f0f0f;
+    border: #0f0f0f 4px solid;
+    width: max-content;
+    padding: 4px;
+    padding-inline: 1em;
+    border-radius: 5px;
+}
+
+.transactionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0f0f0f;
+    width: max-content;
+    border-radius: 5px;
+    border-bottom: 2px solid #2a2c3e;
+}
+
+.icon {
+    margin-right: 2px; 
+    color: #a9dfd8; 
+    font-size: 1em;
+}

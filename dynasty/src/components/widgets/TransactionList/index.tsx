@@ -12,7 +12,7 @@ import {
   usePlayerContext, 
   useSuperFlexContext 
 } from "@/context";
-import { allUsers, findPlayerByID, findUserByOwnerID, findUserByRosterID, getSortedTransactionRecords, processPlayers, processTransactions, toDateTime } from "@/utils";
+import { allUsers, findLogo, findPlayerByID, findUserByOwnerID, findUserByRosterID, getSortedTransactionRecords, processPlayers, processTransactions, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
@@ -57,18 +57,24 @@ export default function TransactionList() {
   const handleSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectSeason(e.target.value);
   };
-
-  console.log("records: ", records)
   
   return (
-    <div>
-      <div>
+    <div className={styles.transactionList}>
+      <div className={`flex items-center justify-between text-sm ${styles.transactionHeader}`}>
+        <p className={styles.filterBtn}><Icon icon="fluent:filter-16-filled" className={styles.icon}/>Filter</p>
+        <p className={styles.filterBtn}><Icon icon="ep:sort" className={styles.icon}/>Sort</p>
+        <select className={styles.filterBtn}>
+          <option>15</option>
+          <option>30</option>
+          <option>50</option>
+        </select>
+      </div>
+      <div className="px-2">
       {records.map((record, i) => {
         const creator = findUserByOwnerID(record.creator, users);
         return(
-        <div key={i} className="py-2">
-
-          <div className="flex items-center text-sm">
+        <div key={i} className={`py-2 ${styles.solidRow}`}>
+          <div className={`flex items-center text-sm`}>
             <div className={`mr-1 ${styles.ownerImage}`} style={{backgroundImage:`url(${SLEEPER_AVATAR_BASE_URL}${creator.avatar})`}}></div>
             <div>
               <p className="text-xs">{toDateTime(record.created)}</p>
@@ -90,17 +96,20 @@ export default function TransactionList() {
               const user = findUserByRosterID(record.adds[pID], legacyLeague[0]);
               const player = findPlayerByID(pID, processedPlayers);
               return (
-                <div key={idx} className="flex items-center pt-2">
+                <div key={idx} className="flex items-center py-2">
                   <div style={{border: `2px solid ${POSITION_COLORS[player.position as keyof typeof POSITION_COLORS]}`, borderRadius:"50%", padding:".2em"}}>
-                    <div className={styles.headshot} style={{ backgroundImage: `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, display: "flex", alignItems:"end", justifyContent:"end"}}>
+                    <div className={styles.headshot} style={{ 
+                      backgroundImage: player.position === "DEF" ? `url(${findLogo(player.team).l})` : `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, 
+                      display: "flex", alignItems:"end", justifyContent:"end"}}>
                       <Icon icon="ph:user-circle-plus-duotone" style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
                     </div>
                   </div>
-                  <div className="ml-1">
+                  <div className="ml-1 text-xs">
+                    {record.type === "trade" ? <p className="flex items-center"><Icon icon="game-icons:cycle" className={styles.icon}/>{user.display_name}</p> : ""}
                     <p className="text-sm font-bold">{player.position === "DEF" ? `${player.first_name} ${player.last_name}` : player.full_name}</p>
-                    <p className="text-xs">#{player.number} {player.team} - {player.position}</p>
-                    <p className="text-xs flex items-center">
-                      <Icon icon="mdi:tag-plus-outline" style={{marginRight:"2px", color:"#a9dfd8", fontSize:"1.25em"}}/>
+                    <p className="">{player.position === "DEF" ? "" : "#"}{player.number} {player.team} - {player.position}</p>
+                    <p className="flex items-center">
+                      <Icon icon="mdi:tag-plus-outline" className={styles.icon}/>
                       {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
                     </p>
                   </div>
@@ -110,17 +119,19 @@ export default function TransactionList() {
               const user = findUserByRosterID(record.drops[pID], legacyLeague[0]);
               const player = findPlayerByID(pID, processedPlayers);
               return (
-                <div key={idx} className="flex items-center pt-2">
+                <div key={idx} className="flex items-center py-2">
                   <div style={{border: `2px solid ${POSITION_COLORS[player.position as keyof typeof POSITION_COLORS]}`, borderRadius:"50%", padding:".2em"}}>
-                    <div className={styles.headshot} style={{ backgroundImage: `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, display: "flex", alignItems:"end", justifyContent:"end"}}>
-                      <Icon icon="ph:user-circle-plus-duotone" style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
+                    <div className={styles.headshot} style={{ 
+                      backgroundImage: player.position === "DEF" ? `url(${findLogo(player.team).l})` : `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, 
+                      display: "flex", alignItems:"end", justifyContent:"end"}}>
+                      <Icon icon="ph:user-circle-minus-duotone" style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
                     </div>
                   </div>
                   <div className="ml-1">
                     <p className="text-sm font-bold">{player.position === "DEF" ? `${player.first_name} ${player.last_name}` : player.full_name}</p>
-                    <p className="text-xs">#{player.number} {player.team} - {player.position}</p>
+                    <p className="text-xs">{player.position === "DEF" ? "" : "#"}{player.number} {player.team} - {player.position}</p>
                     <p className="text-xs flex items-center">
-                      <Icon icon="mdi:tag-minus-outline" style={{marginRight:"2px", color:"#a9dfd8", fontSize:"1.25em"}}/>
+                      <Icon icon="mdi:tag-minus-outline" className={styles.icon}/>
                       {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
                     </p>                  
                     </div>
@@ -128,7 +139,6 @@ export default function TransactionList() {
               );
             })}
           </div>
-         
         </div>
       )})}
       </div>

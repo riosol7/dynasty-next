@@ -30,7 +30,7 @@ import {
 } from "@/utils";
 import { PLAYER_BASE_URL, POSITIONS, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
-export default function PlayerList() {
+export default function PlayerList({ type }: { type? : string})  {
     const { fantasyMarket } = useFantasyMarket()!;
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
@@ -48,8 +48,10 @@ export default function PlayerList() {
     const [selectFantasySeason, setSelectFantasySeason] = useState("All Time");
 
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const filteredPlayers = type === "available" ? processedPlayers.filter(player => findUserByPlayerID(player.player_id, legacyLeague[0]).display_name === "")
+    : processedPlayers;
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-    const sortedPlayers = sortPlayersByFantasyMarket(processedPlayers, fantasyMarket);
+    const sortedPlayers = sortPlayersByFantasyMarket(filteredPlayers, fantasyMarket);
     const records = getSortedPlayerRecords(sortedPlayers, sort, asc, currentPage, recordsPerPage);
     const npage = Math.ceil(processedPlayers?.length / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
@@ -179,7 +181,9 @@ export default function PlayerList() {
                             <div className="text-end">
                                 <div className="flex justify-between items-end">
                                     <div className="pt-1 flex items-center">
-                                        <Image className={`${styles.ownerLogo}`} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${user?.avatar}`}/>
+                                        {user?.avatar === "" ?
+                                            <Image className={`${styles.ownerLogo}`} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${user?.avatar}`}/>
+                                        : "FA"}
                                         <p className="text-xs text-center ml-1">{user.display_name}</p>
                                     </div>
                                     <p className="text-xs">{fantasyPoints.fpts} / {fantasyPoints.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts</span></p>
