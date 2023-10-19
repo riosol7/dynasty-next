@@ -69,7 +69,7 @@ export default function TransactionList() {
           <option>50</option>
         </select>
       </div>
-      <div className="px-2">
+      <div>
       {records.map((record, i) => {
         const creator = findUserByOwnerID(record.creator, users);
         return(

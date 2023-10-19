@@ -5,7 +5,7 @@ import MarketPlus from "@/components/widgets/Market/MarketPlus";
 export default function Market() {
     return (
         <div className={`flex`}>
-            <div className="w-full">
+            <div className="w-full pr-5">
                 <MarketPlus />
                 <PlayerList type={"available"}/>
             </div>

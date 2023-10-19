@@ -76,7 +76,9 @@ export default function PlayerList({ type }: { type? : string})  {
     };
     return (
         <div>
-            <div className="flex items-center justify-between p-2 border border-solid border-[#0f0f0f]">
+            
+            <div className="flex items-center justify-between pt-5 pb-4 border-b-2 border-solid border-gray-900">
+                {type === "available" ? <h2>Available Players</h2> : ""}
                 <div className="flex items-center">
                     <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
                     <div className="mx-2 flex items-center text-sm">
@@ -105,7 +107,7 @@ export default function PlayerList({ type }: { type? : string})  {
                     </select>
                 </div>
             </div>
-            <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b border-dashed border-[#2a2c3e] py-1">
+            <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b border-dashed border-[#2a2c3e] py-2">
                 <p className="w-1/12">FANTASY</p>
                 <p className="w-1/12">POSITION</p>
                 <div className="w-3/12 flex text-center">
@@ -159,6 +161,7 @@ export default function PlayerList({ type }: { type? : string})  {
             {records?.map((record, i) => {
                 const user = findUserByPlayerID(record.player_id, legacyLeague[0]);
                 const fantasyPoints = totalFantasyPointsByPlayerID(record.player_id, legacyLeague, selectFantasySeason);
+                console.log(user?.avatar)
                 return (
                     <div key={i} className="text-sm flex items-center py-2 border-b border-dashed border-[#0f0f0f]">
                         <div className="w-1/12 font-bold flex items-center justify-center">
@@ -181,7 +184,7 @@ export default function PlayerList({ type }: { type? : string})  {
                             <div className="text-end">
                                 <div className="flex justify-between items-end">
                                     <div className="pt-1 flex items-center">
-                                        {user?.avatar === "" ?
+                                        {user?.avatar !== "," ?
                                             <Image className={`${styles.ownerLogo}`} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${user?.avatar}`}/>
                                         : "FA"}
                                         <p className="text-xs text-center ml-1">{user.display_name}</p>

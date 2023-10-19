@@ -2,7 +2,7 @@ import styles from "./Market.module.css";
 import * as Interfaces from "@/interfaces";
 import { Waivers } from "@/types";
 import { POSITIONS } from "@/constants";
-import { calculatePercentageChange, roundToHundredth } from "@/utils";
+import { calculatePercentageChange, roundToHundredth, findRecentWaivers, findHighestBid, findLowestBid, findTopSpender } from "@/utils";
 import TrendChart from "@/components/charts/TrendChart";
 
 const positionStyles = {
@@ -12,40 +12,7 @@ const positionStyles = {
     TE: styles.teHUD,
 };
 
-export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps ) {
-    const waivers: Waivers = {
-        QB: waiverBids?.qb || [],
-        RB: waiverBids?.rb || [],
-        WR: waiverBids?.wr || [],
-        TE: waiverBids?.te || [],
-    };
-
-    function findLowestBid(position: keyof Waivers) {
-        return waivers[position]?.slice().sort((a, b) => a.settings.waiver_bid - b.settings.waiver_bid)[0]?.settings?.waiver_bid;
-    };
-
-    function findHighestBid(position: keyof Waivers) {
-        return waivers[position]?.slice().sort((a, b) => b.settings.waiver_bid - a.settings.waiver_bid)[0]?.settings?.waiver_bid;
-    };
-
-    function findRecentWaivers(position: keyof Waivers) {
-        return waivers[position]?.slice().sort((a, b) => b.created - a.created);
-    };
-
-    function findTopSpender(waiverData: Interfaces.Transaction[]) {
-        return Object.entries(
-            waiverData.slice().reduce((acc, team) => {
-                acc[team.creator] = acc[team.creator] || [];
-                acc[team.creator].push(team);
-                return acc;
-            }, Object.create(null))
-        ).map((o: any) => {
-            return {
-                owner: o[0],
-                pts: o[1].reduce((a: number, b: any) => a + b.settings.waiver_bid, 0),
-            };
-        }).sort((a, b) => b.pts - a.pts)[0];
-    };
+export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) {
 
     return (
         <div className="py-3">
@@ -61,10 +28,11 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                 <div className="w-2/12">TOP SPENDER</div>
             </div>
             {POSITIONS.map((position, i) => {  
-                const recentWaivers = findRecentWaivers(position as keyof Waivers);
-                const highestBid = findHighestBid(position as keyof Waivers);
-                const lowestBid = findLowestBid(position as keyof Waivers);
-                const averageBid = roundToHundredth(waivers[position as keyof Waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0) / waivers[position as keyof Waivers].length);
+                const recentWaivers = findRecentWaivers(waivers[position as keyof typeof waivers]!);
+                const highestBid = findHighestBid(waivers[position as keyof typeof waivers]!);
+                const lowestBid = findLowestBid(waivers[position as keyof typeof waivers]!);
+                const volume = waivers[position as keyof Waivers].length;
+                const averageBid = roundToHundredth(waivers[position as keyof typeof waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
                 return (
                     <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
                         i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
@@ -86,12 +54,10 @@ export default function PositionMarket({ waiverBids }: Interfaces.WaiverBidProps
                             {calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid)} %
                             </p>
                         </div>
-                        {/* AVG */}
                         <p className="w-1/12">{averageBid}</p>     
                         <p className="w-1/12">{lowestBid}</p>
                         <p className="w-1/12">{highestBid}</p>
-                        {/* TRANSACTIONS */}
-                        <p className="w-1/12">{waivers[position as keyof Waivers].length}</p>
+                        <p className="w-1/12">{volume}</p>
                         <p className="w-2/12">{findTopSpender(waivers[position as keyof Waivers])?.owner} (${findTopSpender(waivers[position as keyof Waivers])?.pts})</p>
                     </div>
                 );

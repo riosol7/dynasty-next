@@ -10,7 +10,7 @@ export default function MarketWidget() {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
     const { players, loadPlayers } = usePlayerContext();
 
-    const waiverBids = processWaiverBids(legacyLeague, players);
+    const waivers = processWaiverBids(legacyLeague, players);
 
     return (
         <div className="py-5">
@@ -23,8 +23,8 @@ export default function MarketWidget() {
                     <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }}/>
                 </a>
             </div>
-            <PositionMarket waiverBids={waiverBids}/>
-            <WaiverActivity waiverBids={waiverBids}/>
+            <PositionMarket waivers={waivers}/>
+            <WaiverActivity waivers={waivers}/>
         </div>
     );
 };

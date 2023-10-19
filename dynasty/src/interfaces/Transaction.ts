@@ -35,14 +35,16 @@ export interface Transaction {
   waiver_player: Player;
 };
 
+export interface Waivers { 
+  all?: Transaction[];
+  QB: Transaction[];
+  RB: Transaction[];
+  WR: Transaction[];
+  TE: Transaction[];
+}
+
 export interface WaiverBidProps {
-  waiverBids:{ 
-    all: Transaction[];
-    qb: Transaction[];
-    rb: Transaction[];
-    wr: Transaction[];
-    te: Transaction[];
-  }
+  waivers: Waivers
 }
 
 export interface WaiverProps {

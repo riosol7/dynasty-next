@@ -25,10 +25,10 @@ export const processWaiverBids = (legacyLeague: Interfaces.League[], players: In
 
     return {
         all: waiverBids,
-        qb: qbWaivers,
-        rb: rbWaivers,
-        wr: wrWaivers,
-        te: teWaivers,
+        QB: qbWaivers,
+        RB: rbWaivers,
+        WR: wrWaivers,
+        TE: teWaivers,
     };
 };
   

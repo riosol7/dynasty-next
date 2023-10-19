@@ -46,7 +46,7 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
     );
 };
 
-export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps) {
+export default function WaiverActivity({ waivers }: Interfaces.WaiverBidProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
     const [asc, setAsc] = useState(false);
     const [sort, setSort] = useState("DATE");
@@ -54,7 +54,7 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
     const [recordsPerPage, setRecordsPerPage] = useState(5);
     const [selectOwner, setSelectOwner] = useState("all");
     const [selectPosition, setSelectPosition] = useState("all");
-    const waiverBidsFiltered = waiverBids[selectPosition as keyof typeof waiverBids]?.filter(waiver => {
+    const waiverBidsFiltered = waivers[selectPosition as keyof typeof waivers]?.filter(waiver => {
         if (selectOwner !== "all") {
             return waiver.creator === selectOwner;
         } else {
@@ -62,8 +62,8 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
         };
     });
 
-    const records = getSortedTransactionRecords(waiverBidsFiltered, sort, asc, currentPage, recordsPerPage);
-    const npage = Math.ceil(waiverBidsFiltered?.length / recordsPerPage);
+    const records = getSortedTransactionRecords(waiverBidsFiltered!, sort, asc, currentPage, recordsPerPage);
+    const npage = Math.ceil(waiverBidsFiltered?.length! / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
     
     const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -83,11 +83,11 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
     };
 
     useEffect(() => {
-        if (waiverBidsFiltered?.length < recordsPerPage) {
-            if (waiverBidsFiltered.length > 10) {
+        if (waiverBidsFiltered?.length! < recordsPerPage) {
+            if (waiverBidsFiltered?.length! > 10) {
                 setRecordsPerPage(15);
                 setCurrentPage(1);
-            } else if (waiverBidsFiltered.length > 5) {
+            } else if (waiverBidsFiltered?.length! > 5) {
                 setRecordsPerPage(10);
                 setCurrentPage(1);
             } else {
@@ -109,14 +109,15 @@ export default function WaiverActivity({ waiverBids }: Interfaces.WaiverBidProps
                             ))}
                         </select>
                     </div>
-                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color:waiverBidsFiltered?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" 
+                    style={{fontSize: "1.5em", color: waiverBidsFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
                 </div>
                 <div style={SHOW_PAGES}>
                     <p>Show</p>
                     <select style={{background:"inherit", color:"white", border:"none"}} onChange={handleShowPage} value={recordsPerPage}>
                         <option value={5}>5</option>
-                        {waiverBidsFiltered?.length > 5 ? <option value={10}>10</option> : <></>}
-                        {waiverBidsFiltered?.length > 10 ? <option value={15}>15</option> : <></>}
+                        {waiverBidsFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
+                        {waiverBidsFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}
                     </select>
                 </div>
             </div>
