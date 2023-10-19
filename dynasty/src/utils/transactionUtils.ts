@@ -1,5 +1,4 @@
 import * as Interfaces from "@/interfaces";
-import { Waivers } from "@/types";
 
 export const findLowestBid = (waivers: Interfaces.Transaction[]) => {
     return waivers?.slice().sort((a, b) => a.settings.waiver_bid - b.settings.waiver_bid)[0]?.settings?.waiver_bid;
@@ -14,16 +13,30 @@ export const findRecentWaivers = (waivers: Interfaces.Transaction[]) => {
 };
 
 export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
-    return Object.entries(
-        waiverData.slice().reduce((acc, team) => {
+    if (waiverData) {
+        const reducedData = waiverData.slice().reduce((acc, team) => {
             acc[team.creator] = acc[team.creator] || [];
             acc[team.creator].push(team);
             return acc;
-        }, Object.create(null))
-    ).map((o: any) => {
-        return {
-            owner: o[0],
-            pts: o[1].reduce((a: number, b: any) => a + b.settings.waiver_bid, 0),
-        };
-    }).sort((a, b) => b.pts - a.pts)[0];
+        }, Object.create(null));
+
+        const entries = Object.entries(reducedData);
+
+        if (entries.length > 0) {
+            const result = entries.map((o) => {
+                return {
+                    owner: o[0],
+                    pts: o[1].reduce((a, b) => a + b.settings.waiver_bid, 0),
+                };
+            }).sort((a, b) => b.pts - a.pts)[0];
+
+            return result;
+        } else {
+            // Handle case where entries are empty
+            return null; // or some other appropriate value
+        }
+    } else {
+        // Handle case where waiverData is null or undefined
+        return null; // or some other appropriate value
+    };
 };

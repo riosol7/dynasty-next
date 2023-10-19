@@ -60,14 +60,14 @@ export default function TransactionList() {
   
   return (
     <div className={styles.transactionList}>
-      <div className={`flex items-center justify-between text-sm ${styles.transactionHeader}`}>
+      <div className={`text-sm ${styles.transactionHeader}`}>
         <p className={styles.filterBtn}><Icon icon="fluent:filter-16-filled" className={styles.icon}/>Filter</p>
-        <p className={styles.filterBtn}><Icon icon="ep:sort" className={styles.icon}/>Sort</p>
         <select className={styles.filterBtn}>
           <option>15</option>
           <option>30</option>
           <option>50</option>
         </select>
+        <p className={styles.filterBtn}><Icon icon="ep:sort" className={styles.icon}/>Sort</p>
       </div>
       <div>
       {records.map((record, i) => {
@@ -132,7 +132,7 @@ export default function TransactionList() {
                     <p className="text-xs">{player.position === "DEF" ? "" : "#"}{player.number} {player.team} - {player.position}</p>
                     <p className="text-xs flex items-center">
                       <Icon icon="mdi:tag-minus-outline" className={styles.icon}/>
-                      {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
+                      {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent)?.value || 0}
                     </p>                  
                     </div>
                 </div>

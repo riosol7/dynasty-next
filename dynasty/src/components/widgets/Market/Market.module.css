@@ -27,6 +27,10 @@
     background-image: linear-gradient( -135deg, #fe8800 10%, #faae58 100%);
 }
 
+.kHUD {
+    background-image: linear-gradient( -135deg, #bd66ff 10%, #cb86ff 100%);
+}
+
 .playerHeadShot{
     background-color:#dbdbde;
     background-repeat: no-repeat;

@@ -62,7 +62,7 @@ export const initPlayer: Interfaces.Player = {
         ecr: "",
         sd: "",
         best: "",
-        worst: "",   
+        worst: "",
         player_page_url: "",
         player_image_url: "",
         player_bye_week: "",
@@ -76,4 +76,5 @@ export const initPlayer: Interfaces.Player = {
         start_sit_grade: "",
         r2p_pts: "",
     },
+    injury_status: ""
 };

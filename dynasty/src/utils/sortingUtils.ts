@@ -1,6 +1,5 @@
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
-import { } from ".";
 
 export const handleSort = (
     sort: string, 

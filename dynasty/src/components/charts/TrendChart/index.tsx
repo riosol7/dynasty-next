@@ -5,8 +5,8 @@ import * as Interfaces from "@/interfaces";
 
 export default function TrendChart({ waivers }: Interfaces.WaiverProps) {
   const series = [{ 
-    name: `${waivers[0]?.waiver_player.position}`,
-    data: waivers.sort((a, b) => a.created - b.created).map(waiver => waiver.settings.waiver_bid)
+    name: `${waivers && waivers[0]?.waiver_player.position}`,
+    data: waivers?.sort((a, b) => a.created - b.created).map(waiver => waiver.settings.waiver_bid)
   }];
   const options = {
     chart: {

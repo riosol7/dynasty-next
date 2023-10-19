@@ -161,7 +161,6 @@ export default function PlayerList({ type }: { type? : string})  {
             {records?.map((record, i) => {
                 const user = findUserByPlayerID(record.player_id, legacyLeague[0]);
                 const fantasyPoints = totalFantasyPointsByPlayerID(record.player_id, legacyLeague, selectFantasySeason);
-                console.log(user?.avatar)
                 return (
                     <div key={i} className="text-sm flex items-center py-2 border-b border-dashed border-[#0f0f0f]">
                         <div className="w-1/12 font-bold flex items-center justify-center">

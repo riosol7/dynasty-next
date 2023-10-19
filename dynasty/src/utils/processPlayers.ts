@@ -1,16 +1,22 @@
 import * as Interfaces from "@/interfaces";
 
-const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE", "DEF"];
+const validPositions: Interfaces.Player['position'][] = ["QB", "RB", "WR", "TE", "K", "DEF"];
 
 function extractNumbersFromString(inputString: string): string {
     const numericPart = inputString.match(/\d+/);
     return numericPart ? numericPart[0] : "";
 };
 
-export const processPlayers = (players: Interfaces.Player[], ktc: Interfaces.PlayerMarket[], sf: Interfaces.PlayerMarket[], fc: Interfaces.FantasyCalcPlayer[], dp: Interfaces.DynastyProcessPlayer[], fp: Interfaces.FantasyProPlayer[],) => {
-    const unemployedPlayers = players.filter((player: Interfaces.Player) => !validPositions.includes(player.position) && player.team === null);
+export const processPlayers = (
+    players: Interfaces.Player[], 
+    ktc: Interfaces.PlayerMarket[], 
+    sf: Interfaces.PlayerMarket[], 
+    fc: Interfaces.FantasyCalcPlayer[], 
+    dp: Interfaces.DynastyProcessPlayer[], 
+    fp: Interfaces.FantasyProPlayer[],
+) => {
+    const unemployedPlayers = players.filter((player: Interfaces.Player) => validPositions.includes(player.position) && player.team === null);
     const employedPlayers = players.filter((player: Interfaces.Player) => validPositions.includes(player.position) && player.team !== null);
-
     const updatedEmployedPlayers = employedPlayers.map((player: Interfaces.Player) => {
         const ktcPlayer = ktc.find((ktcPlayer: Interfaces.PlayerMarket) => ktcPlayer.player === player.full_name);
         const sfPlayer = sf.find((superFlexPlayer: Interfaces.PlayerMarket) => superFlexPlayer.player === player.full_name);
