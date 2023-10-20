@@ -78,7 +78,7 @@ export default function PlayerList({ type }: { type? : string})  {
         <div>
             
             <div className="flex items-center justify-between pt-5 pb-4 border-b-2 border-solid border-gray-900">
-                {type === "available" ? <h2>Available Players</h2> : ""}
+                {type === "available" ? <h2 className="font-bold">Available Players</h2> : ""}
                 <div className="flex items-center">
                     <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
                     <div className="mx-2 flex items-center text-sm">
