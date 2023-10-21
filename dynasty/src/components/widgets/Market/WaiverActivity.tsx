@@ -139,10 +139,11 @@ export default function WaiverActivity({ waivers }: Interfaces.WaiverBidProps) {
                 <div className="w-2/12">
                     <select style={SELECT_TAG} onChange={handlePosition} value={selectPosition}>
                         <option value={"all"}>POSITION</option>
-                        <option value={"qb"}>QB</option>
-                        <option value={"rb"}>RB</option>
-                        <option value={"wr"}>WR</option>
-                        <option value={"te"}>TE</option>
+                        <option value={"QB"}>QB</option>
+                        <option value={"RB"}>RB</option>
+                        <option value={"WR"}>WR</option>
+                        <option value={"TE"}>TE</option>
+                        <option value={"K"}>K</option>
                     </select>
                 </div>
                 <div className="w-2/12">
@@ -185,7 +186,7 @@ export default function WaiverActivity({ waivers }: Interfaces.WaiverBidProps) {
                             </div>
                             <div className="pl-4">
                                 <p style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
-                                <p className="text-xs text-gray-400 font-light">{player.team} #{player.number}</p>
+                                <p className="text-xs text-gray-400 font-light">#{player.number} {player.team}</p>
                                 <p className="font-bold text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
                             </div>
                         </div>

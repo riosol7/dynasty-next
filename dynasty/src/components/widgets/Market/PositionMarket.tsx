@@ -14,18 +14,18 @@ const positionStyles = {
 };
 
 export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) {
-
+    console.log(waivers)
     return (
         <div className="py-3">
             <div className="flex items-center font-bold pb-3 text-xs text-[#7d91a6] border-b border-solid border-[#2a2c3e]">
-                <div className="w-1/12">POSITION</div>
+                <div style={{width: "70px"}}>POSITION</div>
                 <div className="w-3/12">TREND</div>
                 <div className="w-1/12">LAST PRICE</div>
                 <div className="w-1/12">CHANGE %</div>
                 <div className="w-1/12">AVG</div>
                 <div className="w-1/12">LOW</div>
                 <div className="w-1/12">HIGH</div>
-                <div className="w-1/12">QTY</div>
+                <div className="w-1/12">VOLUME</div>
                 <div className="w-2/12">TOP SPENDER</div>
             </div>
             {POSITIONS.map((position, i) => {  
@@ -40,11 +40,11 @@ export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) 
                     <div key={i} className={`py-3 flex items-center text-sm font-semibold ${
                         i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
                     }`}>
-                        <div className="w-1/12">
+                        <div style={{width: "70px"}}>
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
                         <div className="w-3/12">
-                            <TrendChart waivers={waivers[position as keyof Waivers]} />
+                            <TrendChart waivers={waivers[position as keyof Waivers]} height={50} width={250} />
                         </div>
                         <p className="w-1/12">{lastPrice}</p>
                         <div className="w-1/12">

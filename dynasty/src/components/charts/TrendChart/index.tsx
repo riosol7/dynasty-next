@@ -3,10 +3,10 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import * as Interfaces from "@/interfaces";
 
-export default function TrendChart({ waivers }: Interfaces.WaiverProps) {
+export default function TrendChart({ height, width, waivers }: Interfaces.TrendChartProps) {
   const series = [{ 
     name: `${waivers && waivers[0]?.waiver_player.position}`,
-    data: waivers?.sort((a, b) => a.created - b.created).map(waiver => waiver.settings.waiver_bid)
+    data: waivers?.slice().sort((a, b) => a.created - b.created).map(waiver => waiver.settings.waiver_bid)
   }];
   const options = {
     chart: {
@@ -48,8 +48,8 @@ export default function TrendChart({ waivers }: Interfaces.WaiverProps) {
       options={options}
       series={series}
       type='line'
-      height={50}
-      width={250}
+      height={height}
+      width={width}
     />
   );
 };

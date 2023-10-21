@@ -92,8 +92,8 @@ export default function TransactionList() {
               const user = findUserByRosterID(record.adds[pID], legacyLeague[0]);
               const player = findPlayerByID(pID, processedPlayers);
               return (
-                <>
-                  <div key={idx} className="flex items-center py-2">
+                <div key={idx}>
+                  <div className="flex items-center py-2">
                     <div style={{border: `2px solid ${POSITION_COLORS[player.position as keyof typeof POSITION_COLORS]}`, borderRadius:"50%", padding:".2em"}}>
                       <div className={styles.headshot} style={{ 
                         backgroundImage: player.position === "DEF" ? `url(${findLogo(player.team).l})` : `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, 
@@ -126,7 +126,7 @@ export default function TransactionList() {
                     ))
 
                   :<></>}
-                </>
+                </div>
               );
             }): Object.keys(record.drops)?.map((pID, idx)=> {
               const user = findUserByRosterID(record.drops[pID], legacyLeague[0]);

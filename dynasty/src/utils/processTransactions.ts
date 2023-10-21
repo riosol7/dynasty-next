@@ -15,13 +15,14 @@ export const processWaiverBids = (legacyLeague: Interfaces.League[], players: In
             const foundPlayer = players.find(player => player.player_id === Object.keys(transaction.adds)[0]); // Only adds for waiver pickups
 
             return {...transaction, creator: creator?.display_name || "", waiver_player: foundPlayer || Constants.initPlayer};
-        }).filter(transaction => transaction.waiver_player?.position !== "DEF" && transaction.waiver_player?.position !== "K")
+        }).filter(transaction => transaction.waiver_player?.position !== "DEF")
     ).flat();
 
     const qbWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "QB");
     const rbWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "RB");
     const wrWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "WR");
-    const teWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "TE"); 
+    const teWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "TE");
+    const kWaivers = [...waiverBids].filter((bid) => bid.waiver_player?.position === "K"); 
 
     return {
         all: waiverBids,
@@ -29,6 +30,7 @@ export const processWaiverBids = (legacyLeague: Interfaces.League[], players: In
         RB: rbWaivers,
         WR: wrWaivers,
         TE: teWaivers,
+        K: kWaivers,
     };
 };
   

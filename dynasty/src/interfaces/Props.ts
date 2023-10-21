@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Roster, League, Match, BracketMatch } from ".";
+import { Roster, League, Match, BracketMatch, Transaction } from ".";
 
 export interface MVPSlideProps {
     legacyLeague: League[];
@@ -126,3 +126,9 @@ export interface HighScoreRecordProps {
     index: number;
     max: number;
 };
+
+export interface TrendChartProps {
+    waivers: Transaction[];
+    height: number;
+    width?: number;
+}

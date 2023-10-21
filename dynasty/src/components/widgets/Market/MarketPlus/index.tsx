@@ -1,4 +1,5 @@
 "use client";
+import TrendChart from "@/components/charts/TrendChart";
 import styles from "../Market.module.css";
 import { POSITIONS } from "@/constants";
 import { useLeagueContext, usePlayerContext } from "@/context";
@@ -19,7 +20,12 @@ export default function MarketPlus() {
     const { players, loadPlayers } = usePlayerContext();
     const [ selectPosition, setSelectPosition ] = useState("QB");
     const [ selectSeason, setSelectSeason ] = useState("All Time");
-
+    const filteredSeasonalBids = legacyLeague.map(league => {
+        return {
+            transactions: league.transactions.filter(transaction => transaction.settings !== null && transaction.settings.waiver_bid), 
+            season: league.season
+        }
+    }).filter(league => league.transactions.length > 0);
     const waivers = processWaiverBids(legacyLeague, players);
     const selectedWaivers = waivers[selectPosition as keyof typeof waivers];
     const recentWaivers = findRecentWaivers(selectedWaivers);
@@ -28,7 +34,10 @@ export default function MarketPlus() {
     const highestBid = findHighestBid(selectedWaivers);
     const volume = selectedWaivers?.length || 0;
     const averageBid = roundToHundredth(selectedWaivers?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
-    const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid || 0; 
+    const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid || 0;
+    const handleSeason = (season: string) => {
+        setSelectSeason(season);
+    };
     return (
         <div>
             <div className="pt-5">
@@ -42,6 +51,16 @@ export default function MarketPlus() {
                 </div>
             </div>
             <div className="py-5">
+                <TrendChart waivers={selectedWaivers} height={200}/>
+            </div>
+            <div className={`flex items-center border-b-2 border-gray-900 text-sm text-gray-400 py-3`}>
+                {filteredSeasonalBids.slice().reverse().map((league, i) => 
+                    <p key={i} className={`${styles.hoverText} ${selectSeason === league.season ? "text-white" : ""} ${i === 0 ? "" : "mx-4"}`} 
+                    onClick={() => handleSeason(league.season)}>{league.season}</p>
+                )}
+                <p onClick={() => handleSeason("All Time")} className={`${styles.hoverText} ${selectSeason === "All Time" ? "text-white" : ""}`}>ALL</p>
+            </div>
+            <div className="pt-2 pb-5">
                 <h2 className="pt-5 pb-4 border-b-2 border-gray-900 font-bold">{selectSeason} Key Statistics</h2>
                 <div className="pt-4 flex items-center text-xs font-bold">
                     <p className="w-3/12">Last Price</p>
