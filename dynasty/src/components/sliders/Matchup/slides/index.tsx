@@ -18,7 +18,7 @@ import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 
-export default function MatchupSlide({ idx, name, matchup }: Interfaces.MatchupSlideProps) {
+export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.TeamMatchupSlideProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();

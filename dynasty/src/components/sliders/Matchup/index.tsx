@@ -6,7 +6,7 @@ import { findLeagueBySeason, findRosterByOwnerID, findUserByName, getMatchups } 
 import MatchupSlide from "./slides";
 import * as Interfaces from "@/interfaces";
 
-export default function MatchupSlider({ name }: Interfaces.TeamParamProps) {
+export default function TeamMatchupSlider({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
 

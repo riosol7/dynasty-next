@@ -103,7 +103,7 @@ export interface SelectSeasonProps {
     selectSeason: string;
 };
 
-export interface MatchupSlideProps {
+export interface TeamMatchupSlideProps {
     idx: number;
     name: string;
     matchup: Match[];
