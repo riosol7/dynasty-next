@@ -24,88 +24,88 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
     const teFiltered = foundPlayers.filter(player => player.position === "TE");
 
     const ktcQBValue = qbFiltered.reduce((total, player) => {
-      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      const ktcValue = typeof player.ktc?.value === "string" ? parseFloat(player.ktc.value) : player.ktc?.value;
       return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
     const ktcRBValue = rbFiltered.reduce((total, player) => {
-      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      const ktcValue = typeof player.ktc?.value === "string" ? parseFloat(player.ktc.value) : player.ktc?.value;
       return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
     const ktcWRValue = wrFiltered.reduce((total, player) => {
-      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      const ktcValue = typeof player.ktc?.value === "string" ? parseFloat(player.ktc.value) : player.ktc?.value;
       return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
     const ktcTEValue = teFiltered.reduce((total, player) => {
-      const ktcValue = typeof player.ktc.value === "string" ? parseFloat(player.ktc.value) : player.ktc.value;
+      const ktcValue = typeof player.ktc?.value === "string" ? parseFloat(player.ktc.value) : player.ktc?.value;
       return total + (isNaN(ktcValue) ? 0 : ktcValue);
     }, 0);
 
     const ktcTeamValue = ktcQBValue + ktcRBValue + ktcWRValue + ktcTEValue;
 
     const fcQBValue = qbFiltered.reduce((total, player) => {
-      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      const fcValue = typeof player.fc?.value === "string" ? parseFloat(player.fc.value) : player.fc?.value;
       return total + (isNaN(fcValue) ? 0 : fcValue);
     }, 0);
 
     const fcRBValue = rbFiltered.reduce((total, player) => {
-      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      const fcValue = typeof player.fc?.value === "string" ? parseFloat(player.fc.value) : player.fc?.value;
       return total + (isNaN(fcValue) ? 0 : fcValue);
     }, 0);
 
     const fcWRValue = wrFiltered.reduce((total, player) => {
-      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      const fcValue = typeof player.fc?.value === "string" ? parseFloat(player.fc.value) : player.fc?.value;
       return total + (isNaN(fcValue) ? 0 : fcValue);
     }, 0);
 
     const fcTEValue = teFiltered.reduce((total, player) => {
-      const fcValue = typeof player.fc.value === "string" ? parseFloat(player.fc.value) : player.fc.value;
+      const fcValue = typeof player.fc?.value === "string" ? parseFloat(player.fc.value) : player.fc?.value;
       return total + (isNaN(fcValue) ? 0 : fcValue);
     }, 0);
  
     const fcTeamValue = fcQBValue + fcRBValue + fcWRValue + fcTEValue;
 
     const dpQBValue = qbFiltered.reduce((total, player) => {
-      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      const dpValue = typeof player.dp?.value === "string" ? parseFloat(player.dp.value) : player.dp?.value;
       return total + (isNaN(dpValue) ? 0 : dpValue);
     }, 0);
 
     const dpRBValue = rbFiltered.reduce((total, player) => {
-      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      const dpValue = typeof player.dp?.value === "string" ? parseFloat(player.dp.value) : player.dp?.value;
       return total + (isNaN(dpValue) ? 0 : dpValue);
     }, 0);
 
     const dpWRValue = wrFiltered.reduce((total, player) => {
-      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      const dpValue = typeof player.dp?.value === "string" ? parseFloat(player.dp.value) : player.dp?.value;
       return total + (isNaN(dpValue) ? 0 : dpValue);
     }, 0);
 
     const dpTEValue = teFiltered.reduce((total, player) => {
-      const dpValue = typeof player.dp.value === "string" ? parseFloat(player.dp.value) : player.dp.value;
+      const dpValue = typeof player.dp?.value === "string" ? parseFloat(player.dp.value) : player.dp?.value;
       return total + (isNaN(dpValue) ? 0 : dpValue);
     }, 0);
 
     const dpTeamValue = dpQBValue + dpRBValue + dpWRValue + dpTEValue;
 
     const sfQBValue = qbFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
       return total + (isNaN(sfValue) ? 0 : sfValue);
     }, 0);
 
     const sfRBValue = rbFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
       return total + (isNaN(sfValue) ? 0 : sfValue);
     }, 0);
 
     const sfWRValue = wrFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
       return total + (isNaN(sfValue) ? 0 : sfValue);
     }, 0);
 
     const sfTEValue = teFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf.value === "string" ? parseFloat(player.sf.value) : player.sf.value;
+      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
       return total + (isNaN(sfValue) ? 0 : sfValue);
     }, 0);
 
