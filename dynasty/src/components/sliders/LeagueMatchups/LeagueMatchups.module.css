@@ -7,9 +7,8 @@
     display: flex;
     align-items: center;
     background-color: #0f0f0f;
-    width: 400px;
     height: 120px;
-    margin-inline-end: 40px;
+    margin-inline-end: 30px;
     font-size: small;
 }
 
@@ -18,11 +17,11 @@
 } */
 
 .teamLogo {
-    width: 60px; 
+    width: 50px; 
     height: 120px;
     background-position: top;
     background-repeat: no-repeat;
-    background-size: 60px;
+    background-size: 50px;
 }
 .teamAvatar {
     width: 30px; 
