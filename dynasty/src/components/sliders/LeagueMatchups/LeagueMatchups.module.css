@@ -1,0 +1,48 @@
+.matchupSlide {
+    display: flex;
+    align-items: center;
+}
+
+.matchupCard {
+    display: flex;
+    align-items: center;
+    background-color: #0f0f0f;
+    width: 400px;
+    height: 120px;
+    margin-inline-end: 40px;
+    font-size: small;
+}
+
+/* .playerBackground {
+    height: 120px;
+} */
+
+.teamLogo {
+    width: 60px; 
+    height: 120px;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 60px;
+}
+.teamAvatar {
+    width: 30px; 
+    height: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 30px;
+}
+.teamCard {
+    display: flex;
+    align-items: center;
+}
+
+.teamInfo {
+    width: 140px;
+}
+.player {
+    width: 100%; 
+    height: 100%;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 110px;
+}

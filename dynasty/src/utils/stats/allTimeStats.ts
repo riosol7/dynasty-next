@@ -17,7 +17,7 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
     );
     
     const seasonalStreaks = legacyLeague.map(league => {
-        const matchups = getMatchups(rID, league.matchups);
+        const matchups = getMatchups(league.matchups, rID);
         let winStreak: number = 0;
         let losingStreak: number = 0;
         let longestWinStreak: number = 0;
@@ -84,7 +84,7 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
         const playoffBracket = league.brackets.playoffs.filter(match => match.t1 === rID || match.t2 === rID);
         
         if (playoffBracket.length > 0) {
-            const weeklyScore = getMatchups(rID, league.matchups);
+            const weeklyScore = getMatchups(league.matchups, rID);
             return {
                 bracket: playoffBracket,
                 season: league.season,

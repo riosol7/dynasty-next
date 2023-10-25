@@ -53,7 +53,7 @@ function PostSeasonMatch({match, matchKey, round, season, sectionTitle}: Interfa
         const byeWeek = sectionTitle === "toiletBowl" ? rosters.reverse()[0].roster_id === rID || rosters.reverse()[1].roster_id === rID : 
         rosters?.filter(roster => roster.settings.division === 2)[0].roster_id === rID || rosters?.filter(roster => roster.settings.division === 1)[0].roster_id === rID ? true : false
         
-        const myMatchups = getMatchups(rID, foundLeague.matchups)!;
+        const myMatchups = getMatchups(foundLeague.matchups, rID)!;
 
         if (round === 1) {
             if (Number(season) > 2020) {

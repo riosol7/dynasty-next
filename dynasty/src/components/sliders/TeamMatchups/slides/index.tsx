@@ -1,4 +1,4 @@
-import styles from "../Matchup.module.css";
+import styles from "../TeamMatchups.module.css";
 import React from "react";
 import Image from "next/image";
 import { Icon } from "@iconify-icon/react";
@@ -27,7 +27,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
     const foundUser = findUserByName(name, foundLeague);
     const roster = findRosterByOwnerID(foundUser.user_id, foundLeague); 
     const rID = roster.roster_id;
-    const matchups = getMatchups(rID, foundLeague.matchups);
+    const matchups = getMatchups(foundLeague.matchups, rID);
     const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
     const allPlayStats = getAllPlayStats(rID, selectSeason, legacyLeague);
     const playoffLabel = postSeasonStats.appearance ? "Playoffs" : "Toilet Bowl";

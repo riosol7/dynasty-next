@@ -5,7 +5,7 @@ export const getRivalryStats = (rID: number, legacyLeague: Interfaces.League[]) 
     let myHeadtoHead: ({ wins: number; losses: number; opponentID: any; })[] = [];
     let games: any[] = [];
 
-    const legacyMatchups = legacyLeague?.map(league => getMatchups(rID, league.matchups));
+    const legacyMatchups = legacyLeague?.map(league => getMatchups(league.matchups, rID));
 
     legacyMatchups?.map(season => season?.map(game => {
         const myMatchupInfo = game?.find((team: Interfaces.Match) => team.roster_id === rID);

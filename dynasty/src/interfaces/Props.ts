@@ -93,11 +93,6 @@ export interface PostSeasonMatchProps {
     sectionTitle: string;
 };
 
-export interface TeamLayoutProps {
-    children: ReactNode;
-    name: string;
-};
-
 export interface SelectSeasonProps {
     name: string;
     selectSeason: string;

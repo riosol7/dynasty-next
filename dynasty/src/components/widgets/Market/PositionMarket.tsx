@@ -14,7 +14,6 @@ const positionStyles = {
 };
 
 export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) {
-    console.log(waivers)
     return (
         <div className="py-3">
             <div className="flex items-center font-bold pb-3 text-xs text-[#7d91a6] border-b border-solid border-[#2a2c3e]">

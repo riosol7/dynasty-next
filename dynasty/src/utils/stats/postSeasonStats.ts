@@ -29,7 +29,7 @@ export const getRosterPostSeasonStats = (rID: number, legacyLeague: Interfaces.L
     } else if (playoffBracket?.filter(game => game.r === 2 && game.l === rID).length > 0) {
         placement = 6;
     }
-    const weeklyScore = getMatchups(rID, foundSeasonLeague?.matchups);
+    const weeklyScore = getMatchups(foundSeasonLeague?.matchups, rID);
     const sliceStart = Number(season) > 2020 ? 14 : 13;
     const sliceEnd = playoffBracket?.length === 3 ? sliceStart + 3 : sliceStart + 2;
 

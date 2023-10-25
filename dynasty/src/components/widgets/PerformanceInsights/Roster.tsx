@@ -23,7 +23,7 @@ import {
     primeIndicator, 
     isOdd, totalFantasyPointsByRoster, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
 
-export default function RosterV2({ roster, tab }: Interfaces.RosterProps) {
+export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const { fantasyMarket } = useFantasyMarket()!;

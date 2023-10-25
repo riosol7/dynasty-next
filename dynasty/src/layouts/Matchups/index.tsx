@@ -1,24 +1,23 @@
 import styles from "./Matchups.module.css";
 import { useState } from "react";
-import { useLeagueContext, useSeasonContext } from '@/context';
+import { useLeagueContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
-import { findLeagueBySeason } from '@/utils';
+import { findLeagueBySeason, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
 
-export default function MatchupsLayout({ children }: Interfaces.ChildrenProps) {
+export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: Interfaces.MatchupsLayoutProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason, setSelectSeason } = useSeasonContext();
-    const [ selectWeek, setSelectWeek ] = useState<number>(1); 
+    
     const [ showModal, setShowModal ] = useState<boolean>(false); 
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
-    const numWeeks = league.matchups.length;
+    const matchups = getMatchups(league.matchups);
+    // Sort the selectedMatchups by the highest scoring games.
+    const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
-    const handleChange = (value: number) => {
-        setSelectWeek(value);
-    };
-    
+
     return (
-        <div>
+        <>
             <div className="flex items-center">
                 <p onClick={() => setShowModal(!showModal)} className={`${styles.hover} text-2xl flex items-center p-2`}>
                     {`Week ${selectWeek}, ${selectSeason}`}
@@ -40,6 +39,6 @@ export default function MatchupsLayout({ children }: Interfaces.ChildrenProps) {
                 :<></>}
             </div>
             {children}
-        </div>
+        </>
     );
 };

@@ -13,7 +13,7 @@ export default function TeamMatchupSlider({ name }: Interfaces.TeamParamProps) {
     const foundLeague = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = findUserByName(name, foundLeague);
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
-    const matchups = getMatchups(foundRoster.roster_id, foundLeague.matchups);
+    const matchups = getMatchups(foundLeague.matchups, foundRoster.roster_id);
 
     return (
         <div className="flex items-center py-3">
