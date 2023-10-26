@@ -23,3 +23,8 @@
     font-size: 2rem;
     width: 2rem;
 }
+
+.hover:hover {
+    background-color: #0f0f0f;
+    border-radius: 20%;
+}

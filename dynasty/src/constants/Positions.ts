@@ -6,4 +6,5 @@ export const POSITION_COLORS = {
     WR: "#58a7ff",
     TE: "#faae58",
     K: "#bd66ff",
+    DEF: "rgb(245,245,220)",
 };
