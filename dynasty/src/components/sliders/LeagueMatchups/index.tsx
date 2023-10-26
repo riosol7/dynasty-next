@@ -1,7 +1,7 @@
 import styles from "./LeagueMatchups.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
-import { findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, roundToHundredth } from "@/utils";
 import { useState } from "react";
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
@@ -20,7 +20,28 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
 
     return (
         <div className={`w-4/12 ${styles.matchupSlide}`}>
-            {selectedMatchups?.map((matchup: Interfaces.Match[], i: number) => 
+            {selectedMatchups?.map((matchup: Interfaces.Match[], i: number) => {
+                const team1 = matchup && matchup[0];
+                const team2 = matchup && matchup[1];
+
+                const team1Score = team1?.points;
+                const team2Score = team2?.points;
+
+                const sorted1StarterPts = matchup[0]?.starters_points?.sort((a,b) => b - a);
+                const sorted2StarterPts = matchup[1]?.starters_points?.sort((a,b) => b - a);
+
+                const team1TopStarterPts = sorted1StarterPts && sorted1StarterPts[0];
+                const team2TopStarterPts = sorted2StarterPts && sorted2StarterPts[1];
+                const totalPtsScored = roundToHundredth(team1Score + team2Score);
+                const topPlayer1Percentage = calculatePercentage(team1TopStarterPts, totalPtsScored);
+                const topPlayer2Percentage = calculatePercentage(team2TopStarterPts, totalPtsScored);
+                const team1Percentage = calculatePercentage(team1Score, totalPtsScored);
+                const team2Percentage = calculatePercentage(team2Score, totalPtsScored);
+
+                const topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
+                const topStarter2Details = findPlayerByPts(team1, team2TopStarterPts, players);
+
+                return (
                 <div key={i} className={`my-4`}>
                     <div className={`${styles.matchupCard}`}>
                         {matchup.map((team, idx) => {
@@ -41,7 +62,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                                             <div className={"ml-1 w-full flex items-center"}>
                                                 <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>
                                                 <div className="ml-1">
-                                                    <p className="">{roster.owner.display_name}</p>
+                                                    <p className="font-bold">{roster.owner.display_name}</p>
                                                     <p className="text-xs">{findRecord(team.roster_id, selectedMatchups, selectWeek).record}</p> 
                                                 </div>
                                             </div>
@@ -51,18 +72,27 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                                             <div className={"mr-1 w-full flex items-center"} style={{flexDirection: flexDirection ? "row" : "row-reverse", textAlign: flexDirection ? "start" : "end" }}>
                                                 <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>
                                                 <div className="mr-1">
-                                                    <p className="">{roster.owner.display_name}</p>
+                                                    <p className="font-bold">{roster.owner.display_name}</p>
                                                     <p className="text-xs">{findRecord(team.roster_id, selectedMatchups, selectWeek).record}</p>
                                                 </div>
                                             </div>
                                         </div>
                                         }
                                         <div className={`${flexDirection ? "ml-1" : "mr-1"}`}>
-                                            <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem", transform: flexDirection ? "scaleX(-1)" : "" }} />
-                                            <p className="font-bold">{topStarter.first_name} {topStarter.last_name}</p>
-                                            <div className="flex items-center" style={{flexDirection: flexDirection ? "row" : "row-reverse", textAlign: flexDirection ? "start" : "end" }}>
+                                            <div className="flex items-center pt-1 pb-1" style={{flexDirection: flexDirection ? "row" : "row-reverse", textAlign: flexDirection ? "start" : "end" }}>
+                                                <Icon icon="octicon:dot-fill-16" style={{ color: flexDirection ? "#7B68EE" : "#CD5C5C", fontSize: "12px" }}/>
+                                                <p>{team.points} pts</p>
+                                            </div>
+                                            <div className="font-bold">
+                                                <div className="pt-1 flex items-center font-bold" style={{flexDirection: flexDirection ? "row" : "row-reverse", textAlign: flexDirection ? "start" : "end" }}>
+                                                    <p>{topStarter.first_name}</p> 
+                                                    <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem", transform: flexDirection ? "scaleX(-1)" : "" }} />
+                                                </div> 
+                                                <p>{topStarter.last_name}</p>
+                                            </div>
+                                           <div className="flex items-center text-xs" style={{flexDirection: flexDirection ? "row" : "row-reverse", textAlign: flexDirection ? "start" : "end" }}>
                                                 <p style={{color: POSITION_COLORS[topStarter.position as keyof typeof POSITION_COLORS]}}>{topStarter.position}</p>
-                                                <p  className={`${flexDirection ? "ml-1" : "mr-1"}`}>{starterPts[0]}pts</p>
+                                                <p className={`${flexDirection ? "ml-1" : "mr-1"}`}>{starterPts[0]} pts</p>
                                             </div>
                                         </div>
                                     </div>
@@ -71,12 +101,22 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                         })}
                     </div>
                     <div>
+                        <div className="flex justify-between bg-gray-700 rounded-full h-1 my-1">
+                            <div className={`h-1 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: `${findLogo(topStarter1Details?.team).bgColor2}` }}></div>
+                            <div className={`h-1 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: `${findLogo(topStarter2Details?.team).bgColor2}` }}></div>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                            {/* <p className="">Total Points Scored</p> */}
+                            <p className=""></p>
+                            <p className="">{totalPtsScored} total pts</p>
+
+                        </div>
                         <p>Bar that displays total amount of pts scored.</p>
                         <p>Bar is divided among the total players scored and total per team pts.</p>
                         <p>History</p>
                     </div>
-                </div>
-            )}
+                </div>);
+           } )}
         </div>
     );
 };
