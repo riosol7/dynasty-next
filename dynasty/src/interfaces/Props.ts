@@ -133,3 +133,7 @@ export interface MarketWidgetProps {
     waivers: Waivers;
     selectSeason: string;
 }
+
+export interface MatchupWidgetProps {
+    matchup: Match[];
+}

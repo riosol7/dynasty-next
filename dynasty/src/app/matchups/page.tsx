@@ -1,5 +1,6 @@
 "use client";
 import LeagueMatchupSlider from "@/components/sliders/LeagueMatchups"
+// import MatchupWidget from "@/components/widgets/Matchup";
 import { SeasonProvider, useLeagueContext } from "@/context";
 import MatchupsLayout from "@/layouts/Matchups";
 import { useState } from "react";
@@ -11,8 +12,8 @@ export default function Matchups() {
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek}/>
-                <p>Select Matchups</p>
-                <p>SideBar of custom matchups: Carlos Bowl</p>
+                {/* <MatchupWidget matchup={}/> */}
+                <p>SideBar: list of custom matchups, List Highest Scoring Games</p>
             </MatchupsLayout>
         </SeasonProvider>
     );
