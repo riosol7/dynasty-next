@@ -26,20 +26,20 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
 
                 const team1Score = team1?.points;
                 const team2Score = team2?.points;
+                const totalPtsScored = roundToHundredth(team1Score + team2Score);
 
-                const sorted1StarterPts = matchup[0]?.starters_points?.sort((a,b) => b - a);
-                const sorted2StarterPts = matchup[1]?.starters_points?.sort((a,b) => b - a);
+                const sorted1StarterPts = team1?.starters_points?.sort((a,b) => b - a);
+                const sorted2StarterPts = team2?.starters_points?.sort((a,b) => b - a);
 
                 const team1TopStarterPts = sorted1StarterPts && sorted1StarterPts[0];
                 const team2TopStarterPts = sorted2StarterPts && sorted2StarterPts[1];
-                const totalPtsScored = roundToHundredth(team1Score + team2Score);
                 const topPlayer1Percentage = calculatePercentage(team1TopStarterPts, totalPtsScored);
                 const topPlayer2Percentage = calculatePercentage(team2TopStarterPts, totalPtsScored);
                 const team1Percentage = calculatePercentage(team1Score, totalPtsScored);
                 const team2Percentage = calculatePercentage(team2Score, totalPtsScored);
 
-                const topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
-                const topStarter2Details = findPlayerByPts(team1, team2TopStarterPts, players);
+                let topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
+                let topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
 
                 return (
                 <div key={i} className={`my-4`}>
