@@ -19,7 +19,7 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
     return (
         <>
             <div className="flex items-center justify-between">
-                <p onClick={() => setShowModal(!showModal)} className={`${styles.hover} flex items-center text-xl p-2`}>
+                <div onClick={() => setShowModal(!showModal)} className={`${styles.hover} flex items-center text-xl p-2`}>
                     {`Week ${selectWeek}, ${selectSeason}`}
                     <Icon icon="eva:arrow-down-fill"/>
                     {showModal ?
@@ -36,7 +36,7 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
                         </div>
                     </div>
                     :<></>}
-                </p>
+                </div>
                 <div className="flex items-center text-xs">
                     <div className={styles.awardCard}>
                         

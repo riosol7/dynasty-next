@@ -21,6 +21,10 @@ export const getMatchups = (matchups: Interfaces.Match[][], rID?: number) => {
     };
 };
 
+export const sortMatchupsByPts = (matchups: Interfaces.Match[]) => {
+
+};
+
 export const findRecord = (rID: number, matches: Interfaces.Match[][], week: number) => {
     let wins: number = 0;
     let losses: number = 0;

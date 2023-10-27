@@ -178,7 +178,11 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
                                     </div>
                                 )} 
                             </div>
-                            <p>{findRecord(rID, matchups!, idx).wins}<span style={{color:"whitesmoke"}}>-</span>{findRecord(rID, matchups!, idx).losses}</p>
+                            <p className="flex items-center">
+                                {findRecord(rID, matchups!, idx).wins}
+                                <span style={{color:"whitesmoke"}}>-</span>
+                                {findRecord(rID, matchups!, idx).losses}
+                            </p>
                         </div>
                         <div className="pt-2">
                             {matchup[0].points === 0 && matchup[1].points === 0 ? <></> :
