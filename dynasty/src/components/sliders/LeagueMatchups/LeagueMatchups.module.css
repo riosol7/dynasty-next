@@ -1,7 +1,6 @@
-/* .matchupSlide {
-    display: flex;
-    align-items: center;
-} */
+.matchupSlide {
+    width: 380px;
+}
 
 .matchupCard {
     display: flex;

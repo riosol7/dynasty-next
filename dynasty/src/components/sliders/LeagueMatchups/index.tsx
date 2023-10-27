@@ -10,6 +10,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();
+    const [selectMatchup, setSelectMatchup] = useState();
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     const matchups = getMatchups(league.matchups);
     // Sort the selectedMatchups by the highest scoring games.
@@ -19,7 +20,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
     POSITION_COLORS
 
     return (
-        <div className={`w-4/12 ${styles.matchupSlide}`}>
+        <div className={`${styles.matchupSlide}`}>
             {selectedMatchups?.map((matchup: Interfaces.Match[], i: number) => {
                 const team1 = matchup && matchup[0];
                 const team2 = matchup && matchup[1];
@@ -43,6 +44,12 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
 
                 return (
                 <div key={i} className={`my-4`}>
+                    <div className="pb-1">
+                        <p className="text-xs flex items-center justify-center">
+                            <Icon icon="ep:arrow-up-bold" className="pr-1"/>
+                            Match History (4 Games Played)
+                        </p>
+                    </div>
                     <div className={`${styles.matchupCard}`}>
                         {matchup.map((team, idx) => {
                             const roster = findRosterByRosterID(team.roster_id, league.rosters);
@@ -101,19 +108,15 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                         })}
                     </div>
                     <div>
-                        <div className="flex justify-between bg-gray-700 rounded-full h-1 my-1">
-                            <div className={`h-1 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: `${findLogo(topStarter1Details?.team).bgColor2}` }}></div>
-                            <div className={`h-1 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: `${findLogo(topStarter2Details?.team).bgColor2}` }}></div>
+                        <div className="flex justify-between bg-gray-700 rounded-full h-1.5 my-1">
+                            <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: `${findLogo(topStarter1Details?.team).bgColor2}` }}></div>
+                            <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: `${findLogo(topStarter2Details?.team).bgColor2}` }}></div>
                         </div>
                         <div className="flex justify-between text-xs">
                             {/* <p className="">Total Points Scored</p> */}
-                            <p className=""></p>
-                            <p className="">{totalPtsScored} total pts</p>
-
+                            <p className="">Total Points Scored</p>
+                            <p className="">{totalPtsScored} pts</p>
                         </div>
-                        <p>Bar that displays total amount of pts scored.</p>
-                        <p>Bar is divided among the total players scored and total per team pts.</p>
-                        <p>History</p>
                     </div>
                 </div>);
            } )}

@@ -20,3 +20,7 @@
 .scroll {
     overflow: auto;
 }
+
+.awardCard {
+    margin-inline: 25px;
+}

@@ -11,7 +11,6 @@ export default function Matchups() {
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek}/>
-                <p>Awards per week</p>
                 <p>Select Matchups</p>
                 <p>SideBar of custom matchups: Carlos Bowl</p>
             </MatchupsLayout>
