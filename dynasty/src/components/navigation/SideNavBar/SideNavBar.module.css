@@ -24,7 +24,19 @@
     width: 2rem;
 }
 
+.navItem {
+    padding-block: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navTitle {
+    font-size: 10px;
+    padding-top: 4px;
+}
+
 .hover:hover {
     background-color: #0f0f0f;
-    border-radius: 20%;
+    border-radius: 15%;
 }

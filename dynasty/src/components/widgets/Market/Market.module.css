@@ -75,3 +75,8 @@
 .hoverText:hover {
     color: white;
 }
+
+.selectTrend {
+    background-color: black;
+    font-size: small;
+}

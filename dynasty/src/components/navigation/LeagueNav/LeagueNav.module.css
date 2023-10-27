@@ -23,9 +23,11 @@
 }
 .hamburger {
     font-size: 1.8rem;
-    padding: 4px;
+    padding: 10px;
     color: white;
-    margin-inline: .8em;
+    margin-inline: 16px;
+    display: flex;
+    align-items: center;
 }
 .hamburger:hover {
     border-radius: 50%;

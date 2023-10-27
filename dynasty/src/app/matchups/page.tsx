@@ -12,7 +12,6 @@ export default function Matchups() {
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek}/>
                 <p>Awards per week</p>
-                <p>select Season, Week</p>
                 <p>Select Matchups</p>
                 <p>SideBar of custom matchups: Carlos Bowl</p>
             </MatchupsLayout>

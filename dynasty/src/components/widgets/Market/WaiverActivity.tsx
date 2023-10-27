@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
-import { findLogo, getSortedTransactionRecords, handleSort, nextPage, prevPage, primeIndicator, toDateTime } from "@/utils";
+import { filteredTransactionsBySeason, findLogo, getSortedTransactionRecords, handleSort, nextPage, prevPage, primeIndicator, toDateTime } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
@@ -46,7 +46,7 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
     );
 };
 
-export default function WaiverActivity({ waivers }: Interfaces.WaiverBidProps) {
+export default function WaiverActivity({ waivers, selectSeason }: Interfaces.MarketWidgetProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
     const [asc, setAsc] = useState(false);
     const [sort, setSort] = useState("DATE");
@@ -54,7 +54,9 @@ export default function WaiverActivity({ waivers }: Interfaces.WaiverBidProps) {
     const [recordsPerPage, setRecordsPerPage] = useState(5);
     const [selectOwner, setSelectOwner] = useState("all");
     const [selectPosition, setSelectPosition] = useState("all");
-    const waiverBidsFiltered = waivers[selectPosition as keyof typeof waivers]?.filter(waiver => {
+    const positionWaivers = waivers && waivers[selectPosition as keyof typeof waivers];
+    const filteredWaivers = filteredTransactionsBySeason(positionWaivers, selectSeason);
+    const waiverBidsFiltered = filteredWaivers.filter(waiver => {
         if (selectOwner !== "all") {
             return waiver.creator === selectOwner;
         } else {

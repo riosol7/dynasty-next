@@ -43,7 +43,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
     return (
         <nav className={styles.navigation}>
             <div className="flex items-center">
-                <Icon className={styles.hamburger} icon="charm:menu-hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
+                <Icon className={`${styles.hamburger}`} icon="charm:menu-hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
                 <div className="flex items-center flex-wrap">
                     <a href={`/`} id={styles.leagueAnchor} style={{ width: "270px" }}>
                         <div className="flex items-center">

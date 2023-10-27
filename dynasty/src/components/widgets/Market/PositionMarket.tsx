@@ -2,7 +2,15 @@ import styles from "./Market.module.css";
 import * as Interfaces from "@/interfaces";
 import { Waivers } from "@/types";
 import { POSITIONS } from "@/constants";
-import { calculatePercentageChange, roundToHundredth, findRecentWaivers, findHighestBid, findLowestBid, findTopSpender } from "@/utils";
+import { 
+    calculatePercentageChange, 
+    findRecentWaivers, 
+    findHighestBid, 
+    findLowestBid, 
+    findTopSpender, 
+    filteredTransactionsBySeason,
+    roundToHundredth 
+} from "@/utils";
 import TrendChart from "@/components/charts/TrendChart";
 
 const positionStyles = {
@@ -13,12 +21,13 @@ const positionStyles = {
     K: styles.kHUD,
 };
 
-export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) {
+export default function PositionMarket({ waivers, selectSeason }: Interfaces.MarketWidgetProps ) {
+
     return (
         <div className="py-3">
             <div className="flex items-center font-bold pb-3 text-xs text-[#7d91a6] border-b border-solid border-[#2a2c3e]">
-                <div style={{width: "70px"}}>POSITION</div>
-                <div className="w-3/12">TREND</div>
+                <div style={{ width: "70px" }}>POSITION</div>
+                <div className="w-3/12">{selectSeason === "All Time" ? selectSeason.toLocaleUpperCase() : selectSeason } TREND</div>
                 <div className="w-1/12">LAST PRICE</div>
                 <div className="w-1/12">CHANGE %</div>
                 <div className="w-1/12">AVG</div>
@@ -27,12 +36,14 @@ export default function PositionMarket({ waivers }: Interfaces.WaiverBidProps ) 
                 <div className="w-1/12">VOLUME</div>
                 <div className="w-2/12">TOP SPENDER</div>
             </div>
-            {POSITIONS.map((position, i) => {  
-                const recentWaivers = findRecentWaivers(waivers[position as keyof typeof waivers]!);
-                const highestBid = findHighestBid(waivers[position as keyof typeof waivers]!);
-                const lowestBid = findLowestBid(waivers[position as keyof typeof waivers]!);
-                const volume = waivers[position as keyof Waivers]?.length;
-                const averageBid = roundToHundredth(waivers[position as keyof typeof waivers]?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
+            {POSITIONS.map((position, i) => {
+                const positionWaivers = waivers && waivers[position as keyof typeof waivers]!;
+                const filteredWaivers = filteredTransactionsBySeason(positionWaivers, selectSeason);
+                const recentWaivers = findRecentWaivers(filteredWaivers);
+                const highestBid = findHighestBid(filteredWaivers);
+                const lowestBid = findLowestBid(filteredWaivers);
+                const volume = filteredWaivers?.length;
+                const averageBid = roundToHundredth(filteredWaivers?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
                 const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid;
                 const prevPrice = recentWaivers && recentWaivers[1]?.settings?.waiver_bid;
                 return (

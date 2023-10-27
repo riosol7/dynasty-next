@@ -27,7 +27,8 @@ export default function MarketPlus() {
         }
     }).filter(league => league.transactions.length > 0);
     const waivers = processWaiverBids(legacyLeague, players);
-    const selectedWaivers = waivers[selectPosition as keyof typeof waivers];
+    const selectedWaivers = selectSeason === "All Time" ? waivers[selectPosition as keyof typeof waivers] : waivers[selectPosition as keyof typeof waivers];
+    console.log(selectedWaivers);
     const recentWaivers = findRecentWaivers(selectedWaivers);
     const percentageChanged = recentWaivers && calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid);
     const lowestBid = findLowestBid(selectedWaivers);

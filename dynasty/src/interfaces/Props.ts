@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Roster, League, Match, BracketMatch, Transaction } from ".";
+import { Waivers } from "@/types";
 
 export interface MVPSlideProps {
     legacyLeague: League[];
@@ -126,4 +127,9 @@ export interface TrendChartProps {
     waivers: Transaction[];
     height: number;
     width?: number;
+}
+
+export interface MarketWidgetProps {
+    waivers: Waivers;
+    selectSeason: string;
 }

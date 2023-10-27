@@ -40,3 +40,17 @@ export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
         return null; // or some other appropriate value
     };
 };
+
+
+export const filteredTransactionsBySeason = (transactions: Interfaces.Transaction[], selectSeason: string): Interfaces.Transaction[] => {
+    return transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.created);
+        const transactionYear = transactionDate.getFullYear().toString();
+        
+        if (selectSeason === 'All Time') {
+            return true;
+        } else {
+            return transactionYear === selectSeason;
+        }
+    }) || [];
+}; 
