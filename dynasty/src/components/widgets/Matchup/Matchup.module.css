@@ -1,0 +1,15 @@
+.matchupContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.teamContainer {
+    background-color: #0f0f0f;
+    width: 250px;
+}
+.teamAvatar {
+    min-width: 69px; 
+    min-height: 69px;
+    background-repeat: no-repeat;
+    background-size: 69px;
+}

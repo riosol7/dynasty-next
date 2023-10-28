@@ -12,7 +12,6 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
     const [ showModal, setShowModal ] = useState<boolean>(false); 
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     const matchups = getMatchups(league.matchups);
-    // Sort the selectedMatchups by the highest scoring games.
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
 

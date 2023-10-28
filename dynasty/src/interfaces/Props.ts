@@ -7,6 +7,11 @@ export interface MVPSlideProps {
     roster: Roster 
 };
 
+export interface LeagueMatchupSliderProps {
+    selectWeek: number;
+    setMatchup: React.Dispatch<React.SetStateAction<Match[]>>
+}
+
 export interface SideNavBarProps {
     isSidebarOpen: boolean;
 };

@@ -6,7 +6,7 @@ import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, fin
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
-export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}) {
+export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfaces.LeagueMatchupSliderProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();
@@ -30,7 +30,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
         const bTeam2Score = bTeam2?.points;
         const bTotalPtsScored = roundToHundredth(bTeam1Score + bTeam2Score);
         return bTotalPtsScored - aTotalPtsScored;
-    });
+    }).map((matchup: Interfaces.Match[]) => matchup.sort((a, b) => b.points - a.points));
     
     const handleNext = () => {
         setCurrentPage((prev) => (prev + 1) % Math.ceil(selectedMatchups.length / 2));
@@ -45,7 +45,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
             <div className="flex items-center justify-center py-5">
                 <Icon icon="ep:arrow-left-bold" className={styles.arrow} onClick={handlePrev} disabled={currentPage === 0}/>
                 <div className={`${styles.matchupSlide}`}>
-                    {[...selectedMatchups, ...selectedMatchups, ...selectedMatchups].slice(currentPage * 2, currentPage * 2 + 2).map((matchup: Interfaces.Match[], i: number) => {
+                    {Array.isArray(selectedMatchups) && selectedMatchups.slice(currentPage * 2, currentPage * 2 + 2).map((matchup: Interfaces.Match[], i: number) => {
                     const team1 = matchup && matchup[0];
                     const team2 = matchup && matchup[1];
 
@@ -73,7 +73,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                     const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
 
                     return (
-                        <div key={i} className={i === 0 ? `ml-5` : `mx-5`}>
+                        <div key={i} className={i === 0 ? `ml-5` : `mx-5`} onClick={() => setMatchup(matchup)}>
                             <div className="pb-1">
                                 <p className="text-xs flex items-center justify-center">
                                     <Icon icon="ep:arrow-up-bold" className="pr-1"/>
@@ -93,7 +93,10 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                                                 <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster1?.owner?.avatar})`}}></div>
                                                 <div className="ml-1">
                                                     <p className="font-bold">{roster1.owner.display_name}</p>
-                                                    <p className="text-xs">{findRecord(team1.roster_id, roster1Matchups, selectWeek - 1).record}</p> 
+                                                    <p className="text-xs">
+                                                        <span className="text-[#34d367] mr-1">W</span>
+                                                        {findRecord(team1.roster_id, roster1Matchups, selectWeek - 1).record}
+                                                    </p> 
                                                 </div>
                                             </div>
                                         </div>
@@ -131,7 +134,10 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                                                 <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster2?.owner?.avatar})`}}></div>
                                                 <div className="mr-1">
                                                     <p className="font-bold">{roster2.owner.display_name}</p>
-                                                    <p className="text-xs">{findRecord(team2.roster_id, roster2Matchups, selectWeek - 1).record}</p>
+                                                    <p className="text-xs">
+                                                        {findRecord(team2.roster_id, roster2Matchups, selectWeek - 1).record}
+                                                        <span className="ml-1 text-[#cc1d00]">L</span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,7 +175,7 @@ export default function LeagueMatchupSlider({ selectWeek }: {selectWeek: number}
                         </div>);
                     })}
                 </div>
-                <Icon icon="ep:arrow-right-bold" className={styles.arrow} onClick={handleNext} disabled={currentPage >= selectedMatchups.length / 2 - 1}/>
+                <Icon icon="ep:arrow-right-bold" className={styles.arrow} onClick={handleNext} disabled={currentPage >= selectedMatchups?.length / 2 - 1}/>
             </div>
         </div>
     );
