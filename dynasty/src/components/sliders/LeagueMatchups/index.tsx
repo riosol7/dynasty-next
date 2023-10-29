@@ -102,7 +102,7 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                                         </div>
                                         <div className={`ml-1`}>
                                             <div className="flex items-center pt-1 pb-1" style={{flexDirection: "row", textAlign: "start" }}>
-                                                <Icon icon="octicon:dot-fill-16" style={{ color: "#7B68EE", fontSize: "12px" }}/>
+                                                <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
                                                 <p>{team1.points} pts</p>
                                             </div>
                                             <div className="font-bold">

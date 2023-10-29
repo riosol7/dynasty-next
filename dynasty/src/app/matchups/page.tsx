@@ -19,7 +19,6 @@ export default function Matchups() {
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
                 <MatchupWidget matchup={matchup}/>
-                <p>SideBar: list of custom matchups, List Highest Scoring Games</p>
             </MatchupsLayout>
         </SeasonProvider>
     );

@@ -1,9 +1,11 @@
 import styles from "./Matchup.module.css";
 import React from "react";
 import * as Interfaces from "@/interfaces";
-import { calculatePercentage, findLeagueBySeason, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, roundToHundredth } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, roundToHundredth } from "@/utils";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
-import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { Position } from "@/types";
+import { Icon } from "@iconify-icon/react";
 
 export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps) {
     const { legacyLeague } = useLeagueContext();
@@ -54,7 +56,10 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                     <span className="font-bold text-[#34d367] mr-1">W</span>
                                     {findRecord(team1?.roster_id, roster1Matchups, foundWeekIndex).record}
                                 </p> 
-                                <p>{team1Score}</p>
+                                <p className="flex items-center">
+                                    <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
+                                    {team1Score}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -80,9 +85,50 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                 </div>
                 <div className="flex items-center justify-between">
                     <div className={styles.teamContainer}>
-                        
+                        {team1?.starters.slice().map((starter, i) => { 
+                            const player = findPlayerByID(starter, players);
+                            return ( 
+                                <div key={i} className="my-3 flex items-center justify-between" style={{background:  `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)), ${findLogo(player.team).bgColor}`}}>
+                                    <div className="flex items-center">
+                                        <div className={styles.teamLogo} style={{ backgroundImage:`url(${findLogo(player.team).l})`, backgroundPosition: player.position === "DEF" ? "center" : "left"}}>
+                                            <div className={styles.player} style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)` }}></div>
+                                        </div>
+                                        <div className="ml-1">
+                                            <p className="text-sm font-bold">{player.first_name} {player.last_name}</p>
+                                            <div className={`my-1 ${styles.playerInfo}`}>
+                                                <p className={styles.position} style={{color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
+                                                <p className="mx-1">{player.team}</p>
+                                                {player.position === "DEF" ? <></> : <p className="font-light">#{player.number}</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`text-xs font-bold mr-2`}>
+                                        <p>{team1.starters_points[i]}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
-
+                    <div>
+                        {league.roster_positions.slice(0, 12).map((position, idx) =>
+                            <div key={idx} className={styles.positionHUD}>
+                            {position ===  "WRRB_FLEX" ? 
+                                <span style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></span> 
+                            : position === "FLEX" ? 
+                                <span style={{color: POSITION_COLORS["WR"]}}>
+                                    W<span style={{color: POSITION_COLORS["RB"]}}>R</span>
+                                    <span style={{color: POSITION_COLORS["TE"]}}>T</span>
+                                </span> 
+                            : position === "SUPER_FLEX" ?
+                                <div>
+                                    <p style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></p>
+                                    <p style={{color: POSITION_COLORS["TE"]}}>T<span style={{color: POSITION_COLORS["QB"]}}>Q</span></p>
+                                </div>
+                            : <p style={{color: `${POSITION_COLORS[position as Position]}`}}>{position}</p>}
+                            </div>
+                        )}
+                        <p></p>
+                    </div>
                     <div className={`${styles.teamContainer}`} style={{flexDirection: "row-reverse", textAlign: "end" }}>
                         
                     </div>
