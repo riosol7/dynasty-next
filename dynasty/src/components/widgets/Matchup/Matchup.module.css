@@ -11,7 +11,7 @@
     min-width: 69px; 
     min-height: 69px;
     background-repeat: no-repeat;
-    background-size: 69px;
+    background-size: cover;
 }
 .teamLogo { 
     background-position: top;
@@ -19,8 +19,8 @@
     background-size: cover;
 }
 .player {
-    width: 55px; 
-    height: 55px;
+    width: 70px; 
+    height: 70px;
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
@@ -43,7 +43,7 @@
     background-color: #0f0f0f;
     font-size:x-small;
     margin-block: 12px;
-    min-height: 55px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
