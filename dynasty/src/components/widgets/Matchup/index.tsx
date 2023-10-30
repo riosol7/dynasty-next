@@ -16,7 +16,6 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
     const matchups = league?.matchups;
     const team1 = matchup && matchup[0];
     const team2 = matchup && matchup[1];
-
     const team1Score = team1?.points;
     const team2Score = team2?.points;
     const totalPtsScored = roundToHundredth(team1Score + team2Score);
@@ -31,8 +30,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
     (matchup) =>
         matchup[0].points === team1Score || matchup[1].points === team1Score
     );
-    const sorted1StarterPts = team1?.starters_points?.sort((a,b) => b - a);
-    const sorted2StarterPts = team2?.starters_points?.sort((a,b) => b - a);
+    const sorted1StarterPts = team1?.starters_points?.slice().sort((a,b) => b - a);
+    const sorted2StarterPts = team2?.starters_points?.slice().sort((a,b) => b - a);
 
     const team1TopStarterPts = sorted1StarterPts && sorted1StarterPts[0];
     const team2TopStarterPts = sorted2StarterPts && sorted2StarterPts[1];
@@ -88,8 +87,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                         {team1?.starters.slice().map((starter, i) => { 
                             const player = findPlayerByID(starter, players);
                             return ( 
-                                <div key={i} className="my-3 flex items-center justify-between" style={{background:  `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)), ${findLogo(player.team).bgColor}`}}>
-                                    <div className="flex items-center">
+                                <div key={i}> 
+                                    <div className="mt-3 flex items-center" style={{ background:  `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)), ${findLogo(player.team).bgColor}`}}>
                                         <div className={styles.teamLogo} style={{ backgroundImage:`url(${findLogo(player.team).l})`, backgroundPosition: player.position === "DEF" ? "center" : "left"}}>
                                             <div className={styles.player} style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)` }}></div>
                                         </div>
@@ -102,8 +101,24 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`text-xs font-bold mr-2`}>
-                                        <p>{team1.starters_points[i]}</p>
+                                    {player.position === "QB" ?
+                                    <div className={styles.statContainer}>
+                                        <div>
+                                            <p>24/32 CMP, 241 YD, 2 INT, 3 CAR, 33 YD, 1 FUM, 1 FUM LOST</p>
+                                        </div>
+                                    </div>
+                                    :<></>}
+                                    <div>
+                                        <div className="flex justify-between bg-gray-700 h-1.5">
+                                            <div className="bg-indigo-400 h-1.5" style={{ width: `${calculatePercentage(team1.players_points[player.player_id], team1.points)}%` }}>
+                                            </div>
+                                            {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
+                                            <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
+                                        </div>
+                                        <div className="flex items-center justify-between text-xs">
+                                            <p></p>
+                                            <p className="text-xs">{team1.players_points[player.player_id]} / {team1.points} pts ({calculatePercentage(team1.players_points[player.player_id], team1.points)}%)</p>
+                                        </div>
                                     </div>
                                 </div>
                             )

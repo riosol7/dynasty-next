@@ -5,7 +5,7 @@
 
 .teamContainer {
     background-color: inherit;
-    width: 250px;
+    width: 300px;
 }
 .teamAvatar {
     min-width: 69px; 
@@ -56,4 +56,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.statContainer {
+    padding: 4px;
+    display: flex; 
+    align-items: center; 
+    background-color: #0f0f0f; 
+    color: #A3BBD3;
+    font-size: 10px;
 }

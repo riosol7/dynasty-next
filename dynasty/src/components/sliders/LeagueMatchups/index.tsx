@@ -15,7 +15,7 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
     const [ currentPage, setCurrentPage ] = useState<number>(0);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
-    const selectedMatchups = matchups[selectWeek - 1]?.sort((a: any, b: any) => {
+    const selectedMatchups = matchups[selectWeek - 1]?.slice().sort((a: any, b: any) => {
         const aTeam1 = a && a[0];
         const aTeam2 = a && a[1];
 
@@ -30,7 +30,7 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
         const bTeam2Score = bTeam2?.points;
         const bTotalPtsScored = roundToHundredth(bTeam1Score + bTeam2Score);
         return bTotalPtsScored - aTotalPtsScored;
-    }).map((matchup: Interfaces.Match[]) => matchup.sort((a, b) => b.points - a.points));
+    }).map((matchup: Interfaces.Match[]) => matchup.slice().sort((a, b) => b.points - a.points));
     
     const handleNext = () => {
         setCurrentPage((prev) => (prev + 1) % Math.ceil(selectedMatchups.length / 2));
@@ -48,7 +48,6 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                     {Array.isArray(selectedMatchups) && selectedMatchups.slice(currentPage * 2, currentPage * 2 + 2).map((matchup: Interfaces.Match[], i: number) => {
                     const team1 = matchup && matchup[0];
                     const team2 = matchup && matchup[1];
-
                     const team1Score = team1?.points;
                     const team2Score = team2?.points;
                     const totalPtsScored = roundToHundredth(team1Score + team2Score);
@@ -59,8 +58,8 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                     const roster1Matchups = getMatchups(league.matchups, roster1.roster_id);
                     const roster2Matchups = getMatchups(league.matchups, roster2.roster_id);
 
-                    const sorted1StarterPts = team1?.starters_points?.sort((a,b) => b - a);
-                    const sorted2StarterPts = team2?.starters_points?.sort((a,b) => b - a);
+                    const sorted1StarterPts = team1?.starters_points?.slice().sort((a, b) => b - a);
+                    const sorted2StarterPts = team2?.starters_points?.slice().sort((a, b) => b - a);
 
                     const team1TopStarterPts = sorted1StarterPts && sorted1StarterPts[0];
                     const team2TopStarterPts = sorted2StarterPts && sorted2StarterPts[1];
