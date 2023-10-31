@@ -6,6 +6,7 @@ import MatchupsLayout from "@/layouts/Matchups";
 import { useState } from "react";
 import * as Interfaces from "@/interfaces";
 import { getMatchups } from "@/utils";
+import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
 
 export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
@@ -18,7 +19,10 @@ export default function Matchups() {
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
-                <MatchupWidget matchup={matchup}/>
+                <div className="flex justify-center">
+                    <AllTimeScoreWidget/>
+                    <MatchupWidget matchup={matchup}/>
+                </div>
             </MatchupsLayout>
         </SeasonProvider>
     );
