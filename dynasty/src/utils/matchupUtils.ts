@@ -1,5 +1,16 @@
 import * as Interfaces from "@/interfaces";
 
+export const findMatchupDateByPoints = (legacyLeague: Interfaces.League[], score1: number, score2: number): {matchup: Interfaces.Match[], season: string, week: number} => {
+    const foundSeason = legacyLeague.map(league => league.matchups.map((matchup, week) => {
+        return {
+            matchup: matchup.filter(team => team.points === score1 || team.points === score2),
+            season: league.season,
+            week: week + 1,
+        };
+    })).flat().filter(league => league.matchup.length > 0)[0] || {matchup: [], season: "", week: 0};
+    return foundSeason;
+};
+
 export const getMatchups = (matchups: Interfaces.Match[][], rID?: number) => {
     if (rID) {
         return matchups?.map(week => week.reduce((acc, team) => {
