@@ -18,7 +18,7 @@ export default function AllTimeScoreWidget() {
     }).slice(0, 10);
 
     return (
-        <div className="border-4 border-[#0f0f0f] p-2 mr-5 text-sm">
+        <div className="border-4 border-[#0f0f0f] p-2 text-sm">
             <p className="border-b border-[#0f0f0f] pb-2 font-bold">All Time Scores</p>
             {topMatchupScores.slice().map((matchup: Interfaces.Match[], i) => {
                 const team1Score = matchup[0].points;

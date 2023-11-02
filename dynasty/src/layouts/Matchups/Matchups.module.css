@@ -22,5 +22,7 @@
 }
 
 .awardCard {
-    margin-inline: 25px;
+    text-align: center;
+    width: 100px;
+    margin-inline: 10px;
 }

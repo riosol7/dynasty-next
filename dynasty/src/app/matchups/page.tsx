@@ -19,11 +19,9 @@ export default function Matchups() {
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
-                <div className="flex justify-center">
-                    <AllTimeScoreWidget/>
-                    <MatchupWidget matchup={matchup}/>
-                </div>
+                <MatchupWidget matchup={matchup}/>
             </MatchupsLayout>
+            <AllTimeScoreWidget/>
         </SeasonProvider>
     );
 };
