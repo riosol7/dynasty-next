@@ -11,7 +11,9 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
     }, []);
 
     const dashboardActive = currentPath === "/";
-    const matchupActive = currentPath === "/matchups";
+    const matchupsActive = currentPath === "/matchups";
+    const teamsActive = currentPath === "/teams";
+
 
     return (
         <nav className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
@@ -28,10 +30,17 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
                 </div>
             </div>
             <div className={`${styles.navItem} ${styles.hover}`}>
-                {matchupActive ? <div id={styles.activeIcon}></div> : null}
+                {matchupsActive ? <div id={styles.activeIcon}></div> : null}
                 <div>
-                    <a href={`/matchups`}  className="flex items-center justify-center"><Icon icon="tabler:vs" className={styles.iconSize} style={{color: matchupActive ? "white" : "#7f7f7f"}}/></a>
-                    <p className={styles.navTitle} style={{ color: matchupActive ? "white" : "#7f7f7f" }}>Matchups</p>
+                    <a href={`/matchups`}  className="flex items-center justify-center"><Icon icon="tabler:vs" className={styles.iconSize} style={{color: matchupsActive ? "white" : "#7f7f7f"}}/></a>
+                    <p className={styles.navTitle} style={{ color: matchupsActive ? "white" : "#7f7f7f" }}>Matchups</p>
+                </div>
+            </div>
+            <div className={`${styles.navItem} ${styles.hover}`}>
+                {teamsActive ? <div id={styles.activeIcon}></div> : null}
+                <div>
+                    <a href={`/teams`}  className="flex items-center justify-center"><Icon icon="fluent:people-team-24-filled" className={styles.iconSize} style={{color: teamsActive ? "white" : "#7f7f7f"}}/></a>
+                    <p className={styles.navTitle} style={{ color: teamsActive ? "white" : "#7f7f7f" }}>Teams</p>
                 </div>
             </div>
             <div className={`${styles.navItem} ${styles.hover}`}>

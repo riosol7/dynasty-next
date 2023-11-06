@@ -3,7 +3,7 @@ import DraftWidget from "@/components/widgets/Draft";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import { findUserEXP, findUserByName, findRosterByOwnerID, findLeagueByTeamName } from "@/utils";
+import { findUserEXP, findUserByName, findRosterByOwnerID, findLeagueByTeamName, placementRankings } from "@/utils";
 import * as Interfaces from "@/interfaces";
 // Change header background color from black to background gradient color similar to the DraftWidget background, the navbars should also inherit the new colors.
 export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
@@ -29,15 +29,7 @@ export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
                         <span style={{color:"whitesmoke"}}>-</span>  
                         {foundRoster?.settings.ties}
                         <Icon icon="ic:round-circle" className="mx-2" style={{fontSize:".35em", color:"#698b87"}}/>
-                        <span style={{color:"whitesmoke"}}>{foundRoster?.settings.rank}</span>
-                        <span>{
-                            foundRoster?.settings.rank === 1 ?
-                                "st"
-                            : foundRoster?.settings.rank === 2?
-                                "nd"
-                            : foundRoster?.settings.rank === 3?
-                                "rd" : "th"
-                        }</span>
+                        <span>{placementRankings(foundRoster?.settings.rank)}</span>
                     </p>
                     <p className="font-bold" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {findUserEXP(foundUser?.user_id!, legacyLeague)}</p>
                 </div>

@@ -18,10 +18,16 @@ export default function Matchups() {
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
-                <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
-                <MatchupWidget matchup={matchup}/>
+                <div className="flex py-5">
+                    <div style={{borderRight:"3px solid #0f0f0f", paddingRight:"24px", marginRight:"24px"}}>
+                        <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
+                    </div>
+                    <MatchupWidget matchup={matchup}/>
+                </div>
             </MatchupsLayout>
-            <AllTimeScoreWidget/>
+            <div className="flex justify-center py-5 mt-5">
+                <AllTimeScoreWidget/>
+            </div>
         </SeasonProvider>
     );
 };

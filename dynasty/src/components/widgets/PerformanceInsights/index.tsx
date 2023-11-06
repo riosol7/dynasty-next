@@ -383,7 +383,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <Icon icon={showWeeklyHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
                         <span>{showWeeklyHighScores ? "All Time Weekly High Scores": "All Time Weekly High Score"}</span>
                     </p>
-                    <div className="w-4/12 flex items-center">
+                    <div className="w-4/12 flex items-center" style={{ marginRight: showWeeklyHighScores ? "1em" : "" }}>
                         <div className="w-5/12">
                         {showWeeklyHighScores ?
                             <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
@@ -392,7 +392,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         }</div>                        
                         <div className="w-5/12">
                         {showWeeklyHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
+                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal" }}>Your | Opp Points</p>
                         : 
                             <p>{allTimeRosterStats.best.score}</p>
                         }</div>

@@ -18,8 +18,15 @@ export default function AllTimeScoreWidget() {
     }).slice(0, 10);
 
     return (
-        <div className="border-4 border-[#0f0f0f] p-2 text-sm">
-            <p className="border-b border-[#0f0f0f] pb-2 font-bold">All Time Scores</p>
+        <div className={styles.allTimeContainer}>
+            <p className="font-bold pb-4">All Time Scores</p>
+            <div className="text-xs text-gray-400 flex items-center">
+                <p className="w-14">RANK</p>
+                <p className="w-32">DATE</p>
+                <p className="w-32">TOTAL POINTS</p>
+                <p className="w-44">LOSING TEAM</p>
+                <p className="w-44">WINNING TEAM</p>
+            </div>
             {topMatchupScores.slice().map((matchup: Interfaces.Match[], i) => {
                 const team1Score = matchup[0].points;
                 const team2Score = matchup[1].points;
@@ -31,25 +38,22 @@ export default function AllTimeScoreWidget() {
                 const user2 = findUserByRosterID(matchup[1].roster_id, league);
                 const totalScore = roundToHundredth(team1Score + team2Score);
                 return (
-                    <div key={i} className="flex items-center justify-between py-3">
-                        <p style={{ width: "35px" }} className="text-gray-200 font-bold">{i + 1}</p>
-                        <div style={{ minWidth: "300px" }}>
-                            <p className="font-bold text-xs pb-2 border-b border-[#0f0f0f]">Week {week}, {season}<span className="font-light mx-2">|</span>Total Score {totalScore}</p>
-                            <div className="flex items-center pt-1">
-                                <div className="w-6/12 flex items-center">
-                                    <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user1.avatar})`}}></div>
-                                    <div>
-                                        <p>{user1.display_name}</p> 
-                                        <p>{team1Score}</p>
-                                    </div>
-                                </div>
-                                <div className="w-6/12 flex items-center">
-                                    <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user2.avatar})`}}></div>
-                                    <div className="">
-                                        <p>{user2.display_name}</p> 
-                                        <p>{team2Score}</p>
-                                    </div>
-                                </div>
+                    <div key={i} className="flex items-center py-3">
+                        <p className="w-14 text-gray-200 font-bold">{i + 1}</p>
+                        <p className="w-32">Week {week}, {season}</p>
+                        <p className="w-32">{totalScore}</p>
+                        <div className="w-44 flex items-center">
+                            <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user1.avatar})`}}></div>
+                            <div>
+                                <p>{user1.display_name}</p> 
+                                <p>{team1Score}</p>
+                            </div>
+                        </div>
+                        <div className="w-44 flex items-center">
+                            <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user2.avatar})`}}></div>
+                            <div className="">
+                                <p>{user2.display_name}</p> 
+                                <p>{team2Score}</p>
                             </div>
                         </div>
                     </div>

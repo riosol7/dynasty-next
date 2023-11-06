@@ -17,10 +17,10 @@ export default function HighScoreRecord({ record, type, index, max }: Interfaces
 
     return (
         type === "team" ? 
-        <div className={`${index === max ? styles.performanceRow : styles.performanceSubTitleRow} ${styles.fontHover} ${styles.anchorCell}`} style={{ paddingBlock:"1em" }}>
+        <div className={`${index === max ? styles.performanceRow : styles.performanceSubTitleRow} ${styles.fontHover} ${styles.anchorCell}`} style={{ padding:"1em" }}>
             <div className="w-8/12 flex items-center">
                 <p className="" style={{ width: "30px" }}>{record.rank}</p>
-                <p>{opponent.display_name}</p>
+                <p>vs. {opponent.display_name}</p>
             </div>
             <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">
                 <p className="w-5/12">Week {record.week}, {record.season}</p>

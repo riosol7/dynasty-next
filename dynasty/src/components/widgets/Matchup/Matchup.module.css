@@ -14,12 +14,11 @@
     background-size: cover;
 }
 .teamLogo { 
-    background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .player {
-    width: 70px; 
+    width: 95px; 
     height: 70px;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -72,4 +71,12 @@
     height: 25px;
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+.allTimeContainer {
+    padding-top: 16px;
+    padding-left: 24px;
+    font-size: smaller;
+    border: #0f0f0f solid 3px;
+    width: fit-content;
 }
