@@ -12,11 +12,10 @@ export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
     const matchups = getMatchups(legacyLeague[0].matchups);
     const currentWeek: number = matchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0)).filter(week => week.length > 0).length || 0;
-    const sortedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups);
-    const initialMatchup: Interfaces.Match[] = sortedMatchups[currentWeek - 1] ? sortedMatchups[currentWeek - 1][0] : [];
-
+    const sortedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups[currentWeek - 1]);
+    const initialMatchup: Interfaces.Match[] = sortedMatchups && sortedMatchups[0];
     const [ selectWeek, setSelectWeek ] = useState<number>(currentWeek);
-    const [matchup, setMatchup] = useState<Interfaces.Match[]>(initialMatchup || []);
+    const [ matchup, setMatchup ] = useState<Interfaces.Match[]>(initialMatchup);
 
     useEffect(() => {
         if (selectWeek === 0) {
@@ -25,10 +24,10 @@ export default function Matchups() {
     }, [currentWeek]);
 
     useEffect(() => {
-        if (matchup.length === 0) {
-            setMatchup(sortedMatchups[currentWeek - 1] ? sortedMatchups[currentWeek - 1][0] : [])
+        if (matchup === undefined) {
+            setMatchup(initialMatchup)
         }
-    }, [matchup]);
+    }, [initialMatchup]);
 
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
