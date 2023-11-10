@@ -1,4 +1,5 @@
 import * as Interfaces from "@/interfaces";
+import { roundToHundredth } from ".";
 
 export const findMatchupDateByPoints = (legacyLeague: Interfaces.League[], score1: number, score2: number): {matchup: Interfaces.Match[], season: string, week: number} => {
     const foundSeason = legacyLeague.map(league => league.matchups.map((matchup, week) => {
@@ -56,4 +57,23 @@ export const findRecord = (rID: number, matches: Interfaces.Match[][], week: num
         wins: wins,
         losses: losses
     };
+};
+
+export const sortMatchupsByHighestScore = (matchups: Interfaces.Match[][]) => {
+    return matchups?.slice().sort((a: any, b: any) => {
+        const aTeam1 = a && a[0];
+        const aTeam2 = a && a[1];
+
+        const aTeam1Score = aTeam1?.points;
+        const aTeam2Score = aTeam2?.points;
+        const aTotalPtsScored = roundToHundredth(aTeam1Score + aTeam2Score);
+
+        const bTeam1 = b && b[0];
+        const bTeam2 = b && b[1];
+
+        const bTeam1Score = bTeam1?.points;
+        const bTeam2Score = bTeam2?.points;
+        const bTotalPtsScored = roundToHundredth(bTeam1Score + bTeam2Score);
+        return bTotalPtsScored - aTotalPtsScored;
+    })?.map((matchup: Interfaces.Match[]) => matchup?.slice().sort((a, b) => b.points - a.points));
 };

@@ -43,7 +43,7 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
     const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
 
     const playerList = (team: Interfaces.Match, idx: number) => {
-        return team?.starters.slice().map((starter, i) => { 
+        return team?.starters?.slice().map((starter, i) => { 
             const player = findPlayerByID(starter, players);
             const reverse = idx === 1;
             return ( 

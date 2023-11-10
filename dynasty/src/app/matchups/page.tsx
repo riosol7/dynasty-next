@@ -3,17 +3,32 @@ import LeagueMatchupSlider from "@/components/sliders/LeagueMatchups"
 import MatchupWidget from "@/components/widgets/Matchup";
 import { SeasonProvider, useLeagueContext } from "@/context";
 import MatchupsLayout from "@/layouts/Matchups";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Interfaces from "@/interfaces";
-import { getMatchups } from "@/utils";
+import { getMatchups, sortMatchupsByHighestScore } from "@/utils";
 import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
 
 export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
-    const [ selectWeek, setSelectWeek ] = useState<number>(1);
     const matchups = getMatchups(legacyLeague[0].matchups);
+    const currentWeek: number = matchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0)).filter(week => week.length > 0).length || 0;
+    const sortedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups);
+    const initialMatchup: Interfaces.Match[] = sortedMatchups[currentWeek - 1] ? sortedMatchups[currentWeek - 1][0] : [];
 
-    const [ matchup, setMatchup ] = useState<Interfaces.Match[]>(matchups[0] && matchups[0][0]);
+    const [ selectWeek, setSelectWeek ] = useState<number>(currentWeek);
+    const [matchup, setMatchup] = useState<Interfaces.Match[]>(initialMatchup || []);
+
+    useEffect(() => {
+        if (selectWeek === 0) {
+            setSelectWeek(currentWeek);
+        };
+    }, [currentWeek]);
+
+    useEffect(() => {
+        if (matchup.length === 0) {
+            setMatchup(sortedMatchups[currentWeek - 1] ? sortedMatchups[currentWeek - 1][0] : [])
+        }
+    }, [matchup]);
 
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>

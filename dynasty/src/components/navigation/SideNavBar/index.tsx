@@ -14,7 +14,6 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
     const matchupsActive = currentPath === "/matchups";
     const teamsActive = currentPath === "/teams";
 
-
     return (
         <nav className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
             <div className={`${styles.navItem} ${styles.hover}`}>

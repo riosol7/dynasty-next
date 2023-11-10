@@ -187,9 +187,9 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                                 )}
                             </div>
                             <div className="pl-4">
-                                <p style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
-                                <p className="text-xs text-gray-400 font-light">#{player.number} {player.team}</p>
-                                <p className="font-bold text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
+                                <p className="font-bold" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
+                                <p className="text-xs text-gray-400 font-light">#{player.number} {player.team || "FA"}</p>
+                                <p style={{ fontSize: "11px" }} className="text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
                             </div>
                         </div>
                         <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
