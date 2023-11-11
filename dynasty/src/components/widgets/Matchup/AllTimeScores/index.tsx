@@ -1,13 +1,14 @@
 import styles from "../Matchup.module.css";
 import { useLeagueContext } from "@/context";
-import { findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getMatchups, roundToHundredth } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getMatchups, roundToHundredth } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
 export default function AllTimeScoreWidget() {
     const { legacyLeague } = useLeagueContext();
    
-    const topMatchupScores = legacyLeague.map(league => getMatchups(league.matchups).flat()).flat().sort((a, b) => {
+    const topMatchupScores = legacyLeague.map(league => getMatchups(league.matchups).flat())
+    .flat().sort((a, b) => {
         const aTeam1Score = a[0].points;
         const aTeam2Score = a[1].points;
         const aTotalScore = aTeam1Score + aTeam2Score;
@@ -15,7 +16,23 @@ export default function AllTimeScoreWidget() {
         const bTeam2Score = b[1].points;
         const bTotalScore = bTeam1Score + bTeam2Score;  
         return bTotalScore - aTotalScore;
-    }).slice(0, 10);
+    }).slice(0, 10).map(a => 
+        a.sort((a: any, b: any) => a.points - b.points)
+    );
+
+    const showTeamInfo = (user: any, teamScore: any, totalScore: any) => {
+        return (
+        <div className="w-44 flex items-center">
+            <div className={`mr-1 ${styles.userAvatar}`} 
+            style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user.avatar})`}}>
+            </div>
+            <div>
+                <p className="font-bold">{user.display_name}</p> 
+                <p>{teamScore} pts ({calculatePercentage(teamScore, totalScore)}%)</p>
+            </div>
+        </div>
+        );
+    };
 
     return (
         <div className={styles.allTimeContainer}>
@@ -42,20 +59,8 @@ export default function AllTimeScoreWidget() {
                         <p className="w-14 text-gray-200 font-bold">{i + 1}</p>
                         <p className="w-32">Week {week}, {season}</p>
                         <p className="w-32">{totalScore}</p>
-                        <div className="w-44 flex items-center">
-                            <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user1.avatar})`}}></div>
-                            <div>
-                                <p>{user1.display_name}</p> 
-                                <p>{team1Score}</p>
-                            </div>
-                        </div>
-                        <div className="w-44 flex items-center">
-                            <div className={`mr-1 ${styles.userAvatar}`} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user2.avatar})`}}></div>
-                            <div className="">
-                                <p>{user2.display_name}</p> 
-                                <p>{team2Score}</p>
-                            </div>
-                        </div>
+                        {showTeamInfo(user1, team1Score, totalScore)}
+                        {showTeamInfo(user2, team2Score, totalScore)}
                     </div>
                 )}
             )}

@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import * as Interfaces from "@/interfaces";
 import { getMatchups, sortMatchupsByHighestScore } from "@/utils";
 import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
+import PerformerList from "@/components/widgets/PerformerList";
 
 export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
@@ -32,16 +33,21 @@ export default function Matchups() {
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
-                <div className="flex py-5">
-                    <div style={{borderRight:"3px solid #0f0f0f", paddingRight:"24px", marginRight:"24px"}}>
-                        <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
+                <PerformerList/>
+                <div className="flex flex-wrap justify-center  py-5">
+                    <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
+                    <div className="pl-5">
+                        <MatchupWidget matchup={matchup}/>
                     </div>
-                    <MatchupWidget matchup={matchup}/>
+                    <div className="p-5">
+                        <AllTimeScoreWidget/>
+                    </div>
+
                 </div>
             </MatchupsLayout>
-            <div className="flex justify-center py-5 mt-5">
+            {/* <div className="flex justify-center py-5 mt-5">
                 <AllTimeScoreWidget/>
-            </div>
+            </div> */}
         </SeasonProvider>
     );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from '@iconify-icon/react';
 import styles from "./LeagueNav.module.css";
@@ -37,8 +37,14 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
 };
 
 export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
+    const [currentPath, setCurrentPath] = useState('/');
+
+    useEffect(() => {
+        setCurrentPath(window.location.pathname);
+    }, []);
     const { fantasyMarket, onChange } = useFantasyMarket()!;
     const { loadLegacyLeague } = useLeagueContext();
+    const matchupsActive = currentPath === "/matchups" ? true : false;
 
     return (
         <nav className={styles.navigation}>
@@ -70,12 +76,16 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 />
                 <Icon icon="iconamoon:microphone-duotone" className={styles.mic}/>
             </div>
-            <select id={styles.selectMarket} className="mr-3" onChange={onChange} value={fantasyMarket}>
+            {matchupsActive ? 
+            <></> : <select id={styles.selectMarket} 
+            className="mr-3" 
+            onChange={onChange} 
+            value={fantasyMarket}>
                 <option value={"ktc"}>{"KeepTradeCut"}</option>
                 <option value={"fc"}>{"FantasyCalc"}</option>
                 <option value={"sf"}>{"SuperFlex"}</option>
                 <option value={"dp"}>{"DynastyProcess"}</option>
-            </select>
+            </select>}
             {/* <div className={styles.activity}>
                 <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
             </div> */}

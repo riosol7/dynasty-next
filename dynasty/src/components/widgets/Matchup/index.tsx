@@ -60,8 +60,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                             <div className={`flex ${reverse ? "justify-end" : "justify-start"}`}>
                                 <div className={`my-1 ${styles.playerInfo}`} style={{ flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start" }}>
                                     <p className={styles.position} style={{color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
-                                    <p className={reverse ? "mr-1" : "ml-1"}>{player.team}</p>
-                                    {player.position === "DEF" ? <></> : <p className="font-light px-1">#{player.number}</p>}
+                                    <p className={`${"mx-1"}`}>{player.team}</p>
+                                    {player.position === "DEF" ? <></> : <p className="font-light">#{player.number}</p>}
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                             {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
                             <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
                         </div>
-                        <div className="flex items-center justify-between text-xs" style={{ flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start" }}>
+                        <div className="flex items-center justify-between text-xs pt-1" style={{ flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start" }}>
                             <p className="text-xs">{team.players_points[player.player_id]} / {team.points} pts ({calculatePercentage(team.players_points[player.player_id], team.points)}%)</p>
                         </div>
                     </div>
@@ -85,74 +85,84 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
     };
 
     return (
-        <div className={styles.matchupContainer}>
-            <div>
-                <div className="flex items-center justify-between">
-                    <div className={styles.teamContainer}>
-                        <div className="flex items-center">
-                            <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster1?.owner?.avatar})`}}></div>
-                            <div className="ml-2 text-sm">
-                                <p className="font-bold text-xl">{roster1.owner?.display_name}</p>
-                                <p className="">                                                        
-                                    <span className="font-bold text-[#34d367] mr-1">W</span>
-                                    {findRecord(team1?.roster_id, roster1Matchups, foundWeekIndex).record}
-                                </p> 
-                                <p className="flex items-center">
-                                    <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
-                                    {team1Score}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.teamContainer}`} style={{ flexDirection: "row-reverse", textAlign: "end" }}>
-                        <div className="flex items-center justify-end">
-                            <div className="mr-2 text-sm">
-                                <p className="font-bold text-xl">{roster2.owner?.display_name}</p>
-                                <p>                                                        
-                                    {findRecord(team2?.roster_id, roster2Matchups, foundWeekIndex).record}
-                                    <span className="ml-1 text-[#cc1d00] font-bold">L</span>
-                                </p>
-                                <p className="flex items-center justify-end">
-                                    {team2Score}
-                                    <Icon icon="octicon:dot-fill-16" style={{ color: "#CD5C5C", fontSize: "12px" }}/>
-                                </p>
-                            </div>
-                            <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster2?.owner?.avatar})`}}></div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-between bg-gray-700 rounded-full h-1.5 my-1">
-                    <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${team1Percentage}%` }}></div>
-                    {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
-                    <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className={styles.teamContainer}>
-                        {playerList(team1 , 0)}
-                    </div>
-                    <div>
-                        {league.roster_positions.slice(0, 12).map((position, idx) =>
-                            <div key={idx} className={styles.positionHUD}>
-                            {position ===  "WRRB_FLEX" ? 
-                                <span style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></span> 
-                            : position === "FLEX" ? 
-                                <span style={{color: POSITION_COLORS["WR"]}}>
-                                    W<span style={{color: POSITION_COLORS["RB"]}}>R</span>
-                                    <span style={{color: POSITION_COLORS["TE"]}}>T</span>
-                                </span> 
-                            : position === "SUPER_FLEX" ?
-                                <div>
-                                    <p style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></p>
-                                    <p style={{color: POSITION_COLORS["TE"]}}>T<span style={{color: POSITION_COLORS["QB"]}}>Q</span></p>
+        <div>
+            <p className="text-center text-sm">Week {foundWeekIndex + 1}, {selectSeason}</p>
+            <div className={styles.matchupContainer}>
+                <div>
+                    <div className="flex items-center justify-between">
+                        <div className={styles.teamContainer}>
+                            <div className="flex items-center">
+                                <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster1?.owner?.avatar})`}}></div>
+                                <div className="ml-2 text-sm">
+                                    <p className="font-bold text-xl">{roster1.owner?.display_name}</p>
+                                    <p className="">                                                        
+                                        <span className="font-bold text-[#34d367] mr-1">W</span>
+                                        {findRecord(team1?.roster_id, roster1Matchups, foundWeekIndex).record}
+                                    </p> 
+                                    <p className="flex items-center">
+                                        <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
+                                        {team1Score} pts
+                                    </p>
+                                    <p className="text-sm font-bold py-1">
+                                        <span className="font-light">H2H </span>
+                                        4 - 5
+                                    </p>
                                 </div>
-                            : <p style={{color: `${POSITION_COLORS[position as Position]}`}}>{position}</p>}
                             </div>
-                        )}
-                        <p></p>
+                        </div>
+                        <div className={`${styles.teamContainer}`} style={{ flexDirection: "row-reverse", textAlign: "end" }}>
+                            <div className="flex items-center justify-end">
+                                <div className="mr-2 text-sm">
+                                    <p className="font-bold text-xl">{roster2.owner?.display_name}</p>
+                                    <p>                                                        
+                                        {findRecord(team2?.roster_id, roster2Matchups, foundWeekIndex).record}
+                                        <span className="ml-1 text-[#cc1d00] font-bold">L</span>
+                                    </p>
+                                    <p className="flex items-center justify-end">
+                                        {team2Score}
+                                        <Icon icon="octicon:dot-fill-16" style={{ color: "#CD5C5C", fontSize: "12px" }}/>
+                                    </p>
+                                    <p className="text-sm font-bold py-1">
+                                        5 - 4
+                                        <span className="font-light"> H2H</span>
+                                    </p>
+                                </div>
+                                <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster2?.owner?.avatar})`}}></div>
+                            </div>
+                        </div>
                     </div>
-                    <div className={`${styles.teamContainer}`}>
-                        {playerList(team2, 1)}
+                    <div className="flex justify-between bg-gray-700 rounded-full h-1.5 my-1">
+                        <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${team1Percentage}%` }}></div>
+                        {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
+                        <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className={styles.teamContainer}>
+                            {playerList(team1 , 0)}
+                        </div>
+                        <div>
+                            {league.roster_positions.slice(0, 12).map((position, idx) =>
+                                <div key={idx} className={styles.positionHUD}>
+                                {position ===  "WRRB_FLEX" ? 
+                                    <span style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></span> 
+                                : position === "FLEX" ? 
+                                    <span style={{color: POSITION_COLORS["WR"]}}>
+                                        W<span style={{color: POSITION_COLORS["RB"]}}>R</span>
+                                        <span style={{color: POSITION_COLORS["TE"]}}>T</span>
+                                    </span> 
+                                : position === "SUPER_FLEX" ?
+                                    <div>
+                                        <p style={{color: POSITION_COLORS["WR"]}}>W<span style={{color: POSITION_COLORS["RB"]}}>R</span></p>
+                                        <p style={{color: POSITION_COLORS["TE"]}}>T<span style={{color: POSITION_COLORS["QB"]}}>Q</span></p>
+                                    </div>
+                                : <p style={{color: `${POSITION_COLORS[position as Position]}`}}>{position}</p>}
+                                </div>
+                            )}
+                            <p></p>
+                        </div>
+                        <div className={`${styles.teamContainer}`}>
+                            {playerList(team2, 1)}
+                        </div>
                     </div>
                 </div>
             </div>

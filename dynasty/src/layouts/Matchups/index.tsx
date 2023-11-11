@@ -2,7 +2,7 @@ import styles from "./Matchups.module.css";
 import { useState } from "react";
 import { useLeagueContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
-import { findLeagueBySeason, getMatchups } from '@/utils';
+import { findLeagueBySeason, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
 
 export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: Interfaces.MatchupsLayoutProps) {
@@ -14,6 +14,12 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
+    const selectedWeekMatchups = matchups && matchups[selectWeek - 1];
+    const matchupList = selectedWeekMatchups?.flat().sort((a: Interfaces.Match, b: Interfaces.Match) => b.points - a.points);
+    const bestOffense = matchupList && matchupList[0];
+    const bestOffenseUser = findUserByRosterID(bestOffense?.roster_id, league);
+    const worstOffense = matchupList && matchupList[matchupList?.length - 1];
+    const worstOffenseUser = findUserByRosterID(worstOffense?.roster_id, league);
 
     return (
         <>
@@ -44,10 +50,12 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
                     <div className={styles.awardCard}>
                         
                         <p>Best Offense</p>
+                        <p>{bestOffenseUser.display_name}</p>
                     </div>
                     <div className={styles.awardCard}>
                         
                         <p>Worst Offense</p>
+                        <p>{worstOffenseUser.display_name}</p>
                     </div>
                     <div className={styles.awardCard}>
                         

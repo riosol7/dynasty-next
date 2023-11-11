@@ -29,8 +29,8 @@
     border-radius: 20px;
     background-color: rgba(180, 180, 180, 0.3);
     color: inherit;
-    padding-inline: 2px;
-    padding-block: 1px;
+    padding-inline: 4px;
+    padding-block: 2px;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
     background-color: #0f0f0f;
     font-size:x-small;
     padding-block: 12px;
-    margin-bottom: 5.7em;
+    margin-bottom: 6.1em;
     height: 70px;
     display: flex;
     justify-content: center;

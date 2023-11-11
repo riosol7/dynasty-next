@@ -2,7 +2,7 @@ import styles from "./LeagueMatchups.module.css";
 import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
-import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth, sortMatchupsByHighestScore } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
@@ -15,22 +15,7 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
     const [ currentPage, setCurrentPage ] = useState<number>(0);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
-    const selectedMatchups = matchups[selectWeek - 1]?.slice().sort((a: any, b: any) => {
-        const aTeam1 = a && a[0];
-        const aTeam2 = a && a[1];
-
-        const aTeam1Score = aTeam1?.points;
-        const aTeam2Score = aTeam2?.points;
-        const aTotalPtsScored = roundToHundredth(aTeam1Score + aTeam2Score);
-
-        const bTeam1 = b && b[0];
-        const bTeam2 = b && b[1];
-
-        const bTeam1Score = bTeam1?.points;
-        const bTeam2Score = bTeam2?.points;
-        const bTotalPtsScored = roundToHundredth(bTeam1Score + bTeam2Score);
-        return bTotalPtsScored - aTotalPtsScored;
-    }).map((matchup: Interfaces.Match[]) => matchup.slice().sort((a, b) => b.points - a.points));
+    const selectedMatchups = sortMatchupsByHighestScore(matchups[selectWeek - 1]);
     
     const handleNext = () => {
         setCurrentPage((prev) => (prev + 1) % Math.ceil(selectedMatchups.length / 4));
@@ -55,7 +40,14 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                 const team1Score = team1?.points;
                 const team2Score = team2?.points;
                 const totalPtsScored = roundToHundredth(team1Score + team2Score);
-                
+
+                const totalQBPtsScored = 0;
+                const totalRBPtsScored = 0;
+                const totalWRPtsScored = 0;
+                const totalTEPtsScored = 0;
+                const totalKPtsScored = 0;
+                const totalDEFPtsScored = 0;
+
                 const roster1 = findRosterByRosterID(team1.roster_id, league.rosters);
                 const roster2 = findRosterByRosterID(team2.roster_id, league.rosters);
 
@@ -79,7 +71,7 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                     <div key={i} className={`pb-5`} onClick={() => setMatchup(matchup)}>
                         <div className="pb-1">
                             <p className="text-xs flex items-center justify-center">
-                                <Icon icon="ep:arrow-up-bold" className="pr-1"/>
+                                <Icon icon="ep:arrow-up-bold" className="pr-1" style={{ color: "#a9dfd8"}}/>
                                 Match History (4 Games Played)
                             </p>
                         </div>
