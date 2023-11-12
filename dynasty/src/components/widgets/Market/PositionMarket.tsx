@@ -53,8 +53,8 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <div style={{width: "70px"}}>
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
-                        <div className="w-3/12">
-                            <TrendChart waivers={waivers[position as keyof Waivers]} height={50} width={250} />
+                        <div className="w-3/12 pr-5">
+                            <TrendChart waivers={waivers[position as keyof Waivers]} height={50}/>
                         </div>
                         <p className="w-1/12">{lastPrice}</p>
                         <div className="w-1/12">

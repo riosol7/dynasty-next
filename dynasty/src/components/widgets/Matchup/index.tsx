@@ -99,9 +99,9 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                         <span className="font-bold text-[#34d367] mr-1">W</span>
                                         {findRecord(team1?.roster_id, roster1Matchups, foundWeekIndex).record}
                                     </p> 
-                                    <p className="flex items-center">
+                                    <p className="flex items-center pt-1">
                                         <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
-                                        {team1Score} pts
+                                        {team1Score} ({calculatePercentage(team1Score, totalPtsScored)}%)
                                     </p>
                                     <p className="text-sm font-bold py-1">
                                         <span className="font-light">H2H </span>
@@ -118,8 +118,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                         {findRecord(team2?.roster_id, roster2Matchups, foundWeekIndex).record}
                                         <span className="ml-1 text-[#cc1d00] font-bold">L</span>
                                     </p>
-                                    <p className="flex items-center justify-end">
-                                        {team2Score}
+                                    <p className="flex items-center justify-end pt-1">
+                                        {team2Score} ({calculatePercentage(team2Score, totalPtsScored)}%)
                                         <Icon icon="octicon:dot-fill-16" style={{ color: "#CD5C5C", fontSize: "12px" }}/>
                                     </p>
                                     <p className="text-sm font-bold py-1">

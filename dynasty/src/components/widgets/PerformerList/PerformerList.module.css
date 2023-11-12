@@ -1,0 +1,26 @@
+.playerImage {
+    border-radius: 50%;
+    background-color: #111111;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    min-height: 85px;
+    min-width: 85px;
+}
+
+.rank {
+    font-weight: bolder;
+    font-size: small;
+    padding: 5px;
+}
+
+.position {
+    text-align: center;
+    font-size: xx-small;
+    font-weight: bolder;
+    border-radius: 25%;
+    padding: 5px;
+    margin-top: 43px;
+    position:absolute;
+    background-color: #111111;
+}

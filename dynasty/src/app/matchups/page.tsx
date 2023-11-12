@@ -33,8 +33,10 @@ export default function Matchups() {
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
-                <PerformerList/>
-                <div className="flex flex-wrap justify-center  py-5">
+                <div className="py-5">
+                    <PerformerList selectWeek={selectWeek}/>
+                </div>
+                <div className="flex flex-wrap justify-center py-5">
                     <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
                     <div className="pl-5">
                         <MatchupWidget matchup={matchup}/>

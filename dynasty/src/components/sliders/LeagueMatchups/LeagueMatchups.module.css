@@ -12,7 +12,7 @@
 }
 
 .matchupSlide::-webkit-scrollbar-thumb {
-    background-color: #a9dfd8;
+    background-color: #a9dfd8da;
     border-radius: 15%;
 }
 
