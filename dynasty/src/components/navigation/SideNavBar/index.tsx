@@ -15,7 +15,7 @@ export default function SideNavBar({isSidebarOpen}: Interfaces.SideNavBarProps) 
     const teamsActive = currentPath === "/teams";
 
     return (
-        <nav className={styles.sideBar} style={{ width: isSidebarOpen? "200px": "0px" }}>
+        <nav className={styles.sideBar} style={{ width: isSidebarOpen ? "200px": "0px" }}>
             <div className={`${styles.navItem} ${styles.hover}`}>
                 {dashboardActive ? <div id={styles.activeIcon}></div> : null}
                 <div>
