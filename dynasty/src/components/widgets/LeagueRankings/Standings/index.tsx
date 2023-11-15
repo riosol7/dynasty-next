@@ -1,3 +1,4 @@
+import styles from "../LeagueRankings.module.css";
 import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
 import { findLeagueBySeason, sortAllTimeRostersByType } from "@/utils";
@@ -9,7 +10,7 @@ import Tournament from "../Tournament";
 
 export default function Standings({season, tournament}: Interfaces.StandingProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
-
+    const league = findLeagueBySeason(season, legacyLeague);
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
     const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (Interfaces.sortingConfig));
     const allTimeRosters = sortAllTimeRostersByType(legacyLeague, "All Time");
@@ -73,6 +74,34 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
             </div>
         : tournament ? <Tournament season={season}/> :
         <>
+            <div className="text-sm py-4">
+                <div className={styles.performanceHeader}>
+                    <p>Total Points Scored</p>
+                    <div className="flex items-center w-3/12">
+                        <p className="w-4/12">PF</p>
+                        <p className="w-4/12">MAX PF</p>
+                        <p className="w-4/12">PA</p>
+                    </div>
+                </div>
+                {divisionStates.map((divisionState, idx) => 
+                    <div key={idx} className={`${styles.performanceSubTitleRow}`}>
+                        <p>Division {idx + 1}</p>
+                        <div className="flex items-center w-3/12">
+                            <p className="w-4/12">0</p>
+                            <p className="w-4/12">0</p>
+                            <p className="w-4/12">0</p>
+                        </div>
+                    </div>
+                )}
+                <div className={styles.performanceEndTitleRow}>
+                    <p>Total</p>
+                    <div className="flex items-center w-3/12">
+                        <p className="w-4/12">0</p>
+                        <p className="w-4/12">0</p>
+                        <p className="w-4/12">0</p>
+                    </div>
+                </div>
+            </div>
             <div className="py-2">
                 {divisionStates.map((divisionState, index) => (
                     <div key={index}>

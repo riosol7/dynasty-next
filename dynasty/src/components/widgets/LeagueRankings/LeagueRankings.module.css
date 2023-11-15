@@ -22,3 +22,52 @@
     border-radius: 50%;
     width: 29px;
 }
+
+.performanceHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #7d91a6;
+    font-size: 12.85px;
+}
+
+.performanceRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0px;
+    border-bottom: 2px solid #2a2c3e
+}
+
+.performanceTitleRow {
+    display: flex;
+    font-weight: bold;
+    align-items: center; 
+    justify-content: space-between;
+    padding-block: 16px;
+    border-bottom: 2px dashed #0f0f0f
+}
+
+.performanceSubTitleRow {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding-block: 16px;
+    border-bottom: 1px dashed #0f0f0f
+}
+
+.performanceSubEndTitleRow {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding-block: 16px;
+    border-bottom: 2px solid #2a2c3e
+}
+
+.performanceEndTitleRow {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding-block: 16px;
+    border-bottom: 0px solid #2a2c3e
+}
