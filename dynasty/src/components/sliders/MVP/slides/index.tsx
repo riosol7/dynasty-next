@@ -16,7 +16,7 @@ const positionStyles = {
     TE: styles.teHUD,
 };
 
-export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProps) {
+export default function MVPSlide({legacyLeague, mvpType, roster}: Interfaces.MVPSlideProps) {
     const { fantasyMarket } = useFantasyMarket()!;
 
     const [mvp, setMVP] = useState<Interfaces.Player>(Constants.initPlayer);
@@ -25,7 +25,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
     useEffect(() => {
         async function fetchMVP() {
             try {
-                const player = getMVP(roster, fantasyMarket);
+                const player = getMVP(legacyLeague, roster, fantasyMarket, mvpType);
                 setMVP(player);
                 setLoadMVP(false);
             } catch (error) {
@@ -33,7 +33,7 @@ export default function MVPSlide({legacyLeague, roster}: Interfaces.MVPSlideProp
             }
         }
         fetchMVP();
-    }, [fantasyMarket, mvp, roster.roster_id]);
+    }, [fantasyMarket, mvpType, roster, legacyLeague]);
 
     const logo = findLogo(mvp?.team);
 

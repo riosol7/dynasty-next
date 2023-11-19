@@ -68,7 +68,7 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 </div>
             </div>
             <div className="flex items-center rounded-full pl-2 pr-1 border border-gray-700">
-                <Icon icon="ion:search-outline" style={{ fontSize: "18px", color: "white" }} />
+                <Icon icon="ion:search-outline" style={{ fontSize: "18px", color: "white" }}/>
                 <input
                     type="text"
                     className="bg-black outline-none pl-2 py-1"
@@ -86,9 +86,6 @@ export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: I
                 <option value={"sf"}>{"SuperFlex"}</option>
                 <option value={"dp"}>{"DynastyProcess"}</option>
             </select>}
-            {/* <div className={styles.activity}>
-                <Icon icon="fe:activity" style={{color: "#a9dfd8", fontSize: "1.5em"}}/>
-            </div> */}
         </nav>
     );
 };

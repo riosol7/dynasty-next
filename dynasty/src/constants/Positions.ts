@@ -1,4 +1,4 @@
-export const POSITIONS = ["QB", "RB", "WR", "TE", "K"];
+export const POSITIONS = ["QB", "RB", "WR", "TE", "K", "DEF"];
 
 export const POSITION_COLORS = {
     QB: "#f8296d",

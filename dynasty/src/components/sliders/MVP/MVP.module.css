@@ -62,3 +62,8 @@
     min-height: 145px;
     min-width: 175px;
 }
+
+.selectTag {
+    background-color: black;
+    color: white;
+}

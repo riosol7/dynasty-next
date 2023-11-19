@@ -4,7 +4,8 @@ import { Waivers } from "@/types";
 
 export interface MVPSlideProps {
     legacyLeague: League[];
-    roster: Roster 
+    roster: Roster;
+    mvpType: string;
 };
 
 export interface LeagueMatchupSliderProps {

@@ -175,7 +175,8 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 const player = record.waiver_player;
                 return (
                     <div key={i} className={`flex items-center py-2 text-sm text-white ${i === records.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"}`}>
-                        <div className="w-3/12 flex items-top">
+                        <div className="w-3/12 flex items-center">
+                            {player.position !== "DEF" ?
                             <div className={styles.playerHeadShot}
                                 style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                                 {findLogo(player?.team).l !== "FA" ? (
@@ -186,10 +187,16 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                                 <></>
                                 )}
                             </div>
+                            :
+                            <Image alt="" width={35.8} height={35.8} src={findLogo(player?.team).l!}/>
+                            }
                             <div className="pl-4">
                                 <p className="font-bold" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
-                                <p className="text-xs text-gray-400 font-light">#{player.number} {player.team || "FA"}</p>
-                                <p style={{ fontSize: "11px" }} className="text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
+                                {player.position === "DEF" ? <></> : 
+                                <>
+                                    <p className="text-xs text-gray-400 font-light">#{player.number} {player.team || "FA"}</p>
+                                    <p style={{ fontSize: "11px" }} className="text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
+                                </>}
                             </div>
                         </div>
                         <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>

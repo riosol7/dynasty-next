@@ -8,7 +8,7 @@ import StandingRow from "./StandingRow";
 import StandingTableHeader from "./StandingTableHeader";
 import Tournament from "../Tournament";
 
-export default function Standings({season, tournament}: Interfaces.StandingProps) {
+export default function Standings({ season, tournament }: Interfaces.StandingProps) {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext();
     const league = findLeagueBySeason(season, legacyLeague);
     const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
@@ -83,16 +83,15 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
                         <p className="w-4/12">PA</p>
                     </div>
                 </div>
-                {divisionStates.map((divisionState, idx) => 
-                    <div key={idx} className={`${styles.performanceSubTitleRow}`}>
-                        <p>Division {idx + 1}</p>
-                        <div className="flex items-center w-3/12">
-                            <p className="w-4/12">0</p>
-                            <p className="w-4/12">0</p>
-                            <p className="w-4/12">0</p>
-                        </div>
+                {divisionStates.map((_, idx) => 
+                <div key={idx} className={`${styles.performanceSubTitleRow}`}>
+                    <p>Division {idx + 1}</p>
+                    <div className="flex items-center w-3/12">
+                        <p className="w-4/12">0</p>
+                        <p className="w-4/12">0</p>
+                        <p className="w-4/12">0</p>
                     </div>
-                )}
+                </div>)}
                 <div className={styles.performanceEndTitleRow}>
                     <p>Total</p>
                     <div className="flex items-center w-3/12">
@@ -104,20 +103,20 @@ export default function Standings({season, tournament}: Interfaces.StandingProps
             </div>
             <div className="py-2">
                 {divisionStates.map((divisionState, index) => (
-                    <div key={index}>
-                        <StandingTableHeader asc={divisionState.asc} updateDivisionState={updateDivisionState} sort={divisionState.sort} division={index + 1}/>
-                        {divisionState.sort === "rank" ? (
-                            renderStandingRows(findDivisionRosters(index + 1), divisionState.sort, divisionState.asc)
-                        ) : divisionState.sort === "fpts" ? (
-                        renderStandingRows(findDivisionRosters(index + 1), "fpts", divisionState.asc)
-                        ) : divisionState.sort === "ppts" ? (
-                        renderStandingRows(findDivisionRosters(index + 1), "ppts", divisionState.asc)
-                        ) : divisionState.sort === "fpts_against" ? (
-                        renderStandingRows(findDivisionRosters(index + 1), "fpts_against", divisionState.asc)
-                        ) : (
-                        <></>
-                        )} 
-                    </div>
+                <div key={index}>
+                    <StandingTableHeader asc={divisionState.asc} updateDivisionState={updateDivisionState} sort={divisionState.sort} division={index + 1}/>
+                    {divisionState.sort === "rank" ? (
+                        renderStandingRows(findDivisionRosters(index + 1), divisionState.sort, divisionState.asc)
+                    ) : divisionState.sort === "fpts" ? (
+                    renderStandingRows(findDivisionRosters(index + 1), "fpts", divisionState.asc)
+                    ) : divisionState.sort === "ppts" ? (
+                    renderStandingRows(findDivisionRosters(index + 1), "ppts", divisionState.asc)
+                    ) : divisionState.sort === "fpts_against" ? (
+                    renderStandingRows(findDivisionRosters(index + 1), "fpts_against", divisionState.asc)
+                    ) : (
+                    <></>
+                    )} 
+                </div>
                 ))}
             </div>
             <div className="py-2">

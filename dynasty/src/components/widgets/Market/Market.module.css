@@ -12,15 +12,15 @@
 }
 
 .qbHUD {
-    background: linear-gradient( -135deg, #f20000 10%, #f5286b 100%);
+    background: linear-gradient( -135deg, #f20000 10%, #f5286ce1 100%);
 }
   
 .rbHUD {
-    background: linear-gradient( -135deg, #00ccb4 10%, #36ceb8 100%);
+    background: linear-gradient( -135deg, #00ccb4 10%, #36ceb7bd 100%);
 }
   
 .wrHUD {
-    background: linear-gradient( -135deg, #0095ff 10%, #58a7ff 100%);
+    background: linear-gradient( -135deg, #0095ff 10%, #58a6ffd0 100%);
 }
   
 .teHUD {
@@ -28,7 +28,11 @@
 }
 
 .kHUD {
-    background: linear-gradient( -135deg, #bd66ff 10%, #cb86ff 100%);
+    background: linear-gradient( -135deg, #bd66ff 10%, #cb86ff85 100%);
+}
+
+.defHUD {
+    background: linear-gradient( -135deg, rgb(245, 245, 220) 10%, rgba(245, 245, 220, 0.342) 100%);
 }
 
 .playerHeadShot{

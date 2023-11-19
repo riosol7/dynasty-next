@@ -43,7 +43,7 @@ export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
 
 
 export const filteredTransactionsBySeason = (transactions: Interfaces.Transaction[], selectSeason: string): Interfaces.Transaction[] => {
-    return transactions.filter(transaction => {
+    return transactions?.filter(transaction => {
         const transactionDate = new Date(transaction.created);
         const transactionYear = transactionDate.getFullYear().toString();
         

@@ -1,6 +1,7 @@
 "use client";
 import "swiper/swiper-bundle.css";
 import styles from "./MVP.module.css";
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { Icon } from "@iconify-icon/react";
@@ -26,15 +27,24 @@ export default function MVPSlider() {
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
+    const [ mvpType, setMVPType ] = useState<string>("Dynasty");
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-    const loading = loadLegacyLeague && loadPlayers && loadKTC && loadSuperFlex && loadFC && loadDP && loadFantasyPro;
+    const loading: boolean = loadLegacyLeague && loadPlayers && loadKTC && loadSuperFlex && loadFC && loadDP && loadFantasyPro;
+
+    const handleMVPType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setMVPType(e.target.value);
+    };
+
     return (
         <div className="py-5">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                     <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
-                    <p className="mx-1 font-bold">MVPs</p>
+                    <select className={`"mx-1 font-bold flex items-center ${styles.selectTag}`} onChange={handleMVPType} value={mvpType}>
+                        <option value={"Dynasty"}>Dynasty MVPs</option>
+                        <option value={"Fantasy"}>Fantasy MVPs</option>
+                    </select>
                 </div>
                 <a className={styles.anchorCell} href={`/players`}>
                     <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }}/>
@@ -73,7 +83,7 @@ export default function MVPSlider() {
             }}>
                 {processedRosters?.map((roster: Interfaces.Roster, i: React.Key) => (
                 <SwiperSlide key={i}>
-                    <MVPSlide legacyLeague={legacyLeague} roster={roster}/>
+                    <MVPSlide legacyLeague={legacyLeague} mvpType={mvpType} roster={roster}/>
                 </SwiperSlide>
                 ))}
             </Swiper>}
