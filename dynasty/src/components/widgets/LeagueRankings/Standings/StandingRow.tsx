@@ -45,13 +45,13 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
                 }
             </div>
             {season === "All Time" ?
-                <div className="w-3/12 flex items-center" style={{fontSize:"12px", color:"white"}}>
+                <div className="w-3/12 flex items-center" style={{color:"white"}}>
                     <p className="w-4/12">{roster.settings.all_time.season.fpts}</p>
                     <p className="w-4/12">{roster.settings.all_time.season.ppts}</p>
                     <p className="w-4/12">{roster.settings.all_time.season.fpts_against}</p>
                 </div>
             :
-                <div className="w-3/12 flex items-center" style={{fontSize:"12px", color:"white"}}>
+                <div className="w-3/12 flex items-center" style={{color:"white"}}>
                     <p className="w-4/12">{roster.settings.fpts}.{roster.settings.fpts_decimal}</p>
                     <p className="w-4/12">{roster.settings.ppts}.{roster.settings.ppts_decimal}</p>
                     <p className="w-4/12">{roster.settings.fpts_against}.{roster.settings.fpts_against_decimal}</p>
