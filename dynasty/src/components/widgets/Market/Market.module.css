@@ -28,11 +28,11 @@
 }
 
 .kHUD {
-    background: linear-gradient( -135deg, #bd66ff 10%, #cb86ff85 100%);
+    background: linear-gradient( -135deg, #bd66ff 10%, #cb86ffc9 100%);
 }
 
 .defHUD {
-    background: linear-gradient( -135deg, rgb(245, 245, 220) 10%, rgba(245, 245, 220, 0.342) 100%);
+    background: linear-gradient( -135deg, rgb(245, 245, 220) 10%, rgba(245, 245, 220, 0.479) 100%);
 }
 
 .playerHeadShot{

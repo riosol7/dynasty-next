@@ -191,7 +191,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                             <Image alt="" width={35.8} height={35.8} src={findLogo(player?.team).l!}/>
                             }
                             <div className="pl-4">
-                                <p className="font-bold" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
+                                <p className="" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
                                 {player.position === "DEF" ? <></> : 
                                 <>
                                     <p className="text-xs text-gray-400 font-light">#{player.number} {player.team || "FA"}</p>
