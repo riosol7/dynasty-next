@@ -19,7 +19,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
     }, []);
 
     const dashboardActive = currentPath === "/";
-    const marketActive = currentPath === "/martket";
+    const marketActive = currentPath === "/market";
     const matchupsActive = currentPath === "/matchups";
     const teamsActive = currentPath === "/teams";
 

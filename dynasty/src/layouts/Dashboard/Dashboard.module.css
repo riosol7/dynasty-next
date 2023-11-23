@@ -1,10 +1,10 @@
 .dashboardLayout {
     min-height: 100vh;
-    width: calc(100% - 200px);
-    transition: .5s;
+    transition: .3s;
     background-color: rgb(0, 0, 0);
 }
 .dashboardContent {
+    margin-left: calc(5rem);
     padding-top: 4rem;
     padding-inline: 2em;
 }

@@ -13,10 +13,7 @@ export default function DashboardLayout({ children }: Interfaces.ChildrenProps) 
     return (
         <>
             <LeagueNav league={legacyLeague[0]} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
-            <div className={styles.dashboardLayout} style={{ 
-                width:  "100%",
-                paddingLeft: "calc(5rem)",
-            }}>
+            <div className={styles.dashboardLayout}>
                 <SideNavBar isSidebarOpen={isSidebarOpen}/>
                 <div className={styles.dashboardContent}>
                     {children}
