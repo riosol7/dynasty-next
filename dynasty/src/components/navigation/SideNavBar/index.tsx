@@ -21,6 +21,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
     const dashboardActive = currentPath === "/";
     const marketActive = currentPath === "/market";
     const matchupsActive = currentPath === "/matchups";
+    const playersActive = currentPath === "/players";
     const teamsActive = currentPath === "/teams";
 
     return (
@@ -73,6 +74,21 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
                 <div>
                     <a href={`/matchups`}  className="flex items-center justify-center"><Icon icon="tabler:vs" className={styles.iconSize} style={{color: matchupsActive ? "white" : "#7f7f7f"}}/></a>
                     <p className={styles.navTitle} style={{ color: matchupsActive ? "white" : "#7f7f7f" }}>Matchups</p>
+                </div>
+            </div>
+            }
+            {isSidebarOpen ?
+            <a href={`/players`} className={`flex items-center ${styles.hover}`} style={{ paddingBlock: "5px", marginBlock:"10px", marginInline:"10px" }}>
+                {playersActive ? <div id={styles.activeIcon}></div> : null}
+                <Icon icon="game-icons:american-football-player" className={`ml-4 mr-2 ${styles.iconSize}`} style={{color: playersActive ? "white" : "#7f7f7f"}}/>
+                <p className="text-xs" style={{ color: playersActive ? "white" : "#7f7f7f" }}>Players</p>
+            </a>
+            :
+            <div className={`${styles.navItem} ${styles.hover}`}>
+                {playersActive ? <div id={styles.activeIcon}></div> : null}
+                <div>
+                    <a href={`/players`}  className="flex items-center justify-center"><Icon icon="game-icons:american-football-player" className={styles.iconSize} style={{color: playersActive ? "white" : "#7f7f7f"}}/></a>
+                    <p className={styles.navTitle} style={{ color: playersActive ? "white" : "#7f7f7f" }}>Players</p>
                 </div>
             </div>
             }

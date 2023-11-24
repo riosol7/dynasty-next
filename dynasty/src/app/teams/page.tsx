@@ -1,6 +1,9 @@
+import DynastyWidget from "@/components/widgets/Dynasty";
 
 export default function Teams() {
     return (
-        <div>Teams</div>
+        <div>
+            <DynastyWidget/>
+        </div>
     );
 };
