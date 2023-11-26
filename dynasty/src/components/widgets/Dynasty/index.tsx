@@ -2,9 +2,9 @@
 import styles from "./DynastyWidget.module.css";
 import React, { useState } from "react";
 import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
-import { processPlayers, processRosters, sortDynastyRosters } from "@/utils";
+import { findPlayerByID, placementRankings, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
 import * as Interfaces from "@/interfaces";
-import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
 export default function DynastyWidget() {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -45,18 +45,44 @@ export default function DynastyWidget() {
         return aValue - bValue;    
     });
 
-    const teamDetails = (position: string, dynastyValue: Interfaces.DynastyValue) => {
+    const teamDetails = (position: string, dynastyValue: Interfaces.DynastyValue, roster: Interfaces.Roster) => {
+        const rankings = findPositionRank(roster.roster_id);
+        const validPlayers = roster.players.filter((element): element is Interfaces.Player => typeof element !== 'string');
+          
+        const positionPlayers = validPlayers.filter(
+            (player: Interfaces.Player) => player.position.toUpperCase() === position.toUpperCase()
+        ).slice().sort((a, b) => {
+            const aValue: number = Number((a[fantasyMarket as keyof typeof a] as Interfaces.MarketContent)?.value || 0);
+            const bValue: number = Number((b[fantasyMarket as keyof typeof b] as Interfaces.MarketContent)?.value || 0);
+            return bValue - aValue;    
+        });        
         return (
-            <div className="w-3/12">
-                <p>{position.toLocaleUpperCase()}: {dynastyValue[position as keyof typeof dynastyValue]}</p>
+            <div className="w-3/12 px-3">
+                <div className="flex justify-between">
+                    <p className="font-bold" style={{color: POSITION_COLORS[position.toLocaleUpperCase() as keyof typeof POSITION_COLORS]}}>
+                        <span style={{color:"white"}}>{placementRankings(rankings[position as keyof typeof rankings])}</span> 
+                        <span style={{color:"lightgrey"}} className="mx-1 font-light">|</span>
+                        {position.toLocaleUpperCase()}
+                    </p> 
+                    <p>{dynastyValue[position as keyof typeof dynastyValue]}</p>
+                </div>
+                {positionPlayers.map((player, idx) => 
+                <div key={idx} className="my-1">
+                    <div className="flex justify-between">
+                        <p>{idx+ 1}. {player.first_name} {player.last_name}</p>
+                        {/* <p>age {player.age}</p> */}
 
+                        <p>{(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent)?.value}</p>
+                    </div>
+                </div>
+                )}
             </div>
         );
     };
     
     return (
         <div>
-            <div className="flex items-center py-2">
+            <div className="flex items-center py-2 text-xs text-[lightgray]">
                 <p className="w-5/12">Team</p>
                 <p className="w-1/12">Record</p>
                 <p className="w-1/12">Overall</p>
@@ -65,7 +91,6 @@ export default function DynastyWidget() {
                 <p className="w-1/12">WR</p>
                 <p className="w-1/12">TE</p>
                 <p className="w-1/12">Draft</p>
-
             </div>
             {sortedRosters.map((roster, i) => {
                 const dynastyValue = (roster[fantasyMarket as keyof typeof roster] as Interfaces.DynastyValue);
@@ -92,11 +117,11 @@ export default function DynastyWidget() {
                         <p className="w-1/12">{0}</p>
                     </div>
                     {showTeam ?
-                    <div className="text-xs flex items-center">
-                        {teamDetails("qb", dynastyValue)}
-                        {teamDetails("rb", dynastyValue)}
-                        {teamDetails("wr", dynastyValue)}
-                        {teamDetails("te", dynastyValue)}
+                    <div className="text-xs flex items-top">
+                        {teamDetails("qb", dynastyValue, roster)}
+                        {teamDetails("rb", dynastyValue, roster)}
+                        {teamDetails("wr", dynastyValue, roster)}
+                        {teamDetails("te", dynastyValue, roster)}
                     </div>
                     :<></>}
                 </div>
