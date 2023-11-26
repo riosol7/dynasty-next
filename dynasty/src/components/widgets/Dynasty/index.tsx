@@ -2,9 +2,11 @@
 import styles from "./DynastyWidget.module.css";
 import React, { useState } from "react";
 import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
-import { findPlayerByID, placementRankings, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
+import { placementRankings, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import AgeBarChart from "@/components/charts/BarCharts/AgeChart";
+import ValueRadarChart from "@/components/charts/RadarCharts/ValueChart";
 
 export default function DynastyWidget() {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -60,9 +62,9 @@ export default function DynastyWidget() {
             <div className="w-3/12 px-3">
                 <div className="flex justify-between">
                     <p className="font-bold" style={{color: POSITION_COLORS[position.toLocaleUpperCase() as keyof typeof POSITION_COLORS]}}>
-                        <span style={{color:"white"}}>{placementRankings(rankings[position as keyof typeof rankings])}</span> 
-                        <span style={{color:"lightgrey"}} className="mx-1 font-light">|</span>
                         {position.toLocaleUpperCase()}
+                        <span style={{color:"lightgrey"}} className="mx-1 font-light">|</span>
+                        <span style={{color:"white"}}>{placementRankings(rankings[position as keyof typeof rankings])}</span> 
                     </p> 
                     <p>{dynastyValue[position as keyof typeof dynastyValue]}</p>
                 </div>
@@ -98,7 +100,7 @@ export default function DynastyWidget() {
                 const displayName = roster.owner.display_name;
                 const rankings = findPositionRank(roster.roster_id);
                 return (
-                <div key={i}>
+                <div key={i} className="border-[#0f0f0f] border-b-2">
                     <div className="flex items-center py-2" onClick={() => setShowTeam(!showTeam)}>
                         <div className="w-5/12 flex items-center">
                             <p className="w-4 text-center">{dynastyValue.rank}</p>
@@ -117,11 +119,17 @@ export default function DynastyWidget() {
                         <p className="w-1/12">{0}</p>
                     </div>
                     {showTeam ?
-                    <div className="text-xs flex items-top">
-                        {teamDetails("qb", dynastyValue, roster)}
-                        {teamDetails("rb", dynastyValue, roster)}
-                        {teamDetails("wr", dynastyValue, roster)}
-                        {teamDetails("te", dynastyValue, roster)}
+                    <div className="py-3 text-xs border-t border-dashed border-[#0f0f0f]">
+                        <div className="flex items-center">
+                            <AgeBarChart roster={roster} rosters={sortedRosters}/>
+                            <ValueRadarChart roster={roster} rosters={sortedRosters}/>
+                        </div>
+                        <div className="flex items-top">
+                            {teamDetails("qb", dynastyValue, roster)}
+                            {teamDetails("rb", dynastyValue, roster)}
+                            {teamDetails("wr", dynastyValue, roster)}
+                            {teamDetails("te", dynastyValue, roster)}
+                        </div>
                     </div>
                     :<></>}
                 </div>
