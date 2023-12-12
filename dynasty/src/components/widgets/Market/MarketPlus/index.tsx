@@ -89,30 +89,33 @@ export default function MarketPlus() {
                     <p className="w-3/12">{volume}</p>
                 </div>
             </div>
-            <div className="py-5 mt-5 text-sm">
-                <div className="pb-3 flex items-center text-[lightgray] font-bold border-b-2 border-gray-900">
-                    <p className="w-4/12">Player</p>
-                    <p className="w-3/12">Owner</p>
-                    <p className="w-2/12">Bid</p>
-                    <p className="w-2/12">Date</p>
-                </div>
-                {recentWaivers.slice(0,5).map((record, i) => 
-                    <div key={i} className="flex items-center py-3">
-                        <div className="w-4/12 flex items-center">
-                            <div className={styles.playerHeadShot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.waiver_player.player_id}.jpg)`}}></div>
-                            <div className="pl-2">
-                                <p>{record.waiver_player.first_name} {record.waiver_player.last_name}</p>
-                                <div className="text-gray-400" style={{ fontSize: "11px" }}>
-                                    <p>{record.waiver_player.team} #{record.waiver_player.number}</p>
-                                    <p>{record.waiver_player?.years_exp === 0 ? "ROOKIE" : `EXP ${record.waiver_player?.years_exp}`}</p>
+            <div className="pt-5">
+                <h2 className="pt-5 mt-5 pb-4 border-b-2 border-gray-900 font-bold">{selectSeason} Waivers</h2>
+                <div className="py-5 text-sm">
+                    <div className="pb-1 flex items-center text-[lightgray] font-bold ">
+                        <p className="w-4/12">Player</p>
+                        <p className="w-3/12">Owner</p>
+                        <p className="w-2/12">Bid</p>
+                        <p className="w-2/12">Date</p>
+                    </div>
+                    {recentWaivers.slice(0,5).map((record, i) => 
+                        <div key={i} className="flex items-center py-2 border-dashed border-[#0f0f0f] border-b">
+                            <div className="w-4/12 flex items-center">
+                                <div className={styles.playerHeadShot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.waiver_player.player_id}.jpg)`}}></div>
+                                <div className="pl-2">
+                                    <p>{record.waiver_player.first_name} {record.waiver_player.last_name}</p>
+                                    <div className="text-gray-400" style={{ fontSize: "11px" }}>
+                                        <p>{record.waiver_player.team} #{record.waiver_player.number}</p>
+                                        <p>{record.waiver_player?.years_exp === 0 ? "ROOKIE" : `EXP ${record.waiver_player?.years_exp}`}</p>
+                                    </div>
                                 </div>
                             </div>
+                            <p className="w-3/12">{record.creator}</p>
+                            <p className="w-2/12">${record.settings.waiver_bid}</p>
+                            <p className="w-2/12">{toDateTime(record.created)}</p>
                         </div>
-                        <p className="w-3/12">{record.creator}</p>
-                        <p className="w-2/12">${record.settings.waiver_bid}</p>
-                        <p className="w-2/12">{toDateTime(record.created)}</p>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
             <div className="py-5 font-bold">
                 <h2 className="pt-5 pb-4 border-b-2 border-gray-900">Positions</h2>

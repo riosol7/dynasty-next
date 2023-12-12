@@ -71,7 +71,10 @@ export default function DynastyWidget() {
                 {positionPlayers.map((player, idx) => 
                 <div key={idx} className="my-1">
                     <div className="flex justify-between">
-                        <p>{idx+ 1}. {player.first_name} {player.last_name}</p>
+                        <div className="flex items-center">
+                            <p>{idx+ 1}. {player.first_name} {player.last_name}</p>
+                            <p className={styles.injuredIcon}>{player.injury_status === "IR" ? player.injury_status : ""}</p>
+                        </div>
                         {/* <p>age {player.age}</p> */}
 
                         <p>{(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent)?.value}</p>

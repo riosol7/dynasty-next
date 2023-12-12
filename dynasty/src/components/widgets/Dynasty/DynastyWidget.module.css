@@ -4,3 +4,13 @@
     width: 35px;
     height: 35px;
 }
+
+.injuredIcon {
+    margin-left: 4px;
+    border-radius: 50%;
+    background-color:crimson;
+    width: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9px;
+}

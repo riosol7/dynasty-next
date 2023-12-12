@@ -181,7 +181,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                         <div className="w-5/12 flex items-center">
                             <p>value</p>
                             <p className="mx-1" style={{color:"white"}}>{marketContent?.value}</p>
-                            {Number(marketContent.trend) > 0 ? 
+                            {Number(marketContent?.trend) > 0 ? 
                                 <p className="flex items-center" style={{color:"white"}}>
                                     (+{marketContent.trend}<Icon icon="mingcute:trending-up-fill" style={{color:"#a9dfd8", fontSize: "1.6em", marginLeft:"2px"}}/>)
                                 </p>

@@ -116,7 +116,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 </div>
                 <div style={SHOW_PAGES}>
                     <p>Show</p>
-                    <select style={{background:"inherit", color:"white", border:"none"}} onChange={handleShowPage} value={recordsPerPage}>
+                    <select style={{ background:"black", color:"white", border:"none" }} onChange={handleShowPage} value={recordsPerPage}>
                         <option value={5}>5</option>
                         {waiverBidsFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
                         {waiverBidsFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}

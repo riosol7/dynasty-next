@@ -94,13 +94,13 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
         plotOptions: {
             bar: {
                 horizontal: true,
-                columnWidth: '40',
+                columnHeight: '15',
                 endingShape: 'rounded'
             },
         },
         stroke: {
             show: true,
-            width: 2,
+            width: 3,
             colors: ['transparent']
         },
         tooltip: {

@@ -41,28 +41,32 @@ export default function TransactionList() {
   const successfulTransactions = transactions.filter(transaction => transaction.status === "complete");
   const filteredTransactions = successfulTransactions;
   const records = getSortedTransactionRecords(filteredTransactions, sort, asc, currentPage, recordsPerPage);
+  
   const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const valueAsNumber = +e.target.value;
     setRecordsPerPage(valueAsNumber);
   };
+
   const handlePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectPosition(e.target.value)
+    setSelectPosition(e.target.value);
   };
 
   const handleOwner = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectOwner(e.target.value)
+    setSelectOwner(e.target.value);
   };
+
   const paginate = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const valueAsNumber = +e.target.value;
-    setCurrentPage(valueAsNumber)
+    setCurrentPage(valueAsNumber);
   };
+   
   const handleSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectSeason(e.target.value);
   };
   
   return (
     <div className={styles.transactionList}>
-      <p className="flex items-center justify-between font-bold px-4 py-3 border-b-2 border-solid border-[#2a2c3e]">
+      <p className="flex items-center justify-between font-bold px-4 py-3 border-b border-[#2a2c3e]">
         Transactions <Icon icon="uiw:more" className={styles.hover}/>
       </p>
       <div>
@@ -112,7 +116,6 @@ export default function TransactionList() {
                     </div>
                   </div>
                   {record.waiver_budget && record.type === "trade" ?
-                  
                     record.waiver_budget.map(((transaction, index) => 
                     <div key={index} className="text-xs flex items-center">
                       <Image src={SLEEPER_IMG} width={65} height={65} alt={""} style={{borderRadius: "50%", marginInline: ".2em"}}/>
@@ -121,10 +124,8 @@ export default function TransactionList() {
                         <p className="text-sm font-bold">FAAB</p>
                         <p>$ {transaction.amount}</p>
                       </div>
-
                     </div>
                     ))
-
                   :<></>}
                 </div>
               );
