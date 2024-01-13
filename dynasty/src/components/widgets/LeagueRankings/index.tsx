@@ -33,7 +33,7 @@ export default function LeagueRankings() {
 
     return (
         <>
-            <div className="flex items-center justify-between sticky top-0 pt-3 pb-2">
+            <div className="flex items-center justify-between sticky top-0 pt-5 pb-2">
                 <div className="flex items-center">
                     <Icon icon="icon-park-outline:ranking" className="text-[#a9dfd8] text-1.1rem"/>
                     <select className="m-0 mx-1 font-bold bg-black text-white border-none" onChange={handleRankings} value={rankings}>

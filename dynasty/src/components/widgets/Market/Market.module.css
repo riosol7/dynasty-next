@@ -28,11 +28,11 @@
 }
 
 .kHUD {
-    background: linear-gradient( -135deg, #bd66ff 10%, #cb86ffc9 100%);
+    background: linear-gradient( -135deg, #bd66ff 10%, #8a00f3c9 100%);
 }
 
 .defHUD {
-    background: linear-gradient( -135deg, rgb(245, 245, 220) 10%, rgba(245, 245, 220, 0.479) 100%);
+    background: linear-gradient( -135deg, rgb(191,95,64) 10%, rgba(250, 100, 0, 0.479) 100%);
 }
 
 .playerHeadShot{
@@ -83,4 +83,55 @@
 .selectTrend {
     background-color: black;
     font-size: small;
+}
+
+.positionHeader {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: .7rem;
+    padding-bottom: .75rem;
+    color: #7d91a6;
+    border-bottom: solid 2px #2a2c3e;
+}
+
+.waiverContainer {
+    margin-top: .75rem;
+    padding-top: 1.75rem;
+}
+
+.waiverHeader {
+    display: flex;
+    align-items: center;
+    padding-bottom: .75rem;
+    font-size: .7rem;
+    font-weight: bold;
+    color: #7d91a6;
+    border-bottom: solid 2px #2a2c3e;
+}
+
+.waiverPagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2rem;
+    font-size: 13.5px;
+}
+
+.paginateArrows {
+    font-size: 2em;
+    border-radius: 8px;
+    border: 1px solid rgb(45, 48, 48);
+}
+
+#showPages {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+#selectPageNumber {
+    background-color: black;
+    color: white;
+    border: none;
 }

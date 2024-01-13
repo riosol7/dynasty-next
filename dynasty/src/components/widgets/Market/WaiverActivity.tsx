@@ -7,17 +7,7 @@ import { filteredTransactionsBySeason, findLogo, getSortedTransactionRecords, ha
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
-const SELECT_TAG={border:"none", background:"inherit",color:"#7d91a6",fontSize:".7rem",fontWeight:"bold"};
-const SHOW_PAGES={
-    display: "flex",
-    alignItems: "center",
-    borderBottom:"none", 
-    background:"inherit",
-    color:"#e4e1e0",
-    fontSize:"13.5px",
-    fontWeight:"normal",
-    paddingBlock:"3px",
-};
+const SELECT_TAG={border:"none", background:"inherit", color:"#7d91a6", fontWeight:"bold"};
 
 function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
     const isSorting = sort === label;
@@ -100,30 +90,8 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
     }, [recordsPerPage, waiverBidsFiltered]);
 
     return (
-        <div className="pt-4">
-            <div className="flex items-center justify-between pb-1">
-                <div className="flex items-center">
-                    <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
-                    <div className="mx-2 flex items-center text-sm">
-                        <select className="font-bold bg-transparent text-white border-none" onChange={paginate} value={currentPage}>
-                            {pageNumbers.map((number, i) => (
-                                <option key={i} value={number}>{number}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" 
-                    style={{fontSize: "1.5em", color: waiverBidsFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
-                </div>
-                <div style={SHOW_PAGES}>
-                    <p>Show</p>
-                    <select style={{ background:"black", color:"white", border:"none" }} onChange={handleShowPage} value={recordsPerPage}>
-                        <option value={5}>5</option>
-                        {waiverBidsFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
-                        {waiverBidsFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}
-                    </select>
-                </div>
-            </div>
-            <div className="flex items-center py-2 text-xs text-[#7d91a6]">
+        <div className={styles.waiverContainer}>
+            <div className={styles.waiverHeader}>
                 <TableHeaderCell
                     label="PLAYER"
                     sort={sort}
@@ -174,7 +142,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
             {records?.map((record, i) => { 
                 const player = record.waiver_player;
                 return (
-                    <div key={i} className={`flex items-center py-2 text-sm text-white ${i === records.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"}`}>
+                    <div key={i} className={`flex items-center py-3 text-sm text-white ${i === records.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
                         <div className="w-3/12 flex items-center">
                             {player.position !== "DEF" ?
                             <div className={styles.playerHeadShot}
@@ -205,6 +173,29 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     </div>
                 );
             })}
+            <div className={styles.waiverPagination}>
+                <Icon className={styles.paginateArrows} onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                <div id={styles.showPages}>
+                    <p style={{color:"gray"}}>Showing</p>
+                    <select style={{ background:"black", color:"white", border:"none" }} onChange={handleShowPage} value={recordsPerPage}>
+                        <option value={5}>5</option>
+                        {waiverBidsFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
+                        {waiverBidsFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}
+                    </select>
+                    <p style={{color:"gray"}}>out of {waiverBidsFiltered?.length}</p>
+                </div>
+                <p className="mx-2">|</p>
+                <div className="mr-2 flex items-center">
+                    <p style={{color:"gray"}}>Page</p>
+                    <select id={styles.selectPageNumber} onChange={paginate} value={currentPage}>
+                        {pageNumbers.map((number, i) => (
+                            <option key={i} value={number}>{number}</option>
+                        ))}
+                    </select>
+                </div>
+                <Icon className={styles.paginateArrows} onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" 
+                style={{color: waiverBidsFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+            </div>
         </div>
     );
 };

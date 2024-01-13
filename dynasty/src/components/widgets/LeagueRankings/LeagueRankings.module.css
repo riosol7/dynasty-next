@@ -71,3 +71,13 @@
     padding-block: 16px;
     border-bottom: 0px solid #2a2c3e
 }
+
+.standingTableHeader {
+    display: flex;
+    align-items: center;
+    padding-block: .75rem;
+    border-bottom: 2px solid #2a2c3e;
+    font-size: .7rem;
+    font-weight: bold;
+    color: #7d91a6;
+}

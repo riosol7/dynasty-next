@@ -98,7 +98,7 @@ export default function Standings({ season, tournament }: Interfaces.StandingPro
         : tournament ? <Tournament season={season}/> :
         <>
             <div className="text-sm py-4">
-                <div className={`pb-3 ${styles.performanceHeader}`} style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
+                <div className={`pb-3 ${styles.performanceHeader} font-bold`} style={{borderBottom:"2px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
                     <p className="w-7/12">DIVISIONS</p>
                     <p className="w-2/12">RECORD</p>
                     <p className="w-1/12">PF</p>

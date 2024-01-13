@@ -26,7 +26,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
 
     return (
         <div className="py-3">
-            <div className="flex items-center font-bold pb-3 text-xs text-[#7d91a6] border-b border-solid border-[#2a2c3e]">
+            <div className={styles.positionHeader}>
                 <div style={{ width: "70px" }}>POSITION</div>
                 <div className="w-3/12">{selectSeason === "All Time" ? selectSeason.toLocaleUpperCase() : selectSeason } TREND</div>
                 <div className="w-1/12">LAST PRICE</div>
@@ -49,7 +49,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                 const prevPrice = recentWaivers && recentWaivers[1]?.settings?.waiver_bid;
                 return (
                     <div key={i} className={`py-3 flex items-center text-sm ${
-                        i === POSITIONS.length - 1 ? "" : "border-b border-solid border-[#2a2c3e]"
+                        i === POSITIONS.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"
                     }`}>
                         <div style={{width: "70px"}}>
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>

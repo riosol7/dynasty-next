@@ -48,7 +48,7 @@ function SortableHeader({
 
 export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: Interfaces.StandingTableHeaderProps) {
     return (
-        <div className="flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
+        <div className={styles.standingTableHeader}>
             <div className="w-7/12 flex items-center"> 
                 <div className="w-1/12">
                     <SortableHeader
