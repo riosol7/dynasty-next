@@ -184,7 +184,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     </select>
                     <p style={{color:"gray"}}>out of {waiverBidsFiltered?.length}</p>
                 </div>
-                <p className="mx-2">|</p>
+                <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
                 <div className="mr-2 flex items-center">
                     <p style={{color:"gray"}}>Page</p>
                     <select id={styles.selectPageNumber} onChange={paginate} value={currentPage}>

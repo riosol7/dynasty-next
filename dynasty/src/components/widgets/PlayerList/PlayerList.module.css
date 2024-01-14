@@ -18,7 +18,12 @@
     border-bottom: none; 
     background: inherit;
     color: #e4e1e0;
-    font-size: 13px;
     font-weight:normal;
     padding-block: 3px;
+}
+
+.selectTag {
+    background-color: black;
+    color: white;
+    border: none;
 }

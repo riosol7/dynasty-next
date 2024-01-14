@@ -28,7 +28,7 @@ import {
     sortPlayersByFantasyMarket,
     totalFantasyPointsByPlayerID,
 } from "@/utils";
-import { PLAYER_BASE_URL, POSITIONS, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { PLAYER_BASE_URL, POSITIONS, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL, VALID_POSITIONS } from "@/constants";
 
 export default function PlayerList({ type }: { type? : string})  {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -76,38 +76,54 @@ export default function PlayerList({ type }: { type? : string})  {
     };
     return (
         <div>
-            
-            <div className="flex items-center justify-between pt-5 pb-4 border-b-2 border-solid border-gray-900">
-                {type === "available" ? <h2 className="font-bold">Available Players</h2> : ""}
+            <div className="flex items-center justify-between pt-5 pb-3 border-b-2 border-solid border-[#2a2c3e]">
+                {type === "available" ? <h2 className="font-bold">Available Players</h2> :
                 <div className="flex items-center">
-                    <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
-                    <div className="mx-2 flex items-center text-sm">
-                        <select className="font-bold bg-transparent text-white border-none" onChange={paginate} value={currentPage}>
-                            {pageNumbers.map((number, i) => (
-                                <option key={i} value={number}>{number}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color: sortedPlayers?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                    <Icon icon="solar:ranking-bold-duotone" style={{color: "#a9dfd8", fontSize:"1.6rem"}}/>
+                    <h2 className="font-bold ml-1">Player Rankings</h2>                
                 </div>
-                <div className="flex align-items-center">
+                }
+                <div className="flex align-items-center" style={{fontSize:"13px"}}>
                     <div className={styles.showPages}>
                         <p>Show</p>
-                        <select style={{background:"inherit", color:"white", border:"none"}} onChange={handleShowPage} value={recordsPerPage}>
+                        <select className={styles.selectTag} onChange={handleShowPage} value={recordsPerPage}>
                             <option value={15}>15</option>
                             {sortedPlayers?.length > 15 ? <option value={30}>30</option> : <></>}
                             {sortedPlayers?.length > 30 ? <option value={50}>50</option> : <></>}
                         </select>
                     </div>
-                    <select className="ml-5" onChange={handleSeason} value={selectFantasySeason} style={{fontSize:".8em",background:"black", color:"white"}}>
+                    <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
+                    <select className={styles.selectTag} onChange={handleSeason} value={selectFantasySeason}>
                         {legacyLeague?.slice().map((league, i) => 
                             <option key={i} value={league.season}>{league.season}</option>
                         )}
                         <option value="All Time">All Time</option>
                     </select>
+                    {selectFantasySeason !== "All Time" ?
+                    <>
+                        <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
+                        <select className={styles.selectTag}>
+                            <option>Season</option>
+                            <option>Week 1</option>
+                        </select>
+                    </>
+                    :<></>
+                    }
+                    <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
+                    <div className="flex items-center">
+                        <Icon onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{fontSize: "1.5em", color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                        <div className="mx-2 flex items-center text-sm">
+                            <select className={styles.selectTag} onChange={paginate} value={currentPage}>
+                                {pageNumbers.map((number, i) => (
+                                    <option key={i} value={number}>{number}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <Icon onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" style={{fontSize: "1.5em", color: sortedPlayers?.length > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                    </div>
                 </div>
             </div>
-            <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b border-dashed border-[#2a2c3e] py-2">
+            <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b-2 border-dotted border-[#0f0f0f] py-2">
                 <p className="w-1/12">FANTASY</p>
                 <p className="w-1/12">POSITION</p>
                 <div className="w-3/12 flex text-center">
@@ -119,13 +135,13 @@ export default function PlayerList({ type }: { type? : string})  {
                 <p className="w-2/12">RUSHING</p>
                 <p className="w-1/12">DYNASTY</p>
             </div>
-            <div className="flex items-center text-xs font-bold text-[#7d91a6] border-b border-solid border-[#0f0f0f] py-1">
+            <div className="flex items-center text-xs font-bold text-[#7d91a6] border-b-2 border-solid border-[#0f0f0f] py-2">
                 <div className="w-1/12 flex items-center">
                     <p className="w-6/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
                     <p className="w-6/12">POS</p>
                 </div>
                 <div className="w-1/12 text-center flex items-center">
-                    {POSITIONS.map((position, idx) =>
+                    {VALID_POSITIONS.map((position, idx) =>
                         <p key={idx} className="w-3/12">{position}</p>
                     )}
                 </div>
@@ -171,14 +187,14 @@ export default function PlayerList({ type }: { type? : string})  {
                             <div className={`${styles.headshot}`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.player_id}.jpg)`}}></div>
                             <div className="flex items-center justify-center text-xs font-bold pt-1"> 
                                 <p className={styles.positionHUD} style={{color: POSITION_COLORS[record.position as keyof typeof POSITION_COLORS]}}>{record.position}</p>
-                                <p className="ml-1">{record.team} #{record.number}</p>
+                                <p className="ml-1">{record.team} <span className="font-normal">#</span>{record.number}</p>
                             </div>
                         </div>
                         <div className="w-3/12 px-2 font-bold">
                             <p>{record.full_name}</p>
                             <div className="flex items-center text-xs pt-1">
                                 <p style={{color: primeIndicator(record.age, record.position)}}><span className="text-gray-300">AGE </span>{record.age}</p>
-                                <p className="ml-1 text-gray-300">({formatDate(record.birth_date || "0000-00-00")})</p>
+                                <p className="ml-1 text-gray-300 font-normal">({formatDate(record.birth_date || "0000-00-00")})</p>
                             </div>
                             <div className="text-end">
                                 <div className="flex justify-between items-end">
@@ -188,7 +204,7 @@ export default function PlayerList({ type }: { type? : string})  {
                                         : "FA"}
                                         <p className="text-xs text-center ml-1">{user.display_name}</p>
                                     </div>
-                                    <p className="text-xs">{fantasyPoints.fpts} / {fantasyPoints.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts</span></p>
+                                    <p className="text-xs">{fantasyPoints.fpts} <span className="font-normal">/</span> {fantasyPoints.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts</span></p>
                                 </div>
                                 <div className="bg-gray-700 rounded-full h-1 my-1">
                                     <div className="bg-indigo-400 h-1 rounded-full" style={{ width: `${calculatePercentage(fantasyPoints.fpts, fantasyPoints.ppts)}%` }}></div>
