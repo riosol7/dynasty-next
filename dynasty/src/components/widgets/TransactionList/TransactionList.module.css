@@ -18,17 +18,17 @@
 }
 
 .dashedRow {
-    border-bottom: 1px dashed #2a2c3e
+    border-bottom: 1px dashed #111827
 }
 
 .solidRow {
-    border-bottom: 1px solid #2a2c3e
+    border-bottom: 1px solid #111827
 }
 
 .transactionList {
     /* width: 350px; */
     height: max-content;
-    border: 1px solid #2a2c3e;
+    border: 1px solid #111827;
     border-radius: 5px;
 }
 
@@ -52,6 +52,6 @@
     padding: 4px;
 }
 .hover:hover {
-    background-color: #2a2c3e;
+    background-color: #111827;
     border-radius: 8%;
 }

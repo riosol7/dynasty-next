@@ -66,7 +66,7 @@ export default function TransactionList() {
   
   return (
     <div className={styles.transactionList}>
-      <p className="flex items-center justify-between font-bold px-4 py-3 border-b border-[#2a2c3e]">
+      <p className="flex items-center justify-between font-bold px-4 py-3 border-b border-[#111827]">
         Transactions <Icon icon="uiw:more" className={styles.hover}/>
       </p>
       <div>

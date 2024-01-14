@@ -26,11 +26,11 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
         <div className={`font-bold ${label === "PLAYER" || label === "DATE" ? "w-3/12" : "w-1/12"}`}>
         {isSorting ? (
             <div className="flex items-center" onClick={handleClick}>
-                <p className="m-0 text-[#7d91a6]">{label}</p>
+                <p className="text-[#7d91a6]">{label}</p>
                 <Icon icon={icon} style={{ color: "#a9dfd8" }} />
             </div>
         ) : (
-            <p className="m-0 text-[#7d91a6] cursor-pointer" onClick={handleClick}>{label}</p>
+            <p className="text-[#7d91a6] cursor-pointer" onClick={handleClick}>{label}</p>
         )}
         </div>
     );

@@ -55,7 +55,7 @@ export default function MarketPlus() {
             <div className="py-5">
                 <TrendChart waivers={selectedWaivers} height={200}/>
             </div>
-            <div className={`flex items-center border-b-2 border-gray-900 text-sm text-gray-400 py-3`}>
+            <div className={`flex items-center border-b border-[#2a2c3e] text-sm text-gray-400 py-3`}>
                 {filteredSeasonalBids.slice().reverse().map((league, i) => 
                     <p key={i} className={`${styles.hoverText} ${selectSeason === league.season ? "text-white" : ""} ${i === 0 ? "" : "mx-4"}`} 
                     onClick={() => handleSeason(league.season)}>{league.season}</p>
@@ -63,7 +63,7 @@ export default function MarketPlus() {
                 <p onClick={() => handleSeason("All Time")} className={`${styles.hoverText} ${selectSeason === "All Time" ? "text-white" : ""}`}>ALL</p>
             </div>
             <div className="pt-2 pb-5">
-                <h2 className="pt-5 pb-4 border-b-2 border-gray-900 font-bold">{selectSeason} Key Statistics</h2>
+                <h2 className="pt-5 pb-4 border-b-2 border-[#2a2c3e] font-bold">{selectSeason} Key Statistics</h2>
                 <div className="pt-4 flex items-center text-xs font-bold">
                     <p className="w-3/12">Last Price</p>
                     <p className="w-3/12">Top Spender</p>
@@ -90,16 +90,16 @@ export default function MarketPlus() {
                 </div>
             </div>
             <div className="pt-5">
-                <h2 className="pt-5 mt-5 pb-4 border-b-2 border-gray-900 font-bold">{selectSeason} Waivers</h2>
+                <h2 className="pt-5 mt-5 pb-4 border-b-2 border-[#2a2c3e] font-bold">{selectSeason} Waivers</h2>
                 <div className="py-5 text-sm">
-                    <div className="pb-1 flex items-center text-[lightgray] font-bold ">
-                        <p className="w-4/12">Player</p>
-                        <p className="w-3/12">Owner</p>
-                        <p className="w-2/12">Bid</p>
-                        <p className="w-2/12">Date</p>
+                    <div className="flex items-center text-[#7d91a6] font-bold" style={{fontSize:".7rem"}}>
+                        <p className="w-4/12">PLAYER</p>
+                        <p className="w-3/12">OWNER</p>
+                        <p className="w-2/12">BID</p>
+                        <p className="w-2/12">DATE</p>
                     </div>
                     {recentWaivers.slice(0,5).map((record, i) => 
-                        <div key={i} className="flex items-center py-2 border-dashed border-[#0f0f0f] border-b">
+                        <div key={i} className={`flex items-center py-2 ${i === recentWaivers.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
                             <div className="w-4/12 flex items-center">
                                 <div className={styles.playerHeadShot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.waiver_player.player_id}.jpg)`}}></div>
                                 <div className="pl-2">
@@ -118,7 +118,7 @@ export default function MarketPlus() {
                 </div>
             </div>
             <div className="py-5 font-bold">
-                <h2 className="pt-5 pb-4 border-b-2 border-gray-900">Positions</h2>
+                <h2 className="pt-5 pb-4 border-b-2 border-[#2a2c3e]">Positions</h2>
                 <div className="pt-5 flex items-center justify-between">
                     {POSITIONS.slice().filter(position => position !== selectPosition).map((position, i) => {
                         const positionWaivers = waivers[position as keyof typeof waivers];
