@@ -17,8 +17,11 @@ import {
 import { 
     calculatePercentage,
     convertToFeet, 
+    findLeagueBySeason, 
+    findPlayerOwnedBy, 
     findUserByPlayerID, 
     formatDate, 
+    getMatchups, 
     getSortedPlayerRecords, 
     nextPage, 
     prevPage, 
@@ -28,7 +31,7 @@ import {
     sortPlayersByFantasyMarket,
     totalFantasyPointsByPlayerID,
 } from "@/utils";
-import { PLAYER_BASE_URL, POSITIONS, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL, VALID_POSITIONS } from "@/constants";
+import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL, VALID_POSITIONS } from "@/constants";
 
 export default function PlayerList({ type }: { type? : string})  {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -46,10 +49,14 @@ export default function PlayerList({ type }: { type? : string})  {
     const [selectOwner, setSelectOwner] = useState("");
     const [selectPosition, setSelectPosition] = useState("");
     const [selectFantasySeason, setSelectFantasySeason] = useState("All Time");
+    const [selectRanking, setSelectRanking] = useState<string>("DYNASTY");
 
+    const foundSeason = findLeagueBySeason(selectFantasySeason, legacyLeague);
+    const numOfWeeks: number = getMatchups(foundSeason.matchups).length;
+    const weeksArray: number[] = Array.from({ length: numOfWeeks }, (_, index) => index + 1);
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
-    const filteredPlayers = type === "available" ? processedPlayers.filter(player => findUserByPlayerID(player.player_id, legacyLeague[0]).display_name === "")
-    : processedPlayers;
+    const availablePlayers = processedPlayers?.filter(player => findUserByPlayerID(player.player_id, legacyLeague[0]).display_name === "");
+    const filteredPlayers = type === "available" ? availablePlayers : processedPlayers;
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
     const sortedPlayers = sortPlayersByFantasyMarket(filteredPlayers, fantasyMarket);
     const records = getSortedPlayerRecords(sortedPlayers, sort, asc, currentPage, recordsPerPage);
@@ -73,6 +80,9 @@ export default function PlayerList({ type }: { type? : string})  {
     };
     const handleSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectFantasySeason(e.target.value);
+    };
+    const handleSelectRanking = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectRanking(e.target.value);
     };
     return (
         <div>
@@ -104,7 +114,9 @@ export default function PlayerList({ type }: { type? : string})  {
                         <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
                         <select className={styles.selectTag}>
                             <option>Season</option>
-                            <option>Week 1</option>
+                            {weeksArray.map((week, i) =>
+                                <option key={i} value={week}>{`Week ${week}`}</option>
+                            )}
                         </select>
                     </>
                     :<></>
@@ -124,7 +136,12 @@ export default function PlayerList({ type }: { type? : string})  {
                 </div>
             </div>
             <div className="flex items-center text-xs text-center font-bold text-[#7d91a6] border-b-2 border-dotted border-[#0f0f0f] py-2">
-                <p className="w-1/12">FANTASY</p>
+                <p className="w-1/12">
+                    <select className={styles.selectTag} onChange={handleSelectRanking} value={selectRanking} style={{color: "#7d91a6"}}>
+                        <option value={"DYNASTY"}>DYNASTY</option>
+                        <option value={"FANTASY"}>FANTASY</option>
+                    </select>
+                </p>
                 <p className="w-1/12">POSITION</p>
                 <div className="w-3/12 flex text-center">
                     <p className="w-7/12">PLAYER</p>
@@ -133,12 +150,20 @@ export default function PlayerList({ type }: { type? : string})  {
                 <p className="w-2/12">PASSING</p>
                 <p className="w-2/12">RECEIVING</p>
                 <p className="w-2/12">RUSHING</p>
-                <p className="w-1/12">DYNASTY</p>
             </div>
             <div className="flex items-center text-xs font-bold text-[#7d91a6] border-b-2 border-solid border-[#0f0f0f] py-2">
                 <div className="w-1/12 flex items-center">
-                    <p className="w-6/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
-                    <p className="w-6/12">POS</p>
+                    {selectRanking === "DYNASTY" ?
+                    <>
+                        <p className="w-4/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
+                        <p className="w-4/12">POS</p>
+                        <p className="w-4/12">VALUE</p>
+                    </>
+                    :
+                    <>
+                        <p className="w-6/12 flex items-center">OVR <Icon icon={`bi:caret-${asc ? "up" : "down"}-fill`} style={{ color: "#a9dfd8" }}/></p>
+                        <p className="w-6/12">POS</p>
+                    </>}
                 </div>
                 <div className="w-1/12 text-center flex items-center">
                     {VALID_POSITIONS.map((position, idx) =>
@@ -172,7 +197,6 @@ export default function PlayerList({ type }: { type? : string})  {
                     <p className="w-4/12">YD</p>
                     <p className="w-4/12">TD</p>
                 </div>
-                <p className="w-1/12 text-center">VALUE</p>
             </div>
             {records?.map((record, i) => {
                 const user = findUserByPlayerID(record.player_id, legacyLeague[0]);
@@ -180,8 +204,30 @@ export default function PlayerList({ type }: { type? : string})  {
                 return (
                     <div key={i} className="text-sm flex items-center py-2 border-b border-dashed border-[#0f0f0f]">
                         <div className="w-1/12 font-bold flex items-center justify-center">
-                            <p className="w-6/12">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.rank || 0}</p>
-                            <p className="w-6/12">({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.positionRank || 0})</p>
+                            {selectRanking === "DYNASTY" ?
+                            <>
+                                <p className="w-4/12">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.rank || 0}</p>
+                                <p className="w-4/12">
+                                    <span className="font-normal">(</span>
+                                    {(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent)?.positionRank || 0}
+                                    <span className="font-normal">)</span>
+                                </p>
+                                <div className="w-4/12">
+                                    <p>{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).value}</p>
+                                    <span className="font-normal">(</span>
+                                    {(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).trend}
+                                    <span className="font-normal">)</span>
+                                </div>
+                            </>
+                            :
+                            <>
+                                <p className="w-6/12">{0}</p>
+                                <p className="w-6/12">
+                                    <span className="font-normal">(</span>
+                                    {0}
+                                    <span className="font-normal">)</span>
+                                </p>
+                            </>}
                         </div>
                         <div className={`w-1/12`}>
                             <div className={`${styles.headshot}`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.player_id}.jpg)`}}></div>
@@ -210,8 +256,12 @@ export default function PlayerList({ type }: { type? : string})  {
                                     <div className="bg-indigo-400 h-1 rounded-full" style={{ width: `${calculatePercentage(fantasyPoints.fpts, fantasyPoints.ppts)}%` }}></div>
                                 </div>
                                 <div className="flex justify-between">
-                                    <p className="text-[#7c90a5] text-xs">since 2021</p>
-                                    <p className="text-xs">({`${calculatePercentage(fantasyPoints.fpts, fantasyPoints.ppts)}%`})</p>
+                                    <p className="text-[#7c90a5] text-xs">{findPlayerOwnedBy(record.player_id, legacyLeague, user.user_id)}</p>
+                                    <p className="text-xs">
+                                        <span className="font-normal">(</span>
+                                        {`${calculatePercentage(fantasyPoints.fpts, fantasyPoints.ppts)}%`}
+                                        <span className="font-normal">)</span>
+                                    </p>
                                 </div>
                             </div>
                             <div className="pt-1">
@@ -252,7 +302,6 @@ export default function PlayerList({ type }: { type? : string})  {
                             <p className="w-4/12">YD</p>
                             <p className="w-4/12">TD</p>
                         </div>
-                        <p className="w-1/12 text-center">{(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).value} ({(record[fantasyMarket as keyof typeof record] as Interfaces.MarketContent).trend})</p>
                     </div>
                 )
             })}

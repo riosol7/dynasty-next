@@ -45,3 +45,21 @@ export const findUserByPlayerID = (pID: string, league: Interfaces.League): Inte
     
     return foundUser || Constants.initOwner;
 };
+
+export const findPlayerOwnedBy = (pID: string, legacyLeague: Interfaces.League[], uID?: string): string => {
+    
+    if (uID === "") {
+        return "";
+    };
+    
+    const currentSeason: number = Number(legacyLeague[0].season);
+
+    const foundYearsOfPlayerEXPinRoster = legacyLeague.map(league => 
+        league.rosters.find(roster => roster.owner_id === uID)
+        ?.players.find(player => player === pID)
+    ).filter(num => num !== undefined)?.length - 1;
+    
+    // BONUS: and whether if the user drafted or traded
+    
+    return `since ${currentSeason - foundYearsOfPlayerEXPinRoster}`;
+};
