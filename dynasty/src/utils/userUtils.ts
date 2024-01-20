@@ -61,5 +61,5 @@ export const findPlayerOwnedBy = (pID: string, legacyLeague: Interfaces.League[]
     
     // BONUS: and whether if the user drafted or traded
     
-    return `since ${currentSeason - foundYearsOfPlayerEXPinRoster}`;
+    return `owned ${currentSeason - foundYearsOfPlayerEXPinRoster}`;
 };

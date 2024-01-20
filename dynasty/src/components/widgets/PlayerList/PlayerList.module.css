@@ -27,3 +27,14 @@
     color: white;
     border: none;
 }
+
+.trendIcon {
+    font-size: 26px;
+}
+
+.sortDivider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color:#0f0f0f;
+}
