@@ -1,9 +1,11 @@
 "use client";
+import styles from "./Matchups.module.css";
 import LeagueMatchupSlider from "@/components/sliders/LeagueMatchups"
 import MatchupWidget from "@/components/widgets/Matchup";
 import { SeasonProvider, useLeagueContext } from "@/context";
 import MatchupsLayout from "@/layouts/Matchups";
 import { useState, useEffect } from "react";
+import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "@/interfaces";
 import { getMatchups, sortMatchupsByHighestScore } from "@/utils";
 import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
@@ -34,22 +36,20 @@ export default function Matchups() {
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
                 <div className="py-5">
+                    <h3 className={styles.header}><Icon icon="game-icons:american-football-helmet" className={`pr-1 ${styles.icon}`}/>Top Performers</h3>
                     <PerformerList selectWeek={selectWeek}/>
                 </div>
-                <div className="flex flex-wrap justify-center py-5">
+                <div className="py-5">
+                    <h3 className={styles.header}><Icon icon="tabler:vs" className={`pr-1 ${styles.icon}`}/>League Matchups</h3>
                     <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
-                    <div className="pl-5">
-                        <MatchupWidget matchup={matchup}/>
-                    </div>
-                    <div className="p-5">
+                </div>
+                <div className="py-5 flex">
+                    <div className="pr-5">
                         <AllTimeScoreWidget/>
                     </div>
-
+                    <MatchupWidget matchup={matchup}/>
                 </div>
             </MatchupsLayout>
-            {/* <div className="flex justify-center py-5 mt-5">
-                <AllTimeScoreWidget/>
-            </div> */}
         </SeasonProvider>
     );
 };

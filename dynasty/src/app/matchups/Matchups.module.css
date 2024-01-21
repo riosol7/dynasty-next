@@ -1,0 +1,12 @@
+.header {
+    padding-bottom: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    color: #a9dfd8;
+    font-size: 1.8em;
+}
