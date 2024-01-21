@@ -1,25 +1,51 @@
 "use client";
 import TrendChart from "@/components/charts/TrendChart";
 import styles from "../Market.module.css";
+import { Icon } from "@iconify-icon/react";
 import { PLAYER_BASE_URL, POSITIONS } from "@/constants";
 import { useLeagueContext, usePlayerContext } from "@/context";
 import { Waivers } from "@/types";
-import { calculatePercentageChange, processWaiverBids, findRecentWaivers, findLowestBid, findHighestBid, roundToHundredth, filteredTransactionsBySeason, toDateTime, findPlayerByID } from "@/utils";
+import { calculatePercentageChange, processWaiverBids, findRecentWaivers, findLowestBid, findHighestBid, roundToHundredth, filteredTransactionsBySeason, toDateTime, findPlayerByID, getSortedTransactionRecords, nextPage, prevPage, handleSort, findTopSpender } from "@/utils";
 import React, { useState } from "react";
+import * as Interfaces from "@/interfaces";
 
-const positionStyles = {
-    QB: styles.qbHUD,
-    RB: styles.rbHUD,
-    WR: styles.wrHUD,
-    TE: styles.teHUD,
-    K: styles.kHUD,
+function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
+    const isSorting = sort === label;
+
+    const handleClick = () => {
+        if (isSorting) {
+            setAsc(!asc);
+        } else {
+            handleSort(sort, label, asc, setAsc, setSort);
+        };
+    };
+
+    const icon = asc ? "bi:caret-up-fill" : "bi:caret-down-fill";
+
+    return (
+        <div className={`font-bold ${label === "PLAYER" ? "w-4/12" : "w-2/12"}`}>
+        {isSorting ? (
+            <div className="flex items-center" onClick={handleClick}>
+                <p className="text-[#7d91a6]">{label}</p>
+                <Icon icon={icon} style={{ color: "#a9dfd8" }} />
+            </div>
+        ) : (
+            <p className="text-[#7d91a6] cursor-pointer" onClick={handleClick}>{label}</p>
+        )}
+        </div>
+    );
 };
 
 export default function MarketPlus() {
     const { legacyLeague } = useLeagueContext();
     const { players, loadPlayers } = usePlayerContext();
-    const [ selectPosition, setSelectPosition ] = useState("QB");
-    const [ selectSeason, setSelectSeason ] = useState("All Time");
+    const [ asc, setAsc ] = useState<boolean>(false);
+    const [ sort, setSort ] = useState<string>("DATE");
+    const [ currentPage, setCurrentPage] = useState<number>(1);
+    const [ recordsPerPage, setRecordsPerPage ] = useState<number>(5);
+    const [ selectOwner, setSelectOwner ] = useState<string>("all");
+    const [ selectPosition, setSelectPosition ] = useState<string>("QB");
+    const [ selectSeason, setSelectSeason ] = useState<string>("All Time");
     const filteredSeasonalBids = legacyLeague.map(league => {
         return {
             transactions: league.transactions.filter(transaction => transaction.settings !== null && transaction.settings.waiver_bid), 
@@ -29,17 +55,39 @@ export default function MarketPlus() {
     const waivers = processWaiverBids(legacyLeague, players);
     const positionWaivers = waivers[selectPosition as keyof typeof waivers];
     const filteredWaivers = filteredTransactionsBySeason(positionWaivers, selectSeason);
-    const selectedWaivers = selectSeason === "All Time" ? positionWaivers : filteredWaivers;
-    const recentWaivers = findRecentWaivers(selectedWaivers);
+    const recentWaivers = findRecentWaivers(filteredWaivers);
+    
+    // NEEDs CORRECTION 
+    const waiverBidsOwnerFiltered = filteredWaivers.filter(waiver => {
+        if (selectOwner !== "all") {
+            return waiver.creator === selectOwner;
+        } else {
+            return [];
+        };
+    });
+    
+    const records = getSortedTransactionRecords(waiverBidsOwnerFiltered!, sort, asc, currentPage, recordsPerPage);
+    const npage = Math.ceil(waiverBidsOwnerFiltered?.length! / recordsPerPage);
+    const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
+    const paginate = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const valueAsNumber = +e.target.value;
+        setCurrentPage(valueAsNumber)
+    };
     const percentageChanged = recentWaivers && calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid);
-    const lowestBid = findLowestBid(selectedWaivers);
-    const highestBid = findHighestBid(selectedWaivers);
-    const volume = selectedWaivers?.length || 0;
-    const averageBid = roundToHundredth(selectedWaivers?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
+    const lowestBid = findLowestBid(filteredWaivers);
+    const highestBid = findHighestBid(filteredWaivers);
+    const volume = filteredWaivers?.length || 0;
+    const averageBid = roundToHundredth(filteredWaivers?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
     const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid || 0;
     const handleSeason = (season: string) => {
         setSelectSeason(season);
     };
+
+    const handleOwner = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectOwner(e.target.value)
+    };
+
+    const topSpender = findTopSpender(waivers[selectPosition as keyof Waivers]);
     return (
         <div>
             <div className="pt-5">
@@ -53,7 +101,7 @@ export default function MarketPlus() {
                 </div>
             </div>
             <div className="py-5">
-                <TrendChart waivers={selectedWaivers} height={200}/>
+                <TrendChart waivers={filteredWaivers} height={200}/>
             </div>
             <div className={`flex items-center border-b border-[#2a2c3e] text-sm text-gray-400 py-3`}>
                 {filteredSeasonalBids.slice().reverse().map((league, i) => 
@@ -72,9 +120,9 @@ export default function MarketPlus() {
                 </div>
                 <div className="pt-1 flex items-center text-xs">
                     <p className="w-3/12">$ {lowestBid}</p>
-                    <p className="w-3/12">$ {highestBid}</p>
-                    <p className="w-3/12">$ {averageBid}</p>
-                    <p className="w-3/12">{volume}</p>
+                    <p className="w-3/12">{topSpender?.owner}: $ {topSpender?.bid}</p>
+                    <p className="w-3/12">-</p>
+                    <p className="w-3/12">-</p>
                 </div>
                 <div className="pt-4 flex items-center text-xs font-bold">
                     <p className="w-3/12">Low</p>
@@ -90,20 +138,62 @@ export default function MarketPlus() {
                 </div>
             </div>
             <div className="pt-5">
-                <h2 className="pt-5 mt-5 pb-4 border-b-2 border-[#2a2c3e] font-bold">{selectSeason} Waivers</h2>
+                <div className="flex items-center justify-between pt-5 mt-5 pb-4 border-b-2 border-[#2a2c3e]">
+                    <h2 className="font-bold">{selectSeason} Waivers</h2>
+                    <div className="flex items-center border-[#0f0f0f] border-2 rounded-full p-1">
+                        <Icon className={"text-xl"} 
+                        onClick={() => prevPage(currentPage, setCurrentPage)} 
+                        icon="material-symbols:chevron-left-rounded" 
+                        style={{color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                        <select id={styles.selectPageNumber} className="text-xs" onChange={paginate} value={currentPage}>
+                        {pageNumbers.map((number, i) => (
+                            <option key={i} value={number}>{number}</option>
+                        ))}
+                    </select>
+                        <Icon className={"text-xl"} 
+                        onClick={() => nextPage(currentPage, npage, setCurrentPage)} 
+                        icon="material-symbols:chevron-right-rounded" 
+                        style={{color: waiverBidsOwnerFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                    </div>
+                </div>
                 <div className="py-5 text-sm">
                     <div className="flex items-center text-[#7d91a6] font-bold" style={{fontSize:".7rem"}}>
-                        <p className="w-4/12">PLAYER</p>
-                        <p className="w-3/12">OWNER</p>
-                        <p className="w-2/12">BID</p>
-                        <p className="w-2/12">DATE</p>
+                        <TableHeaderCell
+                            label="PLAYER"
+                            sort={sort}
+                            asc={asc}
+                            setAsc={setAsc}
+                            setSort={setSort}
+                        />                        
+                        <div className="w-3/12"> 
+                            <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
+                                <option value={"all"}>ALL OWNERS</option>
+                                {legacyLeague[0]?.users?.map((user, i) => (
+                                    <option key={i} value={user.display_name}>{user.display_name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <TableHeaderCell
+                            label="BID"
+                            sort={sort}
+                            asc={asc}
+                            setAsc={setAsc}
+                            setSort={setSort}
+                        />
+                        <TableHeaderCell
+                            label="DATE"
+                            sort={sort}
+                            asc={asc}
+                            setAsc={setAsc}
+                            setSort={setSort}
+                        />
                     </div>
-                    {recentWaivers.slice(0,5).map((record, i) => 
-                        <div key={i} className={`flex items-center py-2 ${i === recentWaivers.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
+                    {records.map((record, i) => 
+                        <div key={i} className={`flex items-center py-2  ${i === records.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
                             <div className="w-4/12 flex items-center">
                                 <div className={styles.playerHeadShot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${record.waiver_player.player_id}.jpg)`}}></div>
                                 <div className="pl-2">
-                                    <p>{record.waiver_player.first_name} {record.waiver_player.last_name}</p>
+                                    <p style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{record.waiver_player.first_name} {record.waiver_player.last_name}</p>
                                     <div className="text-gray-400" style={{ fontSize: "11px" }}>
                                         <p>{record.waiver_player.team} #{record.waiver_player.number}</p>
                                         <p>{record.waiver_player?.years_exp === 0 ? "ROOKIE" : `EXP ${record.waiver_player?.years_exp}`}</p>
@@ -111,8 +201,8 @@ export default function MarketPlus() {
                                 </div>
                             </div>
                             <p className="w-3/12">{record.creator}</p>
-                            <p className="w-2/12">${record.settings.waiver_bid}</p>
-                            <p className="w-2/12">{toDateTime(record.created)}</p>
+                            <p className="w-2/12" style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
+                            <p className="w-2/12" style={{color:sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
                         </div>
                     )}
                 </div>

@@ -26,10 +26,10 @@ export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
             const result = entries.map((o: any) => {
                 return {
                     owner: o[0],
-                    pts: o[1].reduce((a: any, b: any) => a + b.settings.waiver_bid, 0),
+                    bid: o[1].reduce((a: any, b: any) => a + b.settings.waiver_bid, 0),
                 };
-            }).sort((a, b) => b.pts - a.pts)[0];
-
+            }).sort((a, b) => b.bid - a.bid)[0];
+            console.log("result:",result)
             return result;
         } else {
             // Handle case where entries are empty

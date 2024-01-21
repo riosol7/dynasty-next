@@ -70,7 +70,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <p className="w-1/12">{volume}</p>
                         <div className="w-2/12">
                             <p className="text-xs">@{findTopSpender(waivers[position as keyof Waivers])?.owner}</p>
-                            <p>${findTopSpender(waivers[position as keyof Waivers])?.pts}</p>
+                            <p>${findTopSpender(waivers[position as keyof Waivers])?.bid}</p>
                         </div>
                     </div>
                 );

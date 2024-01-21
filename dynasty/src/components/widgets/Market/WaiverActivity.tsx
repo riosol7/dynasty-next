@@ -7,8 +7,6 @@ import { filteredTransactionsBySeason, findLogo, getSortedTransactionRecords, ha
 import { PLAYER_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
-const SELECT_TAG={border:"none", background:"inherit", color:"#7d91a6", fontWeight:"bold"};
-
 function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
     const isSorting = sort === label;
 
@@ -46,7 +44,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
     const [selectPosition, setSelectPosition] = useState("all");
     const positionWaivers = waivers && waivers[selectPosition as keyof typeof waivers];
     const filteredWaivers = filteredTransactionsBySeason(positionWaivers, selectSeason);
-    const waiverBidsFiltered = filteredWaivers.filter(waiver => {
+    const waiverBidsOwnerFiltered = filteredWaivers.filter(waiver => {
         if (selectOwner !== "all") {
             return waiver.creator === selectOwner;
         } else {
@@ -54,8 +52,8 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
         };
     });
 
-    const records = getSortedTransactionRecords(waiverBidsFiltered!, sort, asc, currentPage, recordsPerPage);
-    const npage = Math.ceil(waiverBidsFiltered?.length! / recordsPerPage);
+    const records = getSortedTransactionRecords(waiverBidsOwnerFiltered!, sort, asc, currentPage, recordsPerPage);
+    const npage = Math.ceil(waiverBidsOwnerFiltered?.length! / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
     
     const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -75,11 +73,11 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
     };
 
     useEffect(() => {
-        if (waiverBidsFiltered?.length! < recordsPerPage) {
-            if (waiverBidsFiltered?.length! > 10) {
+        if (waiverBidsOwnerFiltered?.length! < recordsPerPage) {
+            if (waiverBidsOwnerFiltered?.length! > 10) {
                 setRecordsPerPage(15);
                 setCurrentPage(1);
-            } else if (waiverBidsFiltered?.length! > 5) {
+            } else if (waiverBidsOwnerFiltered?.length! > 5) {
                 setRecordsPerPage(10);
                 setCurrentPage(1);
             } else {
@@ -87,7 +85,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 setCurrentPage(1);
             }
         };
-    }, [recordsPerPage, waiverBidsFiltered]);
+    }, [recordsPerPage, waiverBidsOwnerFiltered]);
 
     return (
         <div className={styles.waiverContainer}>
@@ -107,7 +105,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     setSort={setSort}
                 />
                 <div className="w-2/12">
-                    <select style={SELECT_TAG} onChange={handlePosition} value={selectPosition}>
+                    <select id={styles.selectTag} onChange={handlePosition} value={selectPosition}>
                         <option value={"all"}>POSITION</option>
                         <option value={"QB"}>QB</option>
                         <option value={"RB"}>RB</option>
@@ -117,7 +115,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     </select>
                 </div>
                 <div className="w-2/12">
-                    <select style={SELECT_TAG} onChange={handleOwner} value={selectOwner}>
+                    <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
                     <option value={"all"}>OWNERS</option>
                     {legacyLeague[0]?.users?.map((user, i) => (
                         <option key={i} value={user.display_name}>{user.display_name}</option>
@@ -167,22 +165,25 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                         </div>
                         <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
                         <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
-                        <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{record.creator}</p>
+                        <p className="w-2/12">{record.creator}</p>
                         <p className="w-1/12" style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
                         <p className="w-3/12" style={{color:sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
                     </div>
                 );
             })}
             <div className={styles.waiverPagination}>
-                <Icon className={styles.paginateArrows} onClick={() => prevPage(currentPage, setCurrentPage)} icon="material-symbols:chevron-left-rounded" style={{color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
+                <Icon className={styles.paginateArrows} 
+                onClick={() => prevPage(currentPage, setCurrentPage)} 
+                icon="material-symbols:chevron-left-rounded" 
+                style={{color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
                 <div id={styles.showPages}>
                     <p style={{color:"gray"}}>Showing</p>
                     <select style={{ background:"black", color:"white", border:"none" }} onChange={handleShowPage} value={recordsPerPage}>
                         <option value={5}>5</option>
-                        {waiverBidsFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
-                        {waiverBidsFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}
+                        {waiverBidsOwnerFiltered?.length! > 5 ? <option value={10}>10</option> : <></>}
+                        {waiverBidsOwnerFiltered?.length! > 10 ? <option value={15}>15</option> : <></>}
                     </select>
-                    <p style={{color:"gray"}}>out of {waiverBidsFiltered?.length}</p>
+                    <p style={{color:"gray"}}>out of {waiverBidsOwnerFiltered?.length}</p>
                 </div>
                 <p className="mx-2 font-bold" style={{color:"#111827"}}>|</p>
                 <div className="mr-2 flex items-center">
@@ -193,8 +194,10 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                         ))}
                     </select>
                 </div>
-                <Icon className={styles.paginateArrows} onClick={() => nextPage(currentPage, npage, setCurrentPage)} icon="material-symbols:chevron-right-rounded" 
-                style={{color: waiverBidsFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
+                <Icon className={styles.paginateArrows} 
+                onClick={() => nextPage(currentPage, npage, setCurrentPage)} 
+                icon="material-symbols:chevron-right-rounded" 
+                style={{color: waiverBidsOwnerFiltered?.length! > recordsPerPage ? "#a9dfd8" : "#232227"}}/>
             </div>
         </div>
     );

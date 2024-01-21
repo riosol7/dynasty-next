@@ -135,3 +135,10 @@
     color: white;
     border: none;
 }
+
+#selectTag {
+    border: none; 
+    background: inherit; 
+    color: #7d91a6; 
+    font-weight: bold;
+}
