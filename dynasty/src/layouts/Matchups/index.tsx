@@ -24,11 +24,7 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
     return (
         <>
             <div className="flex items-center justify-between py-4">
-                <div className="">
-                    <div className="flex items-center">
-                        <Icon icon="ep:arrow-left-bold" className={styles.arrow}/>
-                        <Icon icon="ep:arrow-right-bold" className={styles.arrow}/>
-                    </div>
+                <div className="flex items-end">
                     <div onClick={() => setShowModal(!showModal)} className={`${styles.hover} flex items-center text-2xl pt-2`}>
                         {`Week ${selectWeek}, ${selectSeason}`}
                         <Icon icon="eva:arrow-down-fill"/>
@@ -47,6 +43,10 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
                         </div>
                         :<></>}
                     </div>
+                    {/* <div className="pl-3 flex items-center">
+                        <Icon icon="ep:arrow-left-bold" className={styles.arrow}/>
+                        <Icon icon="ep:arrow-right-bold" className={styles.arrow}/>
+                    </div> */}
                 </div>
                 <div className="flex items-center text-xs">
                     <div className={styles.awardCard}>

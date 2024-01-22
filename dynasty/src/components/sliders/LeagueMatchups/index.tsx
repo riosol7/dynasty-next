@@ -69,12 +69,6 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
 
                 return (
                     <div key={i} className={`pb-5 pr-5`} onClick={() => setMatchup(matchup)}>
-                        <div className="pb-1">
-                            <p className="text-xs flex items-center justify-center">
-                                <Icon icon="ep:arrow-up-bold" className="pr-1" style={{ color: "#a9dfd8"}}/>
-                                Match History (4 Games Played)
-                            </p>
-                        </div>
                         <div className={`${styles.matchupCard}`}>
                             <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
                                 <div className={styles.playerBackground} style={(players.length > 0) ? {background:findLogo(topStarter1Details.team || "FA").bgColor}:{}}>
@@ -156,42 +150,47 @@ export default function LeagueMatchupSlider({ selectWeek, setMatchup }: Interfac
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div className="text-xs">
                             <div className="flex justify-between bg-gray-700 rounded-full h-1.5 my-1">
                                 <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
                                 <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="py-2 border-b border-[#0f0f0f] flex items-center justify-between">
+                                <p>- W</p>
+                                <p>Match History: - Games Played <Icon icon="ep:arrow-up-bold" style={{ color: "#a9dfd8"}}/></p>
+                                <p>- W</p>
+                            </div>
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">{totalPtsScored} / 0 pts</p>
                                 <p className="">Total Points Scored ({placementRankings(i + 1)})</p>
                                 <p className="">{totalPtsScored} / 0 pts</p>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["QB"]}}>QB</p>
                                 <p className="">- pts (-%)</p>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["RB"]}} className="">RB</p>
                                 <p className="">- pts (-%)</p>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["WR"]}} className="">WR</p>
                                 <p className="">- pts (-%)</p>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["TE"]}} className="">TE</p>
                                 <p className="">- pts (-%)</p>
                             </div>
-                            <div className="flex justify-between text-xs border-b border-[#0f0f0f] py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["K"]}} className="">K</p>
                                 <p className="">- pts (-%)</p>
                             </div>
-                            <div className="flex justify-between text-xs py-2">
+                            <div className="flex justify-between border-b border-[#0f0f0f] py-2">
                                 <p className="">- pts (-%)</p>
                                 <p style={{ color: POSITION_COLORS["DEF"]}} className="">DEF</p>
                                 <p className="">- pts (-%)</p>

@@ -45,9 +45,9 @@ export default function Matchups() {
                 </div>
                 <div className="py-5 flex">
                     <div className="pr-5">
-                        <AllTimeScoreWidget/>
+                        <MatchupWidget matchup={matchup}/>
                     </div>
-                    <MatchupWidget matchup={matchup}/>
+                    <AllTimeScoreWidget/>
                 </div>
             </MatchupsLayout>
         </SeasonProvider>

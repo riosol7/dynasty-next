@@ -16,7 +16,7 @@ export default function AllTimeScoreWidget() {
         const bTeam2Score = b[1].points;
         const bTotalScore = bTeam1Score + bTeam2Score;  
         return bTotalScore - aTotalScore;
-    }).slice(0, 10).map(a => 
+    }).slice(0, 25).map(a => 
         a.sort((a: any, b: any) => a.points - b.points)
     );
 
