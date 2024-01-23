@@ -22,8 +22,8 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
     const worstOffenseUser = findUserByRosterID(worstOffense?.roster_id, league);
 
     return (
-        <>
-            <div className="flex items-center justify-between py-4">
+        <div>
+            <div className={styles.matchupHeader}>
                 <div className="flex items-end">
                     <div onClick={() => setShowModal(!showModal)} className={`${styles.hover} flex items-center text-2xl pt-2`}>
                         {`Week ${selectWeek}, ${selectSeason}`}
@@ -78,6 +78,6 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
                 </div>
             </div>
             {children}
-        </>
+        </div>
     );
 };

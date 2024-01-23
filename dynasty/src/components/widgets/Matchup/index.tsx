@@ -86,8 +86,7 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
 
     return (
         <div>
-            <p className="text-center text-sm">Week {foundWeekIndex + 1}, {selectSeason}</p>
-            <div className={styles.matchupContainer}>
+            <div className={""}>
                 <div>
                     <div className="flex items-center justify-between">
                         <div className={styles.teamContainer}>
@@ -136,6 +135,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                         {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
                         <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
                     </div>
+                    <p className="text-center text-sm pb-2 pt-1">Week {foundWeekIndex + 1}, {selectSeason}</p>
+
                     <div className="flex items-center justify-between">
                         <div className={styles.teamContainer}>
                             {playerList(team1 , 0)}

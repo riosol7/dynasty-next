@@ -41,7 +41,7 @@ export default function Matchups() {
                 </div>
                 <div className="py-5">
                     <h3 className={styles.header}><Icon icon="tabler:vs" className={`pr-1 ${styles.icon}`}/>League Matchups</h3>
-                    <LeagueMatchupSlider selectWeek={selectWeek} setMatchup={setMatchup}/>
+                    <LeagueMatchupSlider selectWeek={selectWeek} matchup={matchup} setMatchup={setMatchup}/>
                 </div>
                 <div className="py-5 flex">
                     <div className="pr-5">

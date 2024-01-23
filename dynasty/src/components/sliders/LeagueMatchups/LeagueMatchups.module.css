@@ -20,9 +20,22 @@
     background-color: inherit;
 }
 
+.matchupCardContainer {
+    border-radius: 1px;
+    padding: 4px;
+}
 
 .matchupCard {
-    width: 395px;
+    width: 100%;
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between; */
+    background-color: #0f0f0f;
+    /* height: 130px;
+    font-size: small; */
+}
+
+.matchupCardHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -54,7 +67,7 @@
 }
 
 .teamInfo {
-    height: 130px;
+    height: 100%;
 }
 .player {
     width: 100%; 

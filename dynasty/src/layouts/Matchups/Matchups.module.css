@@ -34,3 +34,14 @@
     font-size: small;
     font-weight: 100;
 }
+
+.matchupHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    width: 100%;
+    z-index: 99999;
+    background: black;
+    padding-block: 1em;
+}
