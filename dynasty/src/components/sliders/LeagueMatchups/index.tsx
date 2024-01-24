@@ -1,7 +1,6 @@
 import "swiper/swiper-bundle.css";
 import styles from "./LeagueMatchups.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
 import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth, sortMatchupsByHighestScore } from "@/utils";
@@ -14,18 +13,9 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
     const { players } = usePlayerContext();
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     const matchups = getMatchups(league.matchups);
-    // const [ currentPage, setCurrentPage ] = useState<number>(0);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
     const selectedMatchups = sortMatchupsByHighestScore(matchups[selectWeek - 1]);
-    
-    // const handleNext = () => {
-    //     setCurrentPage((prev) => (prev + 1) % Math.ceil(selectedMatchups.length / 4));
-    // };
-    
-    // const handlePrev = () => {
-    //     setCurrentPage((prev) => (prev - 1 + Math.ceil(selectedMatchups.length / 4)) % Math.ceil(selectedMatchups.length / 4));
-    // };
 
     const selectedMatchup = (selectMatchup: Interfaces.Match[]): boolean => {
         const pointsA:boolean = matchup && matchup[0].points === selectMatchup[0].points;
@@ -33,7 +23,6 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
         return pointsA && pointsB;
     };
     
-
     return (
         <Swiper breakpoints = {{
             1850: {
@@ -89,13 +78,9 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
 
             const topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
             const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
-            console.log(selectedMatchup(matchupTeams))
             return (
                 <SwiperSlide key={i}>
-                    {/* `linear-gradient(90deg, ${findLogo(topStarter1Details.team || "FA").bgColor2} 50%, ${findLogo(topStarter2Details.team || "FA").bgColor2} 100%)` : "black"}}> */}
-                    {/* ` linear-gradient(360deg, rgba(116,178,221,.6) 0%, rgba(114,202,224,.8) 20%, rgba(51,193,189,.5) 50%, rgba(80,204,147,.8) 100%)` : "black"}}> */}
-                    <div className={`${styles.matchupCardContainer}`} 
-                    style={{background: selectedMatchup(matchupTeams) ? `rgba(147,128,135,1)` : "black"}}>
+                    <div className={`${styles.matchupCardContainer}`} style={{background: selectedMatchup(matchupTeams) ? `rgba(147,128,135,1)` : "black"}}>
                         <div className="p-2 bg-black">
                             <div className={`mr-5 ${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
                                 <div className={`${styles.matchupCardHeader}`}>
@@ -180,12 +165,11 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
                                     </div>
                                 </div>
                                 <div className="bg-black py-1">
-                                <div className="flex justify-between bg-gray-700 h-1.5 my-1">
-                                    <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
-                                    <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
-                                </div>
-                                </div>
-                                
+                                    <div className="flex justify-between bg-gray-700 h-1.5 my-1">
+                                        <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
+                                        <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
+                                    </div>
+                                </div> 
                                 <div className="text-xs px-2">
                                     <div className="py-2 border-b border-[black] flex items-center justify-between">
                                         <p>- W</p>

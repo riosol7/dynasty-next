@@ -8,18 +8,18 @@
     width: 300px;
 }
 .teamAvatar {
-    min-width: 79px; 
-    min-height: 79px;
+    min-width: 80px; 
+    min-height: 80px;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .teamLogo { 
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 90px;
 }
 .player {
-    width: 95px; 
-    height: 70px;
+    width: 100px;
+    height: 90px;
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
@@ -40,9 +40,8 @@
     width: 30px;
     background-color: #0f0f0f;
     font-size:x-small;
-    padding-block: 12px;
-    margin-bottom: 6.1em;
-    height: 70px;
+    margin-bottom: 5.5em;
+    height: 96px;
     display: flex;
     justify-content: center;
     align-items: center;
