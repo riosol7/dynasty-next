@@ -1,6 +1,6 @@
 import * as Constants from "@/constants";
 import * as Interfaces from "@/interfaces";
-import { findLeagueByID, findSeasonStats, getAllPlayStats, getAllTimeRosterStats, getRosterPostSeasonStats, lineupEfficiency, roundToHundredth, totalPointsPerGame, winPCT } from ".";
+import { accumulatePoints, calculateAverage, findLeagueByID, findSeasonStats, getAllPlayStats, getAllTimeRosterStats, getRosterPostSeasonStats, lineupEfficiency, processRosters, roundToHundredth, sortPlayersByFantasyMarket, totalPointsPerGame, winPCT } from ".";
 
 export const findRosterByOwnerID = (id:string, league:Interfaces.League): Interfaces.Roster => {
     const foundRoster = league.rosters?.find((roster: Interfaces.Roster) => roster.owner_id === id);
@@ -546,4 +546,31 @@ export const sortRostersByFantasyMarketPosition = (rosters: Interfaces.Roster[],
         return updatedRoster;
     });
     return sortedRosters;
+};
+
+export const getTeamStats = (rID: number, league: Interfaces.League, fantasyMarket: string, processedPlayers: Interfaces.Player[]) => {
+    const processedRosters = processRosters(league, processedPlayers);
+    const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === rID)!;
+
+    const qbs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "QB");
+    const rbs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "RB");
+    const wrs = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "WR");
+    const tes = sortPlayersByFantasyMarket((updatedRoster?.players as Interfaces.Player[])!, fantasyMarket, "TE");
+
+    const avgQBAge = calculateAverage(qbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), qbs?.length);
+    const avgRBAge = calculateAverage(rbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), rbs?.length);
+    const avgWRAge = calculateAverage(wrs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), wrs?.length);
+    const avgTEAge = calculateAverage(tes?.reduce((total, obj) => {return total + Number(obj.age)}, 0), tes?.length);
+    const selectedRoster = (updatedRoster && updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
+    const qbMarketValue = selectedRoster?.qb;
+    const rbMarketValue = selectedRoster?.rb;
+    const wrMarketValue = selectedRoster?.wr;
+    const teMarketValue = selectedRoster?.te;
+
+    // NEED TO ADD SELECTED SEASON FOR ACCUMALTING PTS 
+    const totalQBPoints = accumulatePoints(rID, qbs, legacyLeague);
+    const totalRBPoints = accumulatePoints(rID, rbs, legacyLeague);
+    const totalWRPoints = accumulatePoints(rID, wrs, legacyLeague);
+    const totalTEPoints = accumulatePoints(rID, tes, legacyLeague);
+
 };

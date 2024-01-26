@@ -142,3 +142,10 @@
     color: #7d91a6; 
     font-weight: bold;
 }
+
+.nflTeamLogo {
+    width: 36px;
+    height: 36px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

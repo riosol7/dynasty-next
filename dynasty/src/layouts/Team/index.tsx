@@ -8,17 +8,21 @@ export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProp
     const { legacyLeague } = useLeagueContext();
 
     return (
-        <>
-            <TeamHeader name={name}/>
-            <div className="flex items-center justify-between">
-                <p className="font-bold" style={{color:"lightgrey"}}>PERFORMANCE INSIGHTS</p>
+        <div>
+            <div className={`${styles.teamNav}`}>
                 <select id={styles.selectSeason} onChange={onChange} value={selectSeason}>
                 {legacyLeague.map((league, idx) => (
-                    <option key={idx} value={league.season}>{league.season}</option>
+                    <option key={idx} value={league.season}>{`${league.season} PERFORMANCE INSIGHTS`}</option>
                 ))}
                 </select>
+                <div className="flex items-center pl-5">
+                    <div><p>TOTAL VALUE</p></div>
+                    <div><p>AVG. AGE</p></div>
+                    <div><p>PLAYERS</p></div>
+                </div>
             </div>
+            <TeamHeader name={name}/>
             {children}
-        </>
+        </div>
     );
 };

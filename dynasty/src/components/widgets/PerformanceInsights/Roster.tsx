@@ -105,49 +105,53 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
         color: string, avgPositionAge: number, 
         marketValue: number, totalPts: { fpts: number, ppts: number },
     ) => (
-        <div className="flex items-center pt-3">
-            <div className="w-2/12 flex items-center">
-                {arrow ?
-                <Icon
-                    icon='akar-icons:circle-chevron-down'
-                    onClick={() => showMorePlayers()}
-                    style={{
-                        fontSize:'1.1rem',
-                        color:"#c9cfd1",
-                        background:"black",
-                        borderRadius:"50%"
-                    }}
-                />
-                : <Icon
-                    onClick={() => showMorePlayers()}
-                    icon='akar-icons:circle-chevron-up'
-                    style={{
-                        fontSize:'1.1rem',
-                        color:"#c9cfd1",
-                        background:"black",
-                        borderRadius:"50%"
-                    }}
-                />}
-                <p className="font-bold mx-1" style={{fontSize:"16px",color: color}}>{position}</p>
-                <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
-            </div>
-            <p className="w-1/12 flex items-center mx-2"><Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>{positionCount}</p>
-            <div className="w-2/12 flex items-center">
-                <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
-                <p className="mx-1 flex items-center">{avgPositionAge}</p>
-            </div>
-            <div className="w-2/12 flex items-center">
-                <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"2px" }}/>
-                <p>{marketValue}</p>
-            </div>
-            <div className="w-5/12 mx-2">
-                <p className="text-center" style={{fontSize: "10px"}}>
-                    {totalPts.fpts} / {totalPts.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
-                    ({calculatePercentage(totalPts.fpts, totalPts.ppts)}%)
-                </p>
-                <div className="bg-gray-700 h-1 mt-1 rounded-full">
-                    <div className="bg-indigo-400 h-1 rounded-full" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
+        <div>
+            <div className="flex items-center justify-between px-1 pt-3">
+                <div className="flex items-center">
+                    {arrow ?
+                    <Icon
+                        icon='akar-icons:circle-chevron-down'
+                        onClick={() => showMorePlayers()}
+                        style={{
+                            fontSize:'1.1rem',
+                            color:"#c9cfd1",
+                            background:"black",
+                            borderRadius:"50%"
+                        }}
+                    />
+                    : <Icon
+                        onClick={() => showMorePlayers()}
+                        icon='akar-icons:circle-chevron-up'
+                        style={{
+                            fontSize:'1.1rem',
+                            color:"#c9cfd1",
+                            background:"black",
+                            borderRadius:"50%"
+                        }}
+                    />}
+                    <p className="font-bold mx-1" style={{fontSize:"16px",color: color}}>{position}</p>
+                    <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
                 </div>
+                <div className="flex items-center">
+                    <p className="flex items-center mr-2"><Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>{positionCount}</p>
+                    <div className="flex items-center mr-2">
+                        <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
+                        <p className="mx-1 flex items-center">{avgPositionAge}</p>
+                    </div>
+                    <div className="flex items-center mr-2">
+                        <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"2px" }}/>
+                        <p>{marketValue}</p>
+                    </div>
+                </div>
+            </div>
+            <div className="pt-1">
+                <div className="bg-gray-700 h-1 mt-1">
+                    <div className="bg-indigo-200 h-1" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
+                </div>
+                <p className="text-center pt-1" style={{fontSize: "11.4px"}}>
+                    {totalPts.fpts} / {totalPts.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
+                    ({calculatePercentage(totalPts.fpts, totalPts.ppts)}%) - ?th {position} pts scored
+                </p>
             </div>
         </div>
     );
@@ -167,7 +171,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                 </div> 
                 <div className="mx-2 w-full" style={{ fontSize: ".9rem" }}>
                     <div className="flex items-center">
-                        {player.injury_status === "IR" ? <Icon icon="fa-solid:user-injured" style={{color: "#a9dfd8", fontSize: "1.3em", marginRight: "4px"}}/>: <></>}
+                        {player.injury_status === "IR" ? <Icon icon="fa-solid:user-injured" style={{color: "crimson", fontSize: "1.3em", marginRight: "4px"}}/>: <></>}
                         <p className="font-bold">{player.full_name}</p>
                     </div>
                     <p style={{fontSize:"10px", color:"#cbcbcb"}}>#{player.number} {player.position} - {player.team}</p>
@@ -183,11 +187,11 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                             <p className="mx-1" style={{color:"white"}}>{marketContent?.value}</p>
                             {Number(marketContent?.trend) > 0 ? 
                                 <p className="flex items-center" style={{color:"white"}}>
-                                    (+{marketContent.trend}<Icon icon="mingcute:trending-up-fill" style={{color:"#a9dfd8", fontSize: "1.6em", marginLeft:"2px"}}/>)
+                                    (+{marketContent.trend}<Icon icon="mingcute:trending-up-fill" style={{color:"#35C2BC", fontSize: "1.6em", marginLeft:"2px"}}/>)
                                 </p>
                             : Number(marketContent.trend) < 0 ?  
                                 <p className="flex items-center" style={{color:"white"}}>
-                                    ({marketContent.trend}<Icon icon="mingcute:trending-down-fill" style={{color:"#ff6565", fontSize: "1.6em", marginLeft:"2px"}}/>)
+                                    ({marketContent.trend}<Icon icon="mingcute:trending-down-fill" style={{color:"#F12B05", fontSize: "1.6em", marginLeft:"2px"}}/>)
                                 </p>
                             :""}
                         </div>
@@ -205,25 +209,25 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     };
     
     return (
-        <div className="py-4" style={{minWidth:"388px"}}>
+        <div className="py-4">
             <div className={`${styles.performanceHeader}`}> 
                 <p className="w-10/12">{league.season} Roster</p>
                 <p className="w-2/12 flex justify-end"></p>
             </div>
             <div className="flex flex-wrap">
-                <div className="w-5/12">
+                <div className="w-1/4">
                     {positionHeader(qbArrow, showMoreQBs, qbs?.length, "QB", "#f8296d", avgQBAge, qbMarketValue, totalQBPoints)}
                     {showQBs ? qbs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topQB, 0)}
                 </div>
-                <div className="w-5/12">
+                <div className="w-1/4">
                     {positionHeader(rbArrow, showMoreRBs, rbs?.length, "RB", "#36ceb8", avgRBAge, rbMarketValue, totalRBPoints)}
                     {showRBs ? rbs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topRB, 0)}   
                 </div>
-                <div className="w-5/12">
+                <div className="w-1/4">
                     {positionHeader(wrArrow, showMoreWRs, wrs?.length, "WR", "#58a7ff", avgWRAge, wrMarketValue, totalWRPoints)}
                     {showWRs ? wrs?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topWR, 0)}
                 </div>
-                <div className="w-5/12">
+                <div className="w-1/4">
                     {positionHeader(teArrow, showMoreTEs, tes?.length, "TE", "#faae58", avgTEAge, teMarketValue, totalTEPoints)}
                     {showTEs ? tes?.map((player, i) => playerProfileRow(player, i)) : playerProfileRow(topTE, 0)}
                 </div>

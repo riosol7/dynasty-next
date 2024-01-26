@@ -106,7 +106,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 />
                 <div className="w-2/12">
                     <select id={styles.selectTag} onChange={handlePosition} value={selectPosition}>
-                        <option value={"all"}>POSITION</option>
+                        <option value={"all"}>ALL POSITIONS</option>
                         <option value={"QB"}>QB</option>
                         <option value={"RB"}>RB</option>
                         <option value={"WR"}>WR</option>
@@ -116,7 +116,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 </div>
                 <div className="w-2/12">
                     <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
-                    <option value={"all"}>OWNERS</option>
+                    <option value={"all"}>ALL OWNERS</option>
                     {legacyLeague[0]?.users?.map((user, i) => (
                         <option key={i} value={user.display_name}>{user.display_name}</option>
                     ))}
@@ -147,7 +147,9 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                                 style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                                 {findLogo(player?.team).l !== "FA" ? (
                                 <div className={styles.positionedLogo}>
-                                    <Image alt="" width={35.8} height={35.8} src={findLogo(player?.team).l!}/>
+                                    <div className={styles.nflTeamLogo} style={{ backgroundImage: `url(${findLogo(player?.team).l!})` }}>
+
+                                    </div>
                                 </div>
                                 ) : (
                                 <></>

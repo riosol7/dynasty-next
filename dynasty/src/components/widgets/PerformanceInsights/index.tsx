@@ -589,7 +589,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.losingStreak.losses}L, {allTimeRosterStats.losingStreak.season}</p>
                     </div>
                     <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
-                        <p>Playoff Appearances (w/ Consecutive Streak)</p>
+                        <p>Playoff Appearances (Consecutive Streak)</p>
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.appearances} ({allTimeRosterStats.playoffs.appearanceStreak})</p>
                     </div>
                     <div className={`${styles.performanceRow}`} style={{paddingBlock: "1em"}}>

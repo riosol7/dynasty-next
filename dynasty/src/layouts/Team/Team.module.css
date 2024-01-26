@@ -1,3 +1,16 @@
+.teamNav {
+    width: 93%;
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 64.5px;
+    padding-bottom: 6px;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+}
+
 .tab {
     text-align: center;
     padding: 10px;
@@ -6,11 +19,8 @@
 
 #selectSeason {
     background-color: black;
-    color: white;
-    padding: 10px;
-    padding-inline: 12px;
-    
-
+    color: lightgray;
+    font-weight: bold;
 }
 /* change the blue highlight color over hovering the options */
 #selectSeason:hover {
