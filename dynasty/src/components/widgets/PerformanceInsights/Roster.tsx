@@ -168,7 +168,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
         const marketContent = player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent;
         const playerPoints = allTime ? totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id) : totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id, selectSeason);
         return (
-            <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
+            <div key={i} className="flex items-center py-4 h-36" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
                 <div className={`${styles.smallHeadShot} mx-2`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
                     {findLogo(player.team)?.l !== "FA" ?
@@ -209,7 +209,9 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                         <span className="text-[darkgray] mr-1">{allTime ? "All Time" : `${selectSeason} Season`}</span>
                         {playerPoints.fpts} / {playerPoints.ppts}
                         <span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
-                        ({calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%)
+                        ({calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%) 
+                        <span className="text-[darkgray] mr-1"> Avg.</span>0
+ 
                     </p>
                 </div>
             </div>
