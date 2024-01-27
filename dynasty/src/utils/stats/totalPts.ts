@@ -1,10 +1,37 @@
-import { findRosterByRosterID, getAllTimeRosterStats } from "..";
+import { findLeagueBySeason, findRosterByRosterID, getAllTimeRosterStats } from "..";
 import { roundToHundredth }from "./calculationUtils";
 import * as Interfaces from "@/interfaces";
 import * as Constants from "@/constants";
 
-export const totalFantasyPointsByRoster = (legacyLeague: Interfaces.League[], rID: number, pID: string) : { fpts: number, ppts: number } => {
+export const totalFantasyPointsByRoster = (legacyLeague: Interfaces.League[], rID: number, pID: string, selectSeason?: string) : { fpts: number, ppts: number } => {
     
+    if (selectSeason) {
+        const season: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+
+        const fpts = season.matchups.map(week => week.find(team => team.roster_id === rID)?.starters.find((starter: string) => starter === pID) !== undefined ? 
+                Object.entries(week.filter(team => team.roster_id === rID)[0].players_points).filter(player => player[0] === pID)[0][1] : 0
+            ).reduce((partialSum: number , a: any) => partialSum + a, 0);
+
+        const ppts = season.matchups.map((week) => {
+            const team = week.find((team) => team.roster_id === rID);
+                if (team) {
+                    const playerData = Object.entries(team.players_points).find((player) => player[0] === pID);
+                    
+                    if (playerData) {
+                        return playerData[1];
+                    };
+                };
+                return 0;
+            })
+        .reduce((total, playerPoints: any) => total + playerPoints, 0);
+
+
+        return {
+            fpts: roundToHundredth(fpts),
+            ppts: roundToHundredth(ppts)
+        };
+    };
+
     const fpts = legacyLeague.map((league: Interfaces.League) => 
         league.matchups.map(week => week.find(team => team.roster_id === rID)?.starters.find((starter: string) => starter === pID) !== undefined ? 
             Object.entries(week.filter(team => team.roster_id === rID)[0].players_points).filter(player => player[0] === pID)[0][1] : 0
@@ -49,7 +76,15 @@ export const totalPointsPerGame = (rID: number, pts: number, legacyLeague: Inter
     };
 };
 
-export const accumulatePoints = (rID: number, players: Interfaces.Player[], legacyLeague: Interfaces.League[]) : { fpts: number, ppts: number } => {
+export const accumulatePoints = (rID: number, players: Interfaces.Player[], legacyLeague: Interfaces.League[], selectSeason?: string) : { fpts: number, ppts: number } => {
+    if (selectSeason) {
+        const fpts = roundToHundredth(players?.map((player) => totalFantasyPointsByRoster(legacyLeague, rID, player.player_id, selectSeason).fpts).reduce((sum, pts) => sum + pts, 0));
+        const ppts = roundToHundredth(players?.map((player) => totalFantasyPointsByRoster(legacyLeague, rID, player.player_id, selectSeason).ppts).reduce((sum, maxPts) => sum + maxPts, 0));
+        return {
+            fpts: fpts,
+            ppts: ppts
+        };
+    }
     const fpts = roundToHundredth(players?.map((player) => totalFantasyPointsByRoster(legacyLeague, rID, player.player_id).fpts).reduce((sum, pts) => sum + pts, 0));
     const ppts = roundToHundredth(players?.map((player) => totalFantasyPointsByRoster(legacyLeague, rID, player.player_id).ppts).reduce((sum, maxPts) => sum + maxPts, 0));
     return {

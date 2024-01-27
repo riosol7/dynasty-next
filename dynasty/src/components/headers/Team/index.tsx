@@ -14,9 +14,10 @@ export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
 
     return (
-        <div className="flex items-center justify-between flex-wrap my-4">
+        <div className="flex items-start justify-between flex-wrap my-4">
             <div className="flex items-center">
-                <Image style={{borderRadius:"50%", border:"4px outset #a9dfd8", padding:"4px", background:"black"}} alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}/>
+                <Image alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}
+                style={{borderRadius:"50%", border:"4px outset #a9dfd8", padding:"4px", background:"black"}}/>
                 <div className="mx-3">
                     <div className="flex items-center">
                         <p className="font-bold" style={{fontSize:"18px"}}>{foundUser?.metadata?.team_name ? foundUser?.metadata?.team_name : foundUser?.display_name}</p>

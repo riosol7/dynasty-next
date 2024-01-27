@@ -1,14 +1,18 @@
 .teamNav {
     width: 93%;
-    background-color: red;
+    background-color: black;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 64.5px;
-    padding-bottom: 6px;
+    padding-top: 75px;
+    padding-bottom: 8px;
     position: fixed;
     z-index: 999;
     top: 0;
+}
+
+.teamBody {
+    margin-top: 70px;
 }
 
 .tab {
@@ -24,8 +28,11 @@
 }
 /* change the blue highlight color over hovering the options */
 #selectSeason:hover {
-    background: linear-gradient(49deg, rgba(15,15,15,1) 0%, rgba(17,17,17,1) 100%);
     border-radius: 5px;
-    background-color: rgba(17,17,17,1);
     color: white;
+}
+
+.icon {
+    font-size: 24px;
+    color: #a9dfd8;
 }

@@ -29,7 +29,6 @@ export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
                     bid: o[1].reduce((a: any, b: any) => a + b.settings.waiver_bid, 0),
                 };
             }).sort((a, b) => b.bid - a.bid)[0];
-            console.log("result:",result)
             return result;
         } else {
             // Handle case where entries are empty

@@ -33,7 +33,11 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
+    const [allTime, setAllTime] = useState<boolean>(false);
     const rID = roster.roster_id;
+    const handleAllTime = (): void => {
+        setAllTime(!allTime);
+    };
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const league = findLeagueBySeason(selectSeason, legacyLeague);
     const processedRosters = processRosters(league, processedPlayers);
@@ -68,10 +72,10 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const wrMarketValue = selectedRoster?.wr;
     const teMarketValue = selectedRoster?.te;
 
-    const totalQBPoints = accumulatePoints(rID, qbs, legacyLeague);
-    const totalRBPoints = accumulatePoints(rID, rbs, legacyLeague);
-    const totalWRPoints = accumulatePoints(rID, wrs, legacyLeague);
-    const totalTEPoints = accumulatePoints(rID, tes, legacyLeague);
+    const totalQBPoints = allTime ? accumulatePoints(rID, qbs, legacyLeague) : accumulatePoints(rID, qbs, legacyLeague, selectSeason);
+    const totalRBPoints = allTime ? accumulatePoints(rID, rbs, legacyLeague) : accumulatePoints(rID, rbs, legacyLeague, selectSeason);
+    const totalWRPoints = allTime ? accumulatePoints(rID, wrs, legacyLeague) : accumulatePoints(rID, wrs, legacyLeague, selectSeason);
+    const totalTEPoints = allTime ? accumulatePoints(rID, tes, legacyLeague) : accumulatePoints(rID, tes, legacyLeague, selectSeason);
 
     const [showQBs, setShowQBs] = useState<Boolean>(true)
     const [qbArrow, setQbArrow] = useState<Boolean>(false)
@@ -133,7 +137,10 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                     <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
                 </div>
                 <div className="flex items-center">
-                    <p className="flex items-center mr-2"><Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>{positionCount}</p>
+                    <p className="flex items-center mr-2">
+                        <Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>
+                        {positionCount}
+                    </p>
                     <div className="flex items-center mr-2">
                         <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
                         <p className="mx-1 flex items-center">{avgPositionAge}</p>
@@ -149,6 +156,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                     <div className="bg-indigo-200 h-1" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
                 </div>
                 <p className="text-center pt-1" style={{fontSize: "11.4px"}}>
+                    <span className="text-[darkgray] mr-1">{allTime ? "All Time" : `${selectSeason} Season`}</span>
                     {totalPts.fpts} / {totalPts.ppts}<span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
                     ({calculatePercentage(totalPts.fpts, totalPts.ppts)}%) - ?th {position} pts scored
                 </p>
@@ -158,7 +166,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
 
     const playerProfileRow = (player: Interfaces.Player, i: number) => {
         const marketContent = player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent;
-        const playerPoints = totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id);
+        const playerPoints = allTime ? totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id) : totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id, selectSeason);
         return (
             <div key={i} className="flex items-center py-4" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
                 <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
@@ -187,11 +195,9 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                             <p className="mx-1" style={{color:"white"}}>{marketContent?.value}</p>
                             {Number(marketContent?.trend) > 0 ? 
                                 <p className="flex items-center" style={{color:"white"}}>
-                                    (+{marketContent.trend}<Icon icon="mingcute:trending-up-fill" style={{color:"#35C2BC", fontSize: "1.6em", marginLeft:"2px"}}/>)
-                                </p>
-                            : Number(marketContent.trend) < 0 ?  
-                                <p className="flex items-center" style={{color:"white"}}>
-                                    ({marketContent.trend}<Icon icon="mingcute:trending-down-fill" style={{color:"#F12B05", fontSize: "1.6em", marginLeft:"2px"}}/>)
+                                    (+{marketContent?.trend}
+                                    <Icon icon={`mingcute:trending-${Number(marketContent?.trend) > 0 ? "up" : "down"}-fill`} 
+                                    style={{color:"#35C2BC", fontSize: "1.6em", marginLeft:"2px"}}/>)
                                 </p>
                             :""}
                         </div>
@@ -199,7 +205,9 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                     <div className="w-full bg-gray-700 rounded-full h-1.5 my-1">
                         <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%` }}></div>
                     </div>
-                    <p className="text-center text-xs">{playerPoints.fpts} / {playerPoints.ppts}
+                    <p className="text-center text-xs"> 
+                        <span className="text-[darkgray] mr-1">{allTime ? "All Time" : `${selectSeason} Season`}</span>
+                        {playerPoints.fpts} / {playerPoints.ppts}
                         <span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
                         ({calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%)
                     </p>
@@ -210,9 +218,12 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     
     return (
         <div className="py-4">
-            <div className={`${styles.performanceHeader}`}> 
-                <p className="w-10/12">{league.season} Roster</p>
-                <p className="w-2/12 flex justify-end"></p>
+            <div className={`${styles.performanceHeader} py-1`}> 
+                <p>{league.season} Roster</p>
+                <div className={styles.allTimeToggle} onClick={() => handleAllTime()}
+                style={{background: !allTime? "#1b2025": ""}}>
+                    <p className={styles.allTimeToggleCover}>All Time</p>
+                </div>
             </div>
             <div className="flex flex-wrap">
                 <div className="w-1/4">
