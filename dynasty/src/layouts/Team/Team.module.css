@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 75px;
-    padding-bottom: 8px;
+    padding-bottom: 12px;
     position: fixed;
     z-index: 999;
     top: 0;
@@ -20,19 +20,34 @@
     padding: 10px;
     padding-inline: 35px;
 }
+.selectSeasonContainer {
+    display: flex;
+    align-items: center;
+    color: lightgray;
+    background-color: black;
+
+    font-weight: bold;
+}
 
 #selectSeason {
-    background-color: black;
+    background: black;
     color: lightgray;
     font-weight: bold;
 }
-/* change the blue highlight color over hovering the options */
 #selectSeason:hover {
-    border-radius: 5px;
     color: white;
 }
+#selectSeason:focus {
+    outline: none;
+}
+/* change the blue highlight color over hovering the options
+.selectSeasonContainer:hover {
+    border-radius: 5px;
+    color: white;
+} */
 
 .icon {
     font-size: 24px;
     color: #a9dfd8;
+    margin-right: 4px;
 }

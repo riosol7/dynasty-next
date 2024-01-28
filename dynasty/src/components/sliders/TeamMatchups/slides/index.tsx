@@ -30,7 +30,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
     const matchups = getMatchups(foundLeague.matchups, rID);
     const postSeasonStats = getRosterPostSeasonStats(rID, legacyLeague, selectSeason);
     const allPlayStats = getAllPlayStats(rID, selectSeason, legacyLeague);
-    const playoffLabel = postSeasonStats.appearance ? "Playoffs" : "Toilet Bowl";
+    const postSeasonLabel = postSeasonStats.appearance ? "Playoffs" : "Toilet Bowl";
     const weekLabel = is18GameSeason ? "Wk. 1 - 14" : "Wk. 1 - 13";
     const playoffWeekLabel = is18GameSeason ? "Wk. 15 - 17" : "Wk. 14 - 16";
     const opponent = matchup.find(team => team.roster_id !== rID)!;
@@ -38,12 +38,12 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
     const starterPts = myMatchStats?.starters_points?.sort((a,b) => b - a);
     const topStarter = findPlayerByPts(myMatchStats, starterPts[0]!, players);
     const foundAllPlayRecord = allPlayStats?.weeklyRecord?.[idx]!;
-
+    const byeWeek: boolean = postSeasonStats.bracket.filter(game => game.t1 === rID && !game.t1_from).length === 1 ? true : false; 
     const getTitle = () => {
         if (idx === 0) {
             return `Regular Season (${weekLabel})`;
         } else if ((idx === 14 && is18GameSeason) || (idx === 13 && !is18GameSeason)) {
-            return `${playoffLabel} (${playoffWeekLabel})`;
+            return `${postSeasonLabel} (${playoffWeekLabel})`;
         }
         return "";
     };
@@ -56,7 +56,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
     const exceptionCurrentOwnerAllPlayTotalRosters = foundLeague.rosters.length - 1;
 
     return (
-        <div className="py-4"  style={{fontSize:"12px",width:"200px"}}>
+        <div className="py-5"  style={{fontSize:"12px",width:"200px"}}>
             <div style={{position:"absolute", zIndex:"5", top:"-2px", width:"205px", color:"#e9f0f2"}}>
                 {title && (
                     <div className="">
@@ -69,9 +69,9 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
                 {matchup.find(team => team.roster_id === rID)?.matchup_id === null ? // Weeks w/ no matchup
                     <div className="p-2">
                         <div className="mb-2 flex items-top font-bold" style={{ fontSize:"11.5px" }}>
-                            {(is18GameSeason && idx === 14 && playoffLabel === "Playoffs") || (!is18GameSeason && idx === 13 && playoffLabel === "Playoffs") ?
+                            {(is18GameSeason && idx === 14 && postSeasonLabel === "Playoffs") || (!is18GameSeason && idx === 13 && postSeasonLabel === "Playoffs") ?
                                 <p>Divisional</p>
-                            : (is18GameSeason && idx === 14 && playoffLabel === "Toilet Bowl") || (!is18GameSeason && idx === 13 && playoffLabel === "Toilet Bowl") ?
+                            : (is18GameSeason && idx === 14 && postSeasonLabel === "Toilet Bowl") || (!is18GameSeason && idx === 13 && postSeasonLabel === "Toilet Bowl") ?
                                 <p>Bottom 6</p>
                             : is18GameSeason && idx === 16 ?
                                 <p>Week 17</p>
@@ -92,7 +92,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
                                     }
                                 </div>
                             </div>
-                            {(playoffLabel === "Playoffs" && is18GameSeason && idx === 14) || (playoffLabel === "Playoffs" && !is18GameSeason && idx === 13) ?
+                            {(postSeasonLabel === "Playoffs" && is18GameSeason && idx === 14) || (postSeasonLabel === "Playoffs" && !is18GameSeason && idx === 13) ?
                                 <p>Clinched Division {roster.settings.division} and Bye</p>            
                             :  
                                 <div className="flex justify-between items-center">
@@ -117,25 +117,36 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
                             <div className="font-bold" style={{fontSize:"11.5px"}}>
                                 {(is18GameSeason && idx < 14) || (!is18GameSeason && idx < 13) ?
                                     <p>Week {idx + 1}</p>
-                                : (is18GameSeason && idx === 14 && playoffLabel === "Playoffs") || (!is18GameSeason && idx === 13 && playoffLabel === "Playoffs") ?
+                                : (is18GameSeason && idx === 14 && !byeWeek && postSeasonLabel === "Playoffs") || (!is18GameSeason && idx === 13 && postSeasonLabel === "Playoffs") ?
                                     <p>Divisional</p>
-                                : (is18GameSeason && idx === 14 && playoffLabel === "Toilet Bowl") || (!is18GameSeason && idx === 13 && playoffLabel === "Toilet Bowl") ?
-                                    <p>Bottom 6</p>
-                                : (is18GameSeason && idx === 15 && playoffLabel === "Playoffs" && semiFinals) || (!is18GameSeason && idx === 14 && playoffLabel === "Playoffs" && semiFinals) ?
+                                : (is18GameSeason && idx === 14 && byeWeek && postSeasonLabel === "Playoffs") || 
+                                (is18GameSeason && idx === 15 && !byeWeek && postSeasonLabel === "Playoffs" && semiFinals) || 
+                                (!is18GameSeason && idx === 14 && postSeasonLabel === "Playoffs" && semiFinals) ?
                                     <p>Semi Finals</p>
-                                : (is18GameSeason && idx === 15 && playoffLabel === "Playoffs" && !semiFinals) || (!is18GameSeason && idx === 14 && playoffLabel === "Playoffs" && !semiFinals) ?
+                                : (is18GameSeason && idx === 15 && byeWeek && postSeasonLabel === "Playoffs") || 
+                                    (is18GameSeason && idx === 16 && postSeasonLabel === "Playoffs" && !finals) || 
+                                    (!is18GameSeason && idx === 15 && postSeasonLabel === "Playoffs" && !finals) ?
+                                        <p>3rd Place Match</p>
+                                : (is18GameSeason && idx === 15 && postSeasonLabel === "Playoffs" && !semiFinals) || 
+                                (!is18GameSeason && idx === 14 && postSeasonLabel === "Playoffs" && !semiFinals) ?
                                     <p>5th Place Match</p>
-                                : (is18GameSeason && idx === 15 && playoffLabel === "Toilet Bowl" && seventhPlace) || (!is18GameSeason && idx === 14 && playoffLabel === "Toilet Bowl" && seventhPlace) ?
+                                : (is18GameSeason && idx === 16 && postSeasonLabel === "Playoffs" && finals) || 
+                                (!is18GameSeason && idx === 15 && postSeasonLabel === "Playoffs" && finals) ?
+                                    <p>Finals</p>
+                                : (is18GameSeason && idx === 14 && postSeasonLabel === "Toilet Bowl") || 
+                                (!is18GameSeason && idx === 13 && postSeasonLabel === "Toilet Bowl") ?
+                                    <p>Bottom 6</p>
+                                : (is18GameSeason && idx === 15 && postSeasonLabel === "Toilet Bowl" && seventhPlace) || 
+                                (!is18GameSeason && idx === 14 && postSeasonLabel === "Toilet Bowl" && seventhPlace) ?
                                     <p>7th Place Match</p>
-                                : (is18GameSeason && idx === 15 && playoffLabel === "Toilet Bowl" && !seventhPlace) || (!is18GameSeason && idx === 14 && playoffLabel === "Toilet Bowl" && !seventhPlace) ?
+                                : (is18GameSeason && idx === 15 && postSeasonLabel === "Toilet Bowl" && !seventhPlace) || 
+                                (!is18GameSeason && idx === 14 && postSeasonLabel === "Toilet Bowl" && !seventhPlace) ?
                                     <p>Bottom 4</p>
-                                : (is18GameSeason && idx === 16 && playoffLabel === "Playoffs" && finals) || (!is18GameSeason && idx === 15 && playoffLabel === "Playoffs" && finals) ?
-                                    <p>Finals</p>
-                                : (is18GameSeason && idx === 16 && playoffLabel === "Playoffs" && !finals) || (!is18GameSeason && idx === 15 && playoffLabel === "Playoffs" && !finals) ?
-                                    <p>3rd Place Match</p>
-                                : (is18GameSeason && idx === 16 && playoffLabel === "Toilet Bowl" && toiletBowl) || (!is18GameSeason && idx === 15 && playoffLabel === "Toilet Bowl" && toiletBowl) ?
-                                    <p>Finals</p>
-                                : (is18GameSeason && idx === 16 && playoffLabel === "Toilet Bowl" && !toiletBowl) || (!is18GameSeason && idx === 15 && playoffLabel === "Toilet Bowl" && !toiletBowl) ?
+                                : (is18GameSeason && idx === 16 && postSeasonLabel === "Toilet Bowl" && toiletBowl) || 
+                                (!is18GameSeason && idx === 15 && postSeasonLabel === "Toilet Bowl" && toiletBowl) ?
+                                    <p>Toilet Bowl</p>
+                                : (is18GameSeason && idx === 16 && postSeasonLabel === "Toilet Bowl" && !toiletBowl) || 
+                                (!is18GameSeason && idx === 15 && postSeasonLabel === "Toilet Bowl" && !toiletBowl) ?
                                     <p>9th Place Match</p>
                                 :<></>
                                 }

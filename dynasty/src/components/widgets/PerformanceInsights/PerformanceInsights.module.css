@@ -12,7 +12,7 @@
 }
 
 .smallHeadShot {
-    width: 100px; 
+    width: 70px; 
     height: 70px;
     background-color:#dbdbde;
     background-repeat: no-repeat;
@@ -20,6 +20,13 @@
     background-size: 105px;
     border-radius: 50%;
     border: 0px solid black;
+}
+
+.playerOwnedTitle {
+    font-weight: bold;
+    font-size: 9.5px;
+    padding-top: 10px;
+    text-align: center;
 }
 
 .selectVS {

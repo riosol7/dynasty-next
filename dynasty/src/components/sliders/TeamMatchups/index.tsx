@@ -1,3 +1,4 @@
+import styles from "./TeamMatchups.module.css";
 import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -16,7 +17,8 @@ export default function TeamMatchupSlider({ name }: Interfaces.TeamParamProps) {
     const matchups = getMatchups(foundLeague.matchups, foundRoster.roster_id);
 
     return (
-        <div className="flex items-center py-3">
+        <div className="pb-3">
+            <p className={`pb-2 ${styles.weeklyBreakdown}`}>{selectSeason} Weekly Breakdown</p>
             <Swiper breakpoints = {{
                 1850: {
                     slidesPerView: 8,

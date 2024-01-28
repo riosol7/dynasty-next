@@ -26,23 +26,34 @@ export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProp
     return (
         <div>
             <div className={`${styles.teamNav}`}>
-                <select id={styles.selectSeason} onChange={onChange} value={selectSeason}>
-                {legacyLeague.map((league, idx) => (
-                    <option key={idx} value={league.season}>{`${league.season} PERFORMANCE INSIGHTS`}</option>
-                ))}
-                </select>
+                <div className={styles.selectSeasonContainer}>
+                    <Icon icon="ic:baseline-insights" className={`${styles.icon}`} style={{fontSize:"1.7rem"}}/>
+                    {/* Need to add All Time for selectSeason                 */}
+                    <select id={styles.selectSeason} onChange={onChange} value={selectSeason}>
+                        <option>All-Time Performance Insights</option>
+                        {legacyLeague.map((league, idx) => (
+                            <option key={idx} value={league.season}>{`${league.season} - Performance Insights`}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className="flex items-center pl-5 text-sm font-bold">
                     <div className="flex items-center mr-5">
-                        <Icon icon="fluent:person-tag-20-regular" className={styles.icon} style={{marginRight:"2px"}}/>
-                        <p>TOTAL VALUE {teamStats.value}</p>
+                        <Icon icon="fluent:person-tag-20-regular" className={styles.icon}/>
+                        <p>Total Value 
+                            <span className="pl-2">{teamStats.value}</span>
+                            <span className="pl-2 font-light text-[darkgray]">?nd ranked</span>
+                        </p>
                     </div>
                     <div className="flex items-center mr-5">
                         <Icon icon="material-symbols:avg-pace-sharp" className={styles.icon}/>
-                        <p>AVG. AGE {teamStats.age}</p>
+                        <p>Avg. Age
+                            <span className="pl-2">{teamStats.age}</span>
+                            <span className="pl-2 font-light text-[darkgray]">?nd youngest</span>
+                        </p>
                     </div>
                     <div className="flex items-center">
-                        <Icon icon="fluent:people-team-16-filled" className={styles.icon} style={{fontSize:"22px", marginRight:"2px"}}/>
-                        <p>PLAYERS {teamStats.players}</p>
+                        <Icon icon="fluent:people-team-16-filled" className={styles.icon}/>
+                        <p>Players <span className="pl-1">{teamStats.players}</span></p>
                     </div>
                 </div>
             </div>

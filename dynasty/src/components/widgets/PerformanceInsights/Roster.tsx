@@ -166,17 +166,28 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
 
     const playerProfileRow = (player: Interfaces.Player, i: number) => {
         const marketContent = player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent;
-        const playerPoints = allTime ? totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id) : totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id, selectSeason);
+        const playerPoints = allTime ? 
+        totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id) : 
+        totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id, selectSeason);
         return (
             <div key={i} className="flex items-center py-4 h-36" style={isOdd(i)? {background:"#0f0f0f"} :{}}>
-                <div style={{ width:"30px" }} className="text-center">{i === 0 ? <Icon icon="bxs:star"/> : <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}</div>
-                <div className={`${styles.smallHeadShot} mx-2`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
-                    {findLogo(player.team)?.l !== "FA" ?
-                        <div className={styles.teamLogo}>
-                            <Image width={40} height={40} alt="" src={findLogo(player.team)?.l!}/>
-                        </div>
-                    : <></>}
-                </div> 
+                <div style={{ width:"30px" }} className="text-center">
+                    {i === 0 ? 
+                    <Icon icon="bxs:star"/> : 
+                    <p className="font-bold" style={{color:"#acb6c3", fontSize:"1em"}}>{i + 1}</p>}
+                </div>
+                <div>
+                    <div className={`${styles.smallHeadShot} mx-2`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}>
+                        {findLogo(player.team)?.l !== "FA" ?
+                            <div className={styles.teamLogo}>
+                                <Image width={40} height={40} alt="" src={findLogo(player.team)?.l!}/>
+                            </div>
+                        : <></>}
+                    </div> 
+                    <p className={styles.playerOwnedTitle}>DRAFTED {selectSeason}</p>
+
+                </div>
+                
                 <div className="mx-2 w-full" style={{ fontSize: ".9rem" }}>
                     <div className="flex items-center">
                         {player.injury_status === "IR" ? <Icon icon="fa-solid:user-injured" style={{color: "crimson", fontSize: "1.3em", marginRight: "4px"}}/>: <></>}
