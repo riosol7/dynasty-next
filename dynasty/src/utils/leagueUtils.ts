@@ -12,6 +12,9 @@ export const findLeagueByID = (leagueID: string, legacyLeague: Interfaces.League
 };
 
 export const findLeagueBySeason = (season: string, legacyLeague: Interfaces.League[]): Interfaces.League => {
+    if (season === "All Time") {
+        return legacyLeague[0];
+    } 
     const foundLeague = legacyLeague?.find(league => league.season === season) || Constants.initLegacyLeague[0];
 
     if (!foundLeague) {

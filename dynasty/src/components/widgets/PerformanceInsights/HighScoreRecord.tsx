@@ -37,7 +37,7 @@ export default function HighScoreRecord({ record, type, index, max }: Interfaces
                     <p className="">
                         {foundPlayer.first_name} {foundPlayer.last_name}
                     </p>
-                    <p className="font-bold text-xs" style={{ color: "#7c90a5" }}>{foundPlayer.position} - {foundPlayer.team}</p>
+                    <p className="font-bold" style={{ color: "#7c90a5", fontSize: "11px" }}>{foundPlayer.position} - {foundPlayer.team}</p>
                 </div>
             </div>
             <div style={{ color:"whitesmoke" }} className="w-4/12 flex items-center">

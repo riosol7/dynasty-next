@@ -7,11 +7,11 @@ import * as Interfaces from "@/interfaces";
 
 export default function Team({ params: { name }}: Interfaces.TeamParams) {
     const { legacyLeague } = useLeagueContext();
-
+  
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <TeamLayout name={name}>
-                <TeamMatchupSlider name={name}/>
+                    <TeamMatchupSlider name={name}/>
                 <PerformanceInsightsWidget name={name}/>
             </TeamLayout>
         </SeasonProvider>

@@ -128,14 +128,17 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     // const foundPlayer = findPlayerByID(myHighestScoringPlayer?.starter, players);
     const mySeasonalPowerRank = getPowerRankings(selectSeason, legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const myAllTimePowerRank = getPowerRankings("All Time", legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
-
-    const opponent = findRosterByRosterID(rivalryStats.records[0]?.opponentID, foundLeague.rosters);
-
+    const recentLeague = findLeagueBySeason(legacyLeague[0].season, legacyLeague);
+    const rivalryOpponent = findRosterByRosterID(rivalryStats.records[0]?.opponentID, recentLeague.rosters);
     return (
-        <div className="" style={{minWidth:"300px"}}>
+        <div className="mt-5 pt-5" style={{minWidth:"300px"}}>
             <div style={{fontSize:"14px"}}>
                 <div className={styles.performanceHeader}> 
-                    <p className="w-8/12">{foundLeague.season} Season</p>
+                    <p className="w-8/12">{
+                        selectSeason === "All Time" ?
+                        `${selectSeason}` :
+                        `${foundLeague.season}`
+                    } Seasonal Stats</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12">Record</p>
                         <p className="w-5/12">Rate</p>
@@ -145,15 +148,25 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                 <div className={styles.performanceTitleRow}>
                     <p className="w-8/12">Record</p>
                     <div className="w-4/12 flex items-center">
-                        <p className="w-5/12">{foundRoster.settings.wins}-{foundRoster.settings.losses}</p>
-                        <p className="w-5/12 flex items-center">
-                            {winPCT(foundRoster.settings.wins, foundRoster.settings.losses)}
-                            <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            `${allTimeRosterStats.wins}-${allTimeRosterStats.losses}` : 
+                            `${foundRoster.settings.wins}-${foundRoster.settings.losses}`
+                            }</p>
+                        <p className="w-5/12 flex items-center">{
+                            selectSeason === "All Time" ?
+                            `${winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses) || 0}` :
+                            `${winPCT(foundRoster.settings.wins, foundRoster.settings.losses)}`
+                        }<Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                         </p>
-                        <p className="w-2/12 flex justify-end">{foundRoster.settings.rank}</p> 
+                        <p className="w-2/12 flex justify-end">{
+                            selectSeason === "All Time" ?
+                            allTimeRankings :
+                            foundRoster.settings.rank
+                        }</p> 
                     </div>
                 </div>
-                {postSeasonStats.appearance ?
+                {postSeasonStats.appearance || (selectSeason === "All Time" && allTimeRosterStats.playoffs) ?
                 <>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">Playoffs</p>   
@@ -170,56 +183,30 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">w/ Playoffs</p>   
                         <div className="flex items-center w-4/12">
-                            <p className="w-5/12">{totalSeasonWins}-{totalSeasonLosses}</p>
-                            <p className="w-5/12 flex items-center"> 
-                                {winPCT(totalSeasonWins, totalSeasonLosses)}
-                                {winPCT(totalSeasonWins, totalSeasonLosses).toString().length === 2 ? ".00" : ""}
-                                <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                            <p className="w-5/12">{
+                                selectSeason === "All Time" ?
+                                `${allTimeTotalWins}-${allTimeTotalLosses}` :
+                                `${totalSeasonWins}-${totalSeasonLosses}`
+                            }</p>
+                            <p className="w-5/12 flex items-center">{
+                                selectSeason === "All Time" ?
+                                `${winPCT(allTimeTotalWins, allTimeTotalLosses)}
+                                ${winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}`:
+                                `${winPCT(totalSeasonWins, totalSeasonLosses)}
+                                ${winPCT(totalSeasonWins, totalSeasonLosses).toString().length === 2 ? ".00" : ""}`
+                            }<Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
-                            <p className="w-2/12 flex justify-end">{foundRoster.settings.rank < 7 ? postSeasonStats.playoff_rank : foundRoster.settings.rank}</p>
+                            <p className="w-2/12 flex justify-end">{
+                                selectSeason === "All Time" ?
+                                allTimePlayoffsRanking :
+                                `${foundRoster.settings.rank < 7 ? 
+                                postSeasonStats.playoff_rank : 
+                                foundRoster.settings.rank}`
+                            }</p>
                         </div>
                     </div>
                 </> : <></>}
-                <div className={`${showSeasonalAllPlay ? styles.performanceTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p onClick={() => setShowSeasonalAllPlay(!showSeasonalAllPlay)} className="w-8/12 flex item-center">
-                        <Icon icon={showSeasonalAllPlay ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/> All Play
-                    </p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12">{allPlaySeasonStats.wins}-{allPlaySeasonStats.losses}</p>
-                        <p className="w-5/12 flex items-center">{winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
-                            <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
-                        </p>
-                        <p className="w-2/12 flex justify-end">{mySeasonalPowerRank}</p>
-                    </div>
-                </div>
-                {showSeasonalAllPlay ? 
-                allPlaySeasonStats.opponents.map((record, i) =>
-                    <RivalryRecord key={i} record={record}/>
-                ):<></>}
-                <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">All Time Record</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12">{allTimeRosterStats.wins}-{allTimeRosterStats.losses}</p>
-                        <p className="w-5/12 flex items-center">
-                            {winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses) || 0}
-                            <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
-                        </p>
-                        <p className="w-2/12 flex justify-end">{allTimeRankings}</p>
-                    </div>
-                </div>
-                {allTimeRosterStats.playoffs.appearances > 0 ?
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">w/ Playoffs</p>   
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12">{allTimeTotalWins}-{allTimeTotalLosses}</p>
-                        <p className="w-5/12 flex items-center"> 
-                            {winPCT(allTimeTotalWins, allTimeTotalLosses)}
-                            {winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}
-                            <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
-                        </p>
-                        <p className="w-2/12 flex justify-end">{allTimePlayoffsRanking}</p>
-                    </div>
-                </div> : <></>}
+                {selectSeason === "All Time" ?
                 <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Best</p>
                     <div className="w-4/12 flex items-center">
@@ -230,88 +217,113 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </p>
                         <p className="w-2/12 flex justify-end">{allTimeBestRankings}</p>
                     </div>
-                </div>
-                <div className={`${showAllTimeAllPlay ? styles.performanceTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p onClick={() => setShowAllTimeAllPlay(!showAllTimeAllPlay)} className="w-8/12 flex item-center">
-                        <Icon icon={showAllTimeAllPlay ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/> All Time All Play
-                    </p>                    
-                    <div className="w-4/12 flex items-center"> 
-                        <p className="w-5/12">{allPlayAllTimeStats.wins}-{allPlayAllTimeStats.losses}</p>
-                        <p className="w-5/12 flex items-center">{winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses)}   
+                </div>:<></>}
+                <div className={
+                `${showSeasonalAllPlay || showAllTimeAllPlay ? 
+                styles.performanceTitleRow : 
+                styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                    <p onClick={
+                        selectSeason === "All Time" ?
+                        () => setShowAllTimeAllPlay(!showAllTimeAllPlay) :
+                        () => setShowSeasonalAllPlay(!showSeasonalAllPlay)} 
+                    className="w-8/12 flex item-center">
+                        <Icon icon={showSeasonalAllPlay || showAllTimeAllPlay ? 
+                        "mingcute:down-fill" : "mingcute:up-fill"} 
+                        style={{fontSize: "1.3em"}}/> All Play
+                    </p>
+                    <div className="w-4/12 flex items-center">
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            `${allPlayAllTimeStats.wins}-${allPlayAllTimeStats.losses}` :
+                            `${allPlaySeasonStats.wins}-${allPlaySeasonStats.losses}`
+                        }</p>
+                        <p className="w-5/12 flex items-center">{
+                        selectSeason === "All Time" ?
+                        winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses) : 
+                        winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
                             <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </p>
-                        <p className="w-2/12 flex justify-end">{myAllTimePowerRank}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ?
+                        myAllTimePowerRank : mySeasonalPowerRank}</p>
                     </div>
                 </div>
-                {showAllTimeAllPlay ?
-                    allPlayAllTimeStats.opponents.map((record, i) =>
-                        <RivalryRecord key={i} record={record}/> 
-                ) : <></>}
-                <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} Lineup Efficiency</p>
+                {selectSeason === "All Time" ?
+                    showAllTimeAllPlay ?
+                        allPlayAllTimeStats.opponents.map((record, i) =>
+                            <RivalryRecord key={i} record={record}/> 
+                    ) : <></>
+                : showSeasonalAllPlay ? 
+                    allPlaySeasonStats.opponents.map((record, i) =>
+                        <RivalryRecord key={i} record={record}/>
+                    ):<></>
+                }
+                <div className={selectSeason !== "All Time" ? styles.performanceSubEndTitleRow : styles.performanceTitleRow}>
+                    <p className="w-8/12">Lineup Efficiency</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">{lineupEfficiency(Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), Number(foundRoster.settings.ppts + "." + foundRoster.settings.ppts_decimal))}
+                        <p className="w-5/12 flex items-center">{
+                        selectSeason === "All Time" ?
+                        `${lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}` :
+                        `${lineupEfficiency(
+                        Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), 
+                        Number(foundRoster.settings.ppts + "." + foundRoster.settings.ppts_decimal)
+                        )}`}
                         <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </p>
-                        <p className="w-2/12 flex justify-end">{seasonalLineupEfficiencyRank}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ?
+                        allTimeLineupEfficiencyRanking : 
+                        seasonalLineupEfficiencyRank}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">Best</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">
-                            {lineupEfficiency(allTimeBestStats?.fpts?.score!, allTimeBestStats?.ppts?.score!)}
-                            <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
-                        </p>
-                        <p className="w-2/12 flex justify-end">{bestLineupEfficiencyRank}</p>
+                {selectSeason === "All Time" ?
+                    <div className={`${styles.fontHover} ${
+                        styles.performanceSubEndTitleRow}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                {lineupEfficiency(allTimeBestStats?.fpts?.score!, allTimeBestStats?.ppts?.score!)}
+                                <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                            </p>
+                            <p className="w-2/12 flex justify-end">{bestLineupEfficiencyRank}</p>
+                        </div>
                     </div>
-                </div>
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <div className="w-5/12 flex items-center">
-                            <p>{lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}</p>
-                            <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
-                        </div>                                
-                        <p className="w-2/12 flex justify-end">{allTimeLineupEfficiencyRanking}</p>
-                    </div>
-                </div>
-                <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} Luck Rate</p>
+                :<></>}
+                <div className={selectSeason !== "All Time" ?
+                styles.performanceEndTitleRow :
+                styles.performanceTitleRow}>
+                    <p className="w-8/12">Luck Rate</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <div className="w-5/12 flex items-center">
-                            <p>{roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}</p>
+                            <p>{
+                                selectSeason === "All Time" ?
+                                `${roundToHundredth(winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}` :
+                                `${roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}`
+                                }</p>
                             <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </div>                                
-                        <p className="w-2/12 flex justify-end">{luckRateRanking}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ?
+                        allTimeLuckRateRankings : luckRateRanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">Best</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">
-                            {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
-                            <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
-                        </p>
-                        <p className="w-2/12 flex justify-end">{bestLuckRateRanking}</p>
+                {selectSeason === "All Time" ?
+                    <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best</p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">
+                                {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
+                                <Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
+                            </p>
+                            <p className="w-2/12 flex justify-end">{bestLuckRateRanking}</p>
+                        </div>
                     </div>
-                </div>
-                <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <div className="w-5/12 flex items-center">
-                        <p>{roundToHundredth(winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}</p>
-                            <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
-                        </div>                                
-                        <p className="w-2/12 flex justify-end">{allTimeLuckRateRankings}</p>
-                    </div>
-                </div>
+                   :<></>
+                }
                 <div className={`pt-5 ${styles.performanceHeader}`}> 
                     <p className="w-8/12">Scoring</p>
                     <div className="w-4/12 flex items-center">
@@ -321,249 +333,233 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                 </div>
                 <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} Total Points Per Game</p>
+                    <p className="w-8/12">Total Points Per Game</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{totalPointsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}</p>
-                        <p className="w-2/12 flex justify-end">{totalPtsPerGameRanking}</p>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            `${totalPointsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}` :
+                            `${totalPointsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}`
+                        }</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ?
+                        allTimeTotalPtsPerGameRanking                        
+                        : totalPtsPerGameRanking}</p>
                     </div>
                 </div>
-                {postSeasonStats.appearance ?
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                {postSeasonStats.appearance || allTimeRosterStats.playoffs ?
+                <div className={`${styles.fontHover} ${
+                    selectSeason === "All Time" ?
+                    styles.performanceSubTitleRow :
+                    styles.performanceSubEndTitleRow}`}>
+                    <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}</p>
-                        <p className="w-2/12 flex justify-end">{totalPlayoffPtsPerGameRanking}</p>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            `${roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}`: 
+                            `${roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}`
+                        }</p>
+                        <p className="w-2/12 flex justify-end">{
+                            selectSeason === "All Time" ?
+                            `${allTimeTotalPlayoffPtsPerGameRanking}`:
+                            totalPlayoffPtsPerGameRanking}</p>
                     </div>
                 </div> : <></>}
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                {selectSeason === "All Time" ?
+                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Best</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12 flex items-center">{totalPointsPerGame(rID, allTimeBestStats?.fpts?.score!, legacyLeague, allTimeBestStats?.fpts?.season)}</p>
                         <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRanking}</p>
                     </div>
-                </div>
-                <div className={`${postSeasonStats.appearance ? styles.performanceSubTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{totalPointsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}</p>
-                        <p className="w-2/12 flex justify-end">{allTimeTotalPtsPerGameRanking}</p>
+                </div>:<></>}
+                {selectSeason === "All Time" ?
+                <>
+                    <div className={`${showWeeklyHighScores ? styles.performanceTitleRow : styles.performanceSubTitleRow}`}>
+                        <p className={`w-8/12 flex items-center`} onClick={() => setShowWeeklyHighScores(!showWeeklyHighScores)}>
+                            <Icon icon={showWeeklyHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
+                            <span>{showWeeklyHighScores ? "All Time Weekly High Scores": "All Time Weekly High Score"}</span>
+                        </p>
+                        <div className="w-4/12 flex items-center" style={{ marginRight: showWeeklyHighScores ? "1em" : "" }}>
+                            <div className="w-5/12">
+                            {showWeeklyHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
+                            : 
+                                <p>Week {allTimeRosterStats.topTeamScore[0]?.week}, {allTimeRosterStats.topTeamScore[0]?.season}</p>
+                            }</div>                        
+                            <div className="w-5/12">
+                            {showWeeklyHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal" }}>Your | Opp Points</p>
+                            : 
+                                <p>{allTimeRosterStats.best.score}</p>
+                            }</div>
+                            <div className="w-2/12 flex justify-end">
+                            {showWeeklyHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
+                            : 
+                                <p>{allTimeHighestScoreRanking}</p>
+                            }</div>
+                        </div>
                     </div>
-                </div>
-                {postSeasonStats.appearance ?
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time Playoffs</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}</p>
-                        <p className="w-2/12 flex justify-end">{allTimeTotalPlayoffPtsPerGameRanking}</p>
+                    {showWeeklyHighScores ?
+                    allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
+                        <HighScoreRecord key={i} record={record} type="team" index={i} max={9}/>
+                    )) : <></>}
+                    <div className={`${showPlayerHighScores ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
+                        <p className={`w-8/12 flex items-center`} onClick={() => setShowPlayerHighScores(!showPlayerHighScores)}>
+                            <Icon icon={showPlayerHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
+                            <span>{showPlayerHighScores ? "All Time Player High Scores": "All Time Player High Score"}</span>
+                        </p>
+                        <div className="w-4/12 flex items-center">
+                            <div className="w-5/12">
+                            {showPlayerHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
+                            : 
+                                <p>Week {myHighestScoringPlayer?.week}, {myHighestScoringPlayer?.season}</p>
+                            }</div>
+                            <div className="w-5/12">
+                            {showPlayerHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
+                            : 
+                                <p>{myHighestScoringPlayer?.points}</p>
+                            }</div>
+                            <div className="w-2/12 flex justify-end">
+                            {showPlayerHighScores ?
+                                <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
+                            : 
+                                <p>{overallHighScoreRanking(myHighestScoringPlayer?.points!, allTimeLeagueStats?.playerHighScores!)?.rank}</p>
+                            }</div>
+                        </div>
                     </div>
-                </div> : <></>}
-                <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} Highest Score</p>
+                    {showPlayerHighScores ?
+                        allTimeRosterStats.topPlayerScores.slice(0,10).map((record: Interfaces.HighScoreRecord, i) => 
+                            <HighScoreRecord key={i} record={record} type="player" index={i} max={9}/>)
+                    :<></>}
+                </> :
+                <><div className={styles.performanceTitleRow}>
+                    <p className="w-8/12">Highest Score</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{findSeasonStats(rID, selectSeason, legacyLeague)?.bestScore}</p>
                         <p className="w-2/12 flex justify-end">{seasonalHighestScoreRankings}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                    <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{postSeasonStats.highestScore}</p>
                         <p className="w-2/12 flex justify-end">{highestPostSeasonScoreRanking}</p>
                     </div>
-                </div>
-                <div className={`${styles.fontHover} ${showWeeklyHighScores ? styles.performanceTitleRow : styles.performanceSubTitleRow}`}>
-                    <p className={`w-8/12 flex items-center`} onClick={() => setShowWeeklyHighScores(!showWeeklyHighScores)}>
-                        <Icon icon={showWeeklyHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
-                        <span>{showWeeklyHighScores ? "All Time Weekly High Scores": "All Time Weekly High Score"}</span>
-                    </p>
-                    <div className="w-4/12 flex items-center" style={{ marginRight: showWeeklyHighScores ? "1em" : "" }}>
-                        <div className="w-5/12">
-                        {showWeeklyHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
-                        : 
-                            <p>Week {allTimeRosterStats.topTeamScore[0]?.week}, {allTimeRosterStats.topTeamScore[0]?.season}</p>
-                        }</div>                        
-                        <div className="w-5/12">
-                        {showWeeklyHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal" }}>Your | Opp Points</p>
-                        : 
-                            <p>{allTimeRosterStats.best.score}</p>
-                        }</div>
-                        <div className="w-2/12 flex justify-end">
-                        {showWeeklyHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
-                        : 
-                            <p>{allTimeHighestScoreRanking}</p>
-                        }</div>
-                    </div>
-                </div>
-                {showWeeklyHighScores ?
-                allTimeRosterStats.topTeamScore.slice(0, 10).map((record, i) => (
-                    <HighScoreRecord key={i} record={record} type="team" index={i} max={9}/>
-                )) : <></>}
-                <div className={`${styles.fontHover} ${showPlayerHighScores ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
-                    <p className={`w-8/12 flex items-center`} onClick={() => setShowPlayerHighScores(!showPlayerHighScores)}>
-                        <Icon icon={showPlayerHighScores ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
-                        <span>{showPlayerHighScores ? "All Time Player High Scores": "All Time Player High Score"}</span>
-                    </p>
-                    <div className="w-4/12 flex items-center">
-                        <div className="w-5/12">
-                        {showPlayerHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Season</p>
-                        : 
-                            <p>Week {myHighestScoringPlayer?.week}, {myHighestScoringPlayer?.season}</p>
-                        }</div>
-                        <div className="w-5/12">
-                        {showPlayerHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Points</p>
-                        : 
-                            <p>{myHighestScoringPlayer?.points}</p>
-                        }</div>
-                        <div className="w-2/12 flex justify-end">
-                        {showPlayerHighScores ?
-                            <p className={`${styles.performanceHeader}`} style={{fontWeight: "normal"}}>Ovr Rank</p>
-                        : 
-                            <p>{overallHighScoreRanking(myHighestScoringPlayer?.points!, allTimeLeagueStats?.playerHighScores!)?.rank}</p>
-                        }</div>
-                    </div>
-                </div>
-                {showPlayerHighScores ?
-                    allTimeRosterStats.topPlayerScores.slice(0,10).map((record: Interfaces.HighScoreRecord, i) => 
-                        <HighScoreRecord key={i} record={record} type="player" index={i} max={9}/>)
-                :<></>}
+                </div></>}
                 <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} PF</p>
+                    <p className="w-8/12">PF</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{foundRoster.settings.fpts}.{foundRoster.settings.fpts_decimal}</p>
-                        <p className="w-2/12 flex justify-end">{seasonalPFRanking}</p>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            allTimeRosterStats.fpts :
+                        `${foundRoster.settings.fpts}.${foundRoster.settings.fpts_decimal}`}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ? allTimePFRanking : seasonalPFRanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                <div className={`${selectSeason === "All Time" ? styles.performanceSubTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                    <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{postSeasonStats.fpts}</p>
-                        <p className="w-2/12 flex justify-end">{postSeasonPFRanking}</p>
+                        <p className="w-5/12">{selectSeason === "All Time" ? 
+                        allTimeRosterStats.playoffs.fpts : postSeasonStats.fpts}</p>
+                        <p className="w-2/12 flex justify-end">{selectSeason === "All Time" ?
+                        allTimePlayoffPFRanking : postSeasonPFRanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
+                {selectSeason === "All Time" ?
+                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p className={`w-8/12 ${styles.bestRowHover}`}>Best <span>Season {myBest?.fpts?.season}</span></p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12 flex items-center">{myBestPF}</p>
                         <p className="w-2/12 flex justify-end">{bestPFRanking}</p>
                     </div>
-                </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.fpts}</p>
-                        <p className="w-2/12 flex justify-end">{allTimePFRanking}</p>
-                    </div>
-                </div>
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time Playoffs</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.playoffs.fpts}</p>
-                        <p className="w-2/12 flex justify-end">{allTimePlayoffPFRanking}</p>
-                    </div>
-                </div>
+                </div> : <></>}
                 <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} MAX PF</p>
+                    <p className="w-8/12">MAX PF</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{foundRoster.settings.ppts}.{foundRoster.settings.ppts_decimal}</p>
-                        <p className="w-2/12 flex justify-end">{seasonalMAXPFRanking}</p>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            allTimeRosterStats.ppts :
+                         `${foundRoster.settings.ppts}.${foundRoster.settings.ppts_decimal}`
+                        }</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ?
+                        allTimeMAXPFRanking : seasonalMAXPFRanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">{foundLeague.season} Playoffs</p>
+                <div className={`${styles.fontHover} ${selectSeason !== "All Time" ?
+                styles.performanceSubEndTitleRow : styles.performanceSubTitleRow}`}>
+                    <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">-</p>
                         <p className="w-2/12 flex justify-end">-</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">Best <span>Season {myBest?.ppts?.season}</span></p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">{myBest?.ppts?.score}</p>
-                        <p className="w-2/12 flex justify-end">{bestMAXPFRanking}</p>
+                {selectSeason === "All Time" ?
+                    <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best <span>Season {myBest?.ppts?.season}</span></p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">{myBest?.ppts?.score}</p>
+                            <p className="w-2/12 flex justify-end">{bestMAXPFRanking}</p>
+                        </div>
                     </div>
-                </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.ppts}</p>
-                        <p className="w-2/12 flex justify-end">{allTimeMAXPFRanking}</p>
-                    </div>
-                </div>
-                <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time Playoffs</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">-</p>
-                        <p className="w-2/12 flex justify-end">-</p>
-                    </div>
-                </div>
+                :<></>}
                 <div className={styles.performanceTitleRow}>
-                    <p className="w-8/12">{foundLeague.season} PA</p>
+                    <p className="w-8/12">PA</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{foundRoster.settings.fpts_against}.{foundRoster.settings.fpts_against_decimal}</p>
-                        <p className="w-2/12 flex justify-end">{seasonalPARanking}</p>
-                    </div>
-                </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">{foundLeague.season} Playoffs</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{postSeasonStats.pa || 0}</p>
-                        <p className="w-2/12 flex justify-end">{postSeasonPARanking}</p>
-                    </div>
-                </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">Best <span>Season {myBest?.pa?.season}</span></p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12 flex items-center">{myBest?.pa?.score}</p>
-                        <p className="w-2/12 flex justify-end">{bestPARanking}</p>
-                    </div>
-                </div>
-                <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time</p>
-                    <div className="w-4/12 flex items-center">
-                        <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.pa}</p>
-                        <p className="w-2/12 flex justify-end">{allTimePARanking}</p>
+                        <p className="w-5/12">{
+                            selectSeason === "All Time" ?
+                            allTimeRosterStats.pa :
+                            `${foundRoster.settings.fpts_against}.${foundRoster.settings.fpts_against_decimal}`}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ? allTimePARanking : seasonalPARanking}</p>
                     </div>
                 </div>
                 <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
-                    <p className="w-8/12">All Time Playoffs</p>
+                    <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{allTimeRosterStats.playoffs.pa}</p>
-                        <p className="w-2/12 flex justify-end">{allTimePlayoffPARanking}</p>
+                        <p className="w-5/12">{
+                        selectSeason === "All Time" ? 
+                        allTimeRosterStats.playoffs.pa : 
+                        postSeasonStats.pa || 0}</p>
+                        <p className="w-2/12 flex justify-end">{
+                        selectSeason === "All Time" ? 
+                        allTimePlayoffPARanking : 
+                        postSeasonPARanking}</p>
                     </div>
                 </div>
+                {selectSeason === "All Time" ?
+                    <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
+                        <p className="w-8/12">Best <span>Season {myBest?.pa?.season}</span></p>
+                        <div className="w-4/12 flex items-center">
+                            <p className="w-5/12"></p>
+                            <p className="w-5/12 flex items-center">{myBest?.pa?.score}</p>
+                            <p className="w-2/12 flex justify-end">{bestPARanking}</p>
+                        </div>
+                    </div>
+                :<></>}
                 <div className="py-5">
                     <div className={`${styles.performanceHeader}`}> 
                         <p className="w-10/12">General</p>
                         <p className="w-2/12 flex justify-end"></p>
                     </div>
-                    <div className={`${styles.fontHover} ${showMostWinsAgainst ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
+                    <div className={`${showMostWinsAgainst ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
                         <p className={`w-8/12 flex items-center`} onClick={() => setShowMostWinsAgainst(!showMostWinsAgainst)}>
                             <Icon icon={showMostWinsAgainst ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
                             <span>Most Wins Against</span>
@@ -574,7 +570,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                                 <p className="w-5/12">Win Rate</p>
                                 <p className="w-2/12 flex justify-end">Games Played</p>
                             </div>  
-                        : <p>{opponent.owner.display_name}</p>}
+                        : <p>{rivalryOpponent?.owner?.display_name}</p>}
                     </div>
                     {showMostWinsAgainst ?
                         rivalryStats.records.map(((record, i) => 
@@ -596,7 +592,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p>Toilet Bowl</p>
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.toiletBowls}</p>
                     </div>
-                    <div className={styles.performanceRow} style={{paddingBlock: "1em"}}>
+                    <div className={styles.performanceEndTitleRow} style={{paddingBlock: "1em"}}>
                         <p>Finals</p>
                         <p style={{ color:"whitesmoke" }}>{allTimeRosterStats.playoffs.finals}</p>
                     </div>

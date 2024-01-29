@@ -27,10 +27,9 @@ export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProp
         <div>
             <div className={`${styles.teamNav}`}>
                 <div className={styles.selectSeasonContainer}>
-                    <Icon icon="ic:baseline-insights" className={`${styles.icon}`} style={{fontSize:"1.7rem"}}/>
-                    {/* Need to add All Time for selectSeason                 */}
+                    <Icon icon="fluent:box-multiple-search-24-regular" className={`${styles.icon}`} style={{fontSize:"1.7rem"}}/>
                     <select id={styles.selectSeason} onChange={onChange} value={selectSeason}>
-                        <option>All-Time Performance Insights</option>
+                        <option value={"All Time"}>All-Time Performance Insights</option>
                         {legacyLeague.map((league, idx) => (
                             <option key={idx} value={league.season}>{`${league.season} - Performance Insights`}</option>
                         ))}

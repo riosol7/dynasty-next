@@ -1,3 +1,4 @@
+import styles from "./TeamHeader.module.css";
 import Image from "next/image";
 import DraftWidget from "@/components/widgets/Draft";
 import { Icon } from "@iconify-icon/react";
@@ -14,25 +15,16 @@ export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
 
     return (
-        <div className="flex items-start justify-between flex-wrap my-4">
+        <div className="flex items-center justify-between flex-wrap">
             <div className="flex items-center">
-                <Image alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}
-                style={{borderRadius:"50%", border:"4px outset #a9dfd8", padding:"4px", background:"black"}}/>
+                <div className={styles.avatarBackground}>
+                    <Image alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}
+                    style={{borderRadius:"50%", padding:"4px", background:"black"}}/>
+                </div>
                 <div className="mx-3">
-                    <div className="flex items-center">
-                        <p className="font-bold" style={{fontSize:"18px"}}>{foundUser?.metadata?.team_name ? foundUser?.metadata?.team_name : foundUser?.display_name}</p>
-                        <p style={{color:"#cbcbcb", fontWeight:"lighter", paddingLeft:"6px"}}>@{foundUser?.display_name}</p>         
-                    </div>
-                    <p className="flex items-center" style={{fontSize:"14.5px"}}>
-                        {foundRoster?.settings.wins}
-                        <span style={{color:"whitesmoke"}}>-</span>  
-                        {foundRoster?.settings.losses}
-                        <span style={{color:"whitesmoke"}}>-</span>  
-                        {foundRoster?.settings.ties}
-                        <Icon icon="ic:round-circle" className="mx-2" style={{fontSize:".35em", color:"#698b87"}}/>
-                        <span>{placementRankings(foundRoster?.settings.rank)}</span>
-                    </p>
-                    <p className="font-bold" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {findUserEXP(foundUser?.user_id!, legacyLeague)}</p>
+                    <p className="font-bold" style={{fontSize:"18px"}}>{foundUser?.metadata?.team_name ? foundUser?.metadata?.team_name : foundUser?.display_name}</p>
+                    <p style={{color:"#cbcbcb"}}>@{foundUser?.display_name}</p>         
+                    <p className="font-bold pt-1" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {findUserEXP(foundUser?.user_id!, legacyLeague)}</p>
                 </div>
             </div>
             <DraftWidget name={name}/>

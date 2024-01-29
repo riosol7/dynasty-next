@@ -17,6 +17,7 @@ export default function TeamMatchupSlider({ name }: Interfaces.TeamParamProps) {
     const matchups = getMatchups(foundLeague.matchups, foundRoster.roster_id);
 
     return (
+        selectSeason !== "All Time" ? 
         <div className="pb-3">
             <p className={`pb-2 ${styles.weeklyBreakdown}`}>{selectSeason} Weekly Breakdown</p>
             <Swiper breakpoints = {{
@@ -75,5 +76,6 @@ export default function TeamMatchupSlider({ name }: Interfaces.TeamParamProps) {
                 )}
             </Swiper>
         </div>
+        :<></>
     );
 };
