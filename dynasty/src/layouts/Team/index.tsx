@@ -2,8 +2,25 @@ import styles from "./Team.module.css";
 import * as Interfaces from "../../interfaces";
 import TeamHeader from "@/components/headers/Team";
 import { Icon } from "@iconify-icon/react";
-import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSeasonContext, useSuperFlexContext } from "@/context";
-import { findLeagueByTeamName, findRosterByOwnerID, findUserByName, getTeamStats, processPlayers } from "@/utils";
+import { 
+    useDynastyProcessContext, 
+    useFantasyCalcContext, 
+    useFantasyMarket, 
+    useFantasyProContext, 
+    useKTCContext, 
+    useLeagueContext, 
+    usePlayerContext, 
+    useSeasonContext, 
+    useSuperFlexContext 
+} from "@/context";
+import { 
+    findLeagueByTeamName, 
+    findRosterByOwnerID, 
+    findUserByName, 
+    getTeamStats, 
+    processPlayers, 
+    seasonStats
+} from "@/utils";
 
 export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProps) {
     const { selectSeason, onChange } = useSeasonContext()!;
@@ -15,14 +32,14 @@ export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProp
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
-    const foundLeague = findLeagueByTeamName(name, legacyLeague);
-    const foundUser = findUserByName(name, foundLeague);
-    const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
-    const rID = foundRoster?.roster_id;
-    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const foundLeague: Interfaces.League = findLeagueByTeamName(name, legacyLeague);
+    const foundUser: Interfaces.Owner = findUserByName(name, foundLeague);
+    const foundRoster: Interfaces.Roster = findRosterByOwnerID(foundUser.user_id, foundLeague);
+    const rID:number = foundRoster?.roster_id;
+    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
 
-    const teamStats = getTeamStats(rID, selectSeason, legacyLeague, fantasyMarket, processedPlayers);
-
+    const teamStats = getTeamStats(rID, selectSeason, legacyLeague, fantasyMarket, processedPlayers)?.team;
+    const test = seasonStats(selectSeason, legacyLeague);
     return (
         <div>
             <div className={`${styles.teamNav}`}>

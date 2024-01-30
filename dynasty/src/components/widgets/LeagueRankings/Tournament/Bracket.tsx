@@ -39,47 +39,70 @@ function PostSeasonMatch({match, matchKey, round, season, sectionTitle}: Interfa
     const foundLeague = findLeagueBySeason(season, legacyLeague);
     const rosters = foundLeague.rosters;
 
-    const playoffTitle = round === 1 ? "Quarterfinal" : round === 2 && matchKey === 2 ? "5th Place Match" : round === 2 ? "Semifinal" : round === 3 && matchKey === 1 ?                     
-        <p className="flex items-center justify-center">3rd Place Match <Icon icon="noto-v1:3rd-place-medal" style={{fontSize:"1.25em", marginLeft:"4px"}}/></p>
+    const playoffTitle = 
+    round === 1 ? 
+    "Quarterfinal" : 
+    round === 2 && matchKey === 2 ? 
+    "5th Place Match" : 
+    round === 2 ? 
+    "Semifinal" : 
+    round === 3 && matchKey === 1 ?                     
+        <p className="flex items-center justify-center">
+            3rd Place Match 
+            <Icon icon="noto-v1:3rd-place-medal" style={{fontSize:"1.25em", marginLeft:"4px"}}/>
+        </p>
     :
         <p className="flex items-center justify-center">Final <Icon icon="noto-v1:trophy" style={{fontSize:"1.25em", marginLeft:"4px"}}/></p>
     
-    const toiletTitle = round === 1 ? "Bottom 6" : round === 2 && matchKey === 2 ? "7th Place Match" : round === 2 ? "Bottom 4" : round === 3 && matchKey === 1 ?                     
+    const toiletTitle = 
+    round === 1 ? 
+    "Bottom 6" : 
+    round === 2 && matchKey === 2 ? 
+    "7th Place Match" :
+    round === 2 ? "Bottom 4" :
+    round === 3 && matchKey === 1 ?                     
         <p>9th Place Match</p>
     :
         <p>Toilet Bowl <Icon icon="noto:toilet" style={{fontSize:"1.25em", marginLeft:"4px"}}/></p>
 
     function score(rID: number) {
-        const byeWeek = sectionTitle === "toiletBowl" ? rosters.reverse()[0].roster_id === rID || rosters.reverse()[1].roster_id === rID : 
-        rosters?.filter(roster => roster.settings.division === 2)[0].roster_id === rID || rosters?.filter(roster => roster.settings.division === 1)[0].roster_id === rID ? true : false
+        const byeWeek = sectionTitle === "toiletBowl" ? 
+        rosters.reverse()[0].roster_id === rID || 
+        rosters.reverse()[1].roster_id === rID : 
+        rosters?.filter(roster => roster.settings.division === 2)[0].roster_id === rID || 
+        rosters?.filter(roster => roster.settings.division === 1)[0].roster_id === rID ? 
+        true : false
         
         const myMatchups = getMatchups(foundLeague.matchups, rID)!;
-
+        const foundRosterByWeek = (idx: number) => {
+            return myMatchups[idx]?.find((team: Interfaces.Roster) => team.roster_id === rID);
+        }
+        const extendedSeason: boolean = Number(season) > 2020  
         if (round === 1) {
-            if (Number(season) > 2020) {
-                return <p className="font-bold">{myMatchups[14]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p> 
+            if (extendedSeason) {
+                return <p className="font-bold">{foundRosterByWeek(14)?.points}</p> 
             } else {
-                return <p className="font-bold">{myMatchups[13]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+                return <p className="font-bold">{foundRosterByWeek(13)?.points}</p>
             };
         } else if (round === 2) {
-            if (Number(season) > 2020 && byeWeek) {
-                return <p className="font-bold">{myMatchups[14]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
-            } else if (Number(season) > 2020) {
-                return <p className="font-bold">{myMatchups[15]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+            if (extendedSeason && byeWeek) {
+                return <p className="font-bold">{foundRosterByWeek(14)?.points}</p>
+            } else if (extendedSeason) {
+                return <p className="font-bold">{foundRosterByWeek(15)?.points}</p>
             } else if (Number(season) <= 2020 && byeWeek) {
-                return <p className="font-bold">{myMatchups[13]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+                return <p className="font-bold">{foundRosterByWeek(13)?.points}</p>
             } else {
-                return <p className="font-bold">{myMatchups[14]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+                return <p className="font-bold">{foundRosterByWeek(14)?.points}</p>
             };
         } else if (round === 3) {
-            if (Number(season) > 2020 && byeWeek) {
-                return <p className="font-bold">{myMatchups[15]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
-            } else if (Number(season) > 2020) {
-                return <p className="font-bold">{myMatchups[16]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+            if (extendedSeason && byeWeek) {
+                return <p className="font-bold">{foundRosterByWeek(15)?.points}</p>
+            } else if (extendedSeason) {
+                return <p className="font-bold">{foundRosterByWeek(16)?.points}</p>
             } else if (Number(season) <= 2020 && byeWeek) {
-                return <p className="font-bold">{myMatchups[14]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+                return <p className="font-bold">{foundRosterByWeek(14)?.points}</p>
             } else {
-                return <p className="font-bold">{myMatchups[15]?.find((team: Interfaces.Roster) => team.roster_id === rID)?.points}</p>
+                return <p className="font-bold">{foundRosterByWeek(15)?.points}</p>
             };
         };
     };

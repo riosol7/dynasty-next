@@ -144,3 +144,7 @@ export interface MarketWidgetProps {
 export interface MatchupWidgetProps {
     matchup: Match[];
 }
+
+export interface WeeklyStatsProps {
+    name: string
+}

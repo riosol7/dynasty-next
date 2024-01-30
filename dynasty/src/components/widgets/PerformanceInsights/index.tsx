@@ -130,14 +130,14 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const myAllTimePowerRank = getPowerRankings("All Time", legacyLeague)?.find(roster => roster.roster_id === rID)?.power_rank;
     const recentLeague = findLeagueBySeason(legacyLeague[0].season, legacyLeague);
     const rivalryOpponent = findRosterByRosterID(rivalryStats.records[0]?.opponentID, recentLeague.rosters);
+    const allTime = selectSeason === "All Time" ? true : false;
+    
     return (
         <div className="mt-5 pt-5" style={{minWidth:"300px"}}>
             <div style={{fontSize:"14px"}}>
                 <div className={styles.performanceHeader}> 
                     <p className="w-8/12">{
-                        selectSeason === "All Time" ?
-                        `${selectSeason}` :
-                        `${foundLeague.season}`
+                        allTime ? `${selectSeason}` : `${foundLeague.season}`
                     } Seasonal Stats</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12">Record</p>
@@ -149,24 +149,24 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <p className="w-8/12">Record</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             `${allTimeRosterStats.wins}-${allTimeRosterStats.losses}` : 
                             `${foundRoster.settings.wins}-${foundRoster.settings.losses}`
                             }</p>
                         <p className="w-5/12 flex items-center">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             `${winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses) || 0}` :
                             `${winPCT(foundRoster.settings.wins, foundRoster.settings.losses)}`
                         }<Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                         </p>
                         <p className="w-2/12 flex justify-end">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             allTimeRankings :
                             foundRoster.settings.rank
                         }</p> 
                     </div>
                 </div>
-                {postSeasonStats.appearance || (selectSeason === "All Time" && allTimeRosterStats.playoffs) ?
+                {postSeasonStats.appearance || (allTime && allTimeRosterStats.playoffs) ?
                 <>
                     <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">Playoffs</p>   
@@ -184,12 +184,12 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-8/12">w/ Playoffs</p>   
                         <div className="flex items-center w-4/12">
                             <p className="w-5/12">{
-                                selectSeason === "All Time" ?
+                                allTime ?
                                 `${allTimeTotalWins}-${allTimeTotalLosses}` :
                                 `${totalSeasonWins}-${totalSeasonLosses}`
                             }</p>
                             <p className="w-5/12 flex items-center">{
-                                selectSeason === "All Time" ?
+                                allTime ?
                                 `${winPCT(allTimeTotalWins, allTimeTotalLosses)}
                                 ${winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}`:
                                 `${winPCT(totalSeasonWins, totalSeasonLosses)}
@@ -197,7 +197,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             }<Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
                             <p className="w-2/12 flex justify-end">{
-                                selectSeason === "All Time" ?
+                                allTime ?
                                 allTimePlayoffsRanking :
                                 `${foundRoster.settings.rank < 7 ? 
                                 postSeasonStats.playoff_rank : 
@@ -206,7 +206,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         </div>
                     </div>
                 </> : <></>}
-                {selectSeason === "All Time" ?
+                {allTime ?
                 <div className={`${styles.performanceSubTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Best</p>
                     <div className="w-4/12 flex items-center">
@@ -223,7 +223,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                 styles.performanceTitleRow : 
                 styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p onClick={
-                        selectSeason === "All Time" ?
+                        allTime ?
                         () => setShowAllTimeAllPlay(!showAllTimeAllPlay) :
                         () => setShowSeasonalAllPlay(!showSeasonalAllPlay)} 
                     className="w-8/12 flex item-center">
@@ -233,22 +233,22 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             `${allPlayAllTimeStats.wins}-${allPlayAllTimeStats.losses}` :
                             `${allPlaySeasonStats.wins}-${allPlaySeasonStats.losses}`
                         }</p>
                         <p className="w-5/12 flex items-center">{
-                        selectSeason === "All Time" ?
+                        allTime ?
                         winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses) : 
                         winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses)}   
                             <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ?
+                        allTime ?
                         myAllTimePowerRank : mySeasonalPowerRank}</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                     showAllTimeAllPlay ?
                         allPlayAllTimeStats.opponents.map((record, i) =>
                             <RivalryRecord key={i} record={record}/> 
@@ -263,7 +263,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12 flex items-center">{
-                        selectSeason === "All Time" ?
+                        allTime ?
                         `${lineupEfficiency(allTimeRosterStats.fpts, allTimeRosterStats.ppts)}` :
                         `${lineupEfficiency(
                         Number(foundRoster.settings.fpts + "." + foundRoster.settings.fpts_decimal), 
@@ -272,12 +272,12 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ?
+                        allTime ?
                         allTimeLineupEfficiencyRanking : 
                         seasonalLineupEfficiencyRank}</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                     <div className={`${styles.fontHover} ${
                         styles.performanceSubEndTitleRow}`}>
                         <p className="w-8/12">Best</p>
@@ -298,19 +298,17 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <div className="w-5/12 flex items-center">
-                            <p>{
-                                selectSeason === "All Time" ?
+                            <p>{allTime ?
                                 `${roundToHundredth(winPCT(allTimeRosterStats.wins, allTimeRosterStats.losses)-winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses))}` :
                                 `${roundToHundredth(winPCT(foundRoster.settings.wins, foundRoster.settings.losses)-winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses))}`
                                 }</p>
                             <Icon icon="material-symbols:percent" style={{color:"#a9dfd8", fontSize:"1em"}}/>
                         </div>                                
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ?
-                        allTimeLuckRateRankings : luckRateRanking}</p>
+                        allTime ? allTimeLuckRateRankings : luckRateRanking}</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">Best</p>
                         <div className="w-4/12 flex items-center">
@@ -337,36 +335,33 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             `${totalPointsPerGame(rID, allTimeRosterStats.fpts, legacyLeague, undefined, true)}` :
                             `${totalPointsPerGame(rID, seasonFPTS, legacyLeague, selectSeason)}`
                         }</p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ?
-                        allTimeTotalPtsPerGameRanking                        
-                        : totalPtsPerGameRanking}</p>
+                        allTime ? allTimeTotalPtsPerGameRanking : totalPtsPerGameRanking}</p>
                     </div>
                 </div>
                 {postSeasonStats.appearance || allTimeRosterStats.playoffs ?
                 <div className={`${styles.fontHover} ${
-                    selectSeason === "All Time" ?
+                    allTime ?
                     styles.performanceSubTitleRow :
                     styles.performanceSubEndTitleRow}`}>
                     <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             `${roundToHundredth(allTimeRosterStats.playoffs.fpts / allTimeRosterStats.playoffs.totalGames)}`: 
                             `${roundToHundredth(postSeasonStats.fpts / postSeasonStats.totalGames)}`
                         }</p>
                         <p className="w-2/12 flex justify-end">{
-                            selectSeason === "All Time" ?
-                            `${allTimeTotalPlayoffPtsPerGameRanking}`:
+                            allTime ? allTimeTotalPlayoffPtsPerGameRanking :
                             totalPlayoffPtsPerGameRanking}</p>
                     </div>
                 </div> : <></>}
-                {selectSeason === "All Time" ?
+                {allTime ?
                 <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Best</p>
                     <div className="w-4/12 flex items-center">
@@ -375,7 +370,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">{bestTotalPtsPerGameRanking}</p>
                     </div>
                 </div>:<></>}
-                {selectSeason === "All Time" ?
+                {allTime ?
                 <>
                     <div className={`${showWeeklyHighScores ? styles.performanceTitleRow : styles.performanceSubTitleRow}`}>
                         <p className={`w-8/12 flex items-center`} onClick={() => setShowWeeklyHighScores(!showWeeklyHighScores)}>
@@ -459,24 +454,24 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             allTimeRosterStats.fpts :
                         `${foundRoster.settings.fpts}.${foundRoster.settings.fpts_decimal}`}</p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ? allTimePFRanking : seasonalPFRanking}</p>
+                        allTime ? allTimePFRanking : seasonalPFRanking}</p>
                     </div>
                 </div>
-                <div className={`${selectSeason === "All Time" ? styles.performanceSubTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
+                <div className={`${allTime ? styles.performanceSubTitleRow : styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
-                        <p className="w-5/12">{selectSeason === "All Time" ? 
+                        <p className="w-5/12">{allTime ? 
                         allTimeRosterStats.playoffs.fpts : postSeasonStats.fpts}</p>
-                        <p className="w-2/12 flex justify-end">{selectSeason === "All Time" ?
+                        <p className="w-2/12 flex justify-end">{allTime ?
                         allTimePlayoffPFRanking : postSeasonPFRanking}</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                 <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                     <p className={`w-8/12 ${styles.bestRowHover}`}>Best <span>Season {myBest?.fpts?.season}</span></p>
                     <div className="w-4/12 flex items-center">
@@ -490,12 +485,12 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             allTimeRosterStats.ppts :
                          `${foundRoster.settings.ppts}.${foundRoster.settings.ppts_decimal}`
                         }</p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ?
+                        allTime ?
                         allTimeMAXPFRanking : seasonalMAXPFRanking}</p>
                     </div>
                 </div>
@@ -508,7 +503,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-2/12 flex justify-end">-</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                     <div className={`${styles.performanceSubEndTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">Best <span>Season {myBest?.ppts?.season}</span></p>
                         <div className="w-4/12 flex items-center">
@@ -523,28 +518,28 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                            selectSeason === "All Time" ?
+                            allTime ?
                             allTimeRosterStats.pa :
                             `${foundRoster.settings.fpts_against}.${foundRoster.settings.fpts_against_decimal}`}</p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ? allTimePARanking : seasonalPARanking}</p>
+                        allTime ? allTimePARanking : seasonalPARanking}</p>
                     </div>
                 </div>
-                <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
+                <div className={`${allTime ? styles.performanceSubTitleRow : styles.performanceEndTitleRow} ${styles.fontHover}`}>
                     <p className="w-8/12">Playoffs</p>
                     <div className="w-4/12 flex items-center">
                         <p className="w-5/12"></p>
                         <p className="w-5/12">{
-                        selectSeason === "All Time" ? 
+                        allTime ? 
                         allTimeRosterStats.playoffs.pa : 
                         postSeasonStats.pa || 0}</p>
                         <p className="w-2/12 flex justify-end">{
-                        selectSeason === "All Time" ? 
+                        allTime ? 
                         allTimePlayoffPARanking : 
                         postSeasonPARanking}</p>
                     </div>
                 </div>
-                {selectSeason === "All Time" ?
+                {allTime ?
                     <div className={`${styles.performanceEndTitleRow} ${styles.fontHover}`}>
                         <p className="w-8/12">Best <span>Season {myBest?.pa?.season}</span></p>
                         <div className="w-4/12 flex items-center">

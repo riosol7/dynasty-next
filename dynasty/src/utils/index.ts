@@ -7,6 +7,8 @@ export * from "./stats/seasonStats";
 export * from "./stats/rivarlyStats";
 export * from "./stats/postSeasonStats";
 export * from "./stats/allPlayStats";
+export * from "./stats/leagueStats";
+export * from "./stats/rosterStats";
 export * from "./processRosters";
 export * from "./processPlayers";
 export * from "./processUsers";
