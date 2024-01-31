@@ -15,7 +15,7 @@ export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
     const foundRoster = findRosterByOwnerID(foundUser.user_id, foundLeague);
 
     return (
-        <div className="flex items-center justify-between flex-wrap">
+        <div className="flex items-start justify-between flex-wrap">
             <div className="flex items-center">
                 <div className={styles.avatarBackground}>
                     <Image alt="avatar" width={100} height={100} src={`${SLEEPER_AVATAR_BASE_URL}${foundUser?.avatar}`}

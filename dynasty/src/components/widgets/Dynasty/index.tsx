@@ -2,11 +2,9 @@
 import styles from "./DynastyWidget.module.css";
 import React, { useState } from "react";
 import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
-import { placementRankings, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
+import { placementRankings, processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import AgeBarChart from "@/components/charts/BarCharts/AgeChart";
-import ValueRadarChart from "@/components/charts/RadarCharts/ValueChart";
 
 export default function DynastyWidget() {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -22,13 +20,16 @@ export default function DynastyWidget() {
     const [asc, setAsc] = useState<boolean>(false);
     const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
     const processedRosters: Interfaces.Roster[] = processRosters(legacyLeague[0], processedPlayers);
-    const sortedDynastyRosters: Interfaces.Roster[] = sortDynastyRosters(processedRosters, asc, sort, fantasyMarket);
     
     const findPositionRank = (rID: number) => {
-        const sortedQBDynastyRosters: Interfaces.Roster[] = sortDynastyRosters(processedRosters, asc, "QB", fantasyMarket).map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
-        const sortedRBDynastyRosters: Interfaces.Roster[] = sortDynastyRosters(processedRosters, asc, "RB", fantasyMarket).map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
-        const sortedWRDynastyRosters: Interfaces.Roster[] = sortDynastyRosters(processedRosters, asc, "WR", fantasyMarket).map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
-        const sortedTEDynastyRosters: Interfaces.Roster[] = sortDynastyRosters(processedRosters, asc, "TE", fantasyMarket).map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
+        const sortedQBDynastyRosters: Interfaces.Roster[] = sortDynastyRostersByMarket(processedRosters, asc, "QB", fantasyMarket)
+        .map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
+        const sortedRBDynastyRosters: Interfaces.Roster[] = sortDynastyRostersByMarket(processedRosters, asc, "RB", fantasyMarket)
+        .map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
+        const sortedWRDynastyRosters: Interfaces.Roster[] = sortDynastyRostersByMarket(processedRosters, asc, "WR", fantasyMarket)
+        .map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
+        const sortedTEDynastyRosters: Interfaces.Roster[] = sortDynastyRostersByMarket(processedRosters, asc, "TE", fantasyMarket)
+        .map((roster, i) => {return {...roster, settings:{...roster.settings, rank: i + 1}}});
         const qbRank: number = sortedQBDynastyRosters.find(roster => roster.roster_id === rID)?.settings.rank!;
         const rbRank: number = sortedRBDynastyRosters.find(roster => roster.roster_id === rID)?.settings.rank!;
         const wrRank: number = sortedWRDynastyRosters.find(roster => roster.roster_id === rID)?.settings.rank!;
@@ -123,11 +124,7 @@ export default function DynastyWidget() {
                     </div>
                     {showTeam ?
                     <div className="py-3 text-xs border-t border-dashed border-[#0f0f0f]">
-                        <div className="flex items-center">
-                            <AgeBarChart roster={roster} rosters={sortedRosters}/>
-                            <ValueRadarChart roster={roster} rosters={sortedRosters}/>
-                        </div>
-                        <div className="flex items-top">
+                        <div className="flex items-start">
                             {teamDetails("qb", dynastyValue, roster)}
                             {teamDetails("rb", dynastyValue, roster)}
                             {teamDetails("wr", dynastyValue, roster)}

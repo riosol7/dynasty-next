@@ -131,7 +131,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
     const recentLeague = findLeagueBySeason(legacyLeague[0].season, legacyLeague);
     const rivalryOpponent = findRosterByRosterID(rivalryStats.records[0]?.opponentID, recentLeague.rosters);
     const allTime = selectSeason === "All Time" ? true : false;
-    
+
     return (
         <div className="mt-5 pt-5" style={{minWidth:"300px"}}>
             <div style={{fontSize:"14px"}}>
@@ -190,10 +190,10 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                             }</p>
                             <p className="w-5/12 flex items-center">{
                                 allTime ?
-                                `${winPCT(allTimeTotalWins, allTimeTotalLosses)}
-                                ${winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}`:
-                                `${winPCT(totalSeasonWins, totalSeasonLosses)}
-                                ${winPCT(totalSeasonWins, totalSeasonLosses).toString().length === 2 ? ".00" : ""}`
+                                `${winPCT(allTimeTotalWins, allTimeTotalLosses)}${
+                                    winPCT(allTimeTotalWins, allTimeTotalLosses).toString().length === 2 ? ".00" : ""}` :
+                                `${winPCT(totalSeasonWins, totalSeasonLosses)}${
+                                    winPCT(totalSeasonWins, totalSeasonLosses).toString().length === 2 ? ".00" : ""}`
                             }<Icon icon="material-symbols:percent" style={{ color:"#a9dfd8", fontSize:"1em" }}/>
                             </p>
                             <p className="w-2/12 flex justify-end">{

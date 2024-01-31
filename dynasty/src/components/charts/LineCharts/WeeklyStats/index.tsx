@@ -8,6 +8,7 @@ import { useLeagueContext, useSeasonContext } from "@/context";
 export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
+    const allTime: boolean = selectSeason === "All Time"; 
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     const foundRoster: Interfaces.Roster = findRosterByName(name, league);
     const rID: number = foundRoster.roster_id;
@@ -39,7 +40,7 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
         
     const series = [
         {
-            name:foundRoster.owner.display_name,
+            name:foundRoster?.owner?.display_name,
             data: myPts
         },
         {
@@ -122,6 +123,7 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
         }
     };
     return (
+        allTime ? <></> :
         <Chart
             options={options} 
             series={series} 
@@ -129,5 +131,5 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
             height={350}
             width={"100%"} 
         />
-    )
-}
+    );
+};

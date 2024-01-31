@@ -36,7 +36,7 @@ export default function LeagueRankings() {
             <div className="flex items-center justify-between sticky top-0 pt-5 pb-2">
                 <div className="flex items-center">
                     <Icon icon="icon-park-outline:ranking" className="text-[#a9dfd8] text-1.1rem"/>
-                    <select className="m-0 mx-1 font-bold bg-black text-white border-none" onChange={handleRankings} value={rankings}>
+                    <select className="mx-1 font-bold bg-black text-white border-none" onChange={handleRankings} value={rankings}>
                         <option value={"Standings"}>Standings</option>
                         <option value={"Dynasty"}>Dynasty</option>
                         <option value={"Power"}>Power</option>
@@ -55,8 +55,7 @@ export default function LeagueRankings() {
                                 )}
                                 {(rankings ==="Standings" || rankings === "Power") && tournament === false ?
                                     <option value="All Time">All Time</option>
-                                :<></>
-                                }
+                                :<></>}
                             </select>
                         </div>
                     </div>
@@ -68,8 +67,7 @@ export default function LeagueRankings() {
                 <DynastyRankings/>
             : rankings === "Power" ?
                 <PowerRankings season={season}/>
-            : <></>
-            }
+            : <></>}
         </>
     );
 };

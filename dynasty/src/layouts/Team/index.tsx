@@ -73,8 +73,10 @@ export default function TeamLayout({ children, name }: Interfaces.TeamLayoutProp
                     </div>
                 </div>
             </div>
-            <div className={styles.teamBody}>
+            <div className={styles.header}>
                 <TeamHeader name={name}/>
+            </div>
+            <div className={styles.teamBody}>
                 {children}
             </div>
         </div>

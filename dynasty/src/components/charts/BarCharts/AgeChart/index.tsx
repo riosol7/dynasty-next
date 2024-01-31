@@ -30,9 +30,9 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
     };
 
     const avgRosterAgeByPosition = (position: string) => {
-        const validPlayers = roster.players.filter((element): element is Interfaces.Player => typeof element !== 'string');
+        const validPlayers = roster?.players?.filter((element): element is Interfaces.Player => typeof element !== 'string');
           
-        const positionPlayers = validPlayers.filter(
+        const positionPlayers = validPlayers?.filter(
             (player: Interfaces.Player) => player.position.toUpperCase() === position.toUpperCase()
         ).slice().sort((a, b) => {
             const aValue: number = Number((a[fantasyMarket as keyof typeof a] as Interfaces.MarketContent)?.value || 0);
@@ -40,7 +40,7 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
             return bValue - aValue;    
         });  
         
-        return roundToHundredth(positionPlayers.reduce((a,b) => a + Number(b.age), 0)/ positionPlayers.length);
+        return roundToHundredth(positionPlayers?.reduce((a,b) => a + Number(b.age), 0)/ positionPlayers?.length);
     };
 
     const avgQB = avgLeagueAgeByPosition("qb");
@@ -49,7 +49,7 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
     const avgTE = avgLeagueAgeByPosition("te");
 
     const series = [{
-        name:roster.owner.display_name,
+        name:roster?.owner?.display_name,
         data:[roundToHundredth(roundToHundredth(
             avgRosterAgeByPosition("qb") + avgRosterAgeByPosition("rb") + avgRosterAgeByPosition("wr") + avgRosterAgeByPosition("te")
             )/4), 

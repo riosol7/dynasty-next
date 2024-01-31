@@ -13,11 +13,11 @@ export default function ValueRadarChart({ roster, rosters }: {roster: Interfaces
     const leagueAvgWRs = roundToHundredth(rosters.reduce((a,b) => a + (b[fantasyMarket as keyof typeof b] as Interfaces.DynastyValue).wr, 0) / totalRosters)
     const leagueAvgTEs = roundToHundredth(rosters.reduce((a,b) => a + (b[fantasyMarket as keyof typeof b] as Interfaces.DynastyValue).te, 0) / totalRosters)
     
-    const dynastyMarket = (roster[fantasyMarket as keyof typeof roster] as Interfaces.DynastyValue);
+    const dynastyMarket = (roster && roster[fantasyMarket as keyof typeof roster] as Interfaces.DynastyValue);
     
     const series = [{
-        name: roster.owner.display_name,
-        data:[dynastyMarket.qb, dynastyMarket.rb, dynastyMarket.wr, dynastyMarket.te, 0],
+        name: roster?.owner?.display_name,
+        data:[dynastyMarket?.qb, dynastyMarket?.rb, dynastyMarket?.wr, dynastyMarket?.te, 0],
     },
     {
         name:"League Average",

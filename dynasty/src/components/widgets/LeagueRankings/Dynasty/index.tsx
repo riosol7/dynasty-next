@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
-import { handleSort, processPlayers, processRosters, sortDynastyRosters } from "@/utils";
+import { handleSort, processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
 import { 
     useFantasyMarket,
     useDynastyProcessContext,
@@ -99,7 +99,7 @@ export default function DynastyRankings() {
                     />
                 </div>
             </div>
-            {sortDynastyRosters(processedRosters, asc, sort, fantasyMarket)?.map((roster, i) => 
+            {sortDynastyRostersByMarket(processedRosters, asc, sort, fantasyMarket)?.map((roster, i) => 
                 <DynastyRow key={i} roster={roster} sort={sort} fantasyMarket={fantasyMarket}/>
             )}
         </>
