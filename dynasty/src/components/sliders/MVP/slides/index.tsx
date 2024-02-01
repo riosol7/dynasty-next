@@ -40,12 +40,7 @@ export default function MVPSlide({legacyLeague, mvpType, roster}: Interfaces.MVP
 
     return ( 
         <div className={styles.mvpLayout} style={{background: logo.bgColor}}>
-            <div className="flex" style={{
-                backgroundImage: `url(${logo.l})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "bottom left",
-                backgroundSize: "150px",
-            }}>
+            <div className={styles.mvpBackground} style={{backgroundImage: `linear-gradient(rgba(0, 0, 100, .1), rgba(0, 0, 0, .9)), url(${logo.l})`}}>
                 <div className="px-1">
                     <div className={styles.headshot} style={{backgroundImage: `url(${PLAYER_BASE_URL}${mvp?.player_id}.jpg)`}}></div>
                 </div>
@@ -58,7 +53,7 @@ export default function MVPSlide({legacyLeague, mvpType, roster}: Interfaces.MVP
                         <Image className={styles.ownerLogo} alt="avatar" width={25} height={25} src={`${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar}`}/>
                     </div>
                     <div className={`my-1 flex items-center ${styles.playerHUD} ${positionStyles[mvp?.position as keyof typeof positionStyles] || ""}`}>
-                        <p className="flex items-center text-sm" style={{fontSize: "12px", paddingLeft: "6px"}}>{mvp?.position}
+                        <p className="flex items-center text-sm" style={{fontSize: "12px", paddingInline: "6px"}}>{mvp?.position}
                             <span style={{color: "whitesmoke", fontWeight: "normal", paddingLeft: "12px"}}>
                                 {totalFantasyPointsByRoster(legacyLeague, roster.roster_id, mvp?.player_id).ppts}
                                 <span style={{color: "lightgray"}}> pts</span>

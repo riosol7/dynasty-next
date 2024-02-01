@@ -6,6 +6,7 @@ import DynastyWidget from "@/components/widgets/Dynasty";
 import { useFantasyMarket, useLeagueContext, usePlayerContext, useKTCContext, useSuperFlexContext, useFantasyCalcContext, useDynastyProcessContext, useFantasyProContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
+import TransactionList from "@/components/widgets/TransactionList";
 
 export default function Teams() {
     const { fantasyMarket } = useFantasyMarket()!;
@@ -46,19 +47,24 @@ export default function Teams() {
     }, [sortedDynastyRosters, selectedTeam1])
     
     return (
-        <div>
-            <div>
-                <select onChange={handleSelectTeam1} value={selectedTeam1} style={{background: "black"}}>
-                {sortedDynastyRosters.filter(roster => roster.owner.display_name !== selectedTeam2).map((roster, i) => 
-                    <option key={i} value={roster.owner.display_name}>{roster.owner.display_name}</option>
-                )}
-                </select>
-                <div className="flex items-center">
-                    <AgeBarChart roster={selectedRoster1} rosters={sortedRosters}/>
-                    <ValueRadarChart roster={selectedRoster1} rosters={sortedRosters}/>
+        <div className="flex items-start">
+            <div className="w-full">
+                <div>
+                    <select onChange={handleSelectTeam1} value={selectedTeam1} style={{background: "black"}}>
+                    {sortedDynastyRosters.filter(roster => roster.owner.display_name !== selectedTeam2).map((roster, i) => 
+                        <option key={i} value={roster.owner.display_name}>{roster.owner.display_name}</option>
+                    )}
+                    </select>
+                    <div className="flex items-center">
+                        <AgeBarChart roster={selectedRoster1} rosters={sortedRosters}/>
+                        <ValueRadarChart roster={selectedRoster1} rosters={sortedRosters}/>
+                    </div>
                 </div>
+                <DynastyWidget/>
             </div>
-            <DynastyWidget/>
+            <div className="w-3/12 pl-5">
+                <TransactionList/>
+            </div>
         </div>
     );
 };
