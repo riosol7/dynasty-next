@@ -23,9 +23,9 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
 
     return (
         <div>
-            <div className={styles.matchupHeader}>
+            <div className={styles.matchupNav}>
                 <div className="flex items-end">
-                    <div onClick={() => setShowModal(!showModal)} className={`${styles.hover} flex items-center text-2xl pt-2`}>
+                    <div onClick={() => setShowModal(!showModal)} className={`${styles.selectWeek}`}>
                         {`Week ${selectWeek}, ${selectSeason}`}
                         <Icon icon="eva:arrow-down-fill"/>
                         {showModal ?
@@ -77,7 +77,9 @@ export default function MatchupsLayout({ children, selectWeek, setSelectWeek }: 
                     </div>
                 </div>
             </div>
-            {children}
+            <div className={styles.body}>
+                {children}
+            </div>
         </div>
     );
 };

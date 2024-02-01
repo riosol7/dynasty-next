@@ -12,6 +12,7 @@
     font-weight: bolder;
     font-size: small;
     padding: 5px;
+    text-shadow: -1px -1px 0 #000, 2px -2px 3px #000, -2px 2px 3px #000, 2px 2px 3px #000;
 }
 
 .position {
@@ -19,6 +20,7 @@
     font-size: xx-small;
     font-weight: bolder;
     border-radius: 25%;
+    border: 1px solid black;
     padding: 5px;
     margin-top: 43px;
     position:absolute;

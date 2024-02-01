@@ -27,25 +27,20 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
         <Swiper breakpoints = {{
             1850: {
                 slidesPerView: 4,
-                spaceBetween: 20,
-                loop: true,
             },
             1520:{
                 slidesPerView: 3,
-                spaceBetween: 20,
-                loop: true,
             },
             1200:{
                 slidesPerView: 2,
-                spaceBetween: 20,
-                loop: true,
             },
             855:{
                 slidesPerView: 1,
-                spaceBetween: 20,
-                loop: true,
             },
-        }} slidesPerGroup={1} loop={true}>
+        }} 
+        slidesPerGroup={1}
+        spaceBetween={20}
+        loop={false}>
             {Array.isArray(selectedMatchups) && selectedMatchups.slice().map((matchupTeams: Interfaces.Match[], i: number) => {
             const team1 = matchupTeams && matchupTeams[0];
             const team2 = matchupTeams && matchupTeams[1];

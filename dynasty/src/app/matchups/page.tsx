@@ -9,7 +9,7 @@ import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "@/interfaces";
 import { getMatchups, sortMatchupsByHighestScore } from "@/utils";
 import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
-import PerformerList from "@/components/widgets/PerformerList";
+import Performer from "@/components/sliders/Performer";
 
 export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
@@ -35,9 +35,9 @@ export default function Matchups() {
     return (
         <SeasonProvider season={legacyLeague[0].season || ""}>
             <MatchupsLayout selectWeek={selectWeek} setSelectWeek={setSelectWeek}>
-                <div className="pt-5">
+                <div className="">
                     <h3 className={`${styles.header}`}><Icon icon="game-icons:american-football-helmet" className={`pr-1 ${styles.icon}`}/>Top Performers</h3>
-                    <PerformerList selectWeek={selectWeek}/>
+                    <Performer selectWeek={selectWeek}/>
                 </div>
                 <div className="pb-5">
                     <h3 className={styles.header}><Icon icon="tabler:vs" className={`pr-1 ${styles.icon}`}/>League Matchups</h3>
