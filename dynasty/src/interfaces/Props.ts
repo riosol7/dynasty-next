@@ -9,7 +9,6 @@ export interface MVPSlideProps {
 };
 
 export interface LeagueMatchupSliderProps {
-    selectWeek: number;
     matchup: Match[];
     setMatchup: React.Dispatch<React.SetStateAction<Match[]>>
 }
@@ -25,8 +24,8 @@ export interface LeagueNavProps {
 };
 
 export interface MatchupNavProps {
-    selectWeek: number;
-    setSelectWeek: React.Dispatch<React.SetStateAction<number>>
+    week: number;
+    season: string;
 };
 
 export interface DynastyRowProps {

@@ -2,20 +2,23 @@ import "swiper/swiper-bundle.css";
 import styles from "./LeagueMatchups.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Icon } from "@iconify-icon/react";
-import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
+import { useLeagueContext, usePlayerContext } from "@/context";
 import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth, sortMatchupsByHighestScore } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { useSearchParams } from "next/navigation";
 
-export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }: Interfaces.LeagueMatchupSliderProps) {
+export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.LeagueMatchupSliderProps) {
     const { legacyLeague } = useLeagueContext();
-    const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();
-    const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+    const searchParams = useSearchParams();
+    const week: number = Number(searchParams.get("week"))
+    const season: string = searchParams.get("season")!;
+    const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
-    const selectedMatchups = sortMatchupsByHighestScore(matchups[selectWeek - 1]);
+    const selectedMatchups = sortMatchupsByHighestScore(matchups[week - 1]);
 
     const selectedMatchup = (selectMatchup: Interfaces.Match[]): boolean => {
         const pointsA:boolean = matchup && matchup[0].points === selectMatchup[0].points;
@@ -97,7 +100,7 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
                                                         <p className="font-bold">{roster1.owner.display_name}</p>
                                                         <p className="text-xs">
                                                             <span className="text-[#34d367] mr-1">W</span>
-                                                            {findRecord(team1.roster_id, roster1Matchups, selectWeek - 1).record}
+                                                            {findRecord(team1.roster_id, roster1Matchups, week - 1).record}
                                                         </p> 
                                                     </div>
                                                 </div>
@@ -137,7 +140,7 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
                                                     <div className="mr-1">
                                                         <p className="font-bold">{roster2.owner.display_name}</p>
                                                         <p className="text-xs">
-                                                            {findRecord(team2.roster_id, roster2Matchups, selectWeek - 1).record}
+                                                            {findRecord(team2.roster_id, roster2Matchups, week - 1).record}
                                                             <span className="ml-1 text-[#cc1d00]">L</span>
                                                         </p>
                                                     </div>

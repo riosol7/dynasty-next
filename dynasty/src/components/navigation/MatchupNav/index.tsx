@@ -1,21 +1,24 @@
 "use client";
 import styles from "./Matchups.module.css";
 import { useState } from "react";
-import { useLeagueContext, useSeasonContext } from "@/context";
+import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
+import { useSearchParams } from "next/navigation";
 
-export default function MatchupNav({ selectWeek, setSelectWeek }: Interfaces.MatchupNavProps) {
+export default function MatchupNav() {
     const { legacyLeague } = useLeagueContext();
-    const { selectSeason, setSelectSeason } = useSeasonContext();
-    
+    const searchParams = useSearchParams();
+    const week: number = Number(searchParams.get("week"));
+    const season: string = searchParams.get("season")!; 
+    // const [selectWeek, setSelectWeek] = useState<number>();
     const [ showModal, setShowModal ] = useState<boolean>(false); 
-    const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+    const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
-    const selectedWeekMatchups = matchups && matchups[selectWeek - 1];
+    const selectedWeekMatchups = matchups && matchups[week - 1];
     const matchupList = selectedWeekMatchups?.flat().sort((a: Interfaces.Match, b: Interfaces.Match) => b.points - a.points);
     const bestOffense = matchupList && matchupList[0];
     const bestOffenseUser = findUserByRosterID(bestOffense?.roster_id, league);
@@ -26,19 +29,19 @@ export default function MatchupNav({ selectWeek, setSelectWeek }: Interfaces.Mat
         <nav className={styles.matchupNav}>
             <div className="flex items-end">
                 <div onClick={() => setShowModal(!showModal)} className={`${styles.selectWeek}`}>
-                    {`Week ${selectWeek}, ${selectSeason}`}
+                    {`Week ${week}, ${season}`}
                     <Icon icon="eva:arrow-down-fill"/>
                     {showModal ?
                     <div className={styles.modal}> 
                         <div className={`w-6/12 text-center ${styles.scroll}`}>
-                        {weeks.map((week, i) => 
+                        {/* {weeks.map((week, i) => 
                             <p key={i} className={styles.hover} onClick={() => setSelectWeek(i + 1)}>{week}</p>
                         )}    
                         </div>
                         <div className={`w-6/12 text-center ${styles.scroll}`}>
                         {legacyLeague.map((league, idx) =>
                             <p key={idx} className={styles.hover} onClick={() => setSelectSeason(league.season)}>{league.season}</p>
-                        )}
+                        )} */}
                         </div>
                     </div>
                     :<></>}

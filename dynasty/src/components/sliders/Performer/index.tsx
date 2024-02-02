@@ -2,10 +2,11 @@ import styles from "./Performer.module.css";
 import "swiper/swiper-bundle.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import React, { useState } from "react";
-import { useLeagueContext, useSeasonContext, usePlayerContext } from "@/context";
+import { useLeagueContext, usePlayerContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findUserByRosterID, getMatchups } from "@/utils";
-import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { PLAYER_BASE_URL, POSITION_COLORS } from "@/constants";
+import { useSearchParams } from "next/navigation";
 
 interface TopPerformingPlayer {
     roster_id: number;
@@ -14,15 +15,19 @@ interface TopPerformingPlayer {
     team_points: number;
 };
 
-export default function PerformerSlider({ selectWeek }: {selectWeek: number}) {
+export default function PerformerSlider() {
     const { legacyLeague } = useLeagueContext();
-    const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();
+    const searchParams = useSearchParams();
+
     const [listCount, setListCount] = useState<number>(25);
-    const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+
+    const week: number = Number(searchParams.get("week"))
+    const season: string | null = searchParams.get("season");    
+    const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
     const rosters = league.rosters;
     const matchups = getMatchups(league.matchups);
-    const selectedMatchups =  matchups && matchups[selectWeek - 1];
+    const selectedMatchups =  matchups && matchups[week - 1];
     const topPerformingPlayers = selectedMatchups?.slice().flat().map(
         (team: Interfaces.Match) => {
             const starters = team.starters.map((starter, j) => {

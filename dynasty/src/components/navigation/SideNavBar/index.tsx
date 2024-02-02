@@ -3,13 +3,18 @@ import styles from "./SideNavBar.module.css";
 import * as Interfaces from "@/interfaces";
 import { Icon } from '@iconify-icon/react';
 import { useLeagueContext } from '@/context';
-import { allUsers } from '@/utils';
+import { allUsers, getMatchups } from '@/utils';
 import { SLEEPER_AVATAR_BASE_URL } from '@/constants';
 
 export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps) {
     const { legacyLeague } = useLeagueContext();
     const [currentPath, setCurrentPath] = useState<string>('/');
-    const leagueID: string = legacyLeague[0]?.league_id;
+    
+    const currentLeague: Interfaces.League = legacyLeague[0]!;
+    const matchups = getMatchups(currentLeague.matchups);
+    const currentWeek: number = matchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0))
+        .filter(week => week.length > 0).length || 0;
+    const leagueID: string = currentLeague?.league_id;
     const users: Interfaces.Owner[] = allUsers(legacyLeague);
     const activeUsers: Interfaces.Owner[] = users?.filter(user => user.league_id === leagueID);
     const inactiveUsers: Interfaces.Owner[] = users?.filter(user => user.league_id !== leagueID);
@@ -20,7 +25,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
 
     const dashboardActive = currentPath === "/";
     const marketActive = currentPath === "/market";
-    const matchupsActive = currentPath === "/matchups";
+    const matchupsActive = currentPath.includes("/matchups");
     const playersActive = currentPath === "/players";
     const teamsActive = currentPath === "/teams";
 
@@ -45,7 +50,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
             case "Matchups":
                 navItemActive = matchupsActive;
                 iconName = "tabler:vs";
-                navLink = "/matchups";
+                navLink = `/matchups?week=${currentWeek}&season=${currentLeague?.season}`;
                 break;
 
             case "Players":

@@ -2,16 +2,18 @@ import styles from "./Matchup.module.css";
 import React from "react";
 import * as Interfaces from "@/interfaces";
 import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, roundToHundredth } from "@/utils";
-import { useLeagueContext, usePlayerContext, useSeasonContext } from "@/context";
+import { useLeagueContext, usePlayerContext } from "@/context";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { Position } from "@/types";
 import { Icon } from "@iconify-icon/react";
+import { useSearchParams } from "next/navigation";
 
 export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps) {
     const { legacyLeague } = useLeagueContext();
-    const { selectSeason } = useSeasonContext();
     const { players } = usePlayerContext();
-    const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+    const searchParams = useSearchParams();
+    const season: string = searchParams.get("season")!;
+    const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
     const rosters = league?.rosters;
     const matchups = league?.matchups;
     const team1 = matchup && matchup[0];
@@ -140,7 +142,7 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                 <p>Match History: - Games Played <Icon icon="ep:arrow-up-bold" style={{ color: "#a9dfd8"}}/></p>
                 <p>- W</p>
             </div>
-            <p className="text-center text-sm pb-2 pt-1">Week {foundWeekIndex + 1}, {selectSeason}</p>
+            <p className="text-center text-sm pb-2 pt-1">Week {foundWeekIndex + 1}, {season}</p>
 
             <div className="flex items-center justify-between">
                 <div className={styles.teamContainer}>
