@@ -9,14 +9,15 @@ import * as Interfaces from "../../../interfaces";
 function LeagueStatus({ league }: Interfaces.LeagueProps) {
     const statusClasses = {
         "pre_draft": "text-whitesmoke",
-        "complete": "text-whitesmoke",
         "in_season": "text-whitesmoke",
+        "post_season": "text-whitesmoke",
+        "complete": "text-whitesmoke",
     };
   
     return (
         <p className={`m-0 ${statusClasses[league.status]}`}>
             {league.status === "pre_draft" && "Pre Draft"}
-            {league.status === "complete" && "Post Season"}
+            {league.status === "complete" && "Finished Season"}
             {league.status === "in_season" && "In Season"}
             <span className="ml-2 text-white">{league.season}</span>
         </p>

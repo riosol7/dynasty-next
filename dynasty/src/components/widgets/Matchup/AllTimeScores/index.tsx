@@ -3,6 +3,7 @@ import { useLeagueContext } from "@/context";
 import { calculatePercentage, findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getMatchups, roundToHundredth } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
+import { Icon } from "@iconify-icon/react";
 
 export default function AllTimeScoreWidget() {
     const { legacyLeague } = useLeagueContext();
@@ -36,7 +37,15 @@ export default function AllTimeScoreWidget() {
 
     return (
         <div className={styles.allTimeContainer}>
-            <p className="font-bold pb-4">All Time Scores</p>
+            <div className="flex items-center justify-between mb-4 px-2">
+                <select className={styles.selectScoreList}>
+                    <option>{`All Time Scores`}</option>
+                    {legacyLeague.map((league, i) => 
+                        <option key={i}>{`${league.season} Scores`}</option>
+                    )}
+                </select>
+                <Icon icon="uiw:more" className={styles.transactionModalBtn}/>
+            </div>
             <div className="text-xs text-gray-400 flex items-center">
                 <p className="w-14">RANK</p>
                 <p className="w-32">DATE</p>

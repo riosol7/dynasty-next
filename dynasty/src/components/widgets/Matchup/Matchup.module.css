@@ -15,7 +15,9 @@
 }
 .teamLogo { 
     background-repeat: no-repeat;
-    background-size: 90px;
+    background-size:contain;
+    display: flex;
+    align-items: center;
 }
 .player {
     width: 100px;
@@ -27,14 +29,17 @@
 .playerInfo {
     font-size: x-small;
     border-radius: 20px;
-    background-color: rgba(180, 180, 180, 0.3);
+    background-color: rgba(180, 180, 180, 0.4);
     color: inherit;
     padding-inline: 4px;
     padding-block: 2px;
-    font-weight: 700;
     display: flex;
     align-items: center;
     width: fit-content;
+}
+.playerName {
+    font-size: 14.5px;
+    font-weight: 550;
 }
 .positionHUD {
     width: 30px;
@@ -74,8 +79,21 @@
 
 .allTimeContainer {
     padding-top: 16px;
-    padding-left: 24px;
+    text-align: center;
     font-size: smaller;
-    border: #0f0f0f solid 3px;
+    border: #2a2c3e solid 3px;
     width: fit-content;
+}
+
+.selectScoreList {
+    background-color: black;
+    font-weight: bold;    
+}
+
+.transactionModalBtn {
+    padding: 8px;
+}
+.transactionModalBtn:hover {
+    background-color: #111827;
+    border-radius: 8%;
 }

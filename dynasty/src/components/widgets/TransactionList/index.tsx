@@ -104,9 +104,13 @@ export default function TransactionList() {
   
   return (
     <div className={styles.transactionList}>
-      <p className="flex items-center justify-between font-bold px-4 py-3 border-b border-[#111827]">
-        Recent Transactions <Icon icon="uiw:more" className={styles.hover}/>
-      </p>
+      <div className="flex items-center justify-between font-bold pl-4 pr-2 py-3 border-b border-[#111827]">
+        <div className="flex items-center">
+          <Icon icon="carbon:cics-transaction-server-zos" className={`pr-1 ${styles.icon}`} style={{fontSize:"22px"}}/>
+          <p>Recent Transactions</p> 
+        </div>
+        <Icon icon="uiw:more" className={styles.transactionModalBtn}/>
+      </div>
       <div>
       {records.map((record, i) => {
         const creator = findUserByOwnerID(record.creator, users);

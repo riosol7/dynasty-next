@@ -48,10 +48,10 @@
     font-size: 1em;
 }
 
-.hover {
-    padding: 4px;
+.transactionModalBtn {
+    padding: 8px;
 }
-.hover:hover {
+.transactionModalBtn:hover {
     background-color: #111827;
     border-radius: 8%;
 }

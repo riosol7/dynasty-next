@@ -1,6 +1,6 @@
-.header {
+.sectionTitle {
     padding-top: 4em;
-    padding-bottom: 1.5em;
+    padding-bottom: 1em;
     font-size: 1em;
     font-weight: bold;
     display: flex;
@@ -10,4 +10,8 @@
 .icon {
     color: #a9dfd8;
     font-size: 1.6em;
+}
+
+.body {
+    padding-top: 34px;
 }

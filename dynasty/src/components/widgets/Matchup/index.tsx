@@ -48,23 +48,26 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
             const reverse = idx === 1;
             return ( 
                 <div key={i} className="mb-3"> 
-                    <div className="flex items-center" style={{ 
+                    <div style={{ 
                         background: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1)), ${findLogo(player.team).bgColor}`, 
                         flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start"
                     }}>
                         <div className={`${styles.teamLogo}`} style={{
-                            display: "flex",
-                            alignItems: "center",
                             flexDirection: reverse ? "row-reverse" : "row", 
                             textAlign: reverse ? "end" : "start",
-                            backgroundImage: `url(${findLogo(player.team).l})`,
+                            // backgroundImage: `linear-gradient(rgba(0, 0, 100, .1), rgba(0, 0, 0, .9)), url(${logo.l})`
+                            backgroundImage: 
+                            player.position === "DEF" ?  `url(${findLogo(player.team).l})` : 
+                            `linear-gradient(rgba(0, 0, 100, .1), rgba(0, 0, 0, .9)), url(${findLogo(player.team).l})`,
                             backgroundPosition: reverse ? "right" : "left"
                         }}>
                             <div className={styles.player} style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)` }}></div>
                             <div>
-                                <p className="text-sm font-bold">{player.first_name} {player.last_name}</p>
+                                <p className={styles.playerName}>{player.first_name} {player.last_name}</p>
                                 <div className={`flex ${reverse ? "justify-end" : "justify-start"}`}>
-                                    <div className={`my-1 ${styles.playerInfo}`} style={{ flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start" }}>
+                                    <div className={`my-1 ${styles.playerInfo}`} style={{ 
+                                        flexDirection: reverse ? "row-reverse" : "row", 
+                                        textAlign: reverse ? "end" : "start" }}>
                                         <p className={styles.position} style={{color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
                                         <p className={`${"mx-1"}`}>{player.team}</p>
                                         {player.position === "DEF" ? <></> : <p className={`font-light m${reverse ? "l" : "r"}-1`}>#{player.number}</p>}

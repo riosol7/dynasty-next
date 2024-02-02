@@ -41,7 +41,7 @@ export default function PerformerSlider({ selectWeek }: {selectWeek: number}) {
         return topPerformingPlayers?.slice(0, 25).map((player: TopPerformingPlayer, k: number) => {
             const user = findUserByRosterID(player.roster_id, league);
             const playerInfo = findPlayerByID(player.player_id, players);
-            const cardBackground = (idx: number) => {
+            const checkPodium = (idx: number) => {
                 switch(idx) {
                     case 0:
                         return styles.topPerformerCardBgGold
@@ -54,7 +54,7 @@ export default function PerformerSlider({ selectWeek }: {selectWeek: number}) {
                 }
             };
             return (
-                <SwiperSlide key={k} className={`${cardBackground(k)}`}>
+                <SwiperSlide key={k} className={`${checkPodium(k)}`}>
                     <div className={`${styles.topPerformerCard}`}>
                         <div className={`${styles.playerImage}`} style={
                             {backgroundImage: playerInfo.position === "DEF" ?
@@ -70,7 +70,7 @@ export default function PerformerSlider({ selectWeek }: {selectWeek: number}) {
                             <p className="pt-1">{player.points} 
                             <span className="pl-1 font-light">({calculatePercentage(player.points, player.team_points)}%)</span>
                             </p>
-                            <p className="pt-1">{user.display_name}</p>
+                            <p className={styles.username}>{user.display_name}</p>
                         </div>
                     </div>
                 </SwiperSlide>

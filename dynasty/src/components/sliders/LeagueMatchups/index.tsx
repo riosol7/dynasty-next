@@ -75,13 +75,17 @@ export default function LeagueMatchupSlider({ selectWeek, matchup, setMatchup }:
             const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
             return (
                 <SwiperSlide key={i}>
-                    <div className={`${styles.matchupCardContainer}`} style={{background: selectedMatchup(matchupTeams) ? `rgba(147,128,135,1)` : "black"}}>
+                    <div className={`${styles.matchupCardContainer}`} style={{background: selectedMatchup(matchupTeams) ? 
+                        ` linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)` : "black"}}>
                         <div className="p-2 bg-black">
                             <div className={`mr-5 ${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
                                 <div className={`${styles.matchupCardHeader}`}>
                                     <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
-                                        <div className={styles.playerBackground} style={(players.length > 0) ? {background:findLogo(topStarter1Details.team || "FA").bgColor}:{}}>
-                                            <div className={styles.teamLogo} style={{ backgroundImage:`url(${findLogo(topStarter1Details.team).l})`, backgroundPosition: topStarter1Details.position === "DEF" ? "center" : "top"}}>
+                                        <div className={styles.playerBackground} style={(players.length > 0) ? 
+                                            {background:findLogo(topStarter1Details.team || "FA").bgColor}:{}}>
+                                            <div className={styles.teamLogo} style={{ 
+                                                backgroundImage:`url(${findLogo(topStarter1Details.team).l})`,
+                                                backgroundPosition: topStarter1Details.position === "DEF" ? "center" : "top"}}>
                                                 <div className={styles.player} style={{ backgroundImage: `url(${PLAYER_BASE_URL}${topStarter1Details.player_id}.jpg)` }}></div>
                                             </div>
                                         </div>

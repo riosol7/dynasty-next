@@ -24,6 +24,11 @@ export interface LeagueNavProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export interface MatchupNavProps {
+    selectWeek: number;
+    setSelectWeek: React.Dispatch<React.SetStateAction<number>>
+};
+
 export interface DynastyRowProps {
     roster: Roster;
     sort: string;

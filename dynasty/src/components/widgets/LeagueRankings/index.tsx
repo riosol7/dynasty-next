@@ -1,4 +1,5 @@
 "use client";
+import styles from "./LeagueRankings.module.css";
 import React, { useState, useEffect } from "react";
 import { useLeagueContext } from "@/context";
 import { Icon } from "@iconify-icon/react";
@@ -35,7 +36,7 @@ export default function LeagueRankings() {
         <>
             <div className="flex items-center justify-between sticky top-0 pt-5 pb-2">
                 <div className="flex items-center">
-                    <Icon icon="icon-park-outline:ranking" className="text-[#a9dfd8] text-1.1rem"/>
+                    <Icon icon="ion:podium" className={styles.icon}/>
                     <select className="mx-1 font-bold bg-black text-white border-none" onChange={handleRankings} value={rankings}>
                         <option value={"Standings"}>Standings</option>
                         <option value={"Dynasty"}>Dynasty</option>
