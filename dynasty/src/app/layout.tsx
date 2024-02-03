@@ -1,4 +1,6 @@
+"use client";
 import "@/styles/globals.css";
+import styles from "./Dashboard.module.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
 import { 
@@ -10,9 +12,12 @@ import {
   DynastyProcessProvider,
   FantasyProProvider,
   FantasyMarketProvider,
+  useLeagueContext,
 } from "@/context";
 import * as Interfaces from "@/interfaces";
-import DashboardLayout from "@/layouts/Dashboard";
+import LeagueNav from "@/components/navigation/LeagueNav";
+import SideNavBar from "@/components/navigation/SideNavBar";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +27,8 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({children}: Interfaces.ChildrenProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -33,7 +40,13 @@ export default function RootLayout({children}: Interfaces.ChildrenProps) {
                   <DynastyProcessProvider>
                     <FantasyProProvider>
                       <FantasyMarketProvider>
-                        <DashboardLayout>{children}</DashboardLayout>
+                        <LeagueNav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
+                        <div className={styles.dashboardLayout}>
+                            <SideNavBar isSidebarOpen={isSidebarOpen}/>
+                            <div className={styles.dashboardContent}>
+                                {children}
+                            </div>
+                        </div>
                       </FantasyMarketProvider>
                     </FantasyProProvider>
                   </DynastyProcessProvider>

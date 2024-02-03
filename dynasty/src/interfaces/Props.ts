@@ -13,21 +13,6 @@ export interface LeagueMatchupSliderProps {
     setMatchup: React.Dispatch<React.SetStateAction<Match[]>>
 }
 
-export interface SideNavBarProps {
-    isSidebarOpen: boolean;
-};
-
-export interface LeagueNavProps {
-    league: League;
-    isSidebarOpen: boolean;
-    setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export interface MatchupNavProps {
-    week: number;
-    season: string;
-};
-
 export interface DynastyRowProps {
     roster: Roster;
     sort: string;

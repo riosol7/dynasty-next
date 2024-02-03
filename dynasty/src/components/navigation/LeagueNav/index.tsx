@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from '@iconify-icon/react';
@@ -37,14 +38,15 @@ function LeagueSettings({ league }: Interfaces.LeagueProps) {
     );
 };
 
-export default function LeagueNav({ league, isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
+export default function LeagueNav({ isSidebarOpen, setIsSidebarOpen }: Interfaces.LeagueNavProps) {
     const [currentPath, setCurrentPath] = useState('/');
 
     useEffect(() => {
         setCurrentPath(window.location.pathname);
     }, []);
     const { fantasyMarket, onChange } = useFantasyMarket()!;
-    const { loadLegacyLeague } = useLeagueContext();
+    const { legacyLeague, loadLegacyLeague } = useLeagueContext();
+    const league = legacyLeague[0];
     const matchupsActive = currentPath === "/matchups" ? true : false;
 
     return (
