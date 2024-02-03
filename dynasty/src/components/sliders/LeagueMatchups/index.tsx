@@ -7,11 +7,13 @@ import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, fin
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.LeagueMatchupSliderProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const searchParams = useSearchParams();
+
     const week: number = Number(searchParams.get("week"))
     const season: string = searchParams.get("season")!;
     const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
@@ -19,7 +21,19 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
     const selectedMatchups = sortMatchupsByHighestScore(matchups[week - 1]);
+    const [hoveredItems, setHoveredItems] = useState<boolean[]>(Array(selectedMatchups?.length).fill(false));
 
+    const handleMouseEnter = (index: number) => {
+        const updatedHoveredItems = [...hoveredItems];
+        updatedHoveredItems[index] = true;
+        setHoveredItems(updatedHoveredItems);
+    };
+
+    const handleMouseLeave = (index: number) => {
+        const updatedHoveredItems = [...hoveredItems];
+        updatedHoveredItems[index] = false;
+        setHoveredItems(updatedHoveredItems);
+    };
     const selectedMatchup = (selectMatchup: Interfaces.Match[]): boolean => {
         const pointsA:boolean = matchup && matchup[0].points === selectMatchup[0].points;
         const pointsB:boolean = matchup && matchup[1].points === selectMatchup[1].points;
@@ -78,8 +92,16 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
             const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
             return (
                 <SwiperSlide key={i}>
-                    <div className={`${styles.matchupCardContainer}`} style={{background: selectedMatchup(matchupTeams) ? 
-                        ` linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)` : "black"}}>
+                    <div
+                        className={`${styles.matchupCardContainer}`}
+                        style={{
+                            background: hoveredItems[i]
+                                ? `linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)`
+                                : "black",
+                        }}
+                        onMouseEnter={() => handleMouseEnter(i)}
+                        onMouseLeave={() => handleMouseLeave(i)}
+                    >
                         <div className="p-2 bg-black">
                             <div className={`mr-5 ${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
                                 <div className={`${styles.matchupCardHeader}`}>
