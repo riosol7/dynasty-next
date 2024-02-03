@@ -32,6 +32,8 @@
     border: none;
     border-radius: 16px;
     padding: 12px;
+    display: flex;
+    justify-content: center;
 }
 
 .topPerformerCardBgGold {
@@ -65,5 +67,11 @@
 .username {
     padding-top: 3px;
     color: #7d91a6;
-    font-weight: 600;
+    font-weight: 800;
+}
+
+.performerInfo {
+    text-align: center;
+    font-size: 10px;
+    padding-top: 18px;
 }

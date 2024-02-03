@@ -7,4 +7,4 @@ export default function TeamsLayout({children}: Interfaces.ChildrenProps) {
       {children}
     </div>
   );
-}
+};

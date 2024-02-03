@@ -21,7 +21,7 @@ import {
     calculatePercentage,
     findLogo, sortPlayersByFantasyMarket, processPlayers, processRosters,
     primeIndicator, 
-    isOdd, totalFantasyPointsByRoster, findLeagueBySeason, placementRankings, sortDynastyRosters, sortDynastyRostersByPosition } from "@/utils";
+    isOdd, totalFantasyPointsByRoster, findLeagueBySeason, placementRankings, sortDynastyRostersByPosition } from "@/utils";
 
 export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
@@ -111,7 +111,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
         marketValue: number, totalPts: { fpts: number, ppts: number },
     ) => (
         <div>
-            <div className="flex items-center justify-between px-1 pt-3">
+            <div className="flex items-center justify-between px-1 pr-2 pt-3">
                 <div className="flex items-center">
                     {arrow ?
                     <Icon
@@ -137,18 +137,18 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                     <p className="font-bold mx-1" style={{fontSize:"16px",color: color}}>{position}</p>
                     <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
                 </div>
-                <div className="flex items-center">
-                    <p className="flex items-center mr-2">
-                        <Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>
-                        {positionCount}
-                    </p>
-                    <div className="flex items-center mr-2">
+                <div className="flex items-center w-6/12">
+                    <div className="w-5/12 flex items-center">
                         <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
                         <p className="mx-1 flex items-center">{avgPositionAge}</p>
                     </div>
-                    <div className="flex items-center mr-2">
-                        <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"2px" }}/>
+                    <div className="w-5/12 flex items-center">
+                        <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"5px" }}/>
                         <p>{marketValue}</p>
+                    </div>
+                    <div className="w-2/12 flex items-center">
+                        <Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>
+                        <p>{positionCount}</p>
                     </div>
                 </div>
             </div>
@@ -232,7 +232,7 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     return (
         <div className="py-4">
             <div className={`${styles.performanceHeader} py-1`}> 
-                <p>{allTime ? `Active`: league.season} Roster</p>
+                <p>{allTime ? `Active Roster`: `${league.season} Offense`}</p>
             </div>
             <div className="flex flex-wrap">
                 <div className="w-1/4">

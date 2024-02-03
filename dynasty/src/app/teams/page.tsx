@@ -26,7 +26,7 @@ export default function Teams() {
 
     const [selectedTeam1, setSelectedShowTeam1] = useState<string>(sortedDynastyRosters[0]?.owner?.display_name || "");
     const [selectedTeam2, setSelectedShowTeam2] = useState<string>("");
-    console.log("selectedTeam1: ", selectedTeam1)
+    // console.log("selectedTeam1: ", selectedTeam1)
     const sortedRosters: Interfaces.Roster[] = processedRosters.slice().sort((a, b) => {
         const aValue = (a[fantasyMarket as keyof typeof a] as Interfaces.DynastyValue).rank;
         const bValue = (b[fantasyMarket as keyof typeof b] as Interfaces.DynastyValue).rank;

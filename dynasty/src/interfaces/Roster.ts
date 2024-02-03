@@ -9,6 +9,21 @@ export interface DynastyValue {
     te: number;
 };
 
+export interface TeamStatDepthInterface {
+    players: number;
+    validPlayers?: number;
+    age: string;
+    value: string;
+}
+
+export interface TeamStatInterface { 
+    qb: TeamStatDepthInterface,
+    rb: TeamStatDepthInterface,
+    wr: TeamStatDepthInterface,
+    te: TeamStatDepthInterface,
+    team: TeamStatDepthInterface;
+}
+
 interface RosterStats {
     fpts: number;
     fpts_against: number;

@@ -4,7 +4,6 @@ export default function Players() {
     return (
         <div>
             <PlayerList/>
-
         </div>
     );
 };

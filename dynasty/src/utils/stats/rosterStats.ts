@@ -1,29 +1,31 @@
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, processRosters, sortPlayersByFantasyMarket, calculateAverage, roundToHundredth, accumulatePoints } from "..";
 
-export const getTeamStats = (rID: number, selectSeason: string, legacyLeague: Interfaces.League[], fantasyMarket: string, processedPlayers: Interfaces.Player[]) => {
+export const getTeamStats = (rID: number, selectSeason: string, legacyLeague: Interfaces.League[], fantasyMarket: string, processedPlayers: Interfaces.Player[])  => {
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     
     const processedRosters = processRosters(league, processedPlayers);
     const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === rID)!;
+    const players: Interfaces.Player[] = (updatedRoster?.players as Interfaces.Player[])!;
+    const validPlayers: Interfaces.Player[] = players?.filter(player => player.position !== "DEF" && player.position !== "K")!;
+    const ks: Interfaces.Player[] = players?.filter(player => player.position === "K");
+    const def: Interfaces.Player[] = players?.filter(player => player.position === "DEF"); 
+    const qbs: Interfaces.Player[] = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "QB");
+    const rbs: Interfaces.Player[] = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "RB");
+    const wrs: Interfaces.Player[] = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "WR");
+    const tes: Interfaces.Player[] = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "TE");
+    const avgQBAge: number = calculateAverage(qbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), qbs?.length);
+    const avgRBAge: number = calculateAverage(rbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), rbs?.length);
+    const avgWRAge: number = calculateAverage(wrs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), wrs?.length);
+    const avgTEAge: number = calculateAverage(tes?.reduce((total, obj) => {return total + Number(obj.age)}, 0), tes?.length);
+    const avgTeamAge: number = calculateAverage(validPlayers?.reduce((total, obj) => {return total + Number(obj.age)}, 0), validPlayers?.length);
 
-    const validPlayers = (updatedRoster?.players as Interfaces.Player[])?.filter(player => player.position !== "DEF" && player.position !== "K")!;
-    const qbs = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "QB");
-    const rbs = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "RB");
-    const wrs = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "WR");
-    const tes = sortPlayersByFantasyMarket(validPlayers, fantasyMarket, "TE");
-    const avgQBAge = calculateAverage(qbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), qbs?.length);
-    const avgRBAge = calculateAverage(rbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), rbs?.length);
-    const avgWRAge = calculateAverage(wrs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), wrs?.length);
-    const avgTEAge = calculateAverage(tes?.reduce((total, obj) => {return total + Number(obj.age)}, 0), tes?.length);
-    const avgTeamAge = calculateAverage(validPlayers?.reduce((total, obj) => {return total + Number(obj.age)}, 0), validPlayers?.length);
-
-    const selectedRoster = (updatedRoster && updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
-    const qbMarketValue = selectedRoster?.qb;
-    const rbMarketValue = selectedRoster?.rb;
-    const wrMarketValue = selectedRoster?.wr;
-    const teMarketValue = selectedRoster?.te;
-    const teamMarketValue = roundToHundredth(
+    const selectedRoster: Interfaces.DynastyValue = (updatedRoster && updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
+    const qbMarketValue: number = selectedRoster?.qb;
+    const rbMarketValue: number = selectedRoster?.rb;
+    const wrMarketValue: number = selectedRoster?.wr;
+    const teMarketValue: number = selectedRoster?.te;
+    const teamMarketValue: number = roundToHundredth(
         qbMarketValue +
         rbMarketValue +
         wrMarketValue +
@@ -61,8 +63,15 @@ export const getTeamStats = (rID: number, selectSeason: string, legacyLeague: In
             age: avgTEAge,
             value: teMarketValue,
         },
+        k: {
+            players: ks?.length
+        },
+        def: {
+            players: def?.length
+        },
         team: {
-            players: validPlayers?.length,
+            players: updatedRoster?.players.length,
+            validPlayers: validPlayers?.length,
             age: avgTeamAge,
             value: teamMarketValue
         } 

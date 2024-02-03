@@ -1,5 +1,5 @@
-import styles from "./Performer.module.css";
 import "swiper/swiper-bundle.css";
+import styles from "./Performer.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import React, { useState } from "react";
 import { useLeagueContext, usePlayerContext } from "@/context";
@@ -61,21 +61,23 @@ export default function PerformerSlider() {
             return (
                 <SwiperSlide key={k} className={`${checkPodium(k)}`}>
                     <div className={`${styles.topPerformerCard}`}>
-                        <div className={`${styles.playerImage}`} style={
-                            {backgroundImage: playerInfo.position === "DEF" ?
-                            `url(${findLogo(playerInfo?.team).l}` : `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}
-                        }>
-                            <p className={styles.rank}>{k + 1}</p>
-                            <div className="flex justify-center">
-                                <p className={styles.position} style={{ color: POSITION_COLORS[playerInfo.position as keyof typeof POSITION_COLORS]}}>{playerInfo.position}</p>
+                        <div>
+                            <div className={`${styles.playerImage}`} style={
+                                {backgroundImage: playerInfo.position === "DEF" ?
+                                `url(${findLogo(playerInfo?.team).l}` : `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}
+                            }>
+                                <p className={styles.rank}>{k + 1}</p>
+                                <div className="flex justify-center">
+                                    <p className={styles.position} style={{ color: POSITION_COLORS[playerInfo.position as keyof typeof POSITION_COLORS]}}>{playerInfo.position}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="text-center text-xs pt-4">
-                            <p className="font-bold">{playerInfo.first_name[0]}. {playerInfo.last_name}</p>
-                            <p className="pt-1">{player.points} 
-                            <span className="pl-1 font-light">({calculatePercentage(player.points, player.team_points)}%)</span>
-                            </p>
-                            <p className={styles.username}>{user.display_name}</p>
+                            <div className={styles.performerInfo}>
+                                <p className="font-bold">{playerInfo.first_name[0]}. {playerInfo.last_name}</p>
+                                <p className="pt-1">{player.points} 
+                                <span className="pl-1 font-light">({calculatePercentage(player.points, player.team_points)}%)</span>
+                                </p>
+                                <p className={styles.username}>{user.display_name}</p>
+                            </div>
                         </div>
                     </div>
                 </SwiperSlide>

@@ -1,7 +1,6 @@
 import styles from "./TeamHeader.module.css";
 import Image from "next/image";
 import DraftWidget from "@/components/widgets/Draft";
-import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { findUserEXP, findUserByName, findRosterByOwnerID, findLeagueByTeamName, placementRankings } from "@/utils";
