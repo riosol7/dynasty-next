@@ -1,20 +1,30 @@
 "use client";
 import styles from "./Matchups.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
+interface queryFilter {
+    week: string;
+    season: string;
+}
 
 export default function MatchupNav() {
     const { legacyLeague } = useLeagueContext();
     const searchParams = useSearchParams();
+    const router = useRouter();
+
     const week: number = Number(searchParams.get("week"));
     const season: string = searchParams.get("season")!; 
-    // const [selectWeek, setSelectWeek] = useState<number>();
+    const [ selectWeek, setSelectWeek ] = useState<number>(Number(week));
+    const [ selectSeason, setSelectSeason ] = useState<string>(season)
     const [ showModal, setShowModal ] = useState<boolean>(false); 
-    const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
+    const [forceRerender, setForceRerender] = useState(false);
+
+    const league: Interfaces.League = findLeagueBySeason(selectSeason!, legacyLeague);
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
@@ -25,23 +35,47 @@ export default function MatchupNav() {
     const worstOffense = matchupList && matchupList[matchupList?.length - 1];
     const worstOffenseUser = findUserByRosterID(worstOffense?.roster_id, league);
 
+    const applySearch = (): void => {
+        const strWeek: string = selectWeek.toString();
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set("week", strWeek);
+        newSearchParams.set("season", selectSeason);
+
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.split('?')[0] + '?' + newSearchParams.toString();
+
+        router.replace(newUrl, undefined);
+    };
+
     return (
         <nav className={styles.matchupNav}>
             <div className="flex items-end">
-                <div onClick={() => setShowModal(!showModal)} className={`${styles.selectWeek}`}>
+                <div onMouseEnter={() => setShowModal(true)} onMouseLeave={() => setShowModal(false)} className={`${styles.selectWeek}`}>
                     {`Week ${week}, ${season}`}
                     <Icon icon="eva:arrow-down-fill"/>
                     {showModal ?
-                    <div className={styles.modal}> 
-                        <div className={`w-6/12 text-center ${styles.scroll}`}>
-                        {/* {weeks.map((week, i) => 
-                            <p key={i} className={styles.hover} onClick={() => setSelectWeek(i + 1)}>{week}</p>
+                    <div className={styles.modal}>
+                        <div className={`w-6/12 text-center ${styles.scroll} ${styles.selectWeekScroll}`}>
+                        {weeks.map((week, i) => 
+                            <p key={i} className={styles.hover} onClick={() => setSelectWeek(i + 1)}
+                            style={{
+                                fontWeight: selectWeek === i + 1? "bolder" : ""
+                            }}
+                            >{week}</p>
                         )}    
                         </div>
                         <div className={`w-6/12 text-center ${styles.scroll}`}>
                         {legacyLeague.map((league, idx) =>
-                            <p key={idx} className={styles.hover} onClick={() => setSelectSeason(league.season)}>{league.season}</p>
-                        )} */}
+                            <p key={idx} className={styles.hover} onClick={() => setSelectSeason(league.season)}
+                            style={{
+                                fontWeight: selectSeason === league.season? "bolder" : ""
+                            }}>{league.season}</p>
+                        )}
+                        </div>
+                        <div>
+                            <button onClick={() => applySearch()} className={styles.applySearch}>
+                                Apply
+                            </button>                        
                         </div>
                     </div>
                     :<></>}

@@ -94,6 +94,10 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
                 <SwiperSlide key={i}>
                     <div
                         className={`${styles.matchupCardContainer}`}
+                        // style={{
+                        //     padding: hoveredItems[i] 
+                        //     ? `0px` : `4px`
+                        // }}
                         style={{
                             background: hoveredItems[i]
                                 ? `linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)`
@@ -103,7 +107,7 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
                         onMouseLeave={() => handleMouseLeave(i)}
                     >
                         <div className="p-2 bg-black">
-                            <div className={`mr-5 ${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
+                            <div className={`${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
                                 <div className={`${styles.matchupCardHeader}`}>
                                     <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
                                         <div className={styles.playerBackground} style={(players.length > 0) ? 
@@ -202,7 +206,7 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
                                     </div>
                                     <div className="flex justify-between border-b border-[black] py-2">
                                         <p className="">{totalPtsScored} / 0 pts</p>
-                                        <p className="">Total Points Scored ({placementRankings(i + 1)})</p>
+                                        <p className="">Total Points Scored: {placementRankings(i + 1)}</p>
                                         <p className="">{totalPtsScored} / 0 pts</p>
                                     </div>
                                     <div className="flex justify-between border-b border-[black] py-2">

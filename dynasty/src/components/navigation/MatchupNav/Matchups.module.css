@@ -1,3 +1,10 @@
+.hover {
+    padding-block: 2px;
+}
+.hover:hover {
+    background-color: #0f0f0f;
+    border-radius: 5%;
+}
 .selectWeek:hover {
     background-color: #0f0f0f;
     border-radius: 5%;
@@ -9,20 +16,48 @@
     display: flex;
     align-items: center;
     font-size: x-large;
+    width: 220px;
+
 }
 
 .modal {
-    border-radius: 5px;
+    border-radius: 2px;
     display: flex;
+    /* flex-wrap: wrap; */
     position: absolute;
-    width: 200px;
+    width: 220px;
     height: 200px;
-    background-color: #2e2e2e;
-    padding: 12px;
+    background-color: rgba(65, 65, 65, 0.9);
+    padding: 8px;
     z-index: 1;
     top: 95%; /* Adjust the value as needed */
     left: 0;
     font-size: 12px;
+}
+
+ /* For WebKit (Chrome, Safari) */
+.selectWeekScroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.selectWeekScroll::-webkit-scrollbar-thumb {
+    background-color: #757575;
+    border-radius: 5px;
+}
+
+.selectWeekScroll::-webkit-scrollbar-track {
+    background-color: inherit;
+}
+
+.applySearch {
+    background-color: black;
+    color: white;
+    padding: 4px;
+    padding-inline: 10px;
+    margin-left: 4px;
+}
+.applySearch:hover {
+    color: #a9dfd8;
 }
 
 .scroll {
