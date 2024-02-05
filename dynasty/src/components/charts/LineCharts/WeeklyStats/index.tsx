@@ -56,7 +56,6 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
         chart: {
             animations: {
                 enabled: false,
-                easing: 'linear',
                 dynamicAnimation: {
                     speed: 1000
                 }
@@ -73,7 +72,6 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
             toolbar: {
                 show: false
             },
-            type: 'line',
             stacked: false,
         },
         colors:[

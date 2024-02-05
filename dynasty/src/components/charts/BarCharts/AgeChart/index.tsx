@@ -29,7 +29,7 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
         return avgAge;
     };
 
-    const avgRosterAgeByPosition = (position: string) => {
+    const avgRosterAgeByPosition = (position: string): number => {
         const validPlayers = roster?.players?.filter((element): element is Interfaces.Player => typeof element !== 'string');
           
         const positionPlayers = validPlayers?.filter(
@@ -40,13 +40,13 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
             return bValue - aValue;    
         });  
         
-        return roundToHundredth(positionPlayers?.reduce((a,b) => a + Number(b.age), 0)/ positionPlayers?.length);
+        return roundToHundredth(positionPlayers?.reduce((a,b) => a + Number(b.age), 0)/ positionPlayers?.length) || 0;
     };
 
-    const avgQB = avgLeagueAgeByPosition("qb");
-    const avgRB = avgLeagueAgeByPosition("rb");
-    const avgWR = avgLeagueAgeByPosition("wr");
-    const avgTE = avgLeagueAgeByPosition("te");
+    const avgQB: number = avgLeagueAgeByPosition("qb");
+    const avgRB: number = avgLeagueAgeByPosition("rb");
+    const avgWR: number = avgLeagueAgeByPosition("wr");
+    const avgTE: number = avgLeagueAgeByPosition("te");
 
     const series = [{
         name:roster?.owner?.display_name,
@@ -69,7 +69,6 @@ export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Ros
     }];
     const options = {
         chart: {
-            type: 'bar',
             foreColor: '#b0b0b2',
             toolbar: {
                 show: false
