@@ -73,24 +73,27 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                 <p className={styles.playerName}>{player.first_name} {player.last_name}</p>
                                 <div className={`flex justify-between items-end ${reverse ? "justify-end pl-1" : "justify-start pr-1"}`}>
                                     {reverse ?
-                                    <p className="text-xs mb-1">{team.players_points[player.player_id]} pts
-                                        <span className="ml-1">
+                                    <p className="text-xs mb-1" style={{}}>
+                                        <span className="mr-1">
                                         ({calculatePercentage(team.players_points[player.player_id], team.points)}%)
                                         </span>
-                                    </p>                                    
+                                        <span className="font-bold">{team.players_points[player.player_id]}</span> pts
+
+                                    </p>                                   
                                     :<></>}
                                     <div className={`mb-4 ${styles.playerInfo}`} style={{ 
-                                        borderRadius: reverse ? "10px 0px 7px 5px" : "0px 10px 5px 7px",
+                                        borderRadius: reverse ? "5px 5px 5px 5px" : "5px 5px 5px 5px",
                                         flexDirection: reverse ? "row-reverse" : "row", 
                                         textAlign: reverse ? "end" : "start" }}>
                                         <p className={styles.position} style={{
-                                            borderRadius: reverse ? "0px 0px 7px 0px" : "0px 0px 0px 7px",
+                                            borderRadius: reverse ? "0px 0px 5px 0px" : "0px 0px 0px 5px",
                                             color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
                                         <p className={`${"mx-1"}`}>{player.team}</p>
                                         {player.position === "DEF" ? <></> : <p className={`font-light m${reverse ? "l" : "r"}-1`}>#{player.number}</p>}
                                     </div>
                                     {reverse ? <></> :
-                                    <p className="text-xs mb-1">{team.players_points[player.player_id]} pts
+                                    <p className={`text-xs mb-1 `}>
+                                        <span className="font-bold">{team.players_points[player.player_id]}</span> pts
                                         <span className="ml-1">
                                         ({calculatePercentage(team.players_points[player.player_id], team.points)}%)
                                         </span>
@@ -109,8 +112,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                             <p className="text-xs">{team.players_points[player.player_id]} / {team.points} pts ({calculatePercentage(team.players_points[player.player_id], team.points)}%)</p>
                         </div> */}
                     </div>
-                    <div className={styles.statContainer}>
-                        <p>24/32 CMP, 241 YD, 2 INT, 3 CAR, 33 YD, 1 FUM, 1 FUM LOST</p>
+                    <div className={styles.statContainer} style={{flexDirection: reverse ? "row-reverse" : "row"}}>
+                        <p>-/- CMP, - YD, - INT, - CAR, - YD, - FUM, - FUM LOST</p>
                     </div>
                 </div>
             );
@@ -153,20 +156,11 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                     </div>
                 </div>
             </div>
-            <div className="flex justify-between bg-gray-700 rounded-full h-1.5 my-1">
+            <div className="flex justify-between bg-gray-700 rounded-full h-1.5 mt-1 mb-2">
                 <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${team1Percentage}%` }}></div>
                 {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
                 <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
             </div>
-            <div className="py-2 border-b-2 border-[#0f0f0f] flex items-center justify-between text-sm">
-                <p>- W</p>
-                <p className="font-light">Match History 
-                <span className="font-bold mx-1">-</span> 
-                Games Played <Icon icon="ep:arrow-up-bold" style={{ color: "#a9dfd8"}}/></p>
-                <p>- W</p>
-            </div>
-            <p className="text-center text-sm pb-2 pt-1">Week {week}, {season}</p>
-
             <div className="flex items-center justify-between">
                 <div className={styles.teamContainer}>
                     {playerList(team1 , 0)}

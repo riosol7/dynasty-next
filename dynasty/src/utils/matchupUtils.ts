@@ -33,6 +33,19 @@ export const getMatchups = (matchups: Interfaces.Match[][], rID?: number) => {
     };
 };
 
+export const getLegacyMatchup = (legacyLeague: Interfaces.League[]): Interfaces.Match[][] => {
+    return legacyLeague.map(league => getMatchups(league.matchups).flat())
+    .flat().sort((a, b) => {
+        const aTeam1Score = a[0].points;
+        const aTeam2Score = a[1].points;
+        const aTotalScore = aTeam1Score + aTeam2Score;
+        const bTeam1Score = b[0].points;
+        const bTeam2Score = b[1].points;
+        const bTotalScore = bTeam1Score + bTeam2Score;  
+        return bTotalScore - aTotalScore;
+    });
+};
+
 export const findRecord = (rID: number, matches: Interfaces.Match[][], week: number) => {
     let wins: number = 0;
     let losses: number = 0;

@@ -10,6 +10,7 @@ import { findLeagueBySeason, getMatchups, sortMatchupsByHighestScore } from "@/u
 import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
 import PerformerSlider from "@/components/sliders/Performer";
 import { useSearchParams } from "next/navigation";
+import LegacyMatchup from "@/components/widgets/Matchup/LegacyMatchup";
 
 export default function Matchups() {
     const { legacyLeague } = useLeagueContext();
@@ -45,11 +46,14 @@ export default function Matchups() {
                 </h3>
                 <LeagueMatchupSlider matchup={matchup} setMatchup={setMatchup}/>
             </div>
-            <div className="py-5 flex">
-                <div className="pr-5 mr-5">
+            <div className="py-5 mt-5 flex items-start">
+                <div className="mr-5 pr-3">
                     <MatchupWidget matchup={matchup}/>
                 </div>
-                <AllTimeScoreWidget/>
+                <div className="w-full">
+                    <LegacyMatchup matchup={matchup}/>
+                    <AllTimeScoreWidget/>
+                </div>
             </div>
         </SeasonProvider>
     );

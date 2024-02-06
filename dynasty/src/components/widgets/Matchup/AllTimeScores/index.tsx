@@ -1,6 +1,6 @@
 import styles from "../Matchup.module.css";
 import { useLeagueContext } from "@/context";
-import { calculatePercentage, findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getMatchups, roundToHundredth } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getLegacyMatchup, getMatchups, roundToHundredth } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { Icon } from "@iconify-icon/react";
@@ -8,22 +8,13 @@ import { Icon } from "@iconify-icon/react";
 export default function AllTimeScoreWidget() {
     const { legacyLeague } = useLeagueContext();
    
-    const topMatchupScores = legacyLeague.map(league => getMatchups(league.matchups).flat())
-    .flat().sort((a, b) => {
-        const aTeam1Score = a[0].points;
-        const aTeam2Score = a[1].points;
-        const aTotalScore = aTeam1Score + aTeam2Score;
-        const bTeam1Score = b[0].points;
-        const bTeam2Score = b[1].points;
-        const bTotalScore = bTeam1Score + bTeam2Score;  
-        return bTotalScore - aTotalScore;
-    }).slice(0, 30).map(a => 
+    const topMatchupScores = getLegacyMatchup(legacyLeague).slice(0, 10).map(a => 
         a.sort((a: any, b: any) => a.points - b.points)
     );
 
     const showTeamInfo = (user: any, teamScore: any, totalScore: any) => {
         return (
-        <div className="w-44 flex items-center">
+        <div className="w-3/12 flex items-center">
             <div className={`mr-1 ${styles.userAvatar}`} 
             style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user.avatar})`}}>
             </div>
@@ -37,7 +28,7 @@ export default function AllTimeScoreWidget() {
 
     return (
         <div className={styles.allTimeContainer}>
-            <div className="flex items-center justify-between mb-4 px-2">
+            <div className="flex items-center justify-between border-b-2 border-[#0f0f0f] font-bold pb-3">
                 <select className={styles.selectScoreList}>
                     <option>{`All Time Scores`}</option>
                     {legacyLeague.map((league, i) => 
@@ -46,12 +37,12 @@ export default function AllTimeScoreWidget() {
                 </select>
                 <Icon icon="uiw:more" className={styles.transactionModalBtn}/>
             </div>
-            <div className="text-xs text-gray-400 flex items-center">
-                <p className="w-14">RANK</p>
-                <p className="w-32">DATE</p>
-                <p className="w-32">TOTAL POINTS</p>
-                <p className="w-44">LOSING TEAM</p>
-                <p className="w-44">WINNING TEAM</p>
+            <div className="text-xs text-gray-400 flex items-center pt-4">
+                <p className="w-1/12">RANK</p>
+                <p className="w-2/12">DATE</p>
+                <p className="w-2/12">TOTAL POINTS</p>
+                <p className="w-3/12">LOSING TEAM</p>
+                <p className="w-3/12">WINNING TEAM</p>
             </div>
             {topMatchupScores.slice().map((matchup: Interfaces.Match[], i) => {
                 const team1Score = matchup[0].points;
@@ -65,9 +56,9 @@ export default function AllTimeScoreWidget() {
                 const totalScore = roundToHundredth(team1Score + team2Score);
                 return (
                     <div key={i} className="flex items-center py-3">
-                        <p className="w-14 text-gray-200 font-bold">{i + 1}</p>
-                        <p className="w-32">Week {week}, {season}</p>
-                        <p className="w-32">{totalScore}</p>
+                        <p className="w-1/12 text-gray-200 font-bold">{i + 1}</p>
+                        <p className="w-2/12">Week {week}, {season}</p>
+                        <p className="w-2/12">{totalScore}</p>
                         {showTeamInfo(user1, team1Score, totalScore)}
                         {showTeamInfo(user2, team2Score, totalScore)}
                     </div>
