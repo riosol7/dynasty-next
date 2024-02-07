@@ -20,7 +20,7 @@ const positionStyles = {
 export default function MVPSlide({legacyLeague, mvpType, roster}: Interfaces.MVPSlideProps) {
     const { fantasyMarket } = useFantasyMarket()!;
 
-    const [mvp, setMVP] = useState<Interfaces.Player>(Constants.initPlayer);
+    const [mvp, setMVP] = useState<Interfaces.Player>(Constants.initPlayer)!;
     const [loadMVP, setLoadMVP] = useState<boolean>(true)
 
     useEffect(() => {
@@ -63,7 +63,9 @@ export default function MVPSlide({legacyLeague, mvpType, roster}: Interfaces.MVP
                     <div className="flex items-center mx-2" style={{marginTop: ".8em"}}>
                         <div className="flex items-center" style={{width: "60px"}}>
                             <Icon icon="fa6-solid:ranking-star" style={{fontSize: "22px", color: "#a9dfd8"}}/>
-                            <p className="text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>{(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent)?.rank}</p>
+                            <p className="text-sm" style={{fontSize: "12px", paddingLeft: "4px"}}>
+                                {(mvp[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent)?.rank}
+                            </p>
                         </div>
                         <div className="flex items-center">
                             <Image src={value} alt="value" width={25} height={25}/>

@@ -5,7 +5,7 @@
 
 .teamContainer {
     background-color: inherit;
-    width: 330px;
+    width: max-content;
 }
 .teamAvatar {
     min-width: 80px; 

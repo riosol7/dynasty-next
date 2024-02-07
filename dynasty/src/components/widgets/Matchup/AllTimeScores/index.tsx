@@ -15,11 +15,12 @@ export default function AllTimeScoreWidget() {
     const showTeamInfo = (user: any, teamScore: any, totalScore: any) => {
         return (
         <div className="w-3/12 flex items-center">
-            <div className={`mr-1 ${styles.userAvatar}`} 
+            <div className={`mr-2 ${styles.userAvatar}`} 
             style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${user.avatar})`}}>
             </div>
             <div>
-                <p className="font-bold">{user.display_name}</p> 
+                <p className="font-bold">{user.metadata?.team_name ? 
+                user?.metadata?.team_name : user?.display_name}</p> 
                 <p>{teamScore} pts ({calculatePercentage(teamScore, totalScore)}%)</p>
             </div>
         </div>

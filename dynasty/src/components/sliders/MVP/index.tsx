@@ -42,8 +42,8 @@ export default function MVPSlider() {
                 <div className="flex items-center">
                     <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
                     <select className={`"mx-1 font-bold flex items-center ${styles.selectTag}`} onChange={handleMVPType} value={mvpType}>
-                        <option value={"Dynasty"}>Dynasty MVPs</option>
-                        <option value={"Fantasy"}>Fantasy MVPs</option>
+                        <option value={"Dynasty"}>Dynasty MVP</option>
+                        <option value={"Fantasy"}>Fantasy MVP</option>
                     </select>
                 </div>
                 <a className={styles.anchorCell} href={`/players`}>

@@ -1,7 +1,7 @@
 import styles from "./Matchup.module.css";
 import React from "react";
 import * as Interfaces from "@/interfaces";
-import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, roundToHundredth } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findPlayerByPts, findRecord, findRosterByRosterID, findUserByRosterID, getMatchups, roundToHundredth } from "@/utils";
 import { useLeagueContext, usePlayerContext } from "@/context";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { Position } from "@/types";
@@ -120,41 +120,57 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
         })
     };
 
+    const matchupHeader = (
+        team: Interfaces.Match, 
+        score: number, 
+        roster: Interfaces.Roster, 
+        matchups: Interfaces.Match[][],
+        reverse: boolean,
+        ) => {
+        const user: Interfaces.Owner = findUserByRosterID(roster.roster_id, league);
+        return (
+            <div className={`${styles.teamContainer}`} style={{ 
+                flexDirection: reverse ? "row-reverse" : "row", 
+                textAlign: reverse ? "end" : "start",}}>
+                <div className="flex items-center">
+                    {reverse ? <></> :
+                    <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>                    
+                    }
+                    <div className={`m${reverse ? "r" : "l"}-2 text-sm`}>
+                        <div>
+                            <p className="font-bold">{user.metadata?.team_name ? 
+                            user?.metadata?.team_name : user?.display_name}</p> 
+                        </div>
+                        <p className="">                                                        
+                            {reverse ? <></> :
+                            <span className={`font-bold text-[#34d367] mr-1`}>W</span>}
+                            {findRecord(team?.roster_id, matchups, week - 1).record}
+                            {!reverse ? <></> :
+                            <span className={`font-bold text-[#cc1d00] ml-1`}>L</span>}
+                        </p> 
+                        <p className="text-xs"style={{ 
+                            flexDirection: reverse ? "row-reverse" : "row", 
+                            textAlign: reverse ? "end" : "start",}}>Season Avg -</p>
+                        <p className="flex items-center pt-1"style={{ 
+                            flexDirection: reverse ? "row-reverse" : "-moz-initial", 
+                            textAlign: reverse ? "end" : "-moz-initial",}}>
+                            <Icon icon="octicon:dot-fill-16" style={{ color: reverse ? "#CD5C5C" : "#818CF8", fontSize: "12px" }}/>
+                            {team1Score} ({calculatePercentage(score, totalPtsScored)}%)
+                        </p>
+                    </div>
+                    {!reverse ? <></> :
+                    <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>                    
+                    }
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div>
             <div className="flex items-center justify-between pb-1">
-                <div className={styles.teamContainer}>
-                    <div className="flex items-center">
-                        <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster1?.owner?.avatar})`}}></div>
-                        <div className="ml-2 text-sm">
-                            <p className="font-bold text-xl">{roster1.owner?.display_name}</p>
-                            <p className="">                                                        
-                                <span className="font-bold text-[#34d367] mr-1">W</span>
-                                {findRecord(team1?.roster_id, roster1Matchups, week - 1).record}
-                            </p> 
-                            <p className="flex items-center pt-1">
-                                <Icon icon="octicon:dot-fill-16" style={{ color: "#818CF8", fontSize: "12px" }}/>
-                                {team1Score} ({calculatePercentage(team1Score, totalPtsScored)}%)
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className={`${styles.teamContainer}`} style={{ flexDirection: "row-reverse", textAlign: "end" }}>
-                    <div className="flex items-center justify-end">
-                        <div className="mr-2 text-sm">
-                            <p className="font-bold text-xl">{roster2.owner?.display_name}</p>
-                            <p>                                                        
-                                {findRecord(team2?.roster_id, roster2Matchups, week - 1).record}
-                                <span className="ml-1 text-[#cc1d00] font-bold">L</span>
-                            </p>
-                            <p className="flex items-center justify-end pt-1">
-                                {team2Score} ({calculatePercentage(team2Score, totalPtsScored)}%)
-                                <Icon icon="octicon:dot-fill-16" style={{ color: "#CD5C5C", fontSize: "12px" }}/>
-                            </p>
-                        </div>
-                        <div className={styles.teamAvatar} style={{backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster2?.owner?.avatar})`}}></div>
-                    </div>
-                </div>
+                {matchupHeader(team1, team1Score, roster1, roster1Matchups, false)}
+                {matchupHeader(team2, team2Score, roster2, roster2Matchups, true)}
             </div>
             <div className="flex justify-between bg-gray-700 rounded-full h-1.5 mt-1 mb-2">
                 <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${team1Percentage}%` }}></div>

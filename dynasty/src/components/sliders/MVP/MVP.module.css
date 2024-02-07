@@ -79,3 +79,8 @@
     background-color: black;
     color: white;
 }
+
+.selectTag:focus {
+    outline: none;
+    border: none;
+}
