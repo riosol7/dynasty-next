@@ -17,13 +17,17 @@ import {
 } from "@/context";
 import { 
     accumulatePoints, 
-    calculateAverage, 
     calculatePercentage,
     findLogo, sortPlayersByFantasyMarket, processPlayers, processRosters,
     primeIndicator, 
-    isOdd, totalFantasyPointsByRoster, findLeagueBySeason, placementRankings, sortDynastyRostersByPosition } from "@/utils";
+    isOdd, 
+    totalFantasyPointsByRoster, 
+    findLeagueBySeason, 
+    placementRankings, 
+    sortDynastyRostersByPosition, 
+    getTeamStats } from "@/utils";
 
-export default function Roster({ roster, tab }: Interfaces.RosterProps) {
+export default function Roster({ roster }: Interfaces.RosterProps) {
     const { legacyLeague } = useLeagueContext();
     const { selectSeason } = useSeasonContext();
     const { fantasyMarket } = useFantasyMarket()!;
@@ -33,20 +37,22 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
-    // const [allTime, setAllTime] = useState<boolean>(false);
     const rID = roster.roster_id;
     const allTime = selectSeason === "All Time" ? true : false;
-    // const handleAllTime = (): void => {
-    //     setAllTime(!allTime);
-    // };
     const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const teamStats = getTeamStats(rID, selectSeason, legacyLeague, fantasyMarket, processedPlayers);
+    
     const league = findLeagueBySeason(selectSeason, legacyLeague);
     const processedRosters = processRosters(league, processedPlayers);
     const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === rID)!;
-    const dynastyQBRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "QB").find(roster => roster.roster_id === rID)?.settings.rank;
-    const dynastyRBRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "RB").find(roster => roster.roster_id === rID)?.settings.rank;
-    const dynastyWRRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "WR").find(roster => roster.roster_id === rID)?.settings.rank;
-    const dynastyTERank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "TE").find(roster => roster.roster_id === rID)?.settings.rank;
+    const dynastyQBRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "QB")
+    .find(roster => roster.roster_id === rID)?.settings.rank;
+    const dynastyRBRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "RB")
+    .find(roster => roster.roster_id === rID)?.settings.rank;
+    const dynastyWRRank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "WR")
+    .find(roster => roster.roster_id === rID)?.settings.rank;
+    const dynastyTERank = sortDynastyRostersByPosition(processedRosters, fantasyMarket, "TE")
+    .find(roster => roster.roster_id === rID)?.settings.rank;
     const dynastyRankings = {
         QB: dynastyQBRank || 0,
         RB: dynastyRBRank || 0,
@@ -63,20 +69,27 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
     const topWR = wrs[0];
     const topTE = tes[0];
 
-    const avgQBAge = calculateAverage(qbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), qbs?.length);
-    const avgRBAge = calculateAverage(rbs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), rbs?.length);
-    const avgWRAge = calculateAverage(wrs?.reduce((total, obj) => {return total + Number(obj.age)}, 0), wrs?.length);
-    const avgTEAge = calculateAverage(tes?.reduce((total, obj) => {return total + Number(obj.age)}, 0), tes?.length);
-    const selectedRoster = (updatedRoster && updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
-    const qbMarketValue = selectedRoster?.qb;
-    const rbMarketValue = selectedRoster?.rb;
-    const wrMarketValue = selectedRoster?.wr;
-    const teMarketValue = selectedRoster?.te;
+    const avgQBAge = teamStats.qb.age;
+    const avgRBAge = teamStats.rb.age;
+    const avgWRAge = teamStats.wr.age;
+    const avgTEAge = teamStats.te.age;
+    const qbMarketValue = teamStats?.qb.value;
+    const rbMarketValue = teamStats?.rb.value;
+    const wrMarketValue = teamStats?.wr.value;
+    const teMarketValue = teamStats?.te.value;
 
-    const totalQBPoints = allTime ? accumulatePoints(rID, qbs, legacyLeague) : accumulatePoints(rID, qbs, legacyLeague, selectSeason);
-    const totalRBPoints = allTime ? accumulatePoints(rID, rbs, legacyLeague) : accumulatePoints(rID, rbs, legacyLeague, selectSeason);
-    const totalWRPoints = allTime ? accumulatePoints(rID, wrs, legacyLeague) : accumulatePoints(rID, wrs, legacyLeague, selectSeason);
-    const totalTEPoints = allTime ? accumulatePoints(rID, tes, legacyLeague) : accumulatePoints(rID, tes, legacyLeague, selectSeason);
+    const totalQBPoints = allTime ? 
+    accumulatePoints(rID, qbs, legacyLeague) : 
+    accumulatePoints(rID, qbs, legacyLeague, selectSeason);
+    const totalRBPoints = allTime ? 
+    accumulatePoints(rID, rbs, legacyLeague) : 
+    accumulatePoints(rID, rbs, legacyLeague, selectSeason);
+    const totalWRPoints = allTime ? 
+    accumulatePoints(rID, wrs, legacyLeague) : 
+    accumulatePoints(rID, wrs, legacyLeague, selectSeason);
+    const totalTEPoints = allTime ? 
+    accumulatePoints(rID, tes, legacyLeague) : 
+    accumulatePoints(rID, tes, legacyLeague, selectSeason);
 
     const [showQBs, setShowQBs] = useState<Boolean>(true)
     const [qbArrow, setQbArrow] = useState<Boolean>(false)
@@ -134,27 +147,32 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                             borderRadius:"50%"
                         }}
                     />}
-                    <p className="font-bold mx-1" style={{fontSize:"16px",color: color}}>{position}</p>
+                    <p className="font-bold mx-1" 
+                    style={{fontSize:"16px",color: color}}>{position}</p>
                     <p className="flex items-center">{placementRankings(dynastyRankings[position as keyof typeof dynastyRankings])}</p>
                 </div>
                 <div className="flex items-center w-6/12">
                     <div className="w-5/12 flex items-center">
-                        <Icon icon="material-symbols:avg-pace-sharp" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
+                        <Icon icon="material-symbols:avg-pace-sharp" 
+                        style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"0px" }}/>
                         <p className="mx-1 flex items-center">{avgPositionAge}</p>
                     </div>
                     <div className="w-5/12 flex items-center">
-                        <Icon icon="fluent:person-tag-20-regular" style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"5px" }}/>
+                        <Icon icon="fluent:person-tag-20-regular" 
+                        style={{ fontSize:"24px", color:"#a9dfd8", marginRight:"5px" }}/>
                         <p>{marketValue}</p>
                     </div>
                     <div className="w-2/12 flex items-center">
-                        <Icon icon="fluent:people-team-16-filled" style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>
+                        <Icon icon="fluent:people-team-16-filled" 
+                        style={{color:"#a9dfd8", fontSize:"21px", marginRight:"2px"}}/>
                         <p>{positionCount}</p>
                     </div>
                 </div>
             </div>
             <div className="pt-1">
                 <div className="bg-gray-700 h-1 mt-1">
-                    <div className="bg-indigo-200 h-1" style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
+                    <div className="bg-indigo-200 h-1" 
+                    style={{ width: `${calculatePercentage(totalPts.fpts, totalPts.ppts)}%` }}></div>
                 </div>
                 <p className="text-center pt-1" style={{fontSize: "11.4px"}}>
                     <span className="text-[darkgray] mr-1">{allTime ? "All Time" : `${selectSeason} Season`}</span>
@@ -186,7 +204,6 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                         : <></>}
                     </div> 
                     <p className={styles.playerOwnedTitle}>DRAFTED {selectSeason}</p>
-
                 </div>
                 <div className="mx-2 w-full" style={{ fontSize: ".9rem" }}>
                     <div className="flex items-center">
@@ -214,7 +231,8 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                         </div>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-1.5 my-1">
-                        <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%` }}></div>
+                        <div className="bg-indigo-400 h-1.5 rounded-full" 
+                        style={{ width: `${calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%` }}></div>
                     </div>
                     <p className="text-center text-xs"> 
                         <span className="text-[darkgray] mr-1">{selectSeason === "All Time" ? "All Time" : `${selectSeason} Season`}</span>
@@ -222,7 +240,6 @@ export default function Roster({ roster, tab }: Interfaces.RosterProps) {
                         <span className="font-bold" style={{color:"#7c90a5"}}> pts </span> 
                         ({calculatePercentage(playerPoints.fpts, playerPoints.ppts)}%) 
                         <span className="text-[darkgray] mr-1"> Avg.</span>0
- 
                     </p>
                 </div>
             </div>

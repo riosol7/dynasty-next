@@ -1,7 +1,19 @@
 import styles from "./Matchup.module.css";
 import React from "react";
 import * as Interfaces from "@/interfaces";
-import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findPlayerByPts, findRecord, findRosterByRosterID, findUserByRosterID, getAllPlayStats, getMatchups, roundToHundredth, totalPointsPerGame } from "@/utils";
+import { 
+    calculatePercentage, 
+    findLeagueBySeason, 
+    findLogo, 
+    findPlayerByID, 
+    findPlayerByPts, 
+    findRecord, 
+    findRosterByRosterID, 
+    findUserByRosterID, 
+    getAllPlayStats, 
+    getMatchups, 
+    roundToHundredth, 
+    totalPointsPerGame } from "@/utils";
 import { useLeagueContext, usePlayerContext } from "@/context";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { Position } from "@/types";
@@ -44,7 +56,9 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
 
     const topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
     const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
-
+    const week17Season: boolean = Number(season) <= 2020 && foundWeekIndex < 14 || 
+    Number(season) > 2020 && foundWeekIndex < 15
+    
     const playerList = (team: Interfaces.Match, idx: number) => {
         return team?.starters?.slice().map((starter, i) => { 
             const player = findPlayerByID(starter, players);
@@ -65,9 +79,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                             backgroundPosition: reverse ? "right" : "left",
                         }}>
                             {player.position === "DEF" ?
-                            <div className={`${styles.teamLogo}`} style={{backgroundImage: `url(${findLogo(player.team).l})`}}>
-                            </div>
-                            : <div className={`${styles.player}`} style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)` }}></div>
+                            <div className={`${styles.teamLogo}`} style={{backgroundImage: `url(${findLogo(player.team).l})`}}></div>
+                            : <div className={`${styles.player}`} style={{backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`}}></div>
                             }
                             <div className="w-2/3">
                                 <p className={styles.playerName}>{player.first_name} {player.last_name}</p>
@@ -78,16 +91,13 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                                         ({calculatePercentage(team.players_points[player.player_id], team.points)}%)
                                         </span>
                                         <span className="font-bold">{team.players_points[player.player_id]}</span> pts
-
-                                    </p>                                   
-                                    :<></>}
+                                    </p>:<></>}
                                     <div className={`mb-5 ${styles.playerInfo}`} style={{ 
-                                        borderRadius: reverse ? "5px 5px 5px 5px" : "5px 5px 5px 5px",
-                                        flexDirection: reverse ? "row-reverse" : "row", 
-                                        textAlign: reverse ? "end" : "start" }}>
+                                    borderRadius: reverse ? "5px 5px 5px 5px" : "5px 5px 5px 5px",
+                                    flexDirection: reverse ? "row-reverse" : "row"}}>
                                         <p className={styles.position} style={{
-                                            borderRadius: reverse ? "0px 0px 5px 0px" : "0px 0px 0px 5px",
-                                            color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
+                                        borderRadius: reverse ? "0px 0px 5px 0px" : "0px 0px 0px 5px",
+                                        color: `${POSITION_COLORS[player.position as Position]}`}}>{player.position}</p>
                                         <p className={`${"mx-1"}`}>{player.team}</p>
                                         {player.position === "DEF" ? <></> : <p className={`font-light m${reverse ? "l" : "r"}-1`}>#{player.number}</p>}
                                     </div>
@@ -105,12 +115,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                     <div>
                         <div className="flex justify-between bg-gray-700 h-1.5" style={{ flexDirection: reverse ? "row" : "row-reverse", textAlign: reverse ? "end" : "start" }}>
                             <div className="h-1.5" style={{ width: `${calculatePercentage(team.players_points[player.player_id], team.points)}%`, background: reverse ? "#CD5C5C" : "#818CF8" }}></div>
-                            {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
-                            <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
+                            {/* <div className="h-1.5" style={{ width: `${calculatePercentage(team.players_points[player.player_id], team.points)}%`, background: findLogo(player.team).bgColor2 }}></div> */}
                         </div>
-                        {/* <div className="flex items-center justify-between text-xs pt-1" style={{ flexDirection: reverse ? "row-reverse" : "row", textAlign: reverse ? "end" : "start" }}>
-                            <p className="text-xs">{team.players_points[player.player_id]} / {team.points} pts ({calculatePercentage(team.players_points[player.player_id], team.points)}%)</p>
-                        </div> */}
                     </div>
                     <div className={styles.statContainer} style={{flexDirection: reverse ? "row-reverse" : "row"}}>
                         <p>-/- CMP, - YD, - INT, - CAR, - YD, - FUM, - FUM LOST</p>
@@ -133,80 +139,75 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
         const allPlayStats = getAllPlayStats(rID, season, legacyLeague);
         const weeklyAllPlayRecord = allPlayStats?.weeklyRecord?.[foundWeekIndex]!;
         const exceptionCurrentOwnerAllPlayTotalRosters = rosters.length - 1;
-
+        
         return (
-            <div className={`${styles.teamContainer}`} style={{ 
+            <div className={`${styles.teamContainer}`}>
+                <div className="flex items-end" style={{ 
                 flexDirection: reverse ? "row-reverse" : "row", 
                 textAlign: reverse ? "end" : "start",}}>
-                <div className="flex items-center">
-                    {reverse ? <></> :
                     <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>                    
-                    }
                     <div className={`m${reverse ? "r" : "l"}-2 text-sm`}>
                         <div>
                             <p className="font-bold">{user.metadata?.team_name ? 
                             user?.metadata?.team_name : user?.display_name}</p> 
                         </div>
-                        <p className="flex" style={{ flexDirection: reverse ? "row-reverse" : "row" }}>                                                        
-                            <span className={`font-bold text-[${reverse ? "#cc1d00" : "#34d367"}] m${reverse ?
-                            "l" : "r"}-1`}>{reverse ? "L" : "W"}</span>
-                            {findRecord(team?.roster_id, matchups, week - 1).record}
-                            <span className={`text-[darkgray] m${reverse ? "r" : "l"}-1`}>(- th)</span>
-                        </p>
-                        <div className={`pt-1 text-xs flex items-center justify-${reverse ? "end" : "start"}`}>
-                            <p>Season Avg {totalPointsPerGame(roster?.roster_id, seasonFPTS, legacyLeague, season)}</p>
-                        </div>
-                        {Number(season) <= 2020 && foundWeekIndex < 14 || 
-                        Number(season) > 2020 && foundWeekIndex < 15 ?
-                            <div className={`text-xs flex justify-end items-center`} style={{ 
-                            flexDirection: !reverse ? "row-reverse" : "row" }}>
-                                <div className="flex items-center" style={{ 
-                                flexDirection: reverse ? "row-reverse" : "row"}}>
+                        <div className={week17Season ? "" : "pt-1 pb-2"}>
+                            <p className="flex" style={{ flexDirection: reverse ? "row-reverse" : "row" }}>                                                        
+                                <span className={`font-bold text-[${reverse ? "#cc1d00" : "#34d367"}] m${reverse ?
+                                "l" : "r"}-1`}>{reverse ? "L" : "W"}</span>
+                                {findRecord(team?.roster_id, matchups, week - 1).record}
+                                <span className={`text-[darkgray] m${reverse ? "r" : "l"}-1`}>(- th)</span>
+                            </p>
+                            <div className={`pt-1 text-xs flex items-center justify-${reverse ? "end" : "start"}`}>
+                                <p>Season Avg {totalPointsPerGame(roster?.roster_id, seasonFPTS, legacyLeague, season)}</p>
+                            </div>
+                            {week17Season ?
+                                <div className={`text-xs flex justify-end items-center`} style={{ 
+                                flexDirection: !reverse ? "row-reverse" : "row" }}>
                                     <div className="flex items-center" style={{ 
-                                    flexDirection: reverse ? "row-reverse" : "row" }}>
-                                        <Icon icon="material-symbols:arrow-drop-up-rounded" style={{color:"#42f3e9", fontSize:"2.5em"}}/>
-                                        <p>{weeklyAllPlayRecord?.wins}</p>
+                                    flexDirection: reverse ? "row-reverse" : "row"}}>
+                                        <div className="flex items-center" style={{ 
+                                        flexDirection: reverse ? "row-reverse" : "row" }}>
+                                            <Icon icon="material-symbols:arrow-drop-up-rounded" style={{color:"#42f3e9", fontSize:"2.5em"}}/>
+                                            <p>{weeklyAllPlayRecord?.wins}</p>
+                                        </div>
+                                        <div className="flex items-center" style={{ 
+                                        flexDirection: reverse ? "row-reverse" : "row" }}>
+                                            <Icon icon="material-symbols:arrow-drop-down-rounded" style={{color:"#f85012", fontSize:"2.5em"}}/>
+                                            <p>{weeklyAllPlayRecord?.losses}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center" style={{ 
-                                    flexDirection: reverse ? "row-reverse" : "row" }}>
-                                        <Icon icon="material-symbols:arrow-drop-down-rounded" style={{color:"#f85012", fontSize:"2.5em"}}/>
-                                        <p>{weeklyAllPlayRecord?.losses}</p>
-                                    </div>
-                                </div>
-                                {matchup.map((team, index) => 
-                                <div key={index} className={`flex items-center m${reverse ? "l" : "r"}-1`}>
-                                    { index === 0 ?
-                                        index === 0 && team.roster_id === roster?.roster_id ?
-                                            roundToHundredth(100-(weeklyAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100) !== 0 ?
-                                                <div className="flex items-center" style={{ 
-                                                flexDirection: !reverse ? "row-reverse" : "row"}}>
-                                                    <p className="px-1">{roundToHundredth(100-(weeklyAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
-                                                    <Icon icon="emojione-monotone:four-leaf-clover" style={{ fontSize:"14px", color:"#289a5d" }}/>
-                                                </div>
-                                            : <Icon icon="fluent-emoji-flat:crown" style={{ fontSize:"16px" }}/>
-                                        :
-                                            weeklyAllPlayRecord?.losses === exceptionCurrentOwnerAllPlayTotalRosters ?
+                                    {matchup?.map((team, index) => 
+                                    <div key={index} className={`flex items-center m${reverse ? "l" : "r"}-1`}>
+                                        {index === 0 ?
+                                            index === 0 && team.roster_id === roster?.roster_id ?
+                                                roundToHundredth(100-(weeklyAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100) !== 0 ?
+                                                    <div className="flex items-center" style={{ 
+                                                    flexDirection: !reverse ? "row-reverse" : "row"}}>
+                                                        <p className="px-1">{roundToHundredth(100-(weeklyAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
+                                                        <Icon icon="emojione-monotone:four-leaf-clover" style={{ fontSize:"14px", color:"#289a5d" }}/>
+                                                    </div>
+                                                : <Icon icon="fluent-emoji-flat:crown" style={{ fontSize:"16px" }}/>
+                                            : weeklyAllPlayRecord?.losses === exceptionCurrentOwnerAllPlayTotalRosters ?
                                                 <Icon icon="emojione-v1:pile-of-poo" style={{ fontSize:"16px", color:"#724b21" }}/>
                                             :
                                                 <div className="flex items-center">
                                                     <p className="px-1">{roundToHundredth(0-(weeklyAllPlayRecord?.wins!/exceptionCurrentOwnerAllPlayTotalRosters)*100)}</p>
                                                     <Icon icon="emojione-monotone:four-leaf-clover" style={{ fontSize:"14px", color:"#dab0af" }}/>
                                                 </div>
-                                    : <></> }
-                                </div>)}
-                            </div>
-                        :<></>} 
-                        <div className="pt-1 flex items-center"style={{ 
+                                        : <></>}
+                                    </div>)}
+                                </div>
+                            :<></>} 
+                        </div>
+                        <div className="flex items-center" style={{ 
                         flexDirection: reverse ? "row-reverse" : "-moz-initial", 
                         textAlign: reverse ? "end" : "-moz-initial",}}>
                             <Icon icon="octicon:dot-fill-16" className={`m${reverse ? "l": "r"}-1`} style={{ color: reverse ? "#CD5C5C" : "#818CF8", fontSize: "14px" }}/>
-                            <p>{score}</p>
+                            <p className="font-bold">{score}</p>
                             <p className={`m${reverse ? "r" : "l"}-1`}></p>({calculatePercentage(score, totalPtsScored)}%)
                         </div>
                     </div>
-                    {!reverse ? <></> :
-                    <div className={styles.teamAvatar} style={{ backgroundImage: `url(${SLEEPER_AVATAR_BASE_URL}${roster?.owner?.avatar})`}}></div>                    
-                    }
                 </div>
             </div>
         );
@@ -214,15 +215,11 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
 
     return (
         <div>
-            <div className="flex items-center justify-between pb-1">
+            <div className="flex justify-between pb-2">
                 {matchupHeader(team1, team1Score, roster1, roster1Matchups, false)}
                 {matchupHeader(team2, team2Score, roster2, roster2Matchups, true)}
             </div>
-            <div className="flex justify-between bg-gray-700 rounded-full h-1.5 mt-1 mb-2">
-                <div className="bg-indigo-400 h-1.5 rounded-full" style={{ width: `${team1Percentage}%` }}></div>
-                {/* <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer1Percentage}%`, backgroundColor: topStarter1Details?.team ? `${findLogo(topStarter1Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div>
-                <div className={`h-1.5 rounded-full`} style={{ width: `${topPlayer2Percentage}%`, backgroundColor: topStarter2Details?.team ? `${findLogo(topStarter2Details?.team).bgColor2}` : `rgba(165,172,175,1)` }}></div> */}
-            </div>
+            <div className={styles.totalScoreBar} style={{background: `linear-gradient(480deg, rgba(129,140,248,1) ${team1Percentage}%, rgba(205,92,92,1) 100%)`}}></div>
             <div className="flex items-center justify-between">
                 <div className={styles.teamContainer}>
                     {playerList(team1 , 0)}

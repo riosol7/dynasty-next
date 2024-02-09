@@ -1,9 +1,14 @@
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, processRosters, sortPlayersByFantasyMarket, calculateAverage, roundToHundredth, accumulatePoints } from "..";
 
-export const getTeamStats = (rID: number, selectSeason: string, legacyLeague: Interfaces.League[], fantasyMarket: string, processedPlayers: Interfaces.Player[])  => {
+export const getTeamStats = (
+    rID: number, 
+    selectSeason: string, 
+    legacyLeague: Interfaces.League[], 
+    fantasyMarket: string, 
+    processedPlayers: Interfaces.Player[])  => {
+        
     const league: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
-    
     const processedRosters = processRosters(league, processedPlayers);
     const updatedRoster = processedRosters.find(newRoster => newRoster.roster_id === rID)!;
     const players: Interfaces.Player[] = (updatedRoster?.players as Interfaces.Player[])!;
@@ -20,7 +25,8 @@ export const getTeamStats = (rID: number, selectSeason: string, legacyLeague: In
     const avgTEAge: number = calculateAverage(tes?.reduce((total, obj) => {return total + Number(obj.age)}, 0), tes?.length);
     const avgTeamAge: number = calculateAverage(validPlayers?.reduce((total, obj) => {return total + Number(obj.age)}, 0), validPlayers?.length);
 
-    const selectedRoster: Interfaces.DynastyValue = (updatedRoster && updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
+    const selectedRoster: Interfaces.DynastyValue = (updatedRoster && 
+    updatedRoster[fantasyMarket as keyof typeof updatedRoster] as Interfaces.DynastyValue);
     const qbMarketValue: number = selectedRoster?.qb;
     const rbMarketValue: number = selectedRoster?.rb;
     const wrMarketValue: number = selectedRoster?.wr;

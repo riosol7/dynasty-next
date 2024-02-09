@@ -2,7 +2,14 @@ import styles from "../Matchup.module.css";
 import React from "react";
 import * as Interfaces from "@/interfaces";
 import { Icon } from "@iconify-icon/react";
-import { calculatePercentage, findLeagueBySeason, findMatchupDateByPoints, findRosterByRosterID, findUserByRosterID, getLegacyMatchup, roundToHundredth } from "@/utils";
+import { 
+    calculatePercentage, 
+    findLeagueBySeason, 
+    findMatchupDateByPoints, 
+    findRosterByRosterID, 
+    findUserByRosterID, 
+    getLegacyMatchup, 
+    roundToHundredth } from "@/utils";
 import { useLeagueContext } from "@/context";
 import { useSearchParams } from "next/navigation";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
@@ -12,20 +19,18 @@ export default function LegacyMatchup({ matchup }: Interfaces.MatchupWidgetProps
     const searchParams = useSearchParams();
     const season: string = searchParams.get("season")!;
     const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
-    const rosters = league?.rosters;
-    const team1 = matchup && matchup[0]!;
-    const team2 = matchup && matchup[1]!;
-    const roster1 = findRosterByRosterID(team1?.roster_id, rosters!);
-    const roster2 = findRosterByRosterID(team2?.roster_id, rosters!);
-    const legacyMatchup = getLegacyMatchup(legacyLeague);
-    const filteredLegacyMatchup = legacyMatchup.filter((matchup: Interfaces.Match[]) => 
+    const rosters: Interfaces.Roster[] = league?.rosters;
+    const team1: Interfaces.Match = matchup && matchup[0]!;
+    const team2: Interfaces.Match = matchup && matchup[1]!;
+    const roster1: Interfaces.Roster = findRosterByRosterID(team1?.roster_id, rosters!);
+    const roster2: Interfaces.Roster= findRosterByRosterID(team2?.roster_id, rosters!);
+    const legacyMatchup: Interfaces.Match[][] = getLegacyMatchup(legacyLeague);
+    const filteredLegacyMatchup: Interfaces.Match[][] = legacyMatchup.filter((matchup: Interfaces.Match[]) => 
     (matchup[0]?.roster_id === team1?.roster_id && matchup[1]?.roster_id === team2?.roster_id) ||
     (matchup[0]?.roster_id === team2?.roster_id && matchup[1]?.roster_id === team1?.roster_id)
-    ).map(a => 
-        a.sort((a: any, b: any) => a.points - b.points)
-    );
+    ).map(a => a.sort((a: Interfaces.Match, b: Interfaces.Match) => a.points - b.points));
 
-    const showTeamInfo = (user: any, teamScore: any, totalScore: any) => {
+    const showTeamInfo = (user: Interfaces.Owner, teamScore: number, totalScore: number) => {
         return (
         <div className="w-3/12 flex items-center">
             <div className={`mr-2 ${styles.userAvatar}`} 
@@ -74,9 +79,6 @@ export default function LegacyMatchup({ matchup }: Interfaces.MatchupWidgetProps
                         {showTeamInfo(winningTeamUser, score2, totalScore)}  
                     </div>)
                 })}
-                <div className="">
-                    
-                </div>
             </div>
         </div>
     );
