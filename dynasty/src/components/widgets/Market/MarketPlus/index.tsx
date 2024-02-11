@@ -1,5 +1,5 @@
 "use client";
-import TrendChart from "@/components/charts/TrendChart";
+import TrendChart from "@/components/charts/LineCharts/TrendChart";
 import styles from "../Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { PLAYER_BASE_URL, POSITIONS } from "@/constants";

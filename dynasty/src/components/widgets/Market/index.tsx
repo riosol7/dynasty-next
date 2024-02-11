@@ -41,7 +41,9 @@ export default function MarketWidget() {
                 </div>
             </div>
             <PositionMarket waivers={waivers} selectSeason={selectSeason}/>
-            <WaiverActivity waivers={waivers} selectSeason={selectSeason}/>
+            <div className="py-4">
+                <WaiverActivity waivers={waivers} selectSeason={selectSeason}/>
+            </div>
         </div>
     );
 };

@@ -1,0 +1,18 @@
+.draftWidgetBackground {
+    background: linear-gradient(49deg, rgba(15,15,15,1) 0%, rgba(17,17,17,1) 100%);
+    color: white;
+    font-size: 14px;
+}
+.playerBioIcon {
+    font-size: 10x;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px; 
+}
+.teamLogo {
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 34px;
+    height: 34px;
+}

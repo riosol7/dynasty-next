@@ -2,7 +2,7 @@
 import styles from "./DynastyWidget.module.css";
 import React, { useState } from "react";
 import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
-import { placementRankings, processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
+import { findLeagueBySeason, placementRankings, processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 
@@ -85,9 +85,69 @@ export default function DynastyWidget() {
             </div>
         );
     };
-    
+    const recentSeason: string = legacyLeague && legacyLeague[0].season; 
+    const numberOfDivisions = legacyLeague[0].settings.divisions || 0;
+    const initialDivisionStates = Array.from({ length: numberOfDivisions }, () => (Interfaces.sortingConfig));
+    const [divisionStates, setDivisionStates] = useState(initialDivisionStates);
+    const [selectSeason, setSelectSeason] = useState<string>(recentSeason);
+    const foundRostersBySeason = findLeagueBySeason(selectSeason, legacyLeague).rosters;
+
+    const findDivisionRosters = (division: number) => {
+        return foundRostersBySeason?.filter(roster => roster.settings.division === division)
+        .map((roster, i) => { return {...roster, settings:{...roster.settings, rank: i + 1}}});
+    };
+    const calculateRosterStats = (rosters: Interfaces.Roster[], division?: number) => {
+        const foundRosters = division ? findDivisionRosters(division) : rosters;
+        const initialValue = {
+            wins: 0,
+            losses: 0,
+            ties: 0,
+            ppts: 0,
+            fpts: 0,
+            pa: 0,
+          };
+        const totals = foundRosters.reduce((acc, roster) => {
+            acc.wins += roster.settings.wins || 0;
+            acc.losses += roster.settings.losses || 0;
+            acc.ties += roster.settings.ties || 0;
+            acc.ppts += roster.settings.ppts || 0;
+            acc.fpts += roster.settings.fpts || 0;
+            acc.pa += roster.settings.fpts_against || 0;
+            return acc;
+        }, initialValue);
+
+        return totals;
+    };
     return (
         <div>
+            {/* <div className="text-sm py-4">
+                <div className={`pb-3 ${styles.performanceHeader} font-bold`} style={{borderBottom:"2px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
+                    <p className="w-7/12">DIVISIONS</p>
+                    <p className="w-2/12">RECORD</p>
+                    <p className="w-1/12">PF</p>
+                    <p className="w-1/12">MAX PF</p>
+                    <p className="w-1/12">PA</p>
+                </div>
+                {divisionStates.map((_, idx) => 
+                <div key={idx} className={`${styles.performanceSubTitleRow}`}>
+                    <p className="w-7/12">Division {idx + 1}</p>
+                    <p className="w-2/12">{calculateRosterStats(foundRostersBySeason, idx + 1).wins}
+                    -{calculateRosterStats(foundRostersBySeason, idx + 1).losses}
+                    -{calculateRosterStats(foundRostersBySeason, idx + 1).ties}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason, idx + 1).fpts}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason, idx + 1).ppts}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason, idx + 1).pa}</p>
+                </div>)}
+                <div className={styles.performanceEndTitleRow}>
+                    <p className="w-7/12">Total</p>
+                    <p className="w-2/12">{calculateRosterStats(foundRostersBySeason).wins}
+                    -{calculateRosterStats(foundRostersBySeason).losses}
+                    -{calculateRosterStats(foundRostersBySeason).ties}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason).fpts}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason).ppts}</p>
+                    <p className="w-1/12">{calculateRosterStats(foundRostersBySeason).pa}</p>
+                </div>
+            </div> */}
             <div className="flex items-center py-2 text-xs text-[lightgray]">
                 <p className="w-5/12">Team</p>
                 <p className="w-1/12">Record</p>

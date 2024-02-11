@@ -4,11 +4,14 @@
     align-items: center;
     justify-content: center;
 }
-
 .arrow:hover {
     border-radius: 50%;
     background-color: #111111;
     /* color: #a9dfd8;  not working? check Owner page match colon icon*/ 
+}
+.positionCell {
+    display: flex;
+    justify-content: center;
 }
 
 .qbHUD {
@@ -34,16 +37,19 @@
 .defHUD {
     background: linear-gradient( -135deg, rgb(191,95,64) 10%, rgba(250, 100, 0, 0.479) 100%);
 }
+.waiverCell {
+    text-align: center;
+}
 
 .playerHeadShot{
-    background-color:#dbdbde;
+    background-color:#adadada6;
     background-repeat: no-repeat;
-    background-position: center;
-    background-size:90px;
-    height: 55px;
-    width: 40px;
-    border-radius: 5%;
-    border: 0px solid black;
+    background-position: 50% 25%;
+    background-size: 130px;
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+    border: 0px ridge rgba(255, 235, 235, 0.815);
 }
 
 .positionedLogo{

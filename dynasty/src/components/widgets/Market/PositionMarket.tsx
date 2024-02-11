@@ -11,7 +11,7 @@ import {
     filteredTransactionsBySeason,
     roundToHundredth 
 } from "@/utils";
-import TrendChart from "@/components/charts/TrendChart";
+import TrendChart from "@/components/charts/LineCharts/TrendChart";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -26,7 +26,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
 
     return (
         <div className="py-3">
-            <div className={styles.positionHeader}>
+            <div className={`text-center ${styles.positionHeader}`}>
                 <div style={{ width: "70px" }}>POSITION</div>
                 <div className="w-3/12">{selectSeason === "All Time" ? selectSeason.toLocaleUpperCase() : selectSeason } TREND</div>
                 <div className="w-1/12">LAST PRICE</div>
@@ -48,17 +48,17 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                 const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid;
                 const prevPrice = recentWaivers && recentWaivers[1]?.settings?.waiver_bid;
                 return (
-                    <div key={i} className={`py-3 flex items-center text-sm ${
+                    <div key={i} className={`text-center py-3 flex items-center text-sm ${
                         i === POSITIONS.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"
                     }`}>
-                        <div style={{width: "70px"}}>
+                        <div style={{width: "70px"}} className={styles.positionCell}>
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
-                        <div className="w-3/12 pr-5">
-                            <TrendChart waivers={filteredWaivers} height={50}/>
+                        <div className={`w-3/12 pl-5 ${styles.positionCell}`}>
+                            <TrendChart waivers={filteredWaivers} height={50} width={420}/>
                         </div>
-                        <p className="w-1/12">{lastPrice}</p>
-                        <div className="w-1/12">
+                        <p className={`w-1/12 ${styles.positionCell}`}>{lastPrice}</p>
+                        <div className={`w-1/12 ${styles.positionCell}`}>
                             <p className={`${calculatePercentageChange(lastPrice, prevPrice) > 0 ? "text-green-500" : "text-red-500"}`}>
                             {calculatePercentageChange(lastPrice, prevPrice) > 0 ? "+" : ""}
                             {calculatePercentageChange(lastPrice, prevPrice)} %
@@ -68,8 +68,8 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <p className="w-1/12">{lowestBid}</p>
                         <p className="w-1/12">{highestBid}</p>
                         <p className="w-1/12">{volume}</p>
-                        <div className="w-2/12">
-                            <p className="text-xs">@{findTopSpender(waivers[position as keyof Waivers])?.owner}</p>
+                        <div className={`w-2/12`}>
+                            <p className="text-[darkgray]">@{findTopSpender(waivers[position as keyof Waivers])?.owner}</p>
                             <p>${findTopSpender(waivers[position as keyof Waivers])?.bid}</p>
                         </div>
                     </div>

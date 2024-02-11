@@ -4,7 +4,7 @@ import styles from "./Market.module.css";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext } from "@/context";
 import { filteredTransactionsBySeason, findLogo, getSortedTransactionRecords, handleSort, nextPage, prevPage, primeIndicator, toDateTime } from "@/utils";
-import { PLAYER_BASE_URL } from "@/constants";
+import { PLAYER_BASE_URL, POSITIONS } from "@/constants";
 import * as Interfaces from "@/interfaces";
 
 function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortProps) {
@@ -21,7 +21,10 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
     const icon = asc ? "bi:caret-up-fill" : "bi:caret-down-fill";
 
     return (
-        <div className={`font-bold ${label === "PLAYER" || label === "DATE" ? "w-3/12" : "w-1/12"}`}>
+        <div className={`font-bold ${
+        label === "PLAYER" ? "w-3/12" : 
+        label === "DATE" ? "w-3/12 flex justify-center" : 
+        "w-1/12 text-center"}`}>
         {isSorting ? (
             <div className="flex items-center" onClick={handleClick}>
                 <p className="text-[#7d91a6]">{label}</p>
@@ -35,7 +38,7 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
 };
 
 export default function WaiverActivity({ waivers, selectSeason }: Interfaces.MarketWidgetProps) {
-    const { legacyLeague, loadLegacyLeague } = useLeagueContext();
+    const { legacyLeague } = useLeagueContext();
     const [asc, setAsc] = useState(false);
     const [sort, setSort] = useState("DATE");
     const [currentPage, setCurrentPage] = useState(1);
@@ -104,17 +107,15 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     setAsc={setAsc}
                     setSort={setSort}
                 />
-                <div className="w-2/12">
+                <div className="w-2/12 text-center">
                     <select id={styles.selectTag} onChange={handlePosition} value={selectPosition}>
                         <option value={"all"}>ALL POSITIONS</option>
-                        <option value={"QB"}>QB</option>
-                        <option value={"RB"}>RB</option>
-                        <option value={"WR"}>WR</option>
-                        <option value={"TE"}>TE</option>
-                        <option value={"K"}>K</option>
+                        {POSITIONS.map((position, i) => 
+                            <option key={i} value={position}>{position}</option>
+                        )}
                     </select>
                 </div>
-                <div className="w-2/12">
+                <div className="w-2/12 text-center">
                     <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
                     <option value={"all"}>ALL OWNERS</option>
                     {legacyLeague[0]?.users?.map((user, i) => (
@@ -140,23 +141,22 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
             {records?.map((record, i) => { 
                 const player = record.waiver_player;
                 return (
-                    <div key={i} className={`flex items-center py-3 text-sm text-white ${i === records.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
+                    <div key={i} className={`py-3 flex items-center text-sm text-white ${i === records.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
                         <div className="w-3/12 flex items-center">
                             {player.position !== "DEF" ?
                             <div className={styles.playerHeadShot}
                                 style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                                 {findLogo(player?.team).l !== "FA" ? (
-                                <div className={styles.positionedLogo}>
-                                    <div className={styles.nflTeamLogo} style={{ backgroundImage: `url(${findLogo(player?.team).l!})` }}>
-
-                                    </div>
-                                </div>
+                                <></>
+                                // <div className={styles.positionedLogo}>
+                                //     <div className={styles.nflTeamLogo} style={{ backgroundImage: `url(${findLogo(player?.team).l!})` }}></div>
+                                // </div>
                                 ) : (
                                 <></>
                                 )}
                             </div>
-                            : <Image alt="" width={35.8} height={35.8} src={findLogo(player?.team).l!}/>}
-                            <div className="pl-4">
+                            : <Image alt="" width={60} height={60} src={findLogo(player?.team).l!}/>}
+                            <div className="pl-3">
                                 <p className="" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
                                 {player.position === "DEF" ? <></> : 
                                 <>
@@ -165,11 +165,11 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                                 </>}
                             </div>
                         </div>
-                        <p className="w-1/12" style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
-                        <p className="w-2/12" style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
-                        <p className="w-2/12">{record.creator}</p>
-                        <p className="w-1/12" style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
-                        <p className="w-3/12" style={{color:sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
+                        <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
+                        <p className={`w-2/12 ${styles.waiverCell}`} style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
+                        <p className={`w-2/12 ${styles.waiverCell}`}>{record.creator}</p>
+                        <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
+                        <p className={`w-3/12 ${styles.waiverCell}`} style={{color:sort === "DATE" ? "#a9dfd8" : ""}}>{toDateTime(record.created)}</p>
                     </div>
                 );
             })}
