@@ -18,12 +18,13 @@ export const getMatchups = (matchups: Interfaces.Match[][], rID?: number) => {
             acc[team.matchup_id] = acc[team.matchup_id] || [];
             acc[team.matchup_id].push(team);
             return acc;
-        }, Object.create(null))).map(match => Object.entries(match).map(game => game[1])).map(matchup => matchup.reduce((acc, teams:any) => {
+        }, Object.create(null))).map(match => Object.entries(match).map(game => game && game[1]))
+        .map(matchup => matchup && matchup.reduce((acc, teams:any) => {
             if (teams.filter((team: Interfaces.Match) => team.roster_id === rID).length > 0) {
                 return teams;
             };
             return acc;
-        })).map((match: any) => match.sort((a:any, b:any) => b.points - a.points)).filter(game => game.length === 2);
+        }, [])).map((match: any) => match.sort((a:any, b:any) => b.points - a.points)).filter(game => game.length === 2);
     } else {
         return matchups?.map(week => week.reduce((acc, team) => {
             acc[team.matchup_id] = acc[team.matchup_id] || [];

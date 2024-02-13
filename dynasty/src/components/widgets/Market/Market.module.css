@@ -40,16 +40,27 @@
 .waiverCell {
     text-align: center;
 }
-
+.playerRow, .playerRow:hover, .playerRow:active {
+    color: inherit;
+    text-decoration: none;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+}
+.playerRow:hover {
+    background: #1b2025;
+    color: white;
+}
 .playerHeadShot{
-    background-color:#adadada6;
+    background-color:black;
     background-repeat: no-repeat;
     background-position: 50% 25%;
-    background-size: 130px;
+    background-size: cover;
     height: 60px;
     width: 60px;
-    border-radius: 5px;
-    border: 0px ridge rgba(255, 235, 235, 0.815);
+    border-radius: 20px;
+    /* border: 2px solid rgba(68, 68, 68, 0.815); */
 }
 
 .positionedLogo{
@@ -61,22 +72,22 @@
 }
 
 #selectTag {
-    border: "none"; 
-    background: "inherit";
-    color: "#7d91a6";
-    font-size: ".7rem";
-    font-weight: "bold";
+    border: none; 
+    background: black;
+    color: #7d91a6;
+    font-size: .7rem;
+    font-weight: bold;
 }
 
 #showPages {
     display: flex;
     align-items: center;
-    border-bottom: "none"; 
-    background: "inherit";
-    color: "#e4e1e0";
-    font-size: "13.5px";
-    font-weight:"normal";
-    padding-block:"3px";
+    border-bottom: none; 
+    background: inherit;
+    color: #e4e1e0;
+    font-size: 13.5px;
+    font-weight: normal;
+    padding-block: 3px;
 }
 .hover:hover {
     background-color: #2a2c3e;
@@ -140,13 +151,6 @@
     background-color: black;
     color: white;
     border: none;
-}
-
-#selectTag {
-    border: none; 
-    background: inherit; 
-    color: #7d91a6; 
-    font-weight: bold;
 }
 
 .nflTeamLogo {

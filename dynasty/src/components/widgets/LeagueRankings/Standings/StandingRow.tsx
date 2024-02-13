@@ -7,6 +7,8 @@ import { winPCT } from "@/utils";
 
 export default function StandingRow({roster, season}: Interfaces.RankingRowProps) { 
 
+    const streak: string = roster?.metadata?.streak;
+
     return (
         <a href={`/teams/${roster.owner.display_name}`} className={`py-3 ${styles.anchorCell}`} style={{fontSize:"14px"}}>
             <div className="w-7/12 text-truncate">
@@ -36,11 +38,11 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
                     <p>{roster.settings.all_time.season.wins}-{roster.settings.all_time.season.losses}</p>
                 :
                     <p>{roster.settings.wins}-{roster.settings.losses}-{roster.settings.ties}
-                    {roster?.metadata?.streak ?
-                        <Icon icon={roster?.metadata?.streak?.includes("W") === true ? "bi:caret-up-fill" : "bi:caret-down-fill"} className="mx-1" 
-                        style={roster?.metadata?.streak?.includes("W") === true ?{color:"#368727", fontSize:".7rem"}:{color:"#cc1d00", fontSize:".7rem"}}/>
+                    {streak ?
+                        <Icon icon={streak?.includes("W") === true ? "bi:caret-up-fill" : "bi:caret-down-fill"} className="mx-1" 
+                        style={streak?.includes("W") === true ?{color:"#368727", fontSize:".7rem"}:{color:"#cc1d00", fontSize:".7rem"}}/>
                     :<></>
-                    }{roster.metadata.streak}
+                    }{streak}
                     </p>
                 }
             </div>

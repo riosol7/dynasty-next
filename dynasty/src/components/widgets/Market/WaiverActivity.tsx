@@ -75,6 +75,8 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
         setCurrentPage(valueAsNumber)
     };
 
+    const teamLogoSize: number = 60;
+
     useEffect(() => {
         if (waiverBidsOwnerFiltered?.length! < recordsPerPage) {
             if (waiverBidsOwnerFiltered?.length! > 10) {
@@ -111,16 +113,16 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                     <select id={styles.selectTag} onChange={handlePosition} value={selectPosition}>
                         <option value={"all"}>ALL POSITIONS</option>
                         {POSITIONS.map((position, i) => 
-                            <option key={i} value={position}>{position}</option>
+                        <option key={i} value={position}>{position}</option>
                         )}
                     </select>
                 </div>
                 <div className="w-2/12 text-center">
                     <select id={styles.selectTag} onChange={handleOwner} value={selectOwner}>
-                    <option value={"all"}>ALL OWNERS</option>
-                    {legacyLeague[0]?.users?.map((user, i) => (
+                        <option value={"all"}>ALL OWNERS</option>
+                        {legacyLeague[0]?.users?.map((user, i) => (
                         <option key={i} value={user.display_name}>{user.display_name}</option>
-                    ))}
+                        ))}
                     </select>
                 </div>
                 <TableHeaderCell
@@ -141,31 +143,23 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
             {records?.map((record, i) => { 
                 const player = record.waiver_player;
                 return (
-                    <div key={i} className={`py-3 flex items-center text-sm text-white ${i === records.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"}`}>
+                    <div key={i} className={`${styles.playerRow}`}>
                         <div className="w-3/12 flex items-center">
                             {player.position !== "DEF" ?
                             <div className={styles.playerHeadShot}
-                                style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
-                                {findLogo(player?.team).l !== "FA" ? (
-                                <></>
-                                // <div className={styles.positionedLogo}>
-                                //     <div className={styles.nflTeamLogo} style={{ backgroundImage: `url(${findLogo(player?.team).l!})` }}></div>
-                                // </div>
-                                ) : (
-                                <></>
-                                )}
+                            style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                             </div>
-                            : <Image alt="" width={60} height={60} src={findLogo(player?.team).l!}/>}
+                            : <Image alt="" width={teamLogoSize} height={teamLogoSize} src={findLogo(player?.team).l!}/>}
                             <div className="pl-3">
                                 <p className="" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
                                 {player.position === "DEF" ? <></> : 
-                                <>
-                                    <p className="text-xs text-gray-400 font-light">#{player.number} {player.team || "FA"}</p>
-                                    <p style={{ fontSize: "11px" }} className="text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
-                                </>}
+                                <div className="text-gray-400 font-light">
+                                    <p className="">#{player.number} {player.team || "FA"}</p>
+                                    <p>{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
+                                </div>}
                             </div>
                         </div>
-                        <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age}</p>
+                        <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age || "-"}</p>
                         <p className={`w-2/12 ${styles.waiverCell}`} style={{color:sort === "all" ? "#a9dfd8" : ""}}>{player?.position}</p>
                         <p className={`w-2/12 ${styles.waiverCell}`}>{record.creator}</p>
                         <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "BID" ? "#a9dfd8" : ""}}>${record.settings.waiver_bid}</p>
