@@ -97,11 +97,11 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
             }
         },
         stroke: {
-            curve: 'smooth',
+            // curve: 'smooth',
             width: 4
         },
         theme: {
-            mode: 'dark', 
+            // mode: 'dark', 
         },
         // title:{
         //     text:"Dynasty Growth",
@@ -113,7 +113,7 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
             },
         },
         xaxis: { 
-            type: 'category',
+            // type: 'category',
             categories: weekLabels
         },
         zoom: {

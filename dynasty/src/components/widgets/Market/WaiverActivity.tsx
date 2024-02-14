@@ -22,7 +22,7 @@ function TableHeaderCell({ label, sort, asc, setAsc, setSort}: Interfaces.SortPr
 
     return (
         <div className={`font-bold ${
-        label === "PLAYER" ? "w-3/12" : 
+        label === "PLAYER" ? "w-2/12" : 
         label === "DATE" ? "w-3/12 flex justify-center" : 
         "w-1/12 text-center"}`}>
         {isSorting ? (
@@ -75,7 +75,7 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
         setCurrentPage(valueAsNumber)
     };
 
-    const teamLogoSize: number = 60;
+    const teamLogoSize: number = 50;
 
     useEffect(() => {
         if (waiverBidsOwnerFiltered?.length! < recordsPerPage) {
@@ -144,19 +144,19 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                 const player = record.waiver_player;
                 return (
                     <div key={i} className={`${styles.playerRow}`}>
-                        <div className="w-3/12 flex items-center">
+                        <div className="w-2/12 flex items-center">
                             {player.position !== "DEF" ?
                             <div className={styles.playerHeadShot}
                             style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                             </div>
                             : <Image alt="" width={teamLogoSize} height={teamLogoSize} src={findLogo(player?.team).l!}/>}
                             <div className="pl-3">
-                                <p className="" style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>{player?.first_name} {player?.last_name}</p>
+                                <div style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>
+                                    <p>{player?.first_name}</p>
+                                    <p> {player?.last_name}</p>
+                                </div>
                                 {player.position === "DEF" ? <></> : 
-                                <div className="text-gray-400 font-light">
-                                    <p className="">#{player.number} {player.team || "FA"}</p>
-                                    <p>{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>
-                                </div>}
+                                <p className="text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>}
                             </div>
                         </div>
                         <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age || "-"}</p>

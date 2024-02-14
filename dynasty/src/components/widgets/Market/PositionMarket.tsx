@@ -12,6 +12,7 @@ import {
     roundToHundredth 
 } from "@/utils";
 import TrendChart from "@/components/charts/LineCharts/TrendChart";
+import VolumeChart from "@/components/charts/BarCharts/VolumeChart";
 
 const positionStyles = {
     QB: styles.qbHUD,
@@ -68,6 +69,9 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <p className="w-1/12">{lowestBid}</p>
                         <p className="w-1/12">{highestBid}</p>
                         <p className="w-1/12">{volume}</p>
+                        <div>
+                            <VolumeChart waivers={filteredWaivers} height={50} width={80}/>
+                        </div>
                         <div className={`w-2/12`}>
                             <p className="text-[darkgray]">@{findTopSpender(waivers[position as keyof Waivers])?.owner}</p>
                             <p>${findTopSpender(waivers[position as keyof Waivers])?.bid}</p>

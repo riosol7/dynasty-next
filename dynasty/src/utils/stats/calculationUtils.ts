@@ -30,3 +30,18 @@ export const calculatePercentage = (currentValue: number, totalValue: number): n
 export const calculateAverage = (sum: number, count: number) => {
     return roundToHundredth(sum/count);
 };
+
+export const countRepeatedValues = (numbers: number[]): { [key: number]: number } => {
+    const counts: { [key: number]: number } = {};
+
+    // Count occurrences of each number
+    for (const num of numbers) {
+        if (counts[num]) {
+            counts[num]++;
+        } else {
+            counts[num] = 1;
+        }
+    }
+
+    return counts;
+}

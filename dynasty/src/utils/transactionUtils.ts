@@ -51,5 +51,5 @@ export const filteredTransactionsBySeason = (transactions: Interfaces.Transactio
         } else {
             return transactionYear === selectSeason;
         }
-    }) || [];
+    }).sort((a, b) => a.created - b.created) || [];
 }; 

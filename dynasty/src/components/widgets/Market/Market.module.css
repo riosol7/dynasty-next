@@ -57,9 +57,9 @@
     background-repeat: no-repeat;
     background-position: 50% 25%;
     background-size: cover;
-    height: 60px;
-    width: 60px;
-    border-radius: 20px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
     /* border: 2px solid rgba(68, 68, 68, 0.815); */
 }
 
