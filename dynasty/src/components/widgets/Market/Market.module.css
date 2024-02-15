@@ -126,31 +126,49 @@
     color: #7d91a6;
     border-bottom: solid 2px #2a2c3e;
 }
-
-.waiverPagination {
+.paginationContainer {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 2rem;
-    font-size: 13.5px;
+    /* padding-top: 32px; */
+}
+.waiverPagination {
+    display: flex;
+    align-items: center;
+    /* padding: 8px;
+    padding-inline: 10px; */
+    /* border-radius: 5px; */
+    font-size: 13px;
+    /* border:#2a2c3ed0 1px solid; */
 }
 
 .paginateArrows {
     font-size: 2em;
-    border-radius: 8px;
-    border: 1px solid rgb(45, 48, 48);
+    /* border-radius: 8px;
+    border: 1px solid rgb(45, 48, 48); */
 }
-
-#showPages {
+.showPagesContainer {
     display: flex;
     align-items: center;
     padding-left: 10px;
+    font-weight: bold;
+}
+.showPages {
+    background-color: black;
+    color: white;
+}
+.showPages:focus {
+    outline: none;
 }
 
 #selectPageNumber {
     background-color: black;
     color: white;
     border: none;
+    font-weight: bold;
+}
+#selectPageNumber:focus {
+    outline: none;
 }
 
 .nflTeamLogo {

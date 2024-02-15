@@ -4,20 +4,28 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import * as Interfaces from "@/interfaces";
 import { countRepeatedValues } from "@/utils";
 
+enum curve {
+    "smooth"
+}
+
 export default function VolumeChart({ height, width, waivers }: Interfaces.TrendChartProps) {
     const repeatedValues = countRepeatedValues(waivers?.map(waiver => waiver.settings.waiver_bid));
+    function addDollarSignToElements(arr: string[]): string[] {
+        return arr.map(element => `$${element}`);
+    }
     const series = [{ 
-        name: `${waivers && waivers[0]?.waiver_player.position}`,
+        name: `Quantity`,
         data: Object.values(repeatedValues)
     }];
 
     const options = {
         chart: {
+            foreColor: "#fff",
             sparkline: {
                 enabled: true
             },
             dataLabels: {
-                enabled: true,
+                enabled: false,
             },
             dropShadow: {
                 enabled: true,
@@ -26,42 +34,30 @@ export default function VolumeChart({ height, width, waivers }: Interfaces.Trend
                 blur: 2,
                 opacity: 0.2,
             }
-            },
-            stroke: {
-                width: 3
-            },
-            colors: ["#a9dfd8"],
-            markers: {
-            size: 0
-            },
-            grid: {
+        },
+        stroke: {
+            width: 1,
+        },
+        colors: ["#a9dfd8"],
+        grid: {
             padding: {
                 top: 0,
                 bottom: 0,
                 left: 0
             }
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: "40%",
+                distributed: true,
             },
-            plotOptions: {
-                bar: {
-                    columnWidth: "45%",
-                    distributed: true,
-                },
-            },
-            tooltip: {
-                theme:'dark',
-            x: {
-                show: false
-            },
-            xaxis: {
-                categories: Object.keys(repeatedValues),
-                labels: {
-                    style: {
-                        fontSize: "10px",
-                        colors: "white",
-                    },
-                },
-            },
-        }
+        },
+        tooltip: {
+            theme:'dark',
+        },
+        xaxis: {
+            categories: addDollarSignToElements(Object.keys(repeatedValues)),
+        },
     };
     return (
         <Chart

@@ -97,17 +97,15 @@ export default function WeeklyStatsChart({ name }: Interfaces.WeeklyStatsProps) 
             }
         },
         stroke: {
-            // curve: 'smooth',
+            curve: "smooth" as "smooth",
             width: 4
-        },
-        theme: {
-            // mode: 'dark', 
         },
         // title:{
         //     text:"Dynasty Growth",
         //     align:"left"
         // },
         tooltip: {
+            theme: "dark",
             x: {
                 format: 'MM/dd/yy'
             },

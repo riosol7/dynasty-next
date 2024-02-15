@@ -22,6 +22,7 @@ export default function TrendChart({ height, width, waivers }: Interfaces.TrendC
       }
     },
     stroke: {
+      curve: "smooth" as "smooth",
       width: 3
     },
     colors:["#a9dfd8"],
