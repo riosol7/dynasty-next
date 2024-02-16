@@ -36,7 +36,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
     const opponent = matchup.find(team => team.roster_id !== rID)!;
     const myMatchStats = matchup.find(team => team.roster_id === rID)!; 
     const starterPts = myMatchStats?.starters_points?.sort((a,b) => b - a);
-    const topStarter = findPlayerByPts(myMatchStats, starterPts[0]!, players);
+    const topStarter = findPlayerByPts(myMatchStats, starterPts && starterPts[0]!, players);
     const foundAllPlayRecord = allPlayStats?.weeklyRecord?.[idx]!;
     const byeWeek: boolean = postSeasonStats.bracket.filter(game => game.t1 === rID && !game.t1_from).length === 1 ? true : false; 
     const getTitle = () => {
@@ -225,7 +225,7 @@ export default function TeamMatchupSlide({ idx, name, matchup }: Interfaces.Team
                                             <p className="font-bold text-truncate">
                                                 {topStarter.first_name} {topStarter.last_name} 
                                             </p>
-                                            <p style={{fontSize:"11.5px"}}>scored {starterPts[0]}pts</p>
+                                            <p style={{fontSize:"11.5px"}}>scored {starterPts && starterPts[0]!}pts</p>
                                         </div>
                                     </div>
                                 </div>

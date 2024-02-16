@@ -456,7 +456,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-5/12">{
                             allTime ?
                             allTimeRosterStats.fpts :
-                        `${foundRoster.settings.fpts}.${foundRoster.settings.fpts_decimal}`}</p>
+                        `${foundRoster.settings.fpts}.${foundRoster.settings.fpts_decimal || 0}`}</p>
                         <p className="w-2/12 flex justify-end">{
                         allTime ? allTimePFRanking : seasonalPFRanking}</p>
                     </div>
@@ -487,7 +487,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-5/12">{
                             allTime ?
                             allTimeRosterStats.ppts :
-                         `${foundRoster.settings.ppts}.${foundRoster.settings.ppts_decimal}`
+                         `${foundRoster.settings.ppts || 0}.${foundRoster.settings.ppts_decimal || 0}`
                         }</p>
                         <p className="w-2/12 flex justify-end">{
                         allTime ?
@@ -520,7 +520,7 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                         <p className="w-5/12">{
                             allTime ?
                             allTimeRosterStats.pa :
-                            `${foundRoster.settings.fpts_against}.${foundRoster.settings.fpts_against_decimal}`}</p>
+                            `${foundRoster.settings.fpts_against || 0}.${foundRoster.settings.fpts_against_decimal || 0}`}</p>
                         <p className="w-2/12 flex justify-end">{
                         allTime ? allTimePARanking : seasonalPARanking}</p>
                     </div>

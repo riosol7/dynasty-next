@@ -9,7 +9,7 @@ export const findSeasonStats = (rID: number, season: string, legacyLeague: Inter
     };
 
     const highesetSeasonScore = getMatchups(foundLeague.matchups, rID)?.map((matchup) => {
-        const score: number = matchup.find((team: Interfaces.Match) => team.roster_id === rID).points;
+        const score: number = matchup.find((team: Interfaces.Match) => team.roster_id === rID)?.points;
         return score;
     }).sort((a, b: number) => b - a)[0];
     

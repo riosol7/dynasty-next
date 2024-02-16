@@ -1,14 +1,15 @@
 import Image from "next/image";
 import styles from "./DraftWidget.module.css";
-import { findLogo, findLeagueByTeamName } from "@/utils";
+import { findLogo, findLeagueByTeamName, findLeagueBySeason } from "@/utils";
 import { PLAYER_BASE_URL } from "@/constants";
-import { useLeagueContext } from "@/context";
+import { useLeagueContext, useSeasonContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 
 export default function DraftWidget({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
+    const { selectSeason } = useSeasonContext()!;
 
-    const foundLeague = findLeagueByTeamName(name, legacyLeague);
+    const foundLeague: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
     const foundUser = foundLeague?.users.find(user => user.display_name === name);
     const topDraftPick = foundLeague?.draft?.picks?.find(pick => pick.picked_by === foundUser?.user_id);
 

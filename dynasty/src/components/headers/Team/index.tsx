@@ -1,16 +1,15 @@
 import styles from "./TeamHeader.module.css";
 import DraftWidget from "@/components/widgets/Draft";
-import { useLeagueContext } from "@/context";
+import { useLeagueContext, useSeasonContext } from "@/context";
 import { SLEEPER_AVATAR_BASE_URL } from "@/constants";
-import { findUserEXP, findUserByName, findLeagueByTeamName } from "@/utils";
+import { findUserEXP, findUserByName, findLeagueBySeason } from "@/utils";
 import * as Interfaces from "@/interfaces";
 // Change header background color from black to background gradient color similar to the DraftWidget background, the navbars should also inherit the new colors.
 export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
     const { legacyLeague } = useLeagueContext();
-
-    const foundLeague = findLeagueByTeamName(name, legacyLeague);
-    const foundUser = findUserByName(name, foundLeague);
-
+    const { selectSeason } = useSeasonContext()!;
+    const foundLeagueBySzn: Interfaces.League = findLeagueBySeason(selectSeason, legacyLeague);
+    const foundUser = findUserByName(name, foundLeagueBySzn);
     return (
         <div className="flex items-start justify-between flex-wrap">
             <div className="flex items-center">
@@ -23,7 +22,8 @@ export default function TeamHeader({ name }: Interfaces.TeamParamProps) {
                     <p className="font-bold pt-1" style={{fontSize:"11.5px",color:"#7d91a6"}}>EXP {findUserEXP(foundUser?.user_id!, legacyLeague)}</p>
                 </div>
             </div>
-            <DraftWidget name={name}/>
+            {foundLeagueBySzn.status === "pre_draft" ? 
+            <></>:<DraftWidget name={name}/>}
         </div>
     );
 };
