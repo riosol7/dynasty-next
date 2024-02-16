@@ -48,7 +48,7 @@ function SortableHeader({
 
 export default function StandingTableHeader({ asc, sort, updateOverallStandings, updateDivisionState, division }: Interfaces.StandingTableHeaderProps) {
     return (
-        <div className={styles.standingTableHeader}>
+        <div className={styles.tableHeader}>
             <div className="w-7/12 flex items-center"> 
                 <div className="w-1/12">
                     <SortableHeader

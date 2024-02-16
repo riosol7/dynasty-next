@@ -180,13 +180,13 @@ export default function WaiverActivity({ waivers, selectSeason }: Interfaces.Mar
                             style={{ backgroundImage: `url(${PLAYER_BASE_URL}${player.player_id}.jpg)`,}}>
                             </div>
                             : <Image alt="" width={teamLogoSize} height={teamLogoSize} src={findLogo(player?.team).l!}/>}
-                            <div className="pl-3">
+                            <div className="pl-3 text-xs">
                                 <div style={{color:sort === "PLAYER" ? "#a9dfd8" : ""}}>
                                     <p>{player?.first_name}</p>
-                                    <p> {player?.last_name}</p>
+                                    <p>{player?.last_name}</p>
                                 </div>
-                                {player.position === "DEF" ? <></> : 
-                                <p className="text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>}
+                                {/* {player.position === "DEF" ? <></> : 
+                                <p className="text-xs text-gray-400">{player?.years_exp === 0 ? "ROOKIE" : `EXP ${player?.years_exp}`}</p>} */}
                             </div>
                         </div>
                         <p className={`w-1/12 ${styles.waiverCell}`} style={{color:sort === "AGE" ? "#a9dfd8" : primeIndicator(player?.age, player?.position)}}>{player?.age || "-"}</p>

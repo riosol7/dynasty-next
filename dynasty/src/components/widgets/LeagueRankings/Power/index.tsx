@@ -16,7 +16,7 @@ export default function PowerRankings({season}: Interfaces.SeasonProps) {
     return (
         <>
             <div className="pt-2">
-                <div className="flex py-3" style={{borderBottom:".5px solid #2a2c3e", fontSize:".7rem", color:"#7d91a6"}}>
+                <div className={styles.tableHeader}>
                     <div className="w-7/12 flex items-center">
                         {sort === "RANK" ?
                             <div className="w-1/12 flex items-center">

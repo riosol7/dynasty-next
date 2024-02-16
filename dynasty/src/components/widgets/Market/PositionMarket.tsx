@@ -57,7 +57,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
                         <div className={`w-3/12 ${styles.positionCell}`}>
-                            <TrendChart waivers={filteredWaivers} height={50} width={420}/>
+                            <TrendChart waivers={filteredWaivers} height={50}/>
                         </div>
                         <p className={`w-1/12 ${styles.positionCell}`}>{lastPrice}</p>
                         <div className={`w-1/12 ${styles.positionCell}`}>
@@ -70,9 +70,9 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <p className="w-1/12">{lowestBid}</p>
                         <p className="w-1/12">{highestBid}</p>
                         <p className="w-1/12">{totalQTY}</p>
-                        <div className={`w-1/12`}>
-                            <p className="text-[darkgray]">@{findTopSpender(waivers[position as keyof Waivers])?.owner}</p>
-                            <p>${findTopSpender(waivers[position as keyof Waivers])?.bid}</p>
+                        <div className={`w-1/12 text-xs`}>
+                            <p className="text-[darkgray]">@{findTopSpender(filteredWaivers)?.owner}</p>
+                            <p>${findTopSpender(filteredWaivers)?.bid}</p>
                         </div>
                         <div className="w-2/12 flex justify-center">
                             <VolumeChart waivers={filteredWaivers} height={50}/>

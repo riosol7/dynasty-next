@@ -4,10 +4,6 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import * as Interfaces from "@/interfaces";
 import { countRepeatedValues } from "@/utils";
 
-enum curve {
-    "smooth"
-}
-
 export default function VolumeChart({ height, width, waivers }: Interfaces.TrendChartProps) {
     const repeatedValues = countRepeatedValues(waivers?.map(waiver => waiver.settings.waiver_bid));
     function addDollarSignToElements(arr: string[]): string[] {

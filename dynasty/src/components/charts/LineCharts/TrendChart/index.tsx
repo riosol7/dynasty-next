@@ -2,11 +2,14 @@
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import * as Interfaces from "@/interfaces";
+import { toDateTime } from "@/utils";
 
 export default function TrendChart({ height, width, waivers }: Interfaces.TrendChartProps) {
+  const completedWaiverBids: number[] = waivers?.map(waiver => waiver.settings.waiver_bid);
+  const waiverDates: string[] = waivers?.map(waiver => toDateTime(waiver.created));
   const series = [{ 
     name: `${waivers && waivers[0]?.waiver_player.position}`,
-    data: waivers?.map(waiver => waiver.settings.waiver_bid)
+    data: completedWaiverBids
   }];
   const options = {
     chart: {
@@ -37,10 +40,13 @@ export default function TrendChart({ height, width, waivers }: Interfaces.TrendC
       }
     },
     tooltip: {
-        theme:'dark',
+      theme:'dark',
       x: {
-        show: false
+        show: true
       },
+    },
+    xaxis: {
+      categories: waiverDates,
     }
   };
   return (

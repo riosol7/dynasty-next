@@ -55,8 +55,8 @@ export default function StandingRow({roster, season}: Interfaces.RankingRowProps
             :
                 <div className="w-3/12 flex items-center" style={{color:"white"}}>
                     <p className="w-4/12">{roster.settings.fpts}.{roster.settings.fpts_decimal}</p>
-                    <p className="w-4/12">{roster.settings.ppts}.{roster.settings.ppts_decimal}</p>
-                    <p className="w-4/12">{roster.settings.fpts_against}.{roster.settings.fpts_against_decimal}</p>
+                    <p className="w-4/12">{roster.settings.ppts || 0}.{roster.settings.ppts_decimal}</p>
+                    <p className="w-4/12">{roster.settings.fpts_against || 0}.{roster.settings.fpts_against_decimal}</p>
                 </div>
             }
         </a>

@@ -51,9 +51,12 @@ export const getAllTimeRosterStats = (rID: number, legacyLeague: Interfaces.Leag
     const allTimeRegularSeasonWins = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.wins, 0);
     const allTimeRegularSeasonLosses = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.losses, 0);
     const allTimeRegularSeasonTies = legacyRosters.reduce((acc, item: any) => acc + item?.settings?.ties, 0);
-    const allTimeRegularSeasonFPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts + "." + item?.settings?.fpts_decimal), 0));
-    const allTimeRegularSeasonPPTS = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.ppts + "." + item?.settings?.ppts_decimal), 0));
-    const allTimeRegularSeasonPA = roundToHundredth(legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts_against + "." + item?.settings?.fpts_against_decimal), 0));
+    const allTimeRegularSeasonFPTS = roundToHundredth(
+        legacyRosters?.reduce((acc, item: any) =>  acc + Number(item?.settings?.fpts + "." + (item?.settings?.fpts_decimal || 0)), 0));
+    const allTimeRegularSeasonPPTS = roundToHundredth(
+        legacyRosters?.reduce((acc, item: any) =>  acc + Number((item?.settings?.ppts || 0) + "." + (item?.settings?.ppts_decimal || 0)), 0));
+    const allTimeRegularSeasonPA = roundToHundredth(
+        legacyRosters?.reduce((acc, item: any) =>  acc + Number((item?.settings?.fpts_against || 0) + "." + (item?.settings?.fpts_against_decimal || 0)), 0));
     const bestRosterByWins = legacyRosters?.sort((a: any, b: any) => b.settings.wins - a.settings.wins)[0];
     const bestRosterByFPTS = legacyRosters?.sort((a: any, b: any) => Number(b.settings.fpts + "." + b.settings.fpts_decimal) - Number(a.settings.fpts + "." + a.settings.fpts_decimal))[0];
     const bestRosterByPPTS = legacyRosters?.sort((a: any, b: any) => Number(b.settings.ppts + "." + b.settings.ppts_decimal) - Number(a.settings.ppts + "." + a.settings.ppts_decimal))[0];
