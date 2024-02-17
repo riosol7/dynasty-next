@@ -188,3 +188,9 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+.positionBox {
+    width: 20%;
+    padding: .75em;
+    border-radius: 4px;
+}

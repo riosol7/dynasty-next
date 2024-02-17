@@ -39,7 +39,6 @@ export default function MarketPlus() {
     const waivers: Interfaces.Waivers = processWaiverBids(legacyLeague, players);
     const positionWaivers: Interfaces.Transaction[] = waivers && waivers[selectPosition as keyof typeof waivers]!;
     const filteredWaivers: Interfaces.Transaction[] = filteredTransactionsBySeason(positionWaivers, selectSeason);
-    const recentWaivers: Interfaces.Transaction[] = findRecentWaivers(filteredWaivers);
     
     // NEEDs CORRECTION ??
     const waiverBidsOwnerFiltered = filteredWaivers.filter(waiver => {
@@ -53,16 +52,11 @@ export default function MarketPlus() {
     const records = getSortedTransactionRecords(waiverBidsOwnerFiltered!, sort, asc, currentPage, recordsPerPage);
     const npage = Math.ceil(waiverBidsOwnerFiltered?.length! / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
-    const paginate = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const valueAsNumber = +e.target.value;
-        setCurrentPage(valueAsNumber)
-    };
-    const percentageChanged = recentWaivers && calculatePercentageChange(recentWaivers[0]?.settings?.waiver_bid, recentWaivers[1]?.settings?.waiver_bid);
+ 
     const lowestBid = findLowestBid(filteredWaivers);
     const highestBid = findHighestBid(filteredWaivers);
     const volume = filteredWaivers?.length || 0;
     const averageBid = roundToHundredth(filteredWaivers?.reduce((r, c) => r + c.settings.waiver_bid, 0)! / volume);
-    const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid || 0;
     
     const handleSeason = (season: string) => {
         const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -86,30 +80,30 @@ export default function MarketPlus() {
     const topSpender = findTopSpender(waivers[selectPosition as keyof Waivers]);
     return (
         <div>
-            <div className="pt-5">
-                {/* <div className="pt-5 flex items-center justify-between">
-                    {POSITIONS.slice().filter(position => position !== selectPosition).map((position, i) => {
-                        const positionWaivers = waivers[position as keyof typeof waivers];
-                        const recentPositionWaivers = findRecentWaivers(positionWaivers!);
+            <div className="">
+                <div className="flex items-center justify-between">
+                    {POSITIONS.slice().map((position, i) => {
+                        const positionWaivers: Interfaces.Transaction[] = waivers && waivers[position as keyof typeof waivers]!;
+                        const filteredWaivers: Interfaces.Transaction[] = filteredTransactionsBySeason(positionWaivers, selectSeason);
+                        const recentPositionWaivers: Interfaces.Transaction[] = findRecentWaivers(filteredWaivers);
                         const positionPercentageChanged = recentPositionWaivers && calculatePercentageChange(recentPositionWaivers[0]?.settings?.waiver_bid, recentPositionWaivers[1]?.settings?.waiver_bid);
+                        const percentageChanged = recentPositionWaivers && calculatePercentageChange(recentPositionWaivers[0]?.settings?.waiver_bid, recentPositionWaivers[1]?.settings?.waiver_bid);
+                        const lastPrice = recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid || 0;
+
                         return (
-                            <div key={i} className={`border border-[#2a2c3e] p-3 ${styles.hover}`} style={{width: "200px", borderRadius: "4px"}} onClick={() => handlePosition(position)}>
+                            <div key={i} className={`${styles.positionBox} border border-[${selectPosition === position ? "#a9dfd8" : "#2a2c3e"}] ${styles.hover} ${i === POSITIONS.length - 1 ? "" : "mr-4"}`} onClick={() => handlePosition(position)}>
                                 <p className="pb-5">{position}</p>
                                 <div className={`pt-5 pb-2 ${positionPercentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
-                                <p className="text-xl">${recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid}</p>
-                                <p className="font-light text-xs pt-1">{positionPercentageChanged > 0 ? "+" : ""}{positionPercentageChanged} %</p>
+                                    <p className="text-xl">${recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid}</p>
+                                    <div className="font-light text-xs pt-1">
+                                        <p className={`text-sm ${percentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
+                                            {percentageChanged > 0 ? "+" : ""}${lastPrice - (recentPositionWaivers && recentPositionWaivers[1]?.settings?.waiver_bid)} ({percentageChanged > 0 ? "+" : ""}{percentageChanged} %)
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         );
                     })}
-                </div> */}
-                <p className="text-3xl pb-1">{selectPosition}</p>
-                <p className="text-2xl">${lastPrice}</p>
-                <div className="text-sm flex items-center">
-                    <p className={`text-sm ${percentageChanged > 0 ? "text-green-500" : "text-red-500"}`
-                    }>{percentageChanged > 0 ? "+" : ""}${lastPrice - (recentWaivers && recentWaivers[1]?.settings?.waiver_bid)} ({percentageChanged > 0 ? "+" : ""}{percentageChanged} %)
-                    </p>
-                    <p className="ml-1">{selectSeason}</p>
                 </div>
             </div>
             <div className="py-5">
@@ -149,7 +143,7 @@ export default function MarketPlus() {
                     <p className="w-3/12">{volume}</p>
                 </div>
             </div>
-            <div className="pt-5">
+            <div className="pt-5 mt-5">
                 <div className="flex items-center pt-5 mt-5">
                     <h2 className="font-bold">{selectSeason} Waivers</h2>
                 </div>
@@ -170,25 +164,6 @@ export default function MarketPlus() {
                     {records.map((record, i) => 
                         <PlayerRow key={i} record={record} sort={sort}/>
                     )}
-                </div>
-            </div>
-            <div className="py-5 font-bold">
-                <h2 className="pt-5 pb-4 border-b-2 border-[#2a2c3e]">Positions</h2>
-                <div className="pt-5 flex items-center justify-between">
-                    {POSITIONS.slice().filter(position => position !== selectPosition).map((position, i) => {
-                        const positionWaivers = waivers[position as keyof typeof waivers];
-                        const recentPositionWaivers = findRecentWaivers(positionWaivers!);
-                        const positionPercentageChanged = recentPositionWaivers && calculatePercentageChange(recentPositionWaivers[0]?.settings?.waiver_bid, recentPositionWaivers[1]?.settings?.waiver_bid);
-                        return (
-                            <div key={i} className={`border border-[#2a2c3e] p-3 ${styles.hover}`} style={{width: "200px", borderRadius: "4px"}} onClick={() => handlePosition(position)}>
-                                <p className="pb-5">{position}</p>
-                                <div className={`pt-5 pb-2 ${positionPercentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
-                                <p className="text-xl">${recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid}</p>
-                                <p className="font-light text-xs pt-1">{positionPercentageChanged > 0 ? "+" : ""}{positionPercentageChanged} %</p>
-                                </div>
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
         </div>
