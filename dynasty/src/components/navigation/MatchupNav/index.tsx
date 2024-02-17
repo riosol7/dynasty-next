@@ -1,16 +1,12 @@
 "use client";
 import styles from "./Matchups.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
 import { useRouter, useSearchParams } from "next/navigation";
 
-interface queryFilter {
-    week: string;
-    season: string;
-}
 
 export default function MatchupNav() {
     const { legacyLeague } = useLeagueContext();
@@ -65,7 +61,7 @@ export default function MatchupNav() {
                         )}    
                         </div>
                         <div className={`w-6/12 text-center ${styles.scroll}`}>
-                        {legacyLeague.map((league, idx) =>
+                        {legacyLeague.filter(league => league.status !== "pre_draft").map((league, idx) =>
                             <p key={idx} className={styles.hover} onClick={() => setSelectSeason(league.season)}
                             style={{
                                 fontWeight: selectSeason === league.season? "bolder" : ""

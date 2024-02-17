@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Roster, League, Match, BracketMatch, Transaction } from ".";
+import { Roster, League, Match, BracketMatch, Transaction, Player } from ".";
 import { Waivers } from "@/types";
 
 export interface MVPSlideProps {
@@ -136,4 +136,26 @@ export interface MatchupWidgetProps {
 
 export interface WeeklyStatsProps {
     name: string
+}
+
+export interface PlayerRowProps {
+    record: Transaction;
+    sort: string;
+}
+
+export interface PlayerHeaderProps {
+    asc: boolean;
+    currentPage: number;
+    handleOwner: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    handlePosition?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    plus: boolean;
+    recordsPerPage: number;
+    selectOwner: string;
+    selectPosition?: string;
+    setAsc: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+    setRecordsPerPage: React.Dispatch<React.SetStateAction<number>>;
+    setSort: React.Dispatch<React.SetStateAction<string>>;
+    sort: string;
+    waiverBids: Transaction[];
 }

@@ -3,7 +3,7 @@ import styles from "./SideNavBar.module.css";
 import * as Interfaces from "@/interfaces";
 import { Icon } from '@iconify-icon/react';
 import { useLeagueContext } from '@/context';
-import { allUsers, getMatchups } from '@/utils';
+import { allUsers, findLeagueByID, getMatchups } from '@/utils';
 import { SLEEPER_AVATAR_BASE_URL } from '@/constants';
 
 export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps) {
@@ -11,14 +11,18 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
     const [currentPath, setCurrentPath] = useState<string>('/');
     
     const currentLeague: Interfaces.League = legacyLeague[0]!;
-    const matchups = getMatchups(currentLeague.matchups);
-    const currentWeek: number = matchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0))
+    const prevLeague: Interfaces.League = findLeagueByID(currentLeague.previous_league_id, legacyLeague);
+    const prevMatchups = getMatchups(prevLeague.matchups);
+    const currentMatchups = getMatchups(currentLeague.matchups);
+    const currentWeek: number = currentMatchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0))
         .filter(week => week.length > 0).length || 0;
     const leagueID: string = currentLeague?.league_id;
     const users: Interfaces.Owner[] = allUsers(legacyLeague);
     const activeUsers: Interfaces.Owner[] = users?.filter(user => user.league_id === leagueID);
     const inactiveUsers: Interfaces.Owner[] = users?.filter(user => user.league_id !== leagueID);
-
+    const weekPath: number = currentLeague.status === "pre_draft" ?  prevMatchups.map(weeks => weeks.filter((week: Interfaces.Match[]) => week[0].points !== 0))
+    .filter(week => week.length > 0).length || 0 : currentWeek;
+    const seasonPath: string = currentLeague.status === "pre_draft" ?  prevLeague.season : currentLeague.season;
     useEffect(() => {
         setCurrentPath(window.location.pathname);
     }, []);
@@ -44,13 +48,13 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
             case "Market":
                 navItemActive = marketActive;
                 iconName = "ant-design:stock-outlined";
-                navLink = "/market";
+                navLink = `/market?position=QB&season=${prevLeague.season}`;
                 break;
 
             case "Matchups":
                 navItemActive = matchupsActive;
                 iconName = "tabler:vs";
-                navLink = `/matchups?week=${currentWeek}&season=${currentLeague?.season}`;
+                navLink = `/matchups?week=${weekPath}&season=${seasonPath}`;
                 break;
 
             case "Players":

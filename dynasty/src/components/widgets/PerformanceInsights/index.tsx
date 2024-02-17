@@ -556,14 +556,14 @@ export default function PerformanceInsightsWidget({ name }: Interfaces.TeamParam
                     </div>
                     <div className={`${showMostWinsAgainst ? styles.performanceTitleRow : styles.performanceSubEndTitleRow}`}>
                         <p className={`w-8/12 flex items-center`} onClick={() => setShowMostWinsAgainst(!showMostWinsAgainst)}>
-                            <Icon icon={showMostWinsAgainst ? "mingcute:down-fill" : "mingcute:up-fill"} style={{fontSize: "1.3em"}}/>
                             <span>Most Wins Against</span>
+                            <Icon icon={showMostWinsAgainst ? "mingcute:down-fill" : "mingcute:up-fill"} className={styles.icon}/>
                         </p>
                         {showMostWinsAgainst ?
-                            <div className={`${styles.performanceHeader} w-4/12 flex items-center`}>
+                            <div className={`${styles.performanceHeader} w-4/12 flex items-center text-center`}>
                                 <p className="w-5/12">Record</p>
                                 <p className="w-5/12">Win Rate</p>
-                                <p className="w-2/12 flex justify-end">Games Played</p>
+                                <p className="w-2/12">Games Played</p>
                             </div>  
                         : <p>{rivalryOpponent?.owner?.display_name}</p>}
                     </div>

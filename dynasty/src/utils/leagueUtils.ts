@@ -75,3 +75,10 @@ export const findLeagueByTeamName = (name: string, legacyLeague: Interfaces.Leag
         rosters: sortedRosters
     };
 };
+
+export const validateWaiverBidLeagues = (legacyLeague: Interfaces.League[]): Interfaces.League[] => {
+    const validWaiverSeasons: Interfaces.League[] = legacyLeague.filter(
+        league => league.transactions.filter(transaction => transaction.waiver_budget.length > 0).length > 0
+    );
+    return validWaiverSeasons;
+};

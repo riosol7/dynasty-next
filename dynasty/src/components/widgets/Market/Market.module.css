@@ -113,7 +113,7 @@
 }
 
 .waiverContainer {
-    margin-top: .75rem;
+    /* margin-top: .75rem; */
     padding-top: 1.75rem;
 }
 
@@ -169,6 +169,17 @@
 }
 #selectPageNumber:focus {
     outline: none;
+}
+
+.positionRow {
+    padding-block: .75rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-size: small;
+}
+.positionRow:hover {
+    background: #1b2025;
 }
 
 .nflTeamLogo {

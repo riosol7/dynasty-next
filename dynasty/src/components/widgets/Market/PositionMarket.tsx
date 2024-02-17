@@ -1,6 +1,5 @@
 import styles from "./Market.module.css";
 import * as Interfaces from "@/interfaces";
-import { Waivers } from "@/types";
 import { POSITIONS } from "@/constants";
 import { 
     calculatePercentageChange, 
@@ -50,9 +49,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                 const lastPrice = recentWaivers && recentWaivers[0]?.settings?.waiver_bid;
                 const prevPrice = recentWaivers && recentWaivers[1]?.settings?.waiver_bid;
                 return (
-                    <div key={i} className={`text-center py-3 flex items-center text-sm ${
-                        i === POSITIONS.length - 1 ? "" : "border-b border-dashed border-[#0f0f0f]"
-                    }`}>
+                    <a key={i} href={`/market?position=${position}&season=${selectSeason}`} className={`${styles.positionRow}`}>
                         <div style={{width: "70px"}} className={styles.positionCell}>
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
@@ -77,7 +74,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                         <div className="w-2/12 flex justify-center">
                             <VolumeChart waivers={filteredWaivers} height={50}/>
                         </div>
-                    </div>
+                    </a>
                 );
             })}
         </div>

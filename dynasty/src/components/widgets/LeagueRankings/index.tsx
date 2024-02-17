@@ -50,7 +50,7 @@ export default function LeagueRankings() {
                         : <></>
                         }
                         <div className="flex items-center">
-                            <select className="p-2" onChange={handleSeason} value={season} style={{fontSize:".8em", borderRadius:"25px", border:"2px solid #3bdbba", background:"black", color:"white"}}>
+                            <select className={styles.selectRankingSeason} onChange={handleSeason} value={season}>
                                 {legacyLeague?.slice().map((league, i) => 
                                     <option key={i} value={league.season}>{league.season}</option>
                                 )}
