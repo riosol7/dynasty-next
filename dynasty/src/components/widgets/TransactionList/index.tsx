@@ -73,11 +73,16 @@ export default function TransactionList() {
             <div className={styles.headshot} style={{ 
               backgroundImage: player.position === "DEF" ? `url(${findLogo(player.team).l})` : `url(${PLAYER_BASE_URL + player.player_id}.jpg)`, 
               display: "flex", alignItems:"end", justifyContent:"end"}}>
-              <Icon icon={`ph:user-circle-${transactionIcon}-duotone`} style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
+              <Icon icon={`ph:user-circle-${transactionIcon}-duotone`} 
+              style={{ borderRadius: "50%", backgroundColor: "black", color: POSITION_COLORS[player.position as keyof typeof POSITION_COLORS], fontSize:"1.5em" }}/>
             </div>
           </div>
           <div className="ml-1 text-xs">
-            {record.type === "trade" ? <p className="flex items-center"><Icon icon="game-icons:cycle" className={styles.icon}/>{user.display_name}</p> : ""}
+            {record.type === "trade" ? 
+            <p className="flex items-center">
+              <Icon icon="game-icons:cycle" className={styles.icon}/>
+              {user.display_name}
+            </p> : ""}
             <p className="text-sm font-bold">{player.position === "DEF" ? `${player.first_name} ${player.last_name}` : player.full_name}</p>
             <p className="text-gray-400">{player.position === "DEF" ? "" : "#"}{player.number} {player.team} - {player.position}</p>
             <p className="flex items-center">
@@ -119,7 +124,7 @@ export default function TransactionList() {
           <div className={`flex items-center text-sm`}>
             <div className={`mr-1 ${styles.ownerImage}`} style={{backgroundImage:`url(${SLEEPER_AVATAR_BASE_URL}${creator.avatar})`}}></div>
             <div>
-              <p className="text-xs font-light">{toDateTime(record.created)}</p>
+              <p className="text-xs text-gray-400">{toDateTime(record.created)}</p>
               <p>{record.type === "comissioner" ?
                 "Commissioner made a move"
               : record.type === "trade" ? 

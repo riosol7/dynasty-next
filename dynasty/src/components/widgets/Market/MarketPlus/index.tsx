@@ -148,7 +148,7 @@ export default function MarketPlus() {
                         <p className="w-3/12">Low</p>
                         <p className="w-3/12">High</p>
                         <p className="w-3/12">Average</p>
-                        <p className="w-3/12">Volume</p>
+                        <p className="w-3/12">Quantity</p>
                     </div>
                     <div className="pt-1 flex items-center text-xs">
                         <p className="w-3/12">$ {lowestBid}</p>
@@ -161,7 +161,8 @@ export default function MarketPlus() {
             <div className="py-5">
                 <TrendChart waivers={filteredWaivers} height={300}/>
             </div>
-            <div className={`py-5 my-5 border-dashed border-t border-[#2a2c3e]`}>
+            <div className={`py-5 border-[#2a2c3e]`}>
+                <p className="my-5 pt-5 text-sm text-center font-bold border-b border-gray-800 pb-3">Volume</p>
                 <VolumeChart waivers={filteredWaivers} height={40}/>
             </div>
             <div className="mt-5 pt-5">

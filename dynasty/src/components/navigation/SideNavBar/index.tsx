@@ -48,7 +48,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
             case "Market":
                 navItemActive = marketActive;
                 iconName = "ant-design:stock-outlined";
-                navLink = `/market?position=QB&season=${prevLeague.season}`;
+                navLink = `/market?position=QB&season=All+Time`;
                 break;
 
             case "Matchups":
