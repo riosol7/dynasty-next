@@ -20,7 +20,17 @@ import {
     getSortedTransactionRecords,  
     findTopSpender, 
     validateWaiverBidLeagues, 
-    } from "@/utils";
+} from "@/utils";
+import VolumeChart from "@/components/charts/BarCharts/VolumeChart";
+
+const positionStyles = {
+    QB: styles.qbHUD,
+    RB: styles.rbHUD,
+    WR: styles.wrHUD,
+    TE: styles.teHUD,
+    K: styles.kHUD,
+    DEF: styles.defHUD,
+};
 
 export default function MarketPlus() {
     const router = useRouter();
@@ -80,73 +90,81 @@ export default function MarketPlus() {
     const topSpender = findTopSpender(waivers[selectPosition as keyof Waivers]);
     return (
         <div>
-            <div className="">
-                <div className="flex items-center justify-between">
+            <div className="pb-5">
+                <div className="pt-3 pb-4 flex justify-between items-center">
+                    <h2 className="font-bold">{selectSeason} Key Statistics</h2>
+                    <div className={`flex items-center text-sm text-gray-400`}>
+                        {validWaiverBidLeagues.slice().reverse().map((league, i) => 
+                            <p key={i} className={`${styles.hoverText} ${selectSeason === league.season ? "text-white" : ""} ${i === 0 ? "" : "mx-4"}`} 
+                            onClick={() => handleSeason(league.season)}>{league.season}</p>
+                        )}
+                        <p onClick={() => handleSeason("All Time")} className={`${styles.hoverText} ${selectSeason === "All Time" ? "text-white" : ""}`}>ALL</p>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between mb-3">
                     {POSITIONS.slice().map((position, i) => {
-                        const positionWaivers: Interfaces.Transaction[] = waivers && waivers[position as keyof typeof waivers]!;
-                        const filteredWaivers: Interfaces.Transaction[] = filteredTransactionsBySeason(positionWaivers, selectSeason);
-                        const recentPositionWaivers: Interfaces.Transaction[] = findRecentWaivers(filteredWaivers);
-                        const positionPercentageChanged = recentPositionWaivers && calculatePercentageChange(recentPositionWaivers[0]?.settings?.waiver_bid, recentPositionWaivers[1]?.settings?.waiver_bid);
-                        const percentageChanged = recentPositionWaivers && calculatePercentageChange(recentPositionWaivers[0]?.settings?.waiver_bid, recentPositionWaivers[1]?.settings?.waiver_bid);
-                        const lastPrice = recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid || 0;
-
-                        return (
-                            <div key={i} className={`${styles.positionBox} border border-[${selectPosition === position ? "#a9dfd8" : "#2a2c3e"}] ${styles.hover} ${i === POSITIONS.length - 1 ? "" : "mr-4"}`} onClick={() => handlePosition(position)}>
-                                <p className="pb-5">{position}</p>
-                                <div className={`pt-5 pb-2 ${positionPercentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
-                                    <p className="text-xl">${recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid}</p>
-                                    <div className="font-light text-xs pt-1">
-                                        <p className={`text-sm ${percentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
-                                            {percentageChanged > 0 ? "+" : ""}${lastPrice - (recentPositionWaivers && recentPositionWaivers[1]?.settings?.waiver_bid)} ({percentageChanged > 0 ? "+" : ""}{percentageChanged} %)
-                                        </p>
+                    const positionWaivers: Interfaces.Transaction[] = waivers && waivers[position as keyof typeof waivers]!;
+                    const filteredWaivers: Interfaces.Transaction[] = filteredTransactionsBySeason(positionWaivers, selectSeason);
+                    const recentPositionWaivers: Interfaces.Transaction[] = findRecentWaivers(filteredWaivers);
+                    const currentPrice: number = recentPositionWaivers && recentPositionWaivers[0]?.settings?.waiver_bid || 0;
+                    const prevPrice: number = recentPositionWaivers && recentPositionWaivers[1]?.settings?.waiver_bid || 0
+                    const positionPercentageChanged: number = recentPositionWaivers && calculatePercentageChange(currentPrice, prevPrice) || 0;
+                    return (
+                        <div key={i} 
+                        className={`${styles.positionBoxContainer} ${i === POSITIONS.length - 1 ? "" : "mr-4"}`} 
+                        onClick={() => handlePosition(position)}>
+                            <div className={`${styles.positionBoxOuterLayer} ${selectPosition === position ? positionStyles[position as keyof typeof positionStyles] : `bg-[#2a2c3e]`}`}>
+                                <div className={`${styles.hover} ${styles.positionBoxInnerLayer}`}>
+                                    <p className="pb-5">{position}</p>
+                                    <div className={`pt-5 pb-2 ${positionPercentageChanged === 0 || positionPercentageChanged === Infinity ? "text-white" :
+                                    positionPercentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
+                                        <p className="text-xl">${currentPrice}</p>
+                                        <div className="font-light text-xs pt-1">
+                                            <p className={`text-sm ${positionPercentageChanged === 0 || positionPercentageChanged === Infinity ? "text-white" :
+                                            positionPercentageChanged > 0 ? "text-green-500" : "text-red-500"}`}>
+                                                {positionPercentageChanged > 0 ? "+" : ""}${currentPrice - (prevPrice)} ({positionPercentageChanged > 0 ? "+" : ""}{positionPercentageChanged} %)
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
+                        </div>
+                    );})}
+                </div>
+                <div className="">
+                    <div className="pt-4 flex items-center text-xs font-bold">
+                        <p className="w-3/12">Last Price</p>
+                        <p className="w-3/12">Top Spender</p>
+                        <p className="w-3/12">Most Outbids</p>
+                        <p className="w-3/12">Most Valuable</p>
+                    </div>
+                    <div className="pt-1 flex items-center text-xs">
+                        <p className="w-3/12">$ {lowestBid}</p>
+                        <p className="w-3/12">{topSpender?.owner}: $ {topSpender?.bid}</p>
+                        <p className="w-3/12">-</p>
+                        <p className="w-3/12">-</p>
+                    </div>
+                    <div className="pt-4 flex items-center text-xs font-bold">
+                        <p className="w-3/12">Low</p>
+                        <p className="w-3/12">High</p>
+                        <p className="w-3/12">Average</p>
+                        <p className="w-3/12">Volume</p>
+                    </div>
+                    <div className="pt-1 flex items-center text-xs">
+                        <p className="w-3/12">$ {lowestBid}</p>
+                        <p className="w-3/12">$ {highestBid}</p>
+                        <p className="w-3/12">$ {averageBid}</p>
+                        <p className="w-3/12">{volume}</p>
+                    </div>
                 </div>
             </div>
             <div className="py-5">
-                <TrendChart waivers={filteredWaivers} height={200}/>
+                <TrendChart waivers={filteredWaivers} height={300}/>
             </div>
-            <div className={`flex items-center border-b border-[#2a2c3e] text-sm text-gray-400 py-3`}>
-                {validWaiverBidLeagues.slice().reverse().map((league, i) => 
-                    <p key={i} className={`${styles.hoverText} ${selectSeason === league.season ? "text-white" : ""} ${i === 0 ? "" : "mx-4"}`} 
-                    onClick={() => handleSeason(league.season)}>{league.season}</p>
-                )}
-                <p onClick={() => handleSeason("All Time")} className={`${styles.hoverText} ${selectSeason === "All Time" ? "text-white" : ""}`}>ALL</p>
+            <div className={`py-5 my-5 border-dashed border-t border-[#2a2c3e]`}>
+                <VolumeChart waivers={filteredWaivers} height={40}/>
             </div>
-            <div className="pt-2 pb-5">
-                <h2 className="pt-5 pb-4 border-b-2 border-[#2a2c3e] font-bold">{selectSeason} Key Statistics</h2>
-                <div className="pt-4 flex items-center text-xs font-bold">
-                    <p className="w-3/12">Last Price</p>
-                    <p className="w-3/12">Top Spender</p>
-                    <p className="w-3/12">Most Outbids</p>
-                    <p className="w-3/12">Most Valuable</p>
-                </div>
-                <div className="pt-1 flex items-center text-xs">
-                    <p className="w-3/12">$ {lowestBid}</p>
-                    <p className="w-3/12">{topSpender?.owner}: $ {topSpender?.bid}</p>
-                    <p className="w-3/12">-</p>
-                    <p className="w-3/12">-</p>
-                </div>
-                <div className="pt-4 flex items-center text-xs font-bold">
-                    <p className="w-3/12">Low</p>
-                    <p className="w-3/12">High</p>
-                    <p className="w-3/12">Average</p>
-                    <p className="w-3/12">Volume</p>
-                </div>
-                <div className="pt-1 flex items-center text-xs">
-                    <p className="w-3/12">$ {lowestBid}</p>
-                    <p className="w-3/12">$ {highestBid}</p>
-                    <p className="w-3/12">$ {averageBid}</p>
-                    <p className="w-3/12">{volume}</p>
-                </div>
-            </div>
-            <div className="pt-5 mt-5">
-                <div className="flex items-center pt-5 mt-5">
-                    <h2 className="font-bold">{selectSeason} Waivers</h2>
-                </div>
+            <div className="mt-5 pt-5">
                 <div className="py-5 text-sm">
                     <PlayerHeader 
                     asc={asc} 

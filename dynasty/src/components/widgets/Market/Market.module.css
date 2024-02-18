@@ -189,8 +189,17 @@
     background-repeat: no-repeat;
 }
 
-.positionBox {
+.positionBoxContainer {
     width: 20%;
+}
+
+.positionBoxOuterLayer {
+    padding: 1px;
+    border-radius: 4px;
+}
+
+.positionBoxInnerLayer {
+    background-color: black;
     padding: .75em;
     border-radius: 4px;
 }

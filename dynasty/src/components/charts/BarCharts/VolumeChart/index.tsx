@@ -44,7 +44,7 @@ export default function VolumeChart({ height, width, waivers }: Interfaces.Trend
         },
         plotOptions: {
             bar: {
-                columnWidth: "40%",
+                columnWidth: "35%",
                 distributed: true,
             },
         },
