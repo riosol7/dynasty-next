@@ -17,6 +17,7 @@ import { allUsers, findLogo, findPlayerByID, findUserByOwnerID, findUserByRoster
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 import SLEEPER_IMG from "@/assets/images/sleeper.png";
+import TransactionTreeMap from "@/components/charts/TreemapCharts/TransactionChart";
 
 export default function TransactionList() {
   const { fantasyMarket } = useFantasyMarket()!;
@@ -112,9 +113,12 @@ export default function TransactionList() {
       <div className="flex items-center justify-between font-bold pl-4 pr-2 py-3 border-b border-[#111827]">
         <div className="flex items-center">
           <Icon icon="carbon:cics-transaction-server-zos" className={`pr-1 ${styles.icon}`} style={{fontSize:"22px"}}/>
-          <p>Recent Transactions</p> 
+          <p>Transactions</p> 
         </div>
         <Icon icon="uiw:more" className={styles.transactionModalBtn}/>
+      </div>
+      <div>
+        <TransactionTreeMap/>
       </div>
       <div>
       {records.map((record, i) => {
