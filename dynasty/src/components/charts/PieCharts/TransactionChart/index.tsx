@@ -42,11 +42,8 @@ export default function TransactionPieChart() {
         return transactionCountByUsername;
     };
     const transactionPerCreatorCount = getTransactionCountByUsername(allTransactions);
-    const transformedData = Object.entries(transactionPerCreatorCount).map(([username, value]) => ({
-        x: username,
-        y: value,
-      }));
-    const series = [{data: transformedData}]
+  
+    const series = Object.values(transactionPerCreatorCount);
     const options = {
         chart: {
             foreColor: '#000',
@@ -55,32 +52,43 @@ export default function TransactionPieChart() {
             },
         },
         colors: ["#a9dfd8"],
+        labels: Object.keys(transactionPerCreatorCount),
         legend: {
             show: false,
         },
         plotOptions: {
-            treemap: {
-                distributed: true,
-                enableShades: false,
-                colorScale: {
-                    ranges: [
-                        {
-                            from: -6,
-                            to: 0,
-                            color: "#a9dfd8",
-                            foreColor: "#000",
+            pie: {
+                // background: "transparent",
+                customScale: .9,
+                donut: {
+                    labels: { 
+                        show: true,
+                        name: {
+                            show: true,
+                            color: "gray"
                         },
-                        {
-                            from: 0.001,
-                            to: 6,
-                            color: '#52B12C'
+                        value: {
+                            show: true,
+                            color: "white"
+
+                        },
+                        total: {
+                            show:true,
+                            color: "gray",
+                            // fontWeight: 400
                         }
-                    ]
-                }
+                    },
+                    size: "77%"
+                },
+                expandOnClick: true,
             }
         },
+        stroke: {
+            colors: ["black"]
+        },
         tooltip: {
-            theme:"dark"
+            enabled: false,
+            theme:"dark",
         }
     }
     return (

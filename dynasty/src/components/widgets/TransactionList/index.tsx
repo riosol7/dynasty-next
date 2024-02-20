@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Icon } from "@iconify-icon/react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./TransactionList.module.css";
 import { 
   useDynastyProcessContext, 
@@ -13,11 +13,20 @@ import {
   usePlayerContext, 
   useSuperFlexContext 
 } from "@/context";
-import { allUsers, findLogo, findPlayerByID, findUserByOwnerID, findUserByRosterID, getSortedTransactionRecords, processPlayers, processTransactions, toDateTime } from "@/utils";
+import { 
+  allUsers, 
+  findLogo, 
+  findPlayerByID, 
+  findUserByOwnerID, 
+  findUserByRosterID, 
+  getSortedTransactionRecords, 
+  processPlayers, 
+  processTransactions, 
+  toDateTime } from "@/utils";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import * as Interfaces from "@/interfaces";
 import SLEEPER_IMG from "@/assets/images/sleeper.png";
-import TransactionTreeMap from "@/components/charts/TreemapCharts/TransactionChart";
+import TransactionPieChart from "@/components/charts/PieCharts/TransactionChart";
 
 export default function TransactionList() {
   const { fantasyMarket } = useFantasyMarket()!;
@@ -118,13 +127,13 @@ export default function TransactionList() {
         <Icon icon="uiw:more" className={styles.transactionModalBtn}/>
       </div>
       <div>
-        <TransactionTreeMap/>
+        <TransactionPieChart/>
       </div>
       <div>
       {records.map((record, i) => {
         const creator = findUserByOwnerID(record.creator, users);
         return(
-        <div key={i} className={`py-2 ${i !== records.length - 1 ? styles.dashedRow : ""} px-4`}>
+        <div key={i} className={`py-2 ${styles.dashedRow} px-4`}>
           <div className={`flex items-center text-sm`}>
             <div className={`mr-1 ${styles.ownerImage}`} style={{backgroundImage:`url(${SLEEPER_AVATAR_BASE_URL}${creator.avatar})`}}></div>
             <div>

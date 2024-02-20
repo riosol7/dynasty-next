@@ -18,7 +18,7 @@
 }
 
 .dashedRow {
-    border-bottom: 1px dashed #0f0f0f
+    border-top: 1px dashed #0f0f0f
 }
 
 .solidRow {
@@ -28,8 +28,8 @@
 .transactionList {
     /* width: 350px; */
     height: max-content;
-    border: 1px solid #111827;
-    border-radius: 5px;
+    /* border: 1px solid #111827;
+    border-radius: 5px; */
 }
 
 .filterBtn {
