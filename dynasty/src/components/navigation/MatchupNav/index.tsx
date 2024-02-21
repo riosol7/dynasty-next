@@ -83,25 +83,25 @@ export default function MatchupNav() {
             </div>
             <div className="flex items-center text-xs">
                 <div className={styles.awardCard}>
-                    <Icon icon="fa6-solid:explosion" className={styles.icon}/>
+                    <Icon icon="game-icons:punch-blast" className={styles.icon}/>
                     <p>Best Offense</p>
                     <p>{bestOffenseUser.display_name}</p>
                 </div>
                 <div className={styles.awardCard}>
-                    
+                    <Icon icon="fa-solid:car-crash" className={styles.icon}/>
                     <p>Worst Offense</p>
                     <p>{worstOffenseUser.display_name}</p>
                 </div>
                 <div className={styles.awardCard}>
-                    
+                    <Icon icon="material-symbols:energy-program-saving" className={styles.icon}/>
                     <p>Most Efficient</p>
                 </div>
                 <div className={styles.awardCard}>
-                    
+                    <Icon icon="game-icons:thunder-struck" className={styles.icon}/>
                     <p>Least Efficient</p>
                 </div>
                 <div className={styles.awardCard}>
-                    
+                    <Icon icon="fa6-solid:explosion" className={styles.icon}/>
                     <p>Biggest Blowout</p>
                 </div>
                 <div className={styles.awardCard}>
