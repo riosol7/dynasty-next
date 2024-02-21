@@ -4,7 +4,7 @@ import MarketPlus from "@/components/widgets/Market/MarketPlus";
 
 export default function Market() {
     return (
-        <div className={`flex pt-5`}>
+        <div className={`flex pt-3`}>
             <div className="w-full">
                 <MarketPlus />
                 <div className="pt-5 mt-5">

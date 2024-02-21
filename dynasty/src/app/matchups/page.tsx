@@ -6,13 +6,14 @@ import { SeasonProvider, useLeagueContext } from "@/context";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "@/interfaces";
-import { findLeagueBySeason, getMatchups, sortMatchupsByHighestScore } from "@/utils";
-import AllTimeScoreWidget from "@/components/widgets/Matchup/AllTimeScores";
+import { findLeagueBySeason, findMatchupDateByPoints, getMatchups, sortMatchupsByHighestScore } from "@/utils";
 import PerformerSlider from "@/components/sliders/Performer";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import LegacyMatchup from "@/components/widgets/Matchup/LegacyMatchup";
 
 export default function Matchups() {
+    const router = useRouter();
+
     const { legacyLeague } = useLeagueContext();
     const searchParams = useSearchParams();
     const week: number = Number(searchParams.get("week"));
@@ -23,7 +24,27 @@ export default function Matchups() {
     const sortedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups[week - 1]);
     const initialMatchup: Interfaces.Match[] = sortedMatchups && sortedMatchups[0];
     const [ matchup, setMatchup ] = useState<Interfaces.Match[]>(initialMatchup);
+    
+    const selectMatchup = (game: Interfaces.Match[]): void => {
+        const sortedScores: Interfaces.Match[] = game.sort((a, b) => b.points - a.points); 
+        const team1pts: number = sortedScores! && sortedScores[0]?.points!;
+        const team2pts: number = sortedScores! && sortedScores[0]?.points!;
 
+        const foundMatchupDate = findMatchupDateByPoints(legacyLeague, team1pts, team2pts)
+        const selectWeek: string = foundMatchupDate! && foundMatchupDate?.week?.toString();
+        const selectSeason: string = foundMatchupDate! && foundMatchupDate?.season;
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set("week", selectWeek);
+        newSearchParams.set("season", selectSeason);
+
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.split('?')[0] + '?' + newSearchParams.toString();
+
+        router.replace(newUrl, undefined);
+        setMatchup(sortedScores);
+        
+    };
+    
     useEffect(() => {
         if (matchup === undefined) {
             setMatchup(initialMatchup)
@@ -44,15 +65,15 @@ export default function Matchups() {
                     <Icon icon="tabler:vs" className={`pr-1 ${styles.icon}`}/>
                     League Matchups
                 </h3>
-                <LeagueMatchupSlider matchup={matchup} setMatchup={setMatchup}/>
+                <LeagueMatchupSlider matchup={matchup} selectMatchup={selectMatchup}/>
             </div>
             <div className="py-5 mt-5 flex items-start">
                 <div className="mr-5 pr-3">
                     <MatchupWidget matchup={matchup}/>
                 </div>
                 <div className="w-full">
-                    <LegacyMatchup matchup={matchup}/>
-                    <AllTimeScoreWidget/>
+                    <LegacyMatchup matchup={matchup} legacy={true} selectMatchup={selectMatchup}/>
+                    <LegacyMatchup legacy={false} selectMatchup={selectMatchup}/>
                 </div>
             </div>
         </SeasonProvider>

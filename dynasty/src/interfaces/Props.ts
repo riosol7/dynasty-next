@@ -10,7 +10,7 @@ export interface MVPSlideProps {
 
 export interface LeagueMatchupSliderProps {
     matchup: Match[];
-    setMatchup: React.Dispatch<React.SetStateAction<Match[]>>
+    selectMatchup: (matchup: Match[]) => void;
 }
 
 export interface DynastyRowProps {
@@ -158,4 +158,10 @@ export interface PlayerHeaderProps {
     setSort: React.Dispatch<React.SetStateAction<string>>;
     sort: string;
     waiverBids: Transaction[];
+}
+
+export interface LegacyMatchupProps {
+    matchup?: Match[];
+    legacy?: boolean;
+    selectMatchup: (matchup: Match[]) => void;
 }

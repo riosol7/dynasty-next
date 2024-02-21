@@ -7,9 +7,8 @@ import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, fin
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 
-export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.LeagueMatchupSliderProps) {
+export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfaces.LeagueMatchupSliderProps) {
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const searchParams = useSearchParams();
@@ -85,7 +84,7 @@ export default function LeagueMatchupSlider({ matchup, setMatchup }: Interfaces.
                     `linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)`
                     : "black" }}>
                         <div className="p-2 bg-black">
-                            <div className={`${styles.matchupCard}`} onClick={() => setMatchup(matchupTeams)}>
+                            <div className={`${styles.matchupCard}`} onClick={() => selectMatchup(matchupTeams)}>
                                 <div className={`${styles.matchupCardHeader}`}>
                                     <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
                                         <div className={styles.playerBackground} style={(players.length > 0) ? 

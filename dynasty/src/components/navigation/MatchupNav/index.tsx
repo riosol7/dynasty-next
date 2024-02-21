@@ -83,7 +83,7 @@ export default function MatchupNav() {
             </div>
             <div className="flex items-center text-xs">
                 <div className={styles.awardCard}>
-                    
+                    <Icon icon="fa6-solid:explosion" className={styles.icon}/>
                     <p>Best Offense</p>
                     <p>{bestOffenseUser.display_name}</p>
                 </div>

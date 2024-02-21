@@ -8,8 +8,8 @@
     width: max-content;
 }
 .teamAvatar {
-    min-width: 110px; 
-    min-height: 110px;
+    min-width: 107px; 
+    min-height: 107px;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -112,7 +112,10 @@
 
 .selectScoreList {
     background-color: black;
-    font-weight: bold;    
+    /* font-weight: bold;     */
+}
+.selectScoreList:focus {
+    outline: none;
 }
 
 .transactionModalBtn {
@@ -121,4 +124,13 @@
 .transactionModalBtn:hover {
     background-color: #111827;
     border-radius: 8%;
+}
+
+.matchupRecord {
+    display: flex;
+    align-items: center;
+    padding-block: .75rem;
+}
+.matchupRecord:hover {
+    background-color: #1b2025;
 }

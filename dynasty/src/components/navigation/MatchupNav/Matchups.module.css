@@ -11,7 +11,7 @@
 }
 
 .selectWeek {
-    background-color: black;
+    background: inherit;
     padding: 12px;
     display: flex;
     align-items: center;
@@ -30,7 +30,7 @@
     background-color: rgba(65, 65, 65, 0.9);
     padding: 8px;
     z-index: 1;
-    top: 95%; /* Adjust the value as needed */
+    top: 85%; /* Adjust the value as needed */
     left: 0;
     font-size: 12px;
 }
@@ -79,12 +79,17 @@
 }
 
 .matchupNav {
+    background: rgba(0, 0, 0, 0.795);
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: fixed;
     width: 100%;
     z-index: 99999;
-    background: black;
-    padding-block: 4.5px;
+    padding-block: 10px;
+}
+
+.icon {
+    font-size: 32px;
+    color: #a9dfd8;
 }

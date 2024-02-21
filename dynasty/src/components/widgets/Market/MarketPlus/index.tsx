@@ -92,7 +92,7 @@ export default function MarketPlus() {
         <div>
             <div className="pb-5">
                 <div className="pt-3 pb-4 flex justify-between items-center">
-                    <h2 className="font-bold">{selectSeason} Key Statistics</h2>
+                    <h2>{selectSeason} Key Statistics</h2>
                     <div className={`flex items-center text-sm text-gray-400`}>
                         {validWaiverBidLeagues.slice().reverse().map((league, i) => 
                             <p key={i} className={`${styles.hoverText} ${selectSeason === league.season ? "text-white" : ""} ${i === 0 ? "" : "mx-4"}`} 
