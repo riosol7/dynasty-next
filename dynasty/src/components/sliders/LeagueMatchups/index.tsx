@@ -3,7 +3,7 @@ import styles from "./LeagueMatchups.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Icon } from "@iconify-icon/react";
 import { useLeagueContext, usePlayerContext } from "@/context";
-import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth, sortMatchupsByHighestScore } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findMatchupDateByPoints, findPlayerByPts, findRecord, findRosterByRosterID, getMatchups, placementRankings, roundToHundredth, sortMatchupsByHighestScore } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { PLAYER_BASE_URL, POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
 import { useSearchParams } from "next/navigation";
@@ -13,8 +13,17 @@ export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfac
     const { players } = usePlayerContext();
     const searchParams = useSearchParams();
 
-    const week: number = Number(searchParams.get("week"))
-    const season: string = searchParams.get("season")!;
+    const team1: Interfaces.Match = matchup && matchup[0];
+    const team2: Interfaces.Match = matchup && matchup[1];
+    const team1Score: number = team1?.points;
+    const team2Score: number = team2?.points;
+    const foundGameWeekByScore = findMatchupDateByPoints(
+        legacyLeague, team1Score, team2Score);
+
+    const week: number = foundGameWeekByScore?.week! || 
+    Number(searchParams.get("week"));
+    const season: string = foundGameWeekByScore?.season! ||
+    searchParams.get("season")!;
     const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
@@ -22,8 +31,8 @@ export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfac
     const selectedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups[week - 1]);
 
     const selectedMatchup = (selectMatchup: Interfaces.Match[]): boolean => {
-        const pointsA:boolean = matchup && matchup[0].points === selectMatchup[0].points;
-        const pointsB:boolean = matchup && matchup[1].points === selectMatchup[1].points;
+        const pointsA:boolean = matchup && matchup[0]?.points === selectMatchup[0].points;
+        const pointsB:boolean = matchup && matchup[1]?.points === selectMatchup[1].points;
         return pointsA && pointsB;
     };
     
@@ -84,7 +93,7 @@ export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfac
                     `linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)`
                     : "black" }}>
                         <div className="p-2 bg-black">
-                            <div className={`${styles.matchupCard}`} onClick={() => selectMatchup(matchupTeams)}>
+                            <div className={`${styles.matchupCard}`} onClick={(e) => selectMatchup(matchupTeams, e)}>
                                 <div className={`${styles.matchupCardHeader}`}>
                                     <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
                                         <div className={styles.playerBackground} style={(players.length > 0) ? 

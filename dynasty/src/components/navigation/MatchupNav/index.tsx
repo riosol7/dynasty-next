@@ -1,26 +1,32 @@
 "use client";
 import styles from "./Matchups.module.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";
-import { findLeagueBySeason, findUserByRosterID, getMatchups } from '@/utils';
+import { findLeagueBySeason, findMatchupByWeekSeason, findMatchupDateByPoints, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
 import { useRouter, useSearchParams } from "next/navigation";
 
 
-export default function MatchupNav() {
+export default function MatchupNav({ matchup, selectMatchup }: Interfaces.MatchupNavProps) {
     const { legacyLeague } = useLeagueContext();
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const week: number = Number(searchParams.get("week"));
-    const season: string = searchParams.get("season")!; 
-    const [ selectWeek, setSelectWeek ] = useState<number>(Number(week));
-    const [ selectSeason, setSelectSeason ] = useState<string>(season)
+    const team1: Interfaces.Match = matchup && matchup[0];
+    const team2: Interfaces.Match = matchup && matchup[1];
+    const team1Score: number = team1?.points;
+    const team2Score: number = team2?.points;
+    const foundGameWeekByScore = findMatchupDateByPoints(
+        legacyLeague, team1Score, team2Score);
+    console.log("foundGameWeekByScore: ", foundGameWeekByScore);
+    const week: number = foundGameWeekByScore?.week! || 
+    Number(searchParams.get("week"));
+    const season: string = foundGameWeekByScore?.season! ||
+    searchParams.get("season")!;
     const [ showModal, setShowModal ] = useState<boolean>(false); 
-    const [forceRerender, setForceRerender] = useState(false);
 
-    const league: Interfaces.League = findLeagueBySeason(selectSeason!, legacyLeague);
+    const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
     const matchups = getMatchups(league.matchups);
     const numWeeks = matchups.length;
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
@@ -31,16 +37,25 @@ export default function MatchupNav() {
     const worstOffense = matchupList && matchupList[matchupList?.length - 1];
     const worstOffenseUser = findUserByRosterID(worstOffense?.roster_id, league);
 
-    const applySearch = (): void => {
-        const strWeek: string = selectWeek.toString();
+    const applySearch = (weekIdx:number, selectedSeason: string, event: React.MouseEvent): void => {
+        event.preventDefault();
+
+        const strWeek: string = weekIdx!.toString();
         const newSearchParams = new URLSearchParams(searchParams.toString());
-        newSearchParams.set("week", strWeek);
-        newSearchParams.set("season", selectSeason);
+        
+        if (strWeek === "17" && Number(selectedSeason) <= 2020) {
+            const modifiedStrWeek: string = (Number(strWeek) - 1).toString();
+            newSearchParams.set("week", modifiedStrWeek);
+        } else {
+            newSearchParams.set("week", strWeek);
+        };
 
-        const currentUrl = window.location.href;
-        const newUrl = currentUrl.split('?')[0] + '?' + newSearchParams.toString();
+        newSearchParams.set("season", selectedSeason!);
 
-        router.replace(newUrl, undefined);
+        selectMatchup(
+            findMatchupByWeekSeason(legacyLeague, weekIdx, selectedSeason),
+            event
+        );
     };
 
     return (
@@ -52,34 +67,19 @@ export default function MatchupNav() {
                     {showModal ?
                     <div className={styles.modal}>
                         <div className={`w-6/12 text-center ${styles.scroll} ${styles.selectWeekScroll}`}>
-                        {weeks.map((week, i) => 
-                            <p key={i} className={styles.hover} onClick={() => setSelectWeek(i + 1)}
-                            style={{
-                                fontWeight: selectWeek === i + 1? "bolder" : ""
-                            }}
-                            >{week}</p>
+                        {weeks.map((weekLabel, i) => 
+                            <p key={i} className={`${styles.hover} ${week === i + 1 ? styles.selectedParam : ""}`} 
+                            onClick={(e) => applySearch(i + 1, season, e)}>{weekLabel}</p>
                         )}    
                         </div>
-                        <div className={`w-6/12 text-center ${styles.scroll}`}>
+                        <div className={`w-6/12 text-center ${styles.scroll} ${styles.selectWeekScroll}`}>
                         {legacyLeague.filter(league => league.status !== "pre_draft").map((league, idx) =>
-                            <p key={idx} className={styles.hover} onClick={() => setSelectSeason(league.season)}
-                            style={{
-                                fontWeight: selectSeason === league.season? "bolder" : ""
-                            }}>{league.season}</p>
+                            <p key={idx} className={`${styles.hover} ${season === league.season? styles.selectedParam : ""}`} 
+                            onClick={(e) => applySearch(week, league.season, e)}>{league.season}</p>
                         )}
                         </div>
-                        <div>
-                            <button onClick={() => applySearch()} className={styles.applySearch}>
-                                Apply
-                            </button>                        
-                        </div>
-                    </div>
-                    :<></>}
+                    </div>:<></>}
                 </div>
-                {/* <div className="pl-3 flex items-center">
-                    <Icon icon="ep:arrow-left-bold" className={styles.arrow}/>
-                    <Icon icon="ep:arrow-right-bold" className={styles.arrow}/>
-                </div> */}
             </div>
             <div className="flex items-center text-xs">
                 <div className={styles.awardCard}>

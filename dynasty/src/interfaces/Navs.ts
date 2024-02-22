@@ -1,3 +1,5 @@
+import { Match } from ".";
+
 export interface TeamNavProps {
     name: string;
 }
@@ -12,6 +14,8 @@ export interface LeagueNavProps {
 };
 
 export interface MatchupNavProps {
-    week: number;
-    season: string;
+    // week: number;
+    // season: string;
+    matchup: Match[];
+    selectMatchup: (game: Match[], event: React.MouseEvent) => void;
 };

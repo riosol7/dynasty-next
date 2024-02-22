@@ -6,7 +6,7 @@
     border-radius: 5%;
 }
 .selectWeek:hover {
-    background-color: #0f0f0f;
+    /* background-color: #0f0f0f; */
     border-radius: 5%;
 }
 
@@ -27,15 +27,23 @@
     position: absolute;
     width: 220px;
     height: 200px;
-    background-color: rgba(65, 65, 65, 0.9);
+    background-color: rgba(48, 48, 48, 0.9);
     padding: 8px;
     z-index: 1;
-    top: 85%; /* Adjust the value as needed */
+    top: 80%; /* Adjust the value as needed */
     left: 0;
     font-size: 12px;
 }
 
+.selectedParam {
+    font-weight: bold;
+    color: #00f0d0;
+};
+
  /* For WebKit (Chrome, Safari) */
+.selectWeekScroll {
+    width: 5px;
+}
 .selectWeekScroll::-webkit-scrollbar {
     width: 5px;
 }

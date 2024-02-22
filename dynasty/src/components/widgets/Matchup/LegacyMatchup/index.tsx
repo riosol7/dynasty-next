@@ -61,7 +61,7 @@ export default function LegacyMatchup({ matchup, legacy, selectMatchup }: Interf
         const losingTeamUser: Interfaces.Owner = findUserByRosterID(losingTeam?.roster_id, foundLeague);
         const winningTeamUser: Interfaces.Owner = findUserByRosterID(winningTeam?.roster_id, foundLeague);
         return (
-            <div key={i} className={styles.matchupRecord} onClick={() => selectMatchup(matchup)}>
+            <div key={i} className={styles.matchupRecord} onClick={(e) => selectMatchup(matchup, e)}>
                 <p className="w-1/12 text-gray-200 font-bold">{i+1}</p>
                 <p className="w-2/12">Week {weekNum}, {seasonLabel}</p>
                 <p className="w-2/12">{totalScore}</p>

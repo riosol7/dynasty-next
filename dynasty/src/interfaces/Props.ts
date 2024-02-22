@@ -10,7 +10,7 @@ export interface MVPSlideProps {
 
 export interface LeagueMatchupSliderProps {
     matchup: Match[];
-    selectMatchup: (matchup: Match[]) => void;
+    selectMatchup: (matchup: Match[], event: React.MouseEvent) => void;
 }
 
 export interface DynastyRowProps {
@@ -163,5 +163,5 @@ export interface PlayerHeaderProps {
 export interface LegacyMatchupProps {
     matchup?: Match[];
     legacy?: boolean;
-    selectMatchup: (matchup: Match[]) => void;
+    selectMatchup: (matchup: Match[], event: React.MouseEvent) => void;
 }

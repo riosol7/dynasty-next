@@ -1,7 +1,27 @@
 import * as Interfaces from "@/interfaces";
-import { roundToHundredth } from ".";
+import * as Constants from "@/constants";
+import { findLeagueBySeason, roundToHundredth } from ".";
+
+export const findMatchupByWeekSeason = (legacyLeague: Interfaces.League[], weekIdx: number, season: string): Interfaces.Match[] => {
+    const foundLeague: Interfaces.League = findLeagueBySeason(season, legacyLeague)!;
+    const foundWeekMatchups: Interfaces.Match[][] = getMatchups(foundLeague?.matchups)?.find((_, i) => i + 1 === weekIdx);
+    const foundMatchup: Interfaces.Match[] = sortMatchupsByHighestScore(foundWeekMatchups)[0];
+    return foundMatchup || Constants.initMatch;
+};
 
 export const findMatchupDateByPoints = (legacyLeague: Interfaces.League[], score1: number, score2: number): {matchup: Interfaces.Match[], season: string, week: number} => {
+    const matchups = legacyLeague.map(league => {
+        const gameMatchups: Interfaces.Match[][][] = getMatchups(league.matchups);
+        const foundGame = gameMatchups.filter(seasonalMatchups => 
+            seasonalMatchups.filter(weeklyMatchups => weeklyMatchups.filter(team => team.points === score1 || team.points === score2)).length > 0)
+        return foundGame;
+        // return {
+        //     // matchup: matchup.filter(team => team.points === score1 || team.points === score2),
+        //     season: league.season,
+        //     // week: week + 1,
+        // };
+    })
+    console.log("matchups: ", matchups)
     const foundSeason = legacyLeague.map(league => league.matchups.map((matchup, week) => {
         return {
             matchup: matchup.filter(team => team.points === score1 || team.points === score2),
