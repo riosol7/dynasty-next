@@ -1,10 +1,11 @@
+// "use client";
 import "swiper/swiper-bundle.css";
 import styles from "./Performer.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLeagueContext, usePlayerContext } from "@/context";
 import * as Interfaces from "@/interfaces";
-import { calculatePercentage, findLeagueBySeason, findLogo, findPlayerByID, findUserByRosterID, getMatchups } from "@/utils";
+import { calculatePercentage, findLeagueBySeason, findLogo, findMatchupDateByPoints, findPlayerByID, findUserByRosterID, getMatchups } from "@/utils";
 import { PLAYER_BASE_URL, POSITION_COLORS } from "@/constants";
 import { useSearchParams } from "next/navigation";
 
@@ -15,19 +16,28 @@ interface TopPerformingPlayer {
     team_points: number;
 };
 
-export default function PerformerSlider() {
+export default function PerformerSlider({ matchup }: Interfaces.PerformerSliderProps) {
+    
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const searchParams = useSearchParams();
+    const team1: Interfaces.Match = matchup && matchup[0];
+    const team2: Interfaces.Match = matchup && matchup[1];
+    const team1Score: number = team1?.points;
+    const team2Score: number = team2?.points;
+    const foundGameWeekByScore = findMatchupDateByPoints(
+        legacyLeague, team1Score, team2Score);
 
-    const [listCount, setListCount] = useState<number>(25);
+    const week: number = foundGameWeekByScore?.week! || 
+    Number(searchParams.get("week"));
+    const season: string = foundGameWeekByScore?.season! ||
+    searchParams.get("season")!;
 
-    const week: number = Number(searchParams.get("week"))
-    const season: string | null = searchParams.get("season");    
     const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
     const rosters = league.rosters;
     const matchups = getMatchups(league.matchups);
-    const selectedMatchups =  matchups && matchups[week - 1];
+    const selectedMatchups =  matchups && matchups[Number(week) - 1];
+
     const topPerformingPlayers = selectedMatchups?.slice().flat().map(
         (team: Interfaces.Match) => {
             const starters = team.starters.map((starter, j) => {

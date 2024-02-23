@@ -15,7 +15,12 @@ export interface LeagueMatchupSliderProps {
         event: React.MouseEvent,
         selectWeek: string,
         selectSeason: string,
-    ) => void;}
+    ) => void;
+};
+
+export interface PerformerSliderProps {
+    matchup: Match[];
+}
 
 export interface DynastyRowProps {
     roster: Roster;

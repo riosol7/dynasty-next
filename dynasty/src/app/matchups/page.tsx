@@ -36,13 +36,7 @@ export default function Matchups() {
         const team1pts: number = sortedScores! && sortedScores[0]?.points!;
         const team2pts: number = sortedScores! && sortedScores[0]?.points!;
 
-        // const foundMatchupDate = findMatchupDateByPoints(legacyLeague, team1pts, team2pts)
-        // console.log("foundMatchDate: ", foundMatchupDate)
-        // const selectWeek: string = foundMatchupDate! && foundMatchupDate?.week?.toString();
-        // const selectSeason: string = foundMatchupDate! && foundMatchupDate?.season;
         const newSearchParams = new URLSearchParams(searchParams.toString());
-        console.log("MatchupsPage - selectWeek: ", selectWeek)
-        console.log("MatchupsPage - selectSeason: ", selectSeason)
         newSearchParams.set("week", selectWeek);
         newSearchParams.set("season", selectSeason);
 
@@ -51,8 +45,6 @@ export default function Matchups() {
         setMatchup(sortedScores);
 
         window.history.pushState({}, '', newUrl);
-        // router.push(newUrl, undefined);
-
     };
     
     useEffect(() => {
@@ -70,7 +62,7 @@ export default function Matchups() {
                         <Icon icon="game-icons:american-football-helmet" className={`pr-1 ${styles.icon}`}/>
                         Top Performers
                     </h3>
-                    <PerformerSlider/>
+                    <PerformerSlider matchup={matchup}/>
                 </div>
                 <div className="pb-5">
                     <h3 className={styles.sectionTitle}>
