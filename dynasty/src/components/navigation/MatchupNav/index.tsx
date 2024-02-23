@@ -5,13 +5,12 @@ import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { findLeagueBySeason, findMatchupByWeekSeason, findMatchupDateByPoints, findUserByRosterID, getMatchups } from '@/utils';
 import { Icon } from '@iconify-icon/react';
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 
 export default function MatchupNav({ matchup, selectMatchup }: Interfaces.MatchupNavProps) {
     const { legacyLeague } = useLeagueContext();
     const searchParams = useSearchParams();
-    const router = useRouter();
 
     const team1: Interfaces.Match = matchup && matchup[0];
     const team2: Interfaces.Match = matchup && matchup[1];
@@ -57,10 +56,6 @@ export default function MatchupNav({ matchup, selectMatchup }: Interfaces.Matchu
             findMatchupByWeekSeason(legacyLeague, weekIdx, selectedSeason),
             event
         );
-        // const currentUrl = window.location.href;
-        // const newUrl = currentUrl.split('?')[0] + '?' + newSearchParams.toString();
-
-        // router.replace(newUrl, undefined);
     };
 
     return (
