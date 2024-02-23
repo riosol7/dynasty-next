@@ -10,8 +10,12 @@ export interface MVPSlideProps {
 
 export interface LeagueMatchupSliderProps {
     matchup: Match[];
-    selectMatchup: (matchup: Match[], event: React.MouseEvent) => void;
-}
+    selectMatchup: (
+        game: Match[], 
+        event: React.MouseEvent,
+        selectWeek: string,
+        selectSeason: string,
+    ) => void;}
 
 export interface DynastyRowProps {
     roster: Roster;
@@ -163,5 +167,9 @@ export interface PlayerHeaderProps {
 export interface LegacyMatchupProps {
     matchup?: Match[];
     legacy?: boolean;
-    selectMatchup: (matchup: Match[], event: React.MouseEvent) => void;
-}
+    selectMatchup: (
+        game: Match[], 
+        event: React.MouseEvent,
+        selectWeek: string,
+        selectSeason: string,
+    ) => void;}

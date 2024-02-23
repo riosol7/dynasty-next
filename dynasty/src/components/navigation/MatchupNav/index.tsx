@@ -40,21 +40,22 @@ export default function MatchupNav({ matchup, selectMatchup }: Interfaces.Matchu
     const applySearch = (weekIdx:number, selectedSeason: string, event: React.MouseEvent): void => {
         event.preventDefault();
 
-        const strWeek: string = weekIdx!.toString();
+        let strWeek: string = weekIdx!.toString();
         const newSearchParams = new URLSearchParams(searchParams.toString());
         
         if (strWeek === "17" && Number(selectedSeason) <= 2020) {
-            const modifiedStrWeek: string = (Number(strWeek) - 1).toString();
-            newSearchParams.set("week", modifiedStrWeek);
+            strWeek = (Number(strWeek) - 1).toString();
+            newSearchParams.set("week", strWeek);
         } else {
             newSearchParams.set("week", strWeek);
         };
-
         newSearchParams.set("season", selectedSeason!);
 
         selectMatchup(
-            findMatchupByWeekSeason(legacyLeague, weekIdx, selectedSeason),
-            event
+            findMatchupByWeekSeason(legacyLeague, Number(strWeek), selectedSeason),
+            event,
+            strWeek,
+            selectedSeason
         );
     };
 

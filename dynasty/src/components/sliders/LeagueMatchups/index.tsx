@@ -30,9 +30,9 @@ export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfac
     const weeks: string[] = Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`);
     const selectedMatchups: Interfaces.Match[][] = sortMatchupsByHighestScore(matchups[week - 1]);
 
-    const selectedMatchup = (selectMatchup: Interfaces.Match[]): boolean => {
-        const pointsA:boolean = matchup && matchup[0]?.points === selectMatchup[0].points;
-        const pointsB:boolean = matchup && matchup[1]?.points === selectMatchup[1].points;
+    const selectedMatchup = (game: Interfaces.Match[]): boolean => {
+        const pointsA:boolean = matchup && matchup[0]?.points === game[0].points;
+        const pointsB:boolean = matchup && matchup[1]?.points === game[1].points;
         return pointsA && pointsB;
     };
     
@@ -93,7 +93,7 @@ export default function LeagueMatchupSlider({ matchup, selectMatchup }: Interfac
                     `linear-gradient(240deg, rgba(201,138,162,1) 0%, rgba(147,128,135,1) 50%, rgba(208,139,165,1) 100%)`
                     : "black" }}>
                         <div className="p-2 bg-black">
-                            <div className={`${styles.matchupCard}`} onClick={(e) => selectMatchup(matchupTeams, e)}>
+                            <div className={`${styles.matchupCard}`} onClick={(e) => selectMatchup(matchupTeams, e, week.toString(), season)}>
                                 <div className={`${styles.matchupCardHeader}`}>
                                     <div className={`${styles.teamCard} w-full`} style={{flexDirection: "row", textAlign: "start" }}>
                                         <div className={styles.playerBackground} style={(players.length > 0) ? 

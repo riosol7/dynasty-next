@@ -25,17 +25,24 @@ export default function Matchups() {
     const initialMatchup: Interfaces.Match[] = sortedMatchups && sortedMatchups[0];
     const [ matchup, setMatchup ] = useState<Interfaces.Match[]>(initialMatchup);
     
-    const selectMatchup = (game: Interfaces.Match[], event: React.MouseEvent): void => {
+    const selectMatchup = (
+        game: Interfaces.Match[], 
+        event: React.MouseEvent, 
+        selectWeek: string,
+        selectSeason: string): void => {
         event.preventDefault();
 
         const sortedScores: Interfaces.Match[] = game.sort((a, b) => b.points - a.points); 
         const team1pts: number = sortedScores! && sortedScores[0]?.points!;
         const team2pts: number = sortedScores! && sortedScores[0]?.points!;
 
-        const foundMatchupDate = findMatchupDateByPoints(legacyLeague, team1pts, team2pts)
-        const selectWeek: string = foundMatchupDate! && foundMatchupDate?.week?.toString();
-        const selectSeason: string = foundMatchupDate! && foundMatchupDate?.season;
+        // const foundMatchupDate = findMatchupDateByPoints(legacyLeague, team1pts, team2pts)
+        // console.log("foundMatchDate: ", foundMatchupDate)
+        // const selectWeek: string = foundMatchupDate! && foundMatchupDate?.week?.toString();
+        // const selectSeason: string = foundMatchupDate! && foundMatchupDate?.season;
         const newSearchParams = new URLSearchParams(searchParams.toString());
+        console.log("MatchupsPage - selectWeek: ", selectWeek)
+        console.log("MatchupsPage - selectSeason: ", selectSeason)
         newSearchParams.set("week", selectWeek);
         newSearchParams.set("season", selectSeason);
 
@@ -44,6 +51,7 @@ export default function Matchups() {
         setMatchup(sortedScores);
 
         window.history.pushState({}, '', newUrl);
+        // router.push(newUrl, undefined);
 
     };
     

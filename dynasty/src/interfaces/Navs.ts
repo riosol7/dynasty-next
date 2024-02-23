@@ -17,5 +17,10 @@ export interface MatchupNavProps {
     // week: number;
     // season: string;
     matchup: Match[];
-    selectMatchup: (game: Match[], event: React.MouseEvent) => void;
+    selectMatchup: (
+        game: Match[], 
+        event: React.MouseEvent,
+        selectWeek: string,
+        selectSeason: string,
+    ) => void;
 };
