@@ -10,26 +10,25 @@ export const findMatchupByWeekSeason = (legacyLeague: Interfaces.League[], weekI
 };
 
 export const findMatchupDateByPoints = (legacyLeague: Interfaces.League[], score1: number, score2: number): {matchup: Interfaces.Match[], season: string, week: number} => {
-    const matchups = legacyLeague.map(league => {
+    const labeledMatchups = legacyLeague.map(league => {
         const gameMatchups: Interfaces.Match[][][] = getMatchups(league.matchups);
-        const foundGame = gameMatchups.filter(seasonalMatchups => 
-            seasonalMatchups.filter(weeklyMatchups => weeklyMatchups.filter(team => team.points === score1 || team.points === score2)).length > 0)
-        return foundGame;
-        // return {
-        //     // matchup: matchup.filter(team => team.points === score1 || team.points === score2),
-        //     season: league.season,
-        //     // week: week + 1,
-        // };
+        return gameMatchups.map((matchup, i) => 
+        matchup.map(game => {
+            return {
+                matchup: game, 
+                season: league.season, 
+                week: i + 1
+            }}));
+    }).flat().flat();
+
+    const foundGame = labeledMatchups.find(game => {
+        const team1Score = game! && game?.matchup[0]?.points!;
+        const team2Score = game! && game?.matchup[1]?.points!;
+
+        return (team1Score === score1 && team2Score === score2) || (team2Score === score1 && team1Score === score2)
     })
-    console.log("matchups: ", matchups)
-    const foundSeason = legacyLeague.map(league => league.matchups.map((matchup, week) => {
-        return {
-            matchup: matchup.filter(team => team.points === score1 || team.points === score2),
-            season: league.season,
-            week: week + 1,
-        };
-    })).flat().filter(league => league.matchup.length > 0)[0] || {matchup: [], season: "", week: 0};
-    return foundSeason;
+
+    return foundGame || {matchup: [], season: "", week: 0};
 };
 
 export const getMatchups = (matchups: Interfaces.Match[][], rID?: number) => {

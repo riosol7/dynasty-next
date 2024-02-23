@@ -15,15 +15,16 @@ export default function MatchupNav({ matchup, selectMatchup }: Interfaces.Matchu
 
     const team1: Interfaces.Match = matchup && matchup[0];
     const team2: Interfaces.Match = matchup && matchup[1];
-    const team1Score: number = team1?.points;
-    const team2Score: number = team2?.points;
+    const team1Score: number = team1?.points!;
+    const team2Score: number = team2?.points!;
     const foundGameWeekByScore = findMatchupDateByPoints(
-        legacyLeague, team1Score, team2Score);
-    console.log("foundGameWeekByScore: ", foundGameWeekByScore);
+    legacyLeague, team1Score, team2Score);
+
     const week: number = foundGameWeekByScore?.week! || 
     Number(searchParams.get("week"));
     const season: string = foundGameWeekByScore?.season! ||
     searchParams.get("season")!;
+    
     const [ showModal, setShowModal ] = useState<boolean>(false); 
 
     const league: Interfaces.League = findLeagueBySeason(season!, legacyLeague);
@@ -56,6 +57,10 @@ export default function MatchupNav({ matchup, selectMatchup }: Interfaces.Matchu
             findMatchupByWeekSeason(legacyLeague, weekIdx, selectedSeason),
             event
         );
+        // const currentUrl = window.location.href;
+        // const newUrl = currentUrl.split('?')[0] + '?' + newSearchParams.toString();
+
+        // router.replace(newUrl, undefined);
     };
 
     return (
