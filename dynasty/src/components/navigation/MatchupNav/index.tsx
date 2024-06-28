@@ -1,5 +1,5 @@
 "use client";
-import styles from "./Matchups.module.css";
+import styles from "./MatchupNav.module.css";
 import React, { useState } from "react";
 import { useLeagueContext } from "@/context";
 import * as Interfaces from "@/interfaces";

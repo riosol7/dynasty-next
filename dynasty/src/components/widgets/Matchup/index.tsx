@@ -5,6 +5,7 @@ import {
     calculatePercentage, 
     findLeagueBySeason, 
     findLogo, 
+    findMatchupDateByPoints, 
     findPlayerByID, 
     findPlayerByPts, 
     findRecord, 
@@ -24,15 +25,21 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
     const { legacyLeague } = useLeagueContext();
     const { players } = usePlayerContext();
     const searchParams = useSearchParams();
-    const week: number = Number(searchParams.get("week"));
-    const season: string = searchParams.get("season")!;
-    const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
-    const rosters: Interfaces.Roster[] = league?.rosters;
-    const matchups: Interfaces.Match[][] = league?.matchups;
     const team1: Interfaces.Match = matchup && matchup[0];
     const team2: Interfaces.Match = matchup && matchup[1];
     const team1Score: number = team1?.points;
     const team2Score: number = team2?.points;
+    const foundGameWeekByScore = findMatchupDateByPoints(
+        legacyLeague, team1Score, team2Score);
+
+    const week: number = foundGameWeekByScore?.week! || 
+    Number(searchParams.get("week"));
+    const season: string = foundGameWeekByScore?.season! ||
+    searchParams.get("season")!;
+    const league: Interfaces.League = findLeagueBySeason(season, legacyLeague);
+    const rosters: Interfaces.Roster[] = league?.rosters;
+    const matchups: Interfaces.Match[][] = league?.matchups;
+    
     const totalPtsScored: number = roundToHundredth(team1Score + team2Score);
     
     const roster1: Interfaces.Roster = findRosterByRosterID(team1?.roster_id, rosters!);
@@ -56,8 +63,8 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
 
     const topStarter1Details = findPlayerByPts(team1, team1TopStarterPts, players);
     const topStarter2Details = findPlayerByPts(team2, team2TopStarterPts, players);
-    const week17Season: boolean = Number(season) <= 2020 && foundWeekIndex < 14 || 
-    Number(season) > 2020 && foundWeekIndex < 15
+    const week17Season: boolean = (Number(season) <= 2020 && foundWeekIndex < 13) || 
+    (Number(season) > 2020 && foundWeekIndex < 14)
     
     const playerList = (team: Interfaces.Match, idx: number) => {
         return team?.starters?.slice().map((starter, i) => { 
@@ -113,8 +120,14 @@ export default function MatchupWidget({ matchup }: Interfaces.MatchupWidgetProps
                         </div>
                     </div>
                     <div>
-                        <div className="flex justify-between bg-gray-700 h-1.5" style={{ flexDirection: reverse ? "row" : "row-reverse", textAlign: reverse ? "end" : "start" }}>
-                            <div className="h-1.5" style={{ width: `${calculatePercentage(team.players_points[player.player_id], team.points)}%`, background: reverse ? "#CD5C5C" : "#818CF8" }}></div>
+                        <div className="flex justify-between bg-gray-700 h-1.5" 
+                        style={{ 
+                            flexDirection: reverse ? "row" : "row-reverse", 
+                            textAlign: reverse ? "end" : "start" }}>
+                            <div className="h-1.5" 
+                            style={{ 
+                            width: `${calculatePercentage(team.players_points[player.player_id], team.points)}%`, 
+                            background: reverse ? "#CD5C5C" : "#818CF8" }}></div>
                             {/* <div className="h-1.5" style={{ width: `${calculatePercentage(team.players_points[player.player_id], team.points)}%`, background: findLogo(player.team).bgColor2 }}></div> */}
                         </div>
                     </div>

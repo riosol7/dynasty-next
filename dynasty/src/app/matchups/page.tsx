@@ -6,14 +6,16 @@ import { SeasonProvider, useLeagueContext } from "@/context";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import * as Interfaces from "@/interfaces";
-import { findLeagueBySeason, findMatchupDateByPoints, getMatchups, sortMatchupsByHighestScore } from "@/utils";
+import { 
+    findLeagueBySeason, 
+    getMatchups, 
+    sortMatchupsByHighestScore } from "@/utils";
 import PerformerSlider from "@/components/sliders/Performer";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import LegacyMatchup from "@/components/widgets/Matchup/LegacyMatchup";
 import MatchupNav from "@/components/navigation/MatchupNav";
 
 export default function Matchups() {
-    const router = useRouter();
     const { legacyLeague } = useLeagueContext();
     const searchParams = useSearchParams();
     const week: number = Number(searchParams.get("week"));
@@ -33,8 +35,8 @@ export default function Matchups() {
         event.preventDefault();
 
         const sortedScores: Interfaces.Match[] = game.sort((a, b) => b.points - a.points); 
-        const team1pts: number = sortedScores! && sortedScores[0]?.points!;
-        const team2pts: number = sortedScores! && sortedScores[0]?.points!;
+        // const team1pts: number = sortedScores! && sortedScores[0]?.points!;
+        // const team2pts: number = sortedScores! && sortedScores[0]?.points!;
 
         const newSearchParams = new URLSearchParams(searchParams.toString());
         newSearchParams.set("week", selectWeek);
