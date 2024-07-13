@@ -36,8 +36,8 @@ export default function LeagueRankings() {
         <>
             <div className="flex items-center justify-between sticky top-0 pt-5 pb-2">
                 <div className="flex items-center">
-                    <Icon icon="ion:podium" className={styles.icon}/>
-                    <select className={styles.selectLeagueRanking} onChange={handleRankings} value={rankings}>
+                    <Icon icon="mdi:podium-gold" className={styles.icon}/>
+                    <select className={`${styles.selectLeagueRanking} pl-1`} onChange={handleRankings} value={rankings}>
                         <option value={"Standings"}>Standings</option>
                         <option value={"Dynasty"}>Dynasty</option>
                         <option value={"Power"}>Power</option>

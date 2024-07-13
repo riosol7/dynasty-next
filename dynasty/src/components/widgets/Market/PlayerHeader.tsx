@@ -119,7 +119,7 @@ export default function PlayerHeader({
                     style={{color: currentPage === 1 ? "#232227" : "#a9dfd8"}}/>
                     <div className={styles.showPagesContainer}>
                         <p style={{color:"gray"}}>Show</p>
-                        <select className={styles.showPages} onChange={handleShowPage} value={recordsPerPage}>
+                        <select className={`${styles.showPages} ml-1`} onChange={handleShowPage} value={recordsPerPage}>
                             <option value={5}>5</option>
                             {waiverBids?.length! > 5 ? <option value={10}>10</option> : <></>}
                             {waiverBids?.length! > 10 ? <option value={15}>15</option> : <></>}
@@ -129,7 +129,7 @@ export default function PlayerHeader({
                     <p className="mx-2 font-bold" style={{color:"#111227"}}>|</p>
                     <div className="mr-2 flex items-center">
                         <p style={{color:"gray"}}>Page</p>
-                        <select id={styles.selectPageNumber} onChange={paginate} value={currentPage}>
+                        <select id={styles.selectPageNumber} className="ml-1" onChange={paginate} value={currentPage}>
                             {pageNumbers.map((number, i) => (
                                 <option key={i} value={number}>{number}</option>
                             ))}

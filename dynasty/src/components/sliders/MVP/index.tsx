@@ -40,14 +40,14 @@ export default function MVPSlider() {
         <div className="py-5">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
-                    <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{ color: "#a9dfd8", fontSize: "1.1rem" }} />
-                    <select className={`"mx-1 font-bold flex items-center ${styles.selectTag}`} onChange={handleMVPType} value={mvpType}>
+                    <Icon icon="fluent:star-line-horizontal-3-24-regular" style={{color: "#a9dfd8", fontSize: "1.5rem"}}/>
+                    <select className={`ml-1 font-bold flex items-center ${styles.selectTag}`} onChange={handleMVPType} value={mvpType}>
                         <option value={"Dynasty"}>Dynasty MVP</option>
                         <option value={"Fantasy"}>Fantasy MVP</option>
                     </select>
                 </div>
                 <a className={styles.anchorCell} href={`/players`}>
-                    <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{ fontSize: "1.5rem", color: "#cbcbcb" }}/>
+                    <Icon className={styles.arrow} icon="material-symbols:arrow-right-alt-rounded" style={{fontSize: "1.5rem", color: "#cbcbcb"}}/>
                 </a>
             </div>
             {loading ? <LoadMVP/> : 

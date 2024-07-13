@@ -97,7 +97,7 @@ export default function TransactionList() {
             <p className="text-gray-400">{player.position === "DEF" ? "" : "#"}{player.number} {player.team} - {player.position}</p>
             <p className="flex items-center">
               <Icon icon={`mdi:tag-${transactionIcon}-outline`} className={styles.icon}/>
-              {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent).value || 0}
+              {(player[fantasyMarket as keyof typeof player] as Interfaces.MarketContent)?.value || 0}
             </p>
           </div>
         </div>

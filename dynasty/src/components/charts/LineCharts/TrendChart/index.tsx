@@ -55,7 +55,7 @@ export default function TrendChart({ height, width, waivers }: Interfaces.TrendC
       series={series}
       type='line'
       height={height}
-      width={width}
+      width={'100%'}
     />
   );
 };

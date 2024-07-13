@@ -61,7 +61,7 @@ export default function VolumeChart({ height, width, waivers }: Interfaces.Trend
             series={series}
             type='bar'
             height={height}
-            width={width}
+            width={'100%'}
         />
     );
 };

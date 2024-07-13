@@ -22,8 +22,8 @@ export default function MarketWidget() {
         <div className="py-5">
             <div className="flex items-center justify-between py-2">
                 <div className="flex items-center">
-                    <Icon icon="ant-design:stock-outlined"  style={{color:"#a9dfd8", fontSize:"1.1rem"}} />
-                    <p className="font-bold mx-1">Market</p>
+                    <Icon icon="ant-design:stock-outlined"  style={{color:"#a9dfd8", fontSize:"1.5rem"}} />
+                    <p className="font-bold ml-1">Market</p>
                 </div>
                 <div className="flex items-center">
                     <select onChange={handleSeason} className={`mr-5 ${styles.selectTrend}`} value={selectSeason}>

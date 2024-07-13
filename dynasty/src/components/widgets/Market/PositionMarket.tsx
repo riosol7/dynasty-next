@@ -1,3 +1,4 @@
+import React, { useRef, useEffect, useState } from 'react';
 import styles from "./Market.module.css";
 import * as Interfaces from "@/interfaces";
 import { POSITIONS } from "@/constants";
@@ -23,7 +24,6 @@ const positionStyles = {
 };
 
 export default function PositionMarket({ waivers, selectSeason }: Interfaces.MarketWidgetProps ) {
-
     return (
         <div className="py-3">
             <div className={`text-center ${styles.positionHeader}`}>
@@ -54,7 +54,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                             <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold ${positionStyles[position as keyof typeof positionStyles]}`}>{position}</div>
                         </div>
                         <div className={`w-3/12 ${styles.positionCell}`}>
-                            <TrendChart waivers={filteredWaivers} height={50}/>
+                            <TrendChart waivers={filteredWaivers} height={50} width={250}/>
                         </div>
                         <p className={`w-1/12 ${styles.positionCell}`}>{lastPrice}</p>
                         <div className={`w-1/12 ${styles.positionCell}`}>
@@ -72,7 +72,7 @@ export default function PositionMarket({ waivers, selectSeason }: Interfaces.Mar
                             <p>${findTopSpender(filteredWaivers)?.bid}</p>
                         </div>
                         <div className="w-2/12 flex justify-center">
-                            <VolumeChart waivers={filteredWaivers} height={50}/>
+                            <VolumeChart waivers={filteredWaivers} height={50} width={250}/>
                         </div>
                     </a>
                 );

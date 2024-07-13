@@ -1,9 +1,10 @@
 "use client";
 import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import * as Interfaces from "@/interfaces";
 import { roundToHundredth } from "@/utils";
 import { useFantasyMarket } from "@/context";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function AgeBarChart({ roster, rosters }: {roster: Interfaces.Roster, rosters: Interfaces.Roster[],}) {
     const { fantasyMarket } = useFantasyMarket()!;

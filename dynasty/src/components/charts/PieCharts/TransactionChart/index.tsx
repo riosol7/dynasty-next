@@ -46,35 +46,34 @@ export default function TransactionPieChart() {
     const series = Object.values(transactionPerCreatorCount);
     const options = {
         chart: {
-            foreColor: '#000',
             toolbar: {
                 show: false
             },
         },
-        colors: ["#a9dfd8"],
+        colors: ["#75b1aa", '#546E7A', '#E91E63'],
         labels: Object.keys(transactionPerCreatorCount),
         legend: {
             show: false,
         },
         plotOptions: {
             pie: {
-                // background: "transparent",
                 customScale: .9,
                 donut: {
                     labels: { 
                         show: true,
                         name: {
                             show: true,
-                            color: "gray"
+                            color: "lightgray",
                         },
                         value: {
                             show: true,
-                            color: "white"
+                            color: "white",
+                            fontWeight: "bold"
 
                         },
                         total: {
                             show:true,
-                            color: "gray",
+                            color: "lightgray",
                             // fontWeight: 400
                         }
                     },
