@@ -13,7 +13,6 @@ import {
     useKTCContext, 
     useLeagueContext, 
     usePlayerContext, 
-    useSuperFlexContext 
 } from "@/context";
 import { 
     accumulatePoints, 
@@ -33,13 +32,12 @@ export default function Roster({ roster }: Interfaces.RosterProps) {
     const { fantasyMarket } = useFantasyMarket()!;
     const { players } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const rID = roster.roster_id;
     const allTime = selectSeason === "All Time" ? true : false;
-    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers = processPlayers(players, ktc, fc, dp, fantasyPro);
     const teamStats = getTeamStats(rID, selectSeason, legacyLeague, fantasyMarket, processedPlayers);
     
     const league = findLeagueBySeason(selectSeason, legacyLeague);

@@ -93,7 +93,6 @@ export interface Roster {
     keepers: string[] | null;
     co_owners: string[] | null;
     ktc: DynastyValue; // KeepTradeCut
-    sf: DynastyValue; // SuperFlex
     fc: DynastyValue; // FantasyCalc
     dp: DynastyValue; // DynastyProcess
 };

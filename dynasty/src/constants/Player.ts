@@ -32,14 +32,6 @@ export const initPlayer: Interfaces.Player = {
         path: "",
         positionRank: "",
     },
-    sf: {
-        value: 0,
-        rank: "",
-        tier: "",
-        trend: "",
-        path: "",
-        positionRank: "",
-    },
     fc: {
         value: 0,
         rank: "",

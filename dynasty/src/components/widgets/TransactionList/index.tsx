@@ -11,7 +11,6 @@ import {
   useKTCContext, 
   useLeagueContext, 
   usePlayerContext, 
-  useSuperFlexContext 
 } from "@/context";
 import { 
   allUsers, 
@@ -33,7 +32,6 @@ export default function TransactionList() {
   const { legacyLeague } = useLeagueContext();
   const { players, loadPlayers } = usePlayerContext();
   const { ktc, loadKTC } = useKTCContext();
-  const { superFlex, loadSuperFlex } = useSuperFlexContext();
   const { fc, loadFC } = useFantasyCalcContext();
   const { dp, loadDP } = useDynastyProcessContext();
   const { fantasyPro, loadFantasyPro } = useFantasyProContext();
@@ -45,7 +43,7 @@ export default function TransactionList() {
   const [selectPosition, setSelectPosition] = useState("");
   const [selectSelectSeason, setSelectSeason] = useState("All Time");
   const users = allUsers(legacyLeague);
-  const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+  const processedPlayers = processPlayers(players, ktc, fc, dp, fantasyPro);
   const transactions = processTransactions(legacyLeague);
   const failedTransactions = transactions.filter(transaction => transaction.status === "failed");
   const successfulTransactions = transactions.filter(transaction => transaction.status === "complete");

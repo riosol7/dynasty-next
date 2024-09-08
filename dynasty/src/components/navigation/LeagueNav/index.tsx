@@ -86,7 +86,6 @@ export default function LeagueNav({ isSidebarOpen, setIsSidebarOpen }: Interface
             value={fantasyMarket}>
                 <option value={"ktc"}>{"KeepTradeCut"}</option>
                 <option value={"fc"}>{"FantasyCalc"}</option>
-                <option value={"sf"}>{"SuperFlex"}</option>
                 <option value={"dp"}>{"DynastyProcess"}</option>
             </select>}
         </nav>

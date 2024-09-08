@@ -14,7 +14,6 @@ import {
     useKTCContext,
     useLeagueContext,
     usePlayerContext,
-    useSuperFlexContext,
 } from "@/context";
 import * as Interfaces from "@/interfaces";
 import LoadMVP from "./slides/loadMVP";
@@ -23,14 +22,13 @@ export default function MVPSlider() {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const [ mvpType, setMVPType ] = useState<string>("Dynasty");
-    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers = processPlayers(players, ktc, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
-    const loading: boolean = loadLegacyLeague && loadPlayers && loadKTC && loadSuperFlex && loadFC && loadDP && loadFantasyPro;
+    const loading: boolean = loadLegacyLeague && loadPlayers && loadKTC && loadFC && loadDP && loadFantasyPro;
 
     const handleMVPType = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setMVPType(e.target.value);

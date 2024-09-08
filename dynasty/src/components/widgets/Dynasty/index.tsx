@@ -1,7 +1,7 @@
 "use client";
 import styles from "./DynastyWidget.module.css";
 import React, { useState } from "react";
-import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext, useSuperFlexContext } from "@/context";
+import { useDynastyProcessContext, useFantasyCalcContext, useFantasyMarket, useFantasyProContext, useKTCContext, useLeagueContext, usePlayerContext } from "@/context";
 import { findLeagueBySeason, placementRankings, processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
 import * as Interfaces from "@/interfaces";
 import { POSITION_COLORS, SLEEPER_AVATAR_BASE_URL } from "@/constants";
@@ -11,14 +11,13 @@ export default function DynastyWidget() {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const [showTeam, setShowTeam] = useState<boolean>(false);
     const [sort, setSort] = useState<string>("TEAM");
     const [asc, setAsc] = useState<boolean>(false);
-    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, fc, dp, fantasyPro);
     const processedRosters: Interfaces.Roster[] = processRosters(legacyLeague[0], processedPlayers);
     
     const findPositionRank = (rID: number) => {

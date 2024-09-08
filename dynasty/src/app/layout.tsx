@@ -8,7 +8,6 @@ import {
   PlayerProvider,
   FantasyCalcProvider,
   KTCProvider,
-  SuperFlexProvider,
   DynastyProcessProvider,
   FantasyProProvider,
   FantasyMarketProvider,
@@ -36,7 +35,6 @@ export default function RootLayout({children}: Interfaces.ChildrenProps) {
           <PlayerProvider>
             <FantasyCalcProvider>
               <KTCProvider>
-                <SuperFlexProvider>
                   <DynastyProcessProvider>
                     <FantasyProProvider>
                       <FantasyMarketProvider>
@@ -50,7 +48,6 @@ export default function RootLayout({children}: Interfaces.ChildrenProps) {
                       </FantasyMarketProvider>
                     </FantasyProProvider>
                   </DynastyProcessProvider>
-                </SuperFlexProvider>
               </KTCProvider>
             </FantasyCalcProvider>
           </PlayerProvider>

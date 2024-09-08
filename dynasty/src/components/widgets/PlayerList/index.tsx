@@ -12,7 +12,6 @@ import {
     useKTCContext, 
     useLeagueContext, 
     usePlayerContext, 
-    useSuperFlexContext 
 } from "@/context";
 import { 
     calculatePercentage,
@@ -38,7 +37,6 @@ export default function PlayerList({ type }: { type? : string})  {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
@@ -54,7 +52,7 @@ export default function PlayerList({ type }: { type? : string})  {
     const foundSeason: Interfaces.League = findLeagueBySeason(selectFantasySeason, legacyLeague);
     const numOfWeeks: number = getMatchups(foundSeason.matchups).length;
     const weeksArray: number[] = Array.from({ length: numOfWeeks }, (_, index) => index + 1);
-    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, fc, dp, fantasyPro);
     const availablePlayers = processedPlayers?.filter(player => findUserByPlayerID(player.player_id, legacyLeague[0]).display_name === "");
     const filteredPlayers = type === "available" ? availablePlayers : processedPlayers;
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
@@ -62,7 +60,7 @@ export default function PlayerList({ type }: { type? : string})  {
     const records = getSortedPlayerRecords(sortedPlayers, sort, asc, currentPage, recordsPerPage);
     const npage = Math.ceil(processedPlayers?.length / recordsPerPage);
     const pageNumbers = Array.from({ length: npage }, (_, i) => i + 1);
-    const loading = loadLegacyLeague && loadPlayers && loadKTC && loadSuperFlex && loadFC && loadDP && loadFantasyPro;
+    const loading = loadLegacyLeague && loadPlayers && loadKTC && loadFC && loadDP && loadFantasyPro;
     const handleShowPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const valueAsNumber = +e.target.value;
         setRecordsPerPage(valueAsNumber);

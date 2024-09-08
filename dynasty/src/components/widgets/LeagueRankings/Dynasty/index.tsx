@@ -10,7 +10,6 @@ import {
     useKTCContext,
     useLeagueContext,
     usePlayerContext,
-    useSuperFlexContext,
  } from "@/context";
  import DynastyRow from "./DynastyRow";
  import styles from "../LeagueRankings.module.css";
@@ -41,7 +40,6 @@ export default function DynastyRankings() {
     const { legacyLeague } = useLeagueContext(); 
     const { players } = usePlayerContext();
     const { ktc } = useKTCContext();
-    const { superFlex } = useSuperFlexContext();
     const { fc } = useFantasyCalcContext();
     const { dp } = useDynastyProcessContext();
     const { fantasyPro } = useFantasyProContext();
@@ -49,7 +47,7 @@ export default function DynastyRankings() {
     const [sort, setSort] = useState("TEAM")
     const [asc, setAsc] = useState(false)
 
-    const processedPlayers = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers = processPlayers(players, ktc, fc, dp, fantasyPro);
     const processedRosters = processRosters(legacyLeague[0], processedPlayers);
 
     return (

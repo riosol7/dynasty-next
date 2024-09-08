@@ -31,7 +31,8 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
     const marketActive = currentPath === "/market";
     const matchupsActive = currentPath.includes("/matchups");
     const playersActive = currentPath === "/players";
-    const teamsActive = currentPath === "/teams";
+    const draftActive = currentPath === "/draft";
+    const teamsActive = currentPath === "/teams" || currentPath.includes("/teams/");
 
     const navItem = (title: string) => {
         let navItemActive: boolean = false; 
@@ -61,6 +62,12 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
                 navItemActive = playersActive;
                 iconName = "game-icons:american-football-player";
                 navLink = "/players";
+                break;
+            
+            case "Draft":
+                navItemActive = draftActive;
+                iconName = "carbon:rule-draft";
+                navLink = "/draft";
                 break;
 
             default:
@@ -96,6 +103,7 @@ export default function SideNavBar({ isSidebarOpen }: Interfaces.SideNavBarProps
             {navItem("Market")}
             {navItem("Matchups")}
             {navItem("Players")}
+            {navItem("Draft")}
             {isSidebarOpen ? 
             <div className={styles.navTeamSection}>
                 <p className="font-bold">Teams</p>

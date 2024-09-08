@@ -73,14 +73,6 @@ export const initRoster: Interfaces.Roster = {
         wr: 0,
         te: 0,
     },
-    sf: {
-        rank: 0,
-        team: 0,
-        qb: 0,
-        rb: 0,
-        wr: 0,
-        te: 0,
-    },
     fc: {
         rank: 0,
         team: 0,

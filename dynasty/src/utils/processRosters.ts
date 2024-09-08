@@ -89,28 +89,6 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
 
     const dpTeamValue = dpQBValue + dpRBValue + dpWRValue + dpTEValue;
 
-    const sfQBValue = qbFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
-      return total + (isNaN(sfValue) ? 0 : sfValue);
-    }, 0);
-
-    const sfRBValue = rbFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
-      return total + (isNaN(sfValue) ? 0 : sfValue);
-    }, 0);
-
-    const sfWRValue = wrFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
-      return total + (isNaN(sfValue) ? 0 : sfValue);
-    }, 0);
-
-    const sfTEValue = teFiltered.reduce((total, player) => {
-      const sfValue = typeof player.sf?.value === "string" ? parseFloat(player.sf.value) : player.sf?.value;
-      return total + (isNaN(sfValue) ? 0 : sfValue);
-    }, 0);
-
-    const sfTeamValue = sfQBValue + sfRBValue + sfWRValue + sfTEValue;
-
     return {
       ...roster,
       players: foundPlayers,
@@ -139,35 +117,24 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
         wr: fcWRValue,
         te: fcTEValue,
       },
-      sf: {
-        rank: 0,
-        team: sfTeamValue,
-        qb: sfQBValue,
-        rb: sfRBValue,
-        wr: sfWRValue,
-        te: sfTEValue,
-      },
     };
   });
   const sortedRosters = {
     ktc: [...uploadPlayersToRosters].sort((a, b) => b.ktc.team - a.ktc.team).map((roster, i) => { return {...roster, ktc :{...roster.ktc, rank: i + 1}}}),
     dp: [...uploadPlayersToRosters].sort((a, b) => b.dp.team - a.dp.team).map((roster, i) => { return {...roster, dp :{...roster.dp, rank: i + 1}}}),
     fc: [...uploadPlayersToRosters].sort((a, b) => b.fc.team - a.fc.team).map((roster, i) => { return {...roster, fc :{...roster.fc, rank: i + 1}}}),
-    sf: [...uploadPlayersToRosters].sort((a, b) => b.sf.team - a.sf.team).map((roster, i) => { return {...roster, sf :{...roster.sf, rank: i + 1}}}),
   };
 
   const updatedRankRosters = uploadPlayersToRosters.map((roster) => {
     const ktcRank = sortedRosters.ktc.findIndex((r) => r.owner_id === roster.owner_id);
     const dpRank = sortedRosters.dp.findIndex((r) => r.owner_id === roster.owner_id);
     const fcRank = sortedRosters.fc.findIndex((r) => r.owner_id === roster.owner_id);
-    const sfRank = sortedRosters.sf.findIndex((r) => r.owner_id === roster.owner_id);
 
     return {
       ...roster,
       ktc: { ...roster.ktc, rank: ktcRank + 1 },
       dp: { ...roster.dp, rank: dpRank + 1 },
       fc: { ...roster.fc, rank: fcRank + 1 },
-      sf: { ...roster.sf, rank: sfRank + 1 },
     };
   });
 

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import AgeBarChart from "@/components/charts/BarCharts/AgeChart";
 import ValueRadarChart from "@/components/charts/RadarCharts/ValueChart";
 import DynastyWidget from "@/components/widgets/Dynasty";
-import { useFantasyMarket, useLeagueContext, usePlayerContext, useKTCContext, useSuperFlexContext, useFantasyCalcContext, useDynastyProcessContext, useFantasyProContext } from "@/context";
+import { useFantasyMarket, useLeagueContext, usePlayerContext, useKTCContext, useFantasyCalcContext, useDynastyProcessContext, useFantasyProContext } from "@/context";
 import * as Interfaces from "@/interfaces";
 import { processPlayers, processRosters, sortDynastyRostersByMarket } from "@/utils";
 import TransactionList from "@/components/widgets/TransactionList";
@@ -13,13 +13,12 @@ export default function Teams() {
     const { legacyLeague, loadLegacyLeague } = useLeagueContext(); 
     const { players, loadPlayers } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
     const [sort, setSort] = useState<string>("TEAM");
     const [asc, setAsc] = useState<boolean>(false);
-    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, fc, dp, fantasyPro);
     const processedRosters: Interfaces.Roster[] = processRosters(legacyLeague[0], processedPlayers);
     const sortedDynastyRosters: Interfaces.Roster[] = sortDynastyRostersByMarket(processedRosters, asc, sort, fantasyMarket);
 

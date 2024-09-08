@@ -32,7 +32,6 @@ export interface Player {
     position: string;
     rotowire_id: number;
     sportradar_id: string;
-    sf: MarketContent;
     team: string;
     weight: string;
     yahoo_id: number;
@@ -160,11 +159,6 @@ export interface FantasyCalcPlayer {
 export interface KTCContextType {
     ktc: PlayerMarket[];
     loadKTC: boolean;
-};
-
-export interface SuperFlexContextType {
-    superFlex: PlayerMarket[];
-    loadSuperFlex: boolean;
 };
 
 export interface FantasyCalcContextType {

@@ -11,8 +11,8 @@ import {
     useKTCContext, 
     useLeagueContext, 
     usePlayerContext, 
-    useSeasonContext, 
-    useSuperFlexContext } from "@/context";
+    useSeasonContext 
+} from "@/context";
 import { 
     findLeagueByTeamName, 
     findRosterByOwnerID, 
@@ -27,7 +27,6 @@ export default function TeamNav({ name }: Interfaces.TeamNavProps) {
     const { fantasyMarket } = useFantasyMarket()!;
     const { players } = usePlayerContext();
     const { ktc, loadKTC } = useKTCContext();
-    const { superFlex, loadSuperFlex } = useSuperFlexContext();
     const { fc, loadFC } = useFantasyCalcContext();
     const { dp, loadDP } = useDynastyProcessContext();
     const { fantasyPro, loadFantasyPro } = useFantasyProContext();
@@ -35,7 +34,7 @@ export default function TeamNav({ name }: Interfaces.TeamNavProps) {
     const foundUser: Interfaces.Owner = findUserByName(name, foundLeague);
     const foundRoster: Interfaces.Roster = findRosterByOwnerID(foundUser.user_id, foundLeague);
     const rID:number = foundRoster?.roster_id;
-    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, superFlex, fc, dp, fantasyPro);
+    const processedPlayers: Interfaces.Player[] = processPlayers(players, ktc, fc, dp, fantasyPro);
     const foundStats = getTeamStats(rID, selectSeason, legacyLeague, fantasyMarket, processedPlayers)!;
     // const qbStats = foundStats?.qb;
     // const rbStats = foundStats?.rb;

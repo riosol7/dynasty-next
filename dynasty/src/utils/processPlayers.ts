@@ -10,7 +10,6 @@ function extractNumbersFromString(inputString: string): string {
 export const processPlayers = (
     players: Interfaces.Player[], 
     ktc: Interfaces.PlayerMarket[], 
-    sf: Interfaces.PlayerMarket[], 
     fc: Interfaces.FantasyCalcPlayer[], 
     dp: Interfaces.DynastyProcessPlayer[], 
     fp: Interfaces.FantasyProPlayer[],
@@ -19,13 +18,11 @@ export const processPlayers = (
     const employedPlayers = players.filter((player: Interfaces.Player) => validPositions.includes(player.position) && player.team !== null);
     const updatedEmployedPlayers = employedPlayers.map((player: Interfaces.Player) => {
         const ktcPlayer = ktc.find((ktcPlayer: Interfaces.PlayerMarket) => ktcPlayer.player === player.full_name);
-        const sfPlayer = sf.find((superFlexPlayer: Interfaces.PlayerMarket) => superFlexPlayer.player === player.full_name);
         const fcPlayer = fc.find((fcPlayer: Interfaces.FantasyCalcPlayer) => fcPlayer.name === player.full_name);
         const fpPlayer = fp.find((fpPlayer: Interfaces.FantasyProPlayer) => fpPlayer.player_name === player.full_name || fpPlayer.player_short_name === `${player.first_name[0]}. ${player.last_name}`);
         const dpPlayer = dp.find((dpPlayer: Interfaces.DynastyProcessPlayer) => dpPlayer.player === player.full_name || dpPlayer.fp_id === fpPlayer?.fantasypros_id);
         // Initialize properties
         player.ktc = player.ktc || {};
-        player.sf = player.sf || {};
         player.fc = player.fc || {};
         player.dp = player.dp || {};
         player.fantasy_pro = player.fantasy_pro || {};
@@ -38,11 +35,6 @@ export const processPlayers = (
             player.ktc.tier = ktcPlayer.tier || player.ktc.tier;
             player.ktc.trend = ktcPlayer.trend || player.ktc.trend;
             player.ktc.path = ktcPlayer.path || player.ktc.path;
-        };
-        if (sfPlayer && player.sf) {
-            player.sf.rank = sfPlayer.rank || player.sf.rank;
-            player.sf.positionRank = extractNumbersFromString(sfPlayer.positionRank) || player.sf.positionRank;
-            player.sf.value = sfPlayer.value || player.sf.value;
         };
         if (fcPlayer && player.fc) {
             player.fantasy_calc_id = fcPlayer.fantasycalcId || player.fantasy_calc_id;
