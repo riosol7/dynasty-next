@@ -26,7 +26,7 @@ export const findTopSpender = (waiverData: Interfaces.Transaction[]) => {
             const result = entries.map((o: any) => {
                 return {
                     owner: o[0],
-                    bid: o[1].reduce((a: any, b: any) => a + b.settings.waiver_bid, 0),
+                    bid:   o[1].reduce((a: any, b: any) => a + b.settings.waiver_bid, 0),
                 };
             }).sort((a, b) => b.bid - a.bid)[0];
             return result;

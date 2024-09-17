@@ -3,9 +3,9 @@ import * as Constants from "@/constants";
 import { findLeagueBySeason, roundToHundredth } from ".";
 
 export const findMatchupByWeekSeason = (legacyLeague: Interfaces.League[], weekIdx: number, season: string): Interfaces.Match[] => {
-    const foundLeague: Interfaces.League = findLeagueBySeason(season, legacyLeague)!;
+    const foundLeague: Interfaces.League          = findLeagueBySeason(season, legacyLeague)!;
     const foundWeekMatchups: Interfaces.Match[][] = getMatchups(foundLeague?.matchups)?.find((_, i) => i + 1 === weekIdx);
-    const foundMatchup: Interfaces.Match[] = sortMatchupsByHighestScore(foundWeekMatchups)[0];
+    const foundMatchup: Interfaces.Match[]        = sortMatchupsByHighestScore(foundWeekMatchups)[0];
     return foundMatchup || Constants.initMatch;
 };
 
@@ -26,7 +26,7 @@ export const findMatchupDateByPoints = (legacyLeague: Interfaces.League[], score
         const team2Score = game! && game?.matchup[1]?.points!;
 
         return (team1Score === score1 && team2Score === score2) || (team2Score === score1 && team1Score === score2)
-    })
+    });
 
     return foundGame || {matchup: [], season: "", week: 0};
 };
@@ -67,7 +67,7 @@ export const getLegacyMatchup = (legacyLeague: Interfaces.League[]): Interfaces.
 };
 
 export const findRecord = (rID: number, matches: Interfaces.Match[][], week: number) => {
-    let wins: number = 0;
+    let wins:   number = 0;
     let losses: number = 0;
     let record: string = "0-0";
 
@@ -87,7 +87,7 @@ export const findRecord = (rID: number, matches: Interfaces.Match[][], week: num
 
     return {
         record: record,
-        wins: wins,
+        wins:   wins,
         losses: losses
     };
 };
@@ -97,16 +97,17 @@ export const sortMatchupsByHighestScore = (matchups: Interfaces.Match[][]) => {
         const aTeam1 = a && a[0];
         const aTeam2 = a && a[1];
 
-        const aTeam1Score = aTeam1?.points;
-        const aTeam2Score = aTeam2?.points;
+        const aTeam1Score     = aTeam1?.points;
+        const aTeam2Score     = aTeam2?.points;
         const aTotalPtsScored = roundToHundredth(aTeam1Score + aTeam2Score);
 
         const bTeam1 = b && b[0];
         const bTeam2 = b && b[1];
 
-        const bTeam1Score = bTeam1?.points;
-        const bTeam2Score = bTeam2?.points;
+        const bTeam1Score     = bTeam1?.points;
+        const bTeam2Score     = bTeam2?.points;
         const bTotalPtsScored = roundToHundredth(bTeam1Score + bTeam2Score);
+        
         return bTotalPtsScored - aTotalPtsScored;
     })?.map((matchup: Interfaces.Match[]) => matchup?.slice().sort((a, b) => b.points - a.points));
 };

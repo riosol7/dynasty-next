@@ -3,18 +3,18 @@ import * as Constants from "@/constants";
 
 export const processRosters = (league: Interfaces.League, players: Interfaces.Player[]): Interfaces.Roster[] => {
   const rosters = league.rosters;
-  const users = league.users;
+  const users   = league.users;
 
   const uploadPlayersToRosters = rosters.map(roster => {
-    const foundOwner = users.find(user => user.user_id === roster.owner_id) || Constants.initOwner;
-    const playerIDs = [...roster.players]; 
+    const foundOwner   = users.find(user => user.user_id === roster.owner_id) || Constants.initOwner;
+    const playerIDs    = [...roster.players]; 
     const foundPlayers = playerIDs.map((playerID) => {
       const player = players.find(player => player.player_id === playerID);
         if (player) {
-            return player;
+          return player;
         } else {
-            // Handle the case where a player with the ID is not found
-            return null;
+          // Handle the case where a player with the ID is not found
+          return null;
         }
     }).filter(player => player !== null) as Interfaces.Player[];    
     
@@ -92,49 +92,49 @@ export const processRosters = (league: Interfaces.League, players: Interfaces.Pl
     return {
       ...roster,
       players: foundPlayers,
-      owner: foundOwner,
+      owner:   foundOwner,
       ktc: {
         rank: 0,
         team: ktcTeamValue,
-        qb: ktcQBValue,
-        rb: ktcRBValue,
-        wr: ktcWRValue,
-        te: ktcTEValue,
+        qb:   ktcQBValue,
+        rb:   ktcRBValue,
+        wr:   ktcWRValue,
+        te:   ktcTEValue,
       },
       dp: {
         rank: 0,
         team: dpTeamValue,
-        qb: dpQBValue,
-        rb: dpRBValue,
-        wr: dpWRValue,
-        te: dpTEValue,
+        qb:   dpQBValue,
+        rb:   dpRBValue,
+        wr:   dpWRValue,
+        te:   dpTEValue,
       },
       fc: {
         rank: 0,
         team: fcTeamValue,
-        qb: fcQBValue,
-        rb: fcRBValue,
-        wr: fcWRValue,
-        te: fcTEValue,
+        qb:   fcQBValue,
+        rb:   fcRBValue,
+        wr:   fcWRValue,
+        te:   fcTEValue,
       },
     };
   });
   const sortedRosters = {
     ktc: [...uploadPlayersToRosters].sort((a, b) => b.ktc.team - a.ktc.team).map((roster, i) => { return {...roster, ktc :{...roster.ktc, rank: i + 1}}}),
-    dp: [...uploadPlayersToRosters].sort((a, b) => b.dp.team - a.dp.team).map((roster, i) => { return {...roster, dp :{...roster.dp, rank: i + 1}}}),
-    fc: [...uploadPlayersToRosters].sort((a, b) => b.fc.team - a.fc.team).map((roster, i) => { return {...roster, fc :{...roster.fc, rank: i + 1}}}),
+    dp:  [...uploadPlayersToRosters].sort((a, b) => b.dp.team - a.dp.team).map((roster, i) => { return {...roster, dp :{...roster.dp, rank: i + 1}}}),
+    fc:  [...uploadPlayersToRosters].sort((a, b) => b.fc.team - a.fc.team).map((roster, i) => { return {...roster, fc :{...roster.fc, rank: i + 1}}}),
   };
 
   const updatedRankRosters = uploadPlayersToRosters.map((roster) => {
     const ktcRank = sortedRosters.ktc.findIndex((r) => r.owner_id === roster.owner_id);
-    const dpRank = sortedRosters.dp.findIndex((r) => r.owner_id === roster.owner_id);
-    const fcRank = sortedRosters.fc.findIndex((r) => r.owner_id === roster.owner_id);
+    const dpRank  = sortedRosters.dp.findIndex((r) => r.owner_id === roster.owner_id);
+    const fcRank  = sortedRosters.fc.findIndex((r) => r.owner_id === roster.owner_id);
 
     return {
       ...roster,
       ktc: { ...roster.ktc, rank: ktcRank + 1 },
-      dp: { ...roster.dp, rank: dpRank + 1 },
-      fc: { ...roster.fc, rank: fcRank + 1 },
+      dp:  { ...roster.dp, rank: dpRank + 1 },
+      fc:  { ...roster.fc, rank: fcRank + 1 },
     };
   });
 

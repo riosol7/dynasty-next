@@ -40,10 +40,10 @@ export default function RootLayout({children}: Interfaces.ChildrenProps) {
                       <FantasyMarketProvider>
                         <LeagueNav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
                         <div className={styles.dashboardLayout}>
-                            <SideNavBar isSidebarOpen={isSidebarOpen}/>
-                            <div className={styles.dashboardContent}>
-                                {children}
-                            </div>
+                          <SideNavBar isSidebarOpen={isSidebarOpen}/>
+                          <div className={styles.dashboardContent}>
+                            {children}
+                          </div>
                         </div>
                       </FantasyMarketProvider>
                     </FantasyProProvider>

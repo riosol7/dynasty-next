@@ -6,17 +6,19 @@ export const toDateTime = (secs: number) => {
     };
 
     let dateObj = new Date(t);
-    var month = dateObj.toLocaleString('default', { month: 'long' });
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
+    var month   = dateObj.toLocaleString('default', { month: 'long' });
+    var day     = dateObj.getUTCDate();
+    var year    = dateObj.getUTCFullYear();
+    
     return month + " " + day + ", " + year;
 };
 
 export const formatDate = (inputDate: string): string => {
     const dateParts = inputDate.split('-');
+    
     if (dateParts.length !== 3) {
-    throw new Error('Invalid date format. Please provide a date in the format YYYY-MM-DD.');
-    }
+        throw new Error('Invalid date format. Please provide a date in the format YYYY-MM-DD.');
+    };
 
     const [year, month, day] = dateParts;
     return `${month}-${day}-${year}`;

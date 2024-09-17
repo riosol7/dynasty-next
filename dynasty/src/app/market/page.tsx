@@ -8,11 +8,11 @@ export default function Market() {
             <div className="w-full">
                 <MarketPlus />
                 <div className="pt-5 mt-5">
-                    <PlayerList type={"available"}/>
+                    <PlayerList type={"available"} />
                 </div>
             </div>
             <div className="w-3/12 pl-5">
-                <TransactionList/>
+                <TransactionList />
             </div>
         </div>
     );

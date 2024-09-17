@@ -5,7 +5,9 @@ import { totalFantasyPointsByRoster } from ".";
 export const getMVP = (legacyLeague: Interfaces.League[], roster: Interfaces.Roster, fantasyMarket: string, mvpType: string): Interfaces.Player => {
     try {
         if (mvpType === "Dynasty") {
-            const validPlayers = (roster.players as Interfaces.Player[]).filter(player => player.position !== "DEF" && player.position !== "K");
+            const validPlayers = (roster.players as Interfaces.Player[])
+            .filter(player => player.position !== "DEF" && player.position !== "K");
+            
             const topPlayers = validPlayers.sort((a, b) => {
                 const aValue = (a[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent)?.value;
                 const bValue = (b[fantasyMarket as keyof Interfaces.Player] as Interfaces.MarketContent)?.value;
@@ -17,6 +19,7 @@ export const getMVP = (legacyLeague: Interfaces.League[], roster: Interfaces.Ros
             });
                         
             return topPlayers[0];
+
         } else if (mvpType === "Fantasy") {
             const playerScores = (roster.players as Interfaces.Player[]).map(player => {
                 const points = totalFantasyPointsByRoster(legacyLeague, roster.roster_id, player.player_id);
@@ -26,11 +29,12 @@ export const getMVP = (legacyLeague: Interfaces.League[], roster: Interfaces.Ros
                     fpts: points.fpts
                 }
             }).sort((a, b) => b.fpts - a.fpts);
+            
             return playerScores[0];
-        
+    
         } else {
             return Constants.initPlayer;
-        }
+        };
 
     } catch (error) {
         console.error("Error:", error);

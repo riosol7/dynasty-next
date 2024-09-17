@@ -22,7 +22,7 @@ export const getSortedPlayerRecords = (
     currentPage: number, 
     recordsPerPage: number
 ) => {
-    const lastIdx = currentPage * recordsPerPage;
+    const lastIdx  = currentPage * recordsPerPage;
     const firstIdx = lastIdx - recordsPerPage;
 
     return records?.slice().sort((a, b) => {
@@ -47,7 +47,7 @@ export const getSortedTransactionRecords = (
     currentPage: number, 
     recordsPerPage: number
 ) => {
-    const lastIdx = currentPage * recordsPerPage;
+    const lastIdx  = currentPage * recordsPerPage;
     const firstIdx = lastIdx - recordsPerPage;
 
     return records?.slice().sort((a, b) => {

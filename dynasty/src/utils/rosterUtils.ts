@@ -51,7 +51,10 @@ export const sortDynastyRostersByMarket = (rosters: Interfaces.Roster[], asc: bo
             const aValue = a[fantasyMarket as keyof typeof a];
             const bValue = b[fantasyMarket as keyof typeof b];
 
-            if (typeof aValue === 'object' && typeof bValue === 'object' && aValue !== null && bValue !== null) {
+            if (typeof aValue === 'object' && 
+                typeof bValue === 'object' && 
+                aValue !== null && bValue !== null
+            ) {
                 const aSortValue = aValue[sort.toLowerCase() as keyof typeof aValue];
                 const bSortValue = bValue[sort.toLowerCase() as keyof typeof bValue];
         
@@ -85,11 +88,10 @@ export const sortDynastyRostersByPosition = (rosters: Interfaces.Roster[], fanta
 export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type: string): Interfaces.Roster[] => {
     const currentLeague = legacyLeague[0];
     const updatedRosters: Interfaces.Roster[] = currentLeague.rosters.map((roster) => {
-        const rID = roster.roster_id;
+        const rID                 = roster.roster_id;
         const allPlayAllTimeStats = getAllPlayStats(rID, "All Time", legacyLeague);
-
-        const foundOwner = currentLeague.users.find((user) => user.user_id === roster.owner_id);
-        const allTimeStats = getAllTimeRosterStats(rID, legacyLeague);
+        const foundOwner          = currentLeague.users.find((user) => user.user_id === roster.owner_id);
+        const allTimeStats        = getAllTimeRosterStats(rID, legacyLeague);
         return {
             ...roster,
             owner: foundOwner as Interfaces.Owner,
@@ -97,68 +99,66 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
                 ...roster.settings,
                 all_time: {
                     season: {
-                        fpts: allTimeStats.fpts,
+                        fpts:         allTimeStats.fpts,
                         fpts_against: allTimeStats.pa,
-                        ppts: allTimeStats.ppts,
-                        wins: allTimeStats.wins,
-                        losses: allTimeStats.losses,
-                        win_rate: allTimeStats.winRate,
-                        ties: allTimeStats.ties,
+                        ppts:         allTimeStats.ppts,
+                        wins:         allTimeStats.wins,
+                        losses:       allTimeStats.losses,
+                        win_rate:     allTimeStats.winRate,
+                        ties:         allTimeStats.ties,
                     },
                     total: {
-                        fpts: allTimeStats.fpts + allTimeStats.playoffs.fpts,
+                        fpts:         allTimeStats.fpts + allTimeStats.playoffs.fpts,
                         fpts_against: allTimeStats.pa + allTimeStats.playoffs.pa,
-                        ppts: allTimeStats.ppts + allTimeStats.playoffs.ppts,
-                        wins: allTimeStats.wins + allTimeStats.playoffs.wins,
-                        losses: allTimeStats.losses + allTimeStats.playoffs.losses,
-                        win_rate: winPCT(allTimeStats.wins + allTimeStats.playoffs.wins, allTimeStats.losses + allTimeStats.playoffs.losses),
-                        ties: allTimeStats.ties,
+                        ppts:         allTimeStats.ppts + allTimeStats.playoffs.ppts,
+                        wins:         allTimeStats.wins + allTimeStats.playoffs.wins,
+                        losses:       allTimeStats.losses + allTimeStats.playoffs.losses,
+                        win_rate:     winPCT(allTimeStats.wins + allTimeStats.playoffs.wins, allTimeStats.losses + allTimeStats.playoffs.losses),
+                        ties:         allTimeStats.ties,
                     },
                     playoffs: {
-                        fpts: allTimeStats.playoffs.fpts,
+                        fpts:         allTimeStats.playoffs.fpts,
                         fpts_against: allTimeStats.playoffs.pa,
-                        ppts: allTimeStats.playoffs.ppts,
-                        wins: allTimeStats.playoffs.wins,
-                        losses: allTimeStats.playoffs.losses,
-                        win_rate: winPCT(allTimeStats.playoffs.wins, allTimeStats.playoffs.losses),
-                        score: allTimeStats.playoffs.highestScore,
+                        ppts:         allTimeStats.playoffs.ppts,
+                        wins:         allTimeStats.playoffs.wins,
+                        losses:       allTimeStats.playoffs.losses,
+                        win_rate:     winPCT(allTimeStats.playoffs.wins, allTimeStats.playoffs.losses),
+                        score:        allTimeStats.playoffs.highestScore,
                     },
                 },
                 all_play_win_rate: winPCT(allPlayAllTimeStats.wins, allPlayAllTimeStats.losses),
                 best: {
                     wins: {
-                        score: allTimeStats.best.wins?.score ?? 0,
+                        score:  allTimeStats.best.wins?.score ?? 0,
                         season: allTimeStats.best.wins.season,
                     },
                     losses: {
-                        score: allTimeStats.best.losses ?? 0,
+                        score:  allTimeStats.best.losses ?? 0,
                         season: allTimeStats.best.wins.season, 
                     },
                     score: allTimeStats.best.score ?? 0,
                     fpts: {
-                        score: allTimeStats.best.fpts?.score ?? 0,
+                        score:  allTimeStats.best.fpts?.score ?? 0,
                         season: allTimeStats.best.fpts.season,
                     },
                     ppts: {
-                        score: allTimeStats.best.ppts?.score ?? 0,
+                        score:  allTimeStats.best.ppts?.score ?? 0,
                         season: allTimeStats.best.ppts.season,
                     },
                     pa: {
-                        score: allTimeStats.best.pa?.score ?? 0,
+                        score:  allTimeStats.best.pa?.score ?? 0,
                         season: allTimeStats.best.pa.season
                     },
                 },
             },
         };
     });
-      
 
     switch (type) {
         case "All Time Lineup Efficiency":
             const sortedRosters: Interfaces.Roster[] = (updatedRosters ?? [])
                 .slice()
                 .sort((a, b) => {
-                
                     const fptsA = a.settings.all_time?.season?.fpts ?? 0;
                     const fptsB = b.settings.all_time?.season?.fpts ?? 0;
                     const pptsA = a.settings.all_time?.season?.ppts ?? 0;
@@ -199,13 +199,17 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
             
         case "All Time w/ Playoffs":
             return (updatedRosters ?? []).slice().sort((a, b) => {
-                const winsA = ((a.settings.all_time?.season?.wins ?? 0) +
+                const winsA = (
+                    (a.settings.all_time?.season?.wins ?? 0) +
                     (a.settings.all_time?.playoffs?.wins ?? 0)) as number;
-                const winsB = ((b.settings.all_time?.season?.wins ?? 0) +
+                const winsB = (
+                    (b.settings.all_time?.season?.wins ?? 0) +
                     (b.settings.all_time?.playoffs?.wins ?? 0)) as number;
-                const fptsA = ((a.settings.all_time?.season?.fpts ?? 0) +
+                const fptsA = (
+                    (a.settings.all_time?.season?.fpts ?? 0) +
                     (a.settings.all_time?.playoffs?.fpts ?? 0)) as number;
-                const fptsB = ((b.settings.all_time?.season?.fpts ?? 0) +
+                const fptsB = (
+                    (b.settings.all_time?.season?.fpts ?? 0) +
                     (b.settings.all_time?.playoffs?.fpts ?? 0)) as number;
             
                 if (winsA === winsB) {
@@ -243,7 +247,16 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
 
         case "Best Total Pts Per Game":
             return  (updatedRosters ?? []).slice().sort((a, b) => 
-            totalPointsPerGame(b.roster_id, b.settings?.best?.fpts?.score!, legacyLeague, undefined, true)! - totalPointsPerGame(a.roster_id, a?.settings.best?.fpts?.score!, legacyLeague, undefined, true)!
+            totalPointsPerGame(
+                b.roster_id, 
+                b.settings?.best?.fpts?.score!, 
+                legacyLeague, 
+                undefined, true)! 
+            - totalPointsPerGame(
+                a.roster_id, 
+                a?.settings.best?.fpts?.score!, 
+                legacyLeague, 
+                undefined, true)!
             ).map((roster, idx) => ({
                 ...roster,
                 settings: {
@@ -254,7 +267,16 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
 
         case "All Time Total Pts Per Game":
             return (updatedRosters ?? []).slice().sort((a, b) => 
-            totalPointsPerGame(b.roster_id, b.settings.all_time.season.fpts, legacyLeague, undefined, true)! - totalPointsPerGame(a.roster_id, a.settings.all_time.season.fpts, legacyLeague, undefined, true)!
+            totalPointsPerGame(
+                b.roster_id, 
+                b.settings.all_time.season.fpts, 
+                legacyLeague, 
+                undefined, true)! 
+            - totalPointsPerGame(
+                a.roster_id, 
+                a.settings.all_time.season.fpts, 
+                legacyLeague, 
+                undefined, true)!
             ).map((roster, idx) => ({
                 ...roster,
                 settings: {
@@ -276,8 +298,14 @@ export const sortAllTimeRostersByType = (legacyLeague: Interfaces.League[], type
 
         case "All Time Total Playoff Pts Per Game":
             return (updatedRosters ?? []).slice().sort((a ,b) => 
-            roundToHundredth(b.settings.all_time.playoffs.fpts / (b.settings.all_time.playoffs.wins + b.settings.all_time.playoffs.losses)) - roundToHundredth(a.settings.all_time.playoffs.fpts / (a.settings.all_time.playoffs.wins + a.settings.all_time.playoffs.losses))
-            ).map((roster, idx) => ({
+            roundToHundredth(
+                b.settings.all_time.playoffs.fpts / 
+                (b.settings.all_time.playoffs.wins + b.settings.all_time.playoffs.losses)
+            ) - 
+            roundToHundredth(
+                a.settings.all_time.playoffs.fpts / 
+                (a.settings.all_time.playoffs.wins + a.settings.all_time.playoffs.losses)
+            )).map((roster, idx) => ({
                 ...roster,
                 settings: {
                     ...roster.settings,
@@ -373,9 +401,14 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
     switch(type) {
         case "Seasonal Lineup Efficiency":
             return rosters.sort((a, b) => 
-                lineupEfficiency(Number(b.settings.fpts + "." + b.settings.fpts_decimal), Number(b.settings.ppts + "." + b.settings.ppts_decimal)) - 
-                lineupEfficiency(Number(a.settings.fpts + "." + a.settings.fpts_decimal), Number(a.settings.ppts + "." + a.settings.ppts_decimal))
-            ).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
+            lineupEfficiency(
+                Number(b.settings.fpts + "." + b.settings.fpts_decimal), 
+                Number(b.settings.ppts + "." + b.settings.ppts_decimal)
+            ) - 
+            lineupEfficiency(
+                Number(a.settings.fpts + "." + a.settings.fpts_decimal), 
+                Number(a.settings.ppts + "." + a.settings.ppts_decimal)
+            )).map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
         
         case "Best Lineup Efficiency":
             return rosters.sort((a, b) => 
@@ -389,21 +422,23 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
                     ...roster,
                     settings: {
                         ...roster.settings,
-                        all_play_wins: allPlaySeasonStats.wins,
-                        all_play_losses: allPlaySeasonStats.losses,
+                        all_play_wins:     allPlaySeasonStats.wins,
+                        all_play_losses:   allPlaySeasonStats.losses,
                         all_play_win_rate: winPCT(allPlaySeasonStats.wins, allPlaySeasonStats.losses),
                     }
                 };
-            }).sort((a ,b) => roundToHundredth(winPCT(b.settings.wins, b.settings.losses)- b.settings.all_play_win_rate) - roundToHundredth(winPCT(a.settings.wins, a.settings.losses)- a.settings.all_play_win_rate))
+            }).sort((a ,b) => 
+                roundToHundredth(winPCT(b.settings.wins, b.settings.losses)- b.settings.all_play_win_rate) - 
+                roundToHundredth(winPCT(a.settings.wins, a.settings.losses)- a.settings.all_play_win_rate))
             .map((roster, idx) => ({...roster, settings: {...roster.settings, rank: idx + 1 } }));
             
             return sortedSeasonalLuckRateRosters;
 
         case "Best Luck Rate":
             const sortedBestLuckRateRosters = rosters.slice().map(roster => {
-                const allTimeRosterStats = getAllTimeRosterStats(roster.roster_id, legacyLeague!);
+                const allTimeRosterStats     = getAllTimeRosterStats(roster.roster_id, legacyLeague!);
                 const allPlayBestSeasonStats = getAllPlayStats(roster.roster_id, allTimeRosterStats.best.wins.season, legacyLeague!); 
-                {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
+                // {roundToHundredth(allTimeRosterStats.best.winRate - winPCT(allPlayBestSeasonStats.wins, allPlayBestSeasonStats.losses))}
                 return {
                     ...roster,
                     settings: {
@@ -418,7 +453,7 @@ export const sortSeasonalRostersByType = (rosters: Interfaces.Roster[], type: st
     
         case "Total Pts Per Game":
             const sortedTotalPtsPerGame = rosters.slice().map(roster => {
-                const foundLeague = findLeagueByID(roster?.league_id, legacyLeague!);
+                const foundLeague        = findLeagueByID(roster?.league_id, legacyLeague!);
                 const seasonFPTS: number = Number(roster.settings.fpts + "." + roster.settings.fpts_decimal);
                 return {
                     ...roster,
